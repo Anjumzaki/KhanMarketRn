@@ -28,7 +28,7 @@ import axios from "axios";
 import { bindActionCreators } from "redux";
 import { userAsync } from "../store/actions";
 import { connect } from "react-redux";
-
+// import {DeviceInfo} from 'react-native-device-info'
 class Login extends React.Component {
   static navigationOptions = { header: null };
 
@@ -89,6 +89,8 @@ class Login extends React.Component {
   render() {
     console.log("state L", this.state)
     const { icEye, isPassword } = this.state;
+    // console.log(DeviceInfo.getUniqueID())
+
     const styles = StyleSheet.create({
       logo: {
         width: wp("60%"),

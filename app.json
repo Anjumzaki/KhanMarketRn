@@ -26,10 +26,18 @@
     "android": {
       "package": "com.sposieapps.AssurePay",
       "versionCode": 1,
-      "permissions": ["CAMERA", "RECORD_AUDIO","READ_PHONE_STATE","READ_CONTACTS"]
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "READ_PHONE_STATE",
+        "READ_CONTACTS"
+      ]
     },
     "ios": {
       "supportsTablet": true
-    }
-  }
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js"
+  },
+  "displayName": "Khan Market",
+  "name": "khanmarket"
 }
