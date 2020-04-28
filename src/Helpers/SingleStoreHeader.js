@@ -34,11 +34,11 @@ class SingleStoreHeader extends React.Component {
     return (
       <View
         style={{
-          height: 135 + getStatusBarHeight(),
+          height: 145 + getStatusBarHeight(),
           width: Dimensions.get("window").width,
           justifyContent: "flex-end",
           padding: 5,
-          paddingTop: 20,
+          paddingTop: getStatusBarHeight(),
           backgroundColor: "transparent",
           shadowOffset: {
             width: 0,
@@ -52,7 +52,7 @@ class SingleStoreHeader extends React.Component {
       >
         <Image
           style={{
-            height: 135 + getStatusBarHeight() ,
+            height: 145 + getStatusBarHeight() ,
             width: Dimensions.get("window").width,
             position: "absolute",
             top: 0,
@@ -126,20 +126,21 @@ const styles = StyleSheet.create({
   textI: {
     width: "100%",
     paddingLeft: 5,
-    fontSize: 17
+    fontSize: 17,
+    height:50,
+    
   },
   wrapperText: {
     flexDirection: "row",
     backgroundColor: "white",
     width: "94%",
-    paddingHorizontal: 7,
-    paddingVertical: 7,
     borderRadius: 5,
     paddingLeft: 20,
     marginLeft: 10,
-    marginBottom: 10,
+    marginBottom: 5,
     opacity: 0.9,
-    alignItems: "center"
+    alignItems: "center",
+    
   }
 });
 
