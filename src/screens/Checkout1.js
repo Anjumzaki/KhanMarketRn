@@ -623,7 +623,7 @@ class Cart extends Component {
               <View style={{ flexGrow: 1 }}>
                 <View
                   style={{
-                    width: "90%",
+                    width: "100%",
                     flex: 1,
                     justifyContent: "space-evenly",
                     paddingHorizontal:20
@@ -702,7 +702,7 @@ class Cart extends Component {
                             })
                           }
                           value={this.state.mobile}
-                          style={[textIn.input, { width: "77.5%" }]}
+                          style={[textIn.input, { width: "81%" }]}
                         />
                       </View>
                     </View>
