@@ -326,7 +326,7 @@ export default class SignUp1 extends React.Component {
               style={btnStyles.basic}
               onPress={() => this.props.navigation.navigate("ChoosePass", {
                 name: this.state.name,
-                email: this.state.email,
+                email: this.state.email.toLowerCase(),
                 mobile: this.state.mobile,
                 zipCode: this.state.zipCode,
                 password: this.state.password,

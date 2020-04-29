@@ -26,7 +26,7 @@ import { conStyles, textStyles, textIn, btnStyles } from "../styles/base";
 import LatoText from "../Helpers/LatoText";
 import axios from "axios";
 import { bindActionCreators } from "redux";
-import { userAsync } from "../store/actions";
+import { userAsync, cartLoading } from "../store/actions";
 import { connect } from "react-redux";
 // import {DeviceInfo} from 'react-native-device-info'
 class Login extends React.Component {
@@ -202,8 +202,9 @@ class Login extends React.Component {
             <TouchableOpacity
               style={btnStyles.basic}
               onPress={() => {
+                console.log("Pressed")
                 axios.post("https://sheltered-scrubland-52295.herokuapp.com/api/users/signin",{
-                  email: this.state.email,
+                  email: this.state.email.toLowerCase(),
                   password: this.state.password
                 })
                 .then(resp => {

@@ -22,6 +22,7 @@ import { bindActionCreators } from "redux";
 import { cartAsync } from "../store/actions";
 import { connect } from "react-redux";
 import CartCard from '../Components/cartCards.js'
+import firebase from "firebase";
 
 class Cart extends Component {
   constructor(props) {
@@ -29,8 +30,19 @@ class Cart extends Component {
 
     this.state = {
       heart: false,
-      qt: 1
+      qt: 1, 
+      image: ''
     };
+  }
+
+  componentDidMount(){
+
+    const ref = firebase
+    .storage()
+    .ref("/store_logos/" + this.props.store.id + ".jpg");
+      ref.getDownloadURL().then(url => {
+      this.setState({ image: url });
+      }); 
   }
 
   _onLayoutDidChange = e => {
@@ -67,13 +79,13 @@ class Cart extends Component {
           >
             <Image
               style={{ width: 44, height: 44, marginRight: 10 }}
-              source={require("../../assets/new.png")}
+              source={{uri: this.state.image}}
             />
             <LatoText
               fontName="Lato-Regular"
-              fonSiz={20}
+              fonSiz={20} 
               col="#2E2E2E"
-              text="KHAN MARKET"
+              text={this.props.store.name}
             ></LatoText>
           </View>
           <View style={lines.simple} />
@@ -205,7 +217,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   cart: state.Cart.cartData, 
   loading: state.Cart.cartLoading,
-  error: state.Cart.cartError
+  error: state.Cart.cartError,
+  store: state.Store.storeData,
+
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(

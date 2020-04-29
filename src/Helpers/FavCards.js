@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
+  ScrollView, 
   ImageBackground,
   Dimensions,
   Image,
@@ -13,6 +13,9 @@ import {
 import { TouchableOpacity } from "react-native-gesture-handler";
 import LatoText from "./LatoText";
 import { btnStyles } from "../styles/base";
+import { bindActionCreators } from "redux";
+import { cartAsync, cartSizeAsync } from "../store/actions";
+import { connect } from "react-redux";
 
 class FavCards extends React.Component {
   state = {
@@ -32,12 +35,39 @@ class FavCards extends React.Component {
     });
   }
 
+  // handleChange(num) {
+  //   var preNum = this.state.qt;
+  //   preNum = num + preNum;
+  //   if (preNum >= 1) {
+  //     this.setState({ qt: preNum });
+  //   }
+  // }
+
   handleChange(num) {
+
+    console.log("CHNAGE QUNTIYTTYyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
     var preNum = this.state.qt;
     preNum = num + preNum;
     if (preNum >= 1) {
       this.setState({ qt: preNum });
     }
+
+
+    var pCart=this.props.cart;
+    console.log("pcartttttt666666666666666666666666666666666666666666666",pCart)
+    var that =this
+      pCart.map(function(pro,ind) {
+       console.log("cehck",pro.product.productName ,that.props.product.product.productName)
+       if(pro.product.productName === that.props.product.product.productName){
+          pro.quantity = that.state.qt+num
+       }
+
+    });
+
+    console.log("pacart 111111111111111",pCart)
+
+      this.props.cartAsync(pCart)
+
   }
   render() {
     return (
@@ -165,8 +195,15 @@ class FavCards extends React.Component {
                 </View>
               ) : (
                 <TouchableOpacity
-                  onPress={() => this.setState({ cart: true })}
-                  style={btnStyles.cartBtn}
+                onPress={() => {
+                  var pCart=this.props.cart;
+                  pCart.push({
+                    product: this.props.product.product,
+                    quantity: this.state.qt
+                  })
+                  this.props.cartAsync(pCart)
+                  this.setState({cart: true})
+                }}                  style={btnStyles.cartBtn}
                 >
                   <LatoText
                     fontName="Lato-Regular"
@@ -183,7 +220,6 @@ class FavCards extends React.Component {
     );
   }
 }
-export default FavCards;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -226,3 +262,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
 });
+
+const mapStateToProps = state => ({
+  cart: state.Cart.cartData, 
+  loading: state.Cart.cartLoading,
+  cartSize: state.CartSize.cartSizeData,
+  error: state.Cart.cartError,
+  user: state.user.user,
+  store: state.Store.storeData
+
+});
+const mapDispatchToProps = (dispatch, ownProps) =>
+  bindActionCreators(
+      {
+          cartAsync, 
+          cartSizeAsync
+      },
+      dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FavCards);
