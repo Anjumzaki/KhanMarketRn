@@ -28,7 +28,6 @@ import axios from "axios";
 import { bindActionCreators } from "redux";
 import { userAsync, cartLoading } from "../store/actions";
 import { connect } from "react-redux";
-// import {DeviceInfo} from 'react-native-device-info'
 import { getUniqueId, getManufacturer } from 'react-native-device-info';
 class Login extends React.Component {
   static navigationOptions = { header: null };
@@ -213,7 +212,7 @@ class Login extends React.Component {
                     console.log("resp",resp.data)
                     this.setState({msg: ""})
                     this.props.userAsync(resp.data)
-                    this.props.navigation.navigate("App")
+                    this.props.navigation.navigate("Map")
                 })
                 .catch(err => this.setState({msg: err.message})) 
               
