@@ -29,6 +29,7 @@ import { bindActionCreators } from "redux";
 import { userAsync, cartLoading } from "../store/actions";
 import { connect } from "react-redux";
 // import {DeviceInfo} from 'react-native-device-info'
+import { getUniqueId, getManufacturer } from 'react-native-device-info';
 class Login extends React.Component {
   static navigationOptions = { header: null };
 
@@ -53,7 +54,8 @@ class Login extends React.Component {
       "Sarabun-Medium": require("../../assets/fonts/Sarabun-Medium.ttf"),
       "Sarabun-Light": require("../../assets/fonts/Sarabun-Light.ttf")
     });
-
+    //Unique Id 
+    alert(getUniqueId())
     this.setState({ fontLoaded: true });
   }
   getRef = ref => {
