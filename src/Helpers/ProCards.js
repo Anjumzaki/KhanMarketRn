@@ -55,7 +55,7 @@ class ProCards extends React.Component {
 
 
     var pCart=this.props.cart;
-    console.log("pcartttttt",pCart)
+    console.log("pcartttttt76666666666666666666666666666",pCart)
     var that =this
       pCart.map(function(pro,ind) {
        console.log("cehck",pro.product.productName ,that.props.product.productName)

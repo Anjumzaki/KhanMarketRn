@@ -52,6 +52,7 @@ class Home extends React.Component {
               distance="1 mile away"
               address={item.storeAddress}
               id={item._id}
+              phone={item.phoneNumber}
             />
             ))}
         </ScrollView>

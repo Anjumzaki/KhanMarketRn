@@ -24,14 +24,15 @@ class StoreCard extends React.Component {
         });
   }
   render() {
-    const { name, distance, address, id } = this.props;
+    const { name, distance, address, id, phone } = this.props;
     return (
       <TouchableOpacity
         onPress={() => {
           this.props.storeAsync({
             name: name,
             address: address,
-            id: id
+            id: id,
+            phone : phone
           })
           this.props.navigation.push("StoreDetails",{
           storeId: id

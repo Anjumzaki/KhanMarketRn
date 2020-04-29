@@ -68,7 +68,7 @@ class MyOrders extends Component {
                 text={"Active ("+active.length+")"}
               />
               </View>
-            {active.map((item,ind) => (
+            {active.slice(0).reverse().map((item,ind) => (
             <OrderCards
               navigation={this.props.navigation}
               key={ind}
@@ -91,7 +91,7 @@ class MyOrders extends Component {
               text={"Past ("+past.length+")"}
             />
             </View>
-          {past.map((item,ind) => (
+          {past.slice(0).reverse().map((item,ind) => (
           <OrderCards
             navigation={this.props.navigation}
             key={ind}

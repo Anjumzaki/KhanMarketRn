@@ -22,10 +22,12 @@ const { height } = 300;
 import { bindActionCreators } from "redux";
 import { cartAsync } from "../store/actions";
 import { connect } from "react-redux";
-import axios from "axios";
+import axios from "axios"; 
 import QRCode from 'react-native-qrcode-generator';
+import firebase from "firebase";
 
 import timestamp from "time-stamp";
+import { disableExpoCliLogging } from "expo/build/logs/Logs";
 
 class OrderDetails extends Component {
     constructor(props) {
@@ -36,8 +38,19 @@ class OrderDetails extends Component {
             qt: 1,
             showNum: false,
             step: 0,
+            image: ''
         };
     }
+
+    componentDidMount(){
+
+        const ref = firebase
+        .storage()
+        .ref("/store_logos/" + this.props.route.params.order.storeId + ".jpg");
+          ref.getDownloadURL().then(url => {
+          this.setState({ image: url });
+          }); 
+      }
 
     _onLayoutDidChange = e => {
         const layout = e.nativeEvent.layout;
@@ -50,7 +63,19 @@ class OrderDetails extends Component {
             this.setState({ qt: preNum });
         }
     }
+
+    dateConvert(date1){
+            var date = date1.split("-");
+            var month_names =["Jan","Feb","Mar",
+                              "Apr","May","Jun",
+                              "Jul","Aug","Sep",
+                              "Oct","Nov","Dec"];
+            
+            return "" +  month_names[parseInt(date[1])] + " " + date[0] + "," + date[2];
+        
+    }
     render() {
+        console.log("this.props",this.props.route.params.order, this.props.store)
         console.log("DATEEEEEEEEE", new Date(), console.log(timestamp()))
         console.log(timestamp('DDMMYYYY'));
         console.log(timestamp('YYYY-MM-DD'));
@@ -84,7 +109,7 @@ class OrderDetails extends Component {
                             fontName="Lato-Regular"
                             fonSiz={20}
                             col="#2E2E2E"
-                            text="Order DBz"
+                            text={"Order# " + this.props.route.params.order.orderNumber}
                         ></LatoText>
                         {this.state.showNum ?
                             <TouchableOpacity onPress={() => this.setState({ showNum: false })} style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
@@ -123,14 +148,14 @@ class OrderDetails extends Component {
                     >
                         <Image
                             style={{ width: 44, height: 44, marginRight: 10 }}
-                            source={require("../../assets/new.png")}
+                            source={{uri: this.state.image}}
                         />
                         <View>
                             <LatoText
                                 fontName="Lato-Bold"
                                 fonSiz={20}
                                 col="#2E2E2E"
-                                text={this.props.store.name}
+                                text={this.props.route.params.order.storeName}
                             />
                         </View>
                     </View>
@@ -146,7 +171,7 @@ class OrderDetails extends Component {
                             fontName="Lato-Regular"
                             fonSiz={17}
                             col="#2E2E2E"
-                            text={this.props.store.address}
+                            text={this.props.route.params.order.storeAddress}
                         />
                     </View>
                     {this.state.showNum &&
@@ -165,7 +190,7 @@ class OrderDetails extends Component {
                                     fontName="Lato-Regular"
                                     fonSiz={17}
                                     col="#2E2E2E"
-                                    text={'+923137669965'}
+                                    text={this.props.route.params.order.storePhone}
                                 />
                             </View>
 
@@ -220,13 +245,13 @@ class OrderDetails extends Component {
                                 fontName="Lato-Regular"
                                 fonSiz={17}
                                 col="#2E2E2E"
-                                text=" Jan 3, 2020 "
+                                text={this.dateConvert(this.props.route.params.order.orderDate)}
                             ></LatoText>
                             <LatoText
                                 fontName="Lato-Regular"
                                 fonSiz={17}
                                 col="#2E2E2E"
-                                text=" 5:00 PM - 6:00 PM "
+                                text={"  "+this.props.route.params.order.orderTime}
                             ></LatoText>
                         </View>
                     </View>
@@ -234,16 +259,16 @@ class OrderDetails extends Component {
                     <View style={{ marginHorizontal: 30, marginVertical: 10 }}>
 
 
-                        {this.state.step == 0 &&
+                        {this.props.route.params.order.isAccepted === false && this.props.route.params.order.isRejected === false &&
                             <Image style={{ width: '100%' }} resizeMode="contain" source={require('../../assets/order1.png')} />
                         }
-                        {this.state.step == 1 &&
+                        { this.props.route.params.order.isAccepted === true && this.props.route.params.order.isInPreparation === true  &&
                             <Image style={{ width: '100%' }} resizeMode="contain" source={require('../../assets/order2.png')} />
                         }
-                        {this.state.step == 2 &&
+                        {this.props.route.params.order.isAccepted === true && this.props.route.params.order.isReady === true &&
                             <Image style={{ width: '100%' }} resizeMode="contain" source={require('../../assets/order3.png')} />
                         }
-                        {this.state.step == 3 &&
+                        {this.props.route.params.order.isAccepted === true && this.props.route.params.order.isPicked === true &&
                             <Image style={{ width: '100%' }} resizeMode="contain" source={require('../../assets/order4.png')} />
                         }
                     </View>
@@ -259,7 +284,7 @@ class OrderDetails extends Component {
                         </View>
 
                         <QRCode
-                            value={this.props.orderId}
+                            value={this.props.route.params.order._id}
                             size={200}
                             bgColor='black'
                             fgColor='white' />
@@ -282,6 +307,7 @@ class OrderDetails extends Component {
                             text="Items In Cart"
                         />
                     </View>
+                   
                     <View
                         style={{
                             flexDirection: "row",
@@ -290,190 +316,38 @@ class OrderDetails extends Component {
                             alignItems: "center",
                         }}
                     >
+                         {this.props.route.params.order.products.map((item,ind) => (
+                             <View style={{display: "flex" , flexDirection: "row"}}>
                         <View style={{width:'55%'}}>
-                        <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={17}
-                            col="#2E2E2E"
-                            text="Name"
-                        />
-                        </View>
-                       <View style={{width:'45%',flexDirection:'row',justifyContent:'space-between'}}>
-                       <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={15}
-                            col="#2E2E2E"
-                            text={'$4.50'}
-                        />
-                       <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={15}
-                            col="#2E2E2E"
-                            text={'2'}
-                        />
+                                <LatoText
+                                    fontName="Lato-Regular"
+                                    fonSiz={17}
+                                    col="#2E2E2E"
+                                    text={item.product.productName}
+                                />
+                                </View>
+                            <View style={{width:'45%',flexDirection:'row',justifyContent:'space-between'}}>
+                            <LatoText
+                                    fontName="Lato-Regular"
+                                    fonSiz={15}
+                                    col="#2E2E2E"
+                                    text={"$"+item.product.price}
+                                />
+                            <LatoText
+                                    fontName="Lato-Regular"
+                                    fonSiz={15}
+                                    col="#2E2E2E"
+                                    text={item.quantity}
+                                />
                        </View>
-                        
-                    </View>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            paddingHorizontal: 20,
-                            paddingBottom: 20,
-                            alignItems: "center",
-                        }}
-                    >
-                        <View style={{width:'55%'}}>
-                        <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={17}
-                            col="#2E2E2E"
-                            text="Name"
-                        />
-                        </View>
-                       <View style={{width:'45%',flexDirection:'row',justifyContent:'space-between'}}>
-                       <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={15}
-                            col="#2E2E2E"
-                            text={'$4.50'}
-                        />
-                       <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={15}
-                            col="#2E2E2E"
-                            text={'2'}
-                        />
                        </View>
+                    ))}
                         
-                    </View>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            paddingHorizontal: 20,
-                            paddingBottom: 20,
-                            alignItems: "center",
-                        }}
-                    >
-                        <View style={{width:'55%'}}>
-                        <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={17}
-                            col="#2E2E2E"
-                            text="Name"
-                        />
                         </View>
-                       <View style={{width:'45%',flexDirection:'row',justifyContent:'space-between'}}>
-                       <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={15}
-                            col="#2E2E2E"
-                            text={'$4.50'}
-                        />
-                       <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={15}
-                            col="#2E2E2E"
-                            text={'2'}
-                        />
-                       </View>
+                    
                         
-                    </View>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            paddingHorizontal: 20,
-                            paddingBottom: 20,
-                            alignItems: "center",
-                        }}
-                    >
-                        <View style={{width:'55%'}}>
-                        <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={17}
-                            col="#2E2E2E"
-                            text="Name"
-                        />
-                        </View>
-                       <View style={{width:'45%',flexDirection:'row',justifyContent:'space-between'}}>
-                       <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={15}
-                            col="#2E2E2E"
-                            text={'$4.50'}
-                        />
-                       <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={15}
-                            col="#2E2E2E"
-                            text={'2'}
-                        />
-                       </View>
+                 
                         
-                    </View>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            paddingHorizontal: 20,
-                            paddingBottom: 20,
-                            alignItems: "center",
-                        }}
-                    >
-                        <View style={{width:'55%'}}>
-                        <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={17}
-                            col="#2E2E2E"
-                            text="Name"
-                        />
-                        </View>
-                       <View style={{width:'45%',flexDirection:'row',justifyContent:'space-between'}}>
-                       <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={15}
-                            col="#2E2E2E"
-                            text={'$4.50'}
-                        />
-                       <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={15}
-                            col="#2E2E2E"
-                            text={'2'}
-                        />
-                       </View>
-                        
-                    </View>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            paddingHorizontal: 20,
-                            paddingBottom: 20,
-                            alignItems: "center",
-                        }}
-                    >
-                        <View style={{width:'55%'}}>
-                        <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={17}
-                            col="#2E2E2E"
-                            text="Name"
-                        />
-                        </View>
-                       <View style={{width:'45%',flexDirection:'row',justifyContent:'space-between'}}>
-                       <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={15}
-                            col="#2E2E2E"
-                            text={'$4.50'}
-                        />
-                       <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={15}
-                            col="#2E2E2E"
-                            text={'2'}
-                        />
-                       </View>
-                        
-                    </View>
                     <View style={lines.simple} />
                     <View style={{flexDirection:'row',justifyContent:'space-between',padding:20}}>
                     <LatoText
@@ -486,11 +360,11 @@ class OrderDetails extends Component {
                             fontName='Sarabun-Medium'
                             fonSiz={25}
                             col="#2E2E2E"
-                            text={'$1.50'}
+                            text={"$"+parseFloat(this.props.route.params.order.totalAmount).toFixed(2)}
                         />
                     </View>
                     <View style={lines.simple} />
-                    <View
+        <TouchableOpacity
             style={{
               flexDirection: "row",
               paddingHorizontal: 20,
@@ -499,6 +373,16 @@ class OrderDetails extends Component {
               alignItems: "center",
               justifyContent: "center"
             }}
+            onPress={() => {
+                if(this.props.route.params.order.isAccepted === false){
+                    axios.put("http://192.168.0.105:3000/edit/order/reject/"+this.props.route.params.order._id)
+                    .then(resp => console.log("canclled"))
+                    .catch(err => console.log(err))
+                }else{
+                    console.log("can be canceled")
+                }
+               
+            }}
           >
             <LatoText
               fontName="Lato-Bold"
@@ -506,7 +390,7 @@ class OrderDetails extends Component {
               col="#2E2E2E"
               text="Cancel Order"
             />
-          </View>
+          </TouchableOpacity>
           <View
             style={{
               flexDirection: "row",

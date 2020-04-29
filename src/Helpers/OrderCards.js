@@ -31,7 +31,9 @@ class OrderCards extends React.Component {
   render() {
     console.log("order",this.props.order)
     return (
-      <TouchableOpacity onPress={()=>this.props.navigation.navigate('OrderDetails')} style={styles.procards}>
+      <TouchableOpacity onPress={()=>this.props.navigation.navigate('OrderDetails',{
+        order:this.props.order
+      })} style={styles.procards}>
         <View style={styles.wrapCards}>
           <View style={styles.underCard}>
             <View
@@ -78,13 +80,14 @@ class OrderCards extends React.Component {
                 text={
                   this.props.order.isAccepted === true && this.props.order.isInPreparation === true ? (
                     "Being Prepared"
-                  ) : (
+                  ) : (this.props.order.isAccepted === true && this.props.order.isReady === true ? (
+                    "Ready"): (
                     this.props.order.isAccepted === true && this.props.order.isPicked === true ? (
                       "Completed"
                     ): (
-                      "Wait"
+                      "No Response"
                     )
-                  )
+                  ))
                 }
               />
               )}
@@ -110,6 +113,7 @@ class OrderCards extends React.Component {
                   fonSiz={15}
                   col="#B50000"
                   text={"Cancel Order"}
+                  onPress={() => console.log("ksjd")}
                 />
               </View>
             </View>
