@@ -375,7 +375,7 @@ class OrderDetails extends Component {
             }}
             onPress={() => {
                 if(this.props.route.params.order.isAccepted === false){
-                    axios.put("http://192.168.0.105:3000/edit/order/reject/"+this.props.route.params.order._id)
+                    axios.put("https://sheltered-scrubland-52295.herokuapp.com/edit/order/reject/"+this.props.route.params.order._id)
                     .then(resp => console.log("canclled"))
                     .catch(err => console.log(err))
                 }else{
