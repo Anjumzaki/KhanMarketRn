@@ -376,10 +376,13 @@ class OrderDetails extends Component {
             onPress={() => {
                 if(this.props.route.params.order.isAccepted === false){
                     axios.put("https://sheltered-scrubland-52295.herokuapp.com/edit/order/reject/"+this.props.route.params.order._id)
-                    .then(resp => console.log("canclled"))
+                    .then(resp =>                     alert("Order Cancelled.")
+                    )
                     .catch(err => console.log(err))
                 }else{
                     console.log("can be canceled")
+                    alert("Order cannot be cancelled after preperation state.")
+
                 }
                
             }}
