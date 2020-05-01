@@ -54,7 +54,6 @@ class Login extends React.Component {
       "Sarabun-Light": require("../../assets/fonts/Sarabun-Light.ttf")
     });
     //Unique Id 
-    alert(getUniqueId())
     this.setState({ fontLoaded: true });
   }
   getRef = ref => {
@@ -212,7 +211,7 @@ class Login extends React.Component {
                     console.log("resp",resp.data)
                     this.setState({msg: ""})
                     this.props.userAsync(resp.data)
-                    this.props.navigation.navigate("Map")
+                    this.props.navigation.navigate("App")
                 })
                 .catch(err => this.setState({msg: err.message})) 
               
@@ -236,7 +235,25 @@ class Login extends React.Component {
                 text={" New memeber? Sign up "}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={{ alignItems: "center", marginTop: 20 }}>
+            <TouchableOpacity style={{ alignItems: "center", marginTop: 20 }}
+            onPress={() => {
+              
+              // alert(getUniqueId())
+              var resp = {
+                token: "guest",
+                user: {
+                  name: "guest",
+                  _id: getUniqueId(),
+                  email: "",
+                  mobile: "",
+                  zipCode: ""
+                }
+              }
+
+              this.props.userAsync(resp)
+              this.props.navigation.navigate("Home")
+              console.log("geust resp",resp)
+              }}>
               <LatoText
                 fontName="Lato-Regular"
                 fonSiz={17}
