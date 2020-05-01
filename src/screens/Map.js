@@ -22,7 +22,9 @@ export default class Map extends React.Component {
   componentDidMount() {
     Geolocation.getCurrentPosition(
       (info) => {
-        this.setState({ location: info }, alert(JSON.stringify(info)));
+        this.setState({ location: info }, 
+          // alert(JSON.stringify(info))
+          );
       },
       (error) => {
         console.log(error);

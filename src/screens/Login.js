@@ -238,21 +238,17 @@ class Login extends React.Component {
             <TouchableOpacity style={{ alignItems: "center", marginTop: 20 }}
             onPress={() => {
               
-              // alert(getUniqueId())
-              var resp = {
-                token: "guest",
-                user: {
-                  name: "guest",
-                  _id: getUniqueId(),
-                  email: "",
-                  mobile: "",
-                  zipCode: ""
-                }
-              }
+              axios.post("https://sheltered-scrubland-52295.herokuapp.com/api/users/guest/register",{
+                isGuest: true,
+                guestId: getUniqueId()
+              })
+              .then(resp => {
+                  console.log("resp guest",resp.data)
+                  this.props.userAsync(resp.data)
+                  this.props.navigation.navigate("Map")
+              })
+              .catch(err => this.setState({msg: "Email already exist!"}))  
 
-              this.props.userAsync(resp)
-              this.props.navigation.navigate("App")
-              console.log("geust resp",resp)
               }}>
               <LatoText
                 fontName="Lato-Regular"

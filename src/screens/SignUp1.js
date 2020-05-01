@@ -117,7 +117,7 @@ export default class SignUp1 extends React.Component {
             fonSiz={15}
             col="#5C5C5C"
             txtAlign={"center"}
-            text={"A 6-digit code has been sent to example@gmail.com"}
+            text={"A 6-digit code has been sent to your number and E-mail"}
           />
           {this.state.num.length > 0 ? (
             <CodeInput
@@ -386,6 +386,8 @@ export default class SignUp1 extends React.Component {
                 mobile: this.state.mobile,
                 zipCode: this.state.zipCode,
                 password: this.state.password,
+                isGuest: false,
+                guestId: "" 
               })}
             >
               <LatoText
