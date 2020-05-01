@@ -211,7 +211,7 @@ class Login extends React.Component {
                     console.log("resp",resp.data)
                     this.setState({msg: ""})
                     this.props.userAsync(resp.data)
-                    this.props.navigation.navigate("App")
+                    this.props.navigation.navigate("Map")
                 })
                 .catch(err => this.setState({msg: err.message})) 
               
