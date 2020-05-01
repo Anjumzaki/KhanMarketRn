@@ -22,6 +22,7 @@ import { bindActionCreators } from "redux";
 import { cartAsync } from "../store/actions";
 import { connect } from "react-redux";
 import CartCard from '../Components/cartCards.js'
+import axios from "axios";
 import firebase from "firebase";
 
 class Cart extends Component {
@@ -31,7 +32,8 @@ class Cart extends Component {
     this.state = {
       heart: false,
       qt: 1, 
-      image: ''
+      image: '',
+      tax: ''
     };
   }
 
@@ -43,6 +45,12 @@ class Cart extends Component {
       ref.getDownloadURL().then(url => {
       this.setState({ image: url });
       }); 
+
+      axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/store/"+this.props.store.id)
+      .then(resp => {
+        console.log('RESP DATAA',resp.data)
+        this.setState({tax: resp.data.tax})
+      })
   }
 
   _onLayoutDidChange = e => {
@@ -128,42 +136,60 @@ class Cart extends Component {
               fontName="Lato-Regular"
               fonSiz={20}
               col="#2E2E2E"
-              text="Tax(dummy)"
+              text="Tax"
             ></LatoText>
             <LatoText
               fontName="Lato-Bold"
               fonSiz={25}
               col="#2E2E2E"
-              text={'$2.78'}
+              text={'$'+(parseFloat(this.state.tax)/100)*subTotal.toFixed(3)}
             ></LatoText>
           </View>
               
         </ScrollView>
-        <View style={bottomTab.cartSheet}>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Checkout1')}
-            style={[btnStyles.cartBtnOutline, { width: "55%" }]}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={15}
-              col="#2E2E2E"
-              text="CONTINUE AS GUEST"
-            ></LatoText>
-          </TouchableOpacity>
 
+        {this.props.user.user.isGuest ? (
+            <View style={bottomTab.cartSheet}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Checkout1')}
+              style={[btnStyles.cartBtnOutline, { width: "55%" }]}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col="#2E2E2E"
+                text="CONTINUE AS GUEST"
+              ></LatoText>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Login')}
+              style={[btnStyles.cartBtn, { width: "40%" }]}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col="white"
+                text="SIGN IN/UP"
+              ></LatoText>
+            </TouchableOpacity>
+            </View>
+        ):(
+          <View style={bottomTab.cartSheet}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Checkout1')}
-            style={[btnStyles.cartBtn, { width: "40%" }]}
+            style={[btnStyles.cartBtn, { width: "100%" }]}
           >
             <LatoText
               fontName="Lato-Regular"
               fonSiz={15}
               col="white"
-              text="SIGN IN/UP"
+              text="Checkout"
             ></LatoText>
           </TouchableOpacity>
         </View>
+        )}
+       
       </View>
     );
   }
@@ -219,7 +245,7 @@ const mapStateToProps = state => ({
   loading: state.Cart.cartLoading,
   error: state.Cart.cartError,
   store: state.Store.storeData,
-
+  user: state.user.user,
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
