@@ -1,5 +1,5 @@
 import React from "react";
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import {
   StyleSheet,
   Text,
@@ -20,62 +20,80 @@ export default class Map extends React.Component {
     };
   }
   componentDidMount() {
-    Geolocation.getCurrentPosition((info) =>
-      this.setState({ location: info }, alert(JSON.stringify(info)))
+    Geolocation.getCurrentPosition(
+      (info) => {
+        this.setState({ location: info }, alert(JSON.stringify(info)));
+      },
+      (error) => {
+        console.log(error);
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
     );
   }
   render() {
     if (this.state.location) {
       loc = (
-        <MapView
+        <View style={styles.container}>
+
+          <MapView
           style={styles.map}
-          initialRegion={{
-            latitude: this.state.location.coords.latitude,
-            longitude: this.state.location.coords.longitude,
-            latitudeDelta: 0.0,
-            longitudeDelta: 0.0,
-          }}
-        >
-          <MapView.Marker
-            coordinate={{
+            initialRegion={{
               latitude: this.state.location.coords.latitude,
               longitude: this.state.location.coords.longitude,
-            }}
-            title={"title"}
-            description={"description"}
-          />
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "flex-end",
-              alignItems: "center",
+              latitudeDelta: 0.0,
+              longitudeDelta: 0.0,
             }}
           >
-            <TouchableOpacity onPress={()=>this.props.navigation.push('App')} style={[btnStyles.basic,{width:'80%',marginBottom:100}]}>
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={17}
-                col="white"
-                text={"Done"}
-              />
-            </TouchableOpacity>
-          </View>
-        </MapView>
+            <Marker
+              coordinate={{
+                latitude: this.state.location.coords.latitude,
+                longitude: this.state.location.coords.longitude,
+              }}
+              title={"title"}
+              description={"description"}
+            />
+          </MapView>
+         
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "flex-end",
+                alignItems: "center",
+                width:'100%'
+              }}
+            >
+              <TouchableOpacity 
+                onPress={() => this.props.navigation.push("App")}
+                style={[btnStyles.basic, { width: "80%", marginBottom: 100 }]}
+              >
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col="white"
+                  text={"Done"}
+                />
+              </TouchableOpacity>
+            </View>
+        </View>
+
       );
     } else {
       loc = <Text>Loading</Text>;
     }
 
-    return <View style={styles.container}>{loc}</View>;
+    return loc;
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "flex-end",
     alignItems: "center",
-    backgroundColor: "#F5FCFF",
   },
   map: {
     position: "absolute",
