@@ -51,7 +51,117 @@ class Cart extends Component {
       date: 0,
       times: 0,
       isChecked: false,
+      orderDate: "",
+      orderTime: "1:00 PM - 2:00 PM",
+      storeTimings: {},
+      start: "",
+      end: "",
+      startUnit: "",
+      endUnit: "",
+      timeArray: []
     };
+  }
+
+  componentDidMount(){
+    var days= ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; 
+
+    var d = new Date();
+      var n = d.getDay();
+      this.getTimings(days[n])
+  }
+
+
+  getTimings(day){
+
+    axios.get("http://192.168.0.105:3000/get/store/"+this.props.store.id)
+    .then(resp => {
+      console.log('RESP DATAA',resp.data)
+      
+      // console.log("aaaa",days[n])
+      // console.log("daya",n,resp.data.storeTimings.length)
+      var ishalf =false
+      for(var i=0; i< resp.data.storeTimings.length; i++){
+        console.log("asdsds",resp.data.storeTimings[i].day.substring(0,3) , day)
+        if(resp.data.storeTimings[i].day.substring(0,3) === day){
+          console.log("in cond")
+          if(resp.data.storeTimings[i].openTime.includes("30")){
+            ishalf=true
+          }
+          var su= ""
+          var eu= ""
+          if(resp.data.storeTimings[i].openTime.includes('PM')){
+            su="PM"
+          }else{
+            su="AM"
+          }
+          if(resp.data.storeTimings[i].ClosingTime.includes('PM')){
+            eu="PM"
+          }else{
+            eu="AM"
+          }
+          console.log("ishalf",ishalf)
+          var st= resp.data.storeTimings[i].openTime.substring(0,2)
+          var et= resp.data.storeTimings[i].ClosingTime.substring(0,2)
+          if(ishalf){
+            st=parseInt(st)+1
+          }
+          var arr=[]
+          var unit =su
+          for(var j=0; j<24; j++){
+
+            if(parseInt(st) === parseInt(et) && unit === eu) {
+              break
+            }
+              var temp1 = st+":00 "+unit+" - "
+              st=parseInt(parseInt(st)+1)
+
+              if(parseInt(st) > 11){
+                if(unit==="PM"){
+                  unit="AM"
+                }else{
+                  unit="PM"
+                }
+              }
+              if(parseInt(st) > 12){
+                st=1
+              }
+              // if(parseInt(st) === parseInt(et) && unit === eu) {
+              //   break
+              // }
+              var temp2= parseInt(st)+":00 "+unit
+              // st=parseInt(parseInt(st)+1)
+
+              if(parseInt(st) > 11){
+                if(unit==="PM"){
+                  unit="AM"
+                }else{
+                  unit="PM"
+                }
+              }
+              if(parseInt(st) > 12){
+                st=1
+              }
+              var temp=temp1+temp2
+              arr.push(temp)
+              
+              if(parseInt(st) === parseInt(et) && unit === eu) {
+                break
+              }
+          }
+
+          this.setState({storeTimings: resp.data.storeTimings[i],
+             start: resp.data.storeTimings[i].openTime.substring(0,2),
+             end: resp.data.storeTimings[i].ClosingTime.substring(0,2),
+             startUnit: su,
+             endUnit: eu,
+             timeArray: arr,
+             orderTime: arr[0]
+            })
+        }
+      }
+      // console.log(this.state)
+    })
+    .catch(err => console.log(err))
   }
 
   _onLayoutDidChange = (e) => {
@@ -72,6 +182,27 @@ class Cart extends Component {
   onOpen() {
     console.log("Modal just opened");
   }
+
+  getDayName(dateStr)
+  {
+    console.log("before",dateStr)
+    var days= ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; 
+    var tes = dateStr.replace("-", "/");
+    var tes = tes.replace("-", "/");
+    var dt= tes.split("/")
+    var rt= dt[1]+"/"+dt[0]+"/"+dt[2]
+    // console.log("RRTTTT",rt)
+    // // var tes = "05/23/2014";
+    // console.log("after",tes)
+    // console.log("convert",new Date(rt))
+    // console.log(".get date",new Date(rt).getDate(),new Date(rt).getDay())
+    // console.log("days",days[new Date(rt).getDate()], days[new Date(rt).getDay()]);
+
+    
+      return days[new Date(rt).getDay()];
+      
+  }
+
   render() {
     console.log("DATEEEEEEEEE", new Date(), console.log(timestamp()));
     console.log(timestamp("DDMMYYYY"));
@@ -85,15 +216,47 @@ class Cart extends Component {
     }
 
     var subTotal = 0;
-
     for (var i = 0; i < this.props.cart.length; i++) {
       var temp = this.props.cart[i].price;
       subTotal = subTotal + parseFloat(temp);
     }
     const daysMap = [1, 2, 3, 4, 5];
     const timeMap = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    var date = new Date()
+    var day= date.getDate();
+    var month1= date.getMonth()+1;
+    var year= date.getFullYear();
+    if(day <10){
+      day="0"+day
+    }
+    if(month1 < 10){
+      month1="0"+month1
+    }
+    console.log("todays date", day + "-" + month1 + "-" + year)
+    var todaysDate = day + "-" + month1 + "-" + year
+    var dates=[]
+    
+    for(var i=-1; i<4; i++){
+      var currentDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+      currentDate.setDate(currentDate.getDate() + i);
+      var day = currentDate.getDate()
+      var month = currentDate.getMonth() + 1
+      var year = currentDate.getFullYear()
+      if(day <10){
+        day="0"+day
+      }
+      if(month < 10){
+        month="0"+month
+      }
+
+      dates.push(day + "-" + month + "-" + year)
+    }
+
+    console.log("datesssssssssss",dates)
+    console.log("stateeee",this.state)
 
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <Modal
@@ -117,26 +280,28 @@ class Cart extends Component {
               marginBottom: 20,
             }}
           >
-            {daysMap.map((index, item) => (
+            {dates.map((index, item) => (
               <TouchableOpacity
-                onPress={() => this.setState({ date: item })}
+                onPress={() => {
+                  this.getTimings(this.getDayName(index))
+                  this.setState({ date: item, orderDate: dates[item] })}}
                 style={
                   this.state.date == item ? styles.dSelect : styles.dUnSelect
                 }
               >
                 <LatoText
                   fontName="Lato-Regular"
-                  fonSiz={15}
+                  fonSiz={12}
                   col={this.state.date == item ? "white" : "#5C5C5C"}
                   txtAlign={"center"}
-                  text={"Jan " + (item + 1)}
+                  text={months[parseInt(index.substring(3,5))-1] +" "+ index.substring(0,2)}
                 />
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={10}
                   col={this.state.date == item ? "white" : "#5C5C5C"}
                   txtAlign={"center"}
-                  text={days[item]}
+                  text={this.getDayName(index)}
                 />
               </TouchableOpacity>
             ))}
@@ -145,9 +310,9 @@ class Cart extends Component {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ width: "100%" }}
           >
-            {timeMap.map((index, item) => (
+            {this.state.timeArray.map((index, item) => (
               <TouchableOpacity
-                onPress={() => this.setState({ times: item })}
+                onPress={() => this.setState({ times: item, orderTime: index})}
                 style={
                   this.state.times == item ? styles.tSelect : styles.tUnSelect
                 }
@@ -157,7 +322,7 @@ class Cart extends Component {
                   fonSiz={15}
                   col={this.state.times == item ? "white" : "#5C5C5C"}
                   txtAlign={"center"}
-                  text={item + 1 + ":00 PM  -  " + (item + 2 + ":00 PM")}
+                  text={index}
                 />
               </TouchableOpacity>
             ))}
@@ -442,7 +607,7 @@ class Cart extends Component {
                 fonSiz={17}
                 col={"#2E2E2E"}
                 txtAlign={"center"}
-                text={"Jan " + (this.state.date + 1)}
+                text={(months[parseInt(this.state.orderDate.substring(3,4))-1] === undefined ? new Date().toDateString().substring(0,15) : months[parseInt(this.state.orderDate.substring(3,4))-1]) +" "+ this.state.orderDate.substring(0,2)}
               />
               <LatoText
                 fontName="Lato-Regular"
@@ -459,8 +624,7 @@ class Cart extends Component {
                 txtAlign={"center"}
                 text={
                   " " +
-                  (this.state.times + 1 + ":00 PM  -  ") +
-                  (this.state.times + 2 + ":00 PM")
+                  this.state.orderTime 
                 }
               />
             </View>
@@ -755,8 +919,8 @@ class Cart extends Component {
                 phone: this.props.user.user.mobile,
                 email: this.props.user.user.email,
                 address: "bac Street",
-                orderTime: "5:00 PM",
-                orderDate: timestamp('DD-MM-YYYY'),
+                orderTime: this.state.orderTime,
+                orderDate: this.state.orderDate === "" ? todaysDate : this.state.orderDate,
                 orderTimeZone: "UST",
                 tax: "2.78",
                 orderNumber: "zk342"

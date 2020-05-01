@@ -28,9 +28,20 @@ import { storeAsync, cartAsync } from "../store/actions";
 import { connect } from "react-redux";
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 class SingleStoreHeader extends React.Component {
-  render() {
-    
+  constructor(props) {
+    super(props);
 
+    this.state = {
+      abc:""
+    };
+  }
+  render() {
+    // var num =1
+    // setInterval(() => {
+    //   console.log("aheader [rops",num,this.props.cartData)
+    //   this.setState({abc: "a"})
+    //   num++
+    // }, 2000);
     return (
       <View
         style={{
