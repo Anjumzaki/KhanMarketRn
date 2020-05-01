@@ -251,7 +251,7 @@ class Login extends React.Component {
               }
 
               this.props.userAsync(resp)
-              this.props.navigation.navigate("Home")
+              this.props.navigation.navigate("App")
               console.log("geust resp",resp)
               }}>
               <LatoText
