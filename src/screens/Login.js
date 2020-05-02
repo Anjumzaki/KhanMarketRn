@@ -10,7 +10,8 @@ import {
   TouchableOpacity,
   StatusBar,
   Dimensions,
-  Alert
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { BackStack } from "../Helpers/BackStack";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -20,7 +21,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
   listenOrientationChange as lor,
-  removeOrientationListener as rol
+  removeOrientationListener as rol,
 } from "react-native-responsive-screen";
 import { conStyles, textStyles, textIn, btnStyles } from "../styles/base";
 import LatoText from "../Helpers/LatoText";
@@ -28,7 +29,7 @@ import axios from "axios";
 import { bindActionCreators } from "redux";
 import { userAsync, cartLoading } from "../store/actions";
 import { connect } from "react-redux";
-import { getUniqueId, getManufacturer } from 'react-native-device-info';
+import { getUniqueId, getManufacturer } from "react-native-device-info";
 class Login extends React.Component {
   static navigationOptions = { header: null };
 
@@ -41,7 +42,7 @@ class Login extends React.Component {
       fontLoaded: false,
       email: "",
       password: "",
-      msg: ""
+      msg: "",
     };
   }
   async componentDidMount() {
@@ -51,12 +52,12 @@ class Login extends React.Component {
       "Lato-Regular": require("../../assets/fonts/Lato-Regular.ttf"),
       "Sarabun-Regular": require("../../assets/fonts/Sarabun-Regular.ttf"),
       "Sarabun-Medium": require("../../assets/fonts/Sarabun-Medium.ttf"),
-      "Sarabun-Light": require("../../assets/fonts/Sarabun-Light.ttf")
+      "Sarabun-Light": require("../../assets/fonts/Sarabun-Light.ttf"),
     });
-    //Unique Id 
+    //Unique Id
     this.setState({ fontLoaded: true });
   }
-  getRef = ref => {
+  getRef = (ref) => {
     if (this.props.getRef) this.props.getRef(ref);
   };
   changePwdType = () => {
@@ -64,10 +65,40 @@ class Login extends React.Component {
     // set new state value
     this.setState({
       icEye: isPassword ? "visibility" : "visibility-off",
-      isPassword: !isPassword
+      isPassword: !isPassword,
     });
   };
-  handleForgot = () =>{
+  handleLogin = () => {
+    if(this.state.email){
+      if(this.state.password){
+        console.log("Pressed");
+        axios
+          .post(
+            "https://sheltered-scrubland-52295.herokuapp.com/api/users/signin",
+            {
+              email: this.state.email.toLowerCase(),
+              password: this.state.password,
+            }
+          )
+          .then((resp) => {
+            console.log("resp", resp.data);
+            this.setState({ msg: "" });
+            this.props.userAsync(resp.data);
+            this.props.navigation.navigate("Map");
+          })
+          .catch((err) => this.setState({ msg: err.message,loading:false }));
+      }
+      else{
+        this.setState({errMessage:'Please Enter Your Password'})
+      }
+    }
+    else{
+      this.setState({errMessage:'Please Enter Your Email'})
+    }
+    
+  };
+  handleForgot = () => {
+    
     Alert.alert(
       "Reset Password",
       "A password reset link has been sent to abc@example.com. Please check your inbox. Also, don’t forget to check your spam folder",
@@ -75,43 +106,49 @@ class Login extends React.Component {
         {
           text: "Dismiss",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "Okay", onPress: () => 
-            axios.get('https://sheltered-scrubland-52295.herokuapp.com/api/forgot/password/'+this.state.email)
-            .then(resp => console.log(resp))
-            .catch(err => console.log(err))
-         }
+        {
+          text: "Okay",
+          onPress: () =>
+            axios
+              .get(
+                "https://sheltered-scrubland-52295.herokuapp.com/api/forgot/password/" +
+                  this.state.email
+              )
+              .then((resp) => console.log(resp))
+              .catch((err) => console.log(err)),
+        },
       ],
       { cancelable: false }
     );
-  }
+  };
   render() {
-    console.log("state L", this.state)
+    console.log("state L", this.state);
     const { icEye, isPassword } = this.state;
     // console.log(DeviceInfo.getUniqueID())
 
     const styles = StyleSheet.create({
       logo: {
         width: wp("60%"),
-        alignSelf: "center"
+        alignSelf: "center",
       },
       icon: {
         position: "absolute",
         right: 10,
-        paddingTop: 8
+        paddingTop: 8,
       },
-      myText: { fontSize: hp("5%") }
+      myText: { fontSize: hp("5%") },
     });
     return (
-      <SafeAreaView style={[conStyles.safeAreaMy, { backgroundColor: 'white' }]}>
-        <StatusBar  translucent={true} barStyle="dark-content" />
+      <SafeAreaView
+        style={[conStyles.safeAreaMy, { backgroundColor: "white" }]}
+      >
+        <StatusBar translucent={true} barStyle="dark-content" />
         <ScrollView
           style={{ flex: 1 }}
           contentContainerStyle={conStyles.scroll}
         >
-         
-
           <Image
             style={styles.logo}
             source={require(".././../assets/logo.png")}
@@ -120,7 +157,7 @@ class Login extends React.Component {
           <View
             style={{
               justifyContent: "flex-start",
-              paddingHorizontal: wp("10%")
+              paddingHorizontal: wp("10%"),
             }}
           >
             <LatoText
@@ -139,11 +176,15 @@ class Login extends React.Component {
                 />
               </View>
               <View>
-                <TextInput style={textIn.input}
-                onChangeText={ (email) => this.setState({
-                  email
-                })}
-                value={this.state.email} />
+                <TextInput
+                  style={textIn.input}
+                  onChangeText={(email) =>
+                    this.setState({
+                      email,
+                    })
+                  }
+                  value={this.state.email}
+                />
               </View>
             </View>
             <View>
@@ -156,14 +197,16 @@ class Login extends React.Component {
                 />
               </View>
               <View>
-                <TextInput style={textIn.input} secureTextEntry={isPassword}
-                onChangeText={ (password) => {
-                  this.setState({
-                  password
-                })
-              }
-              }
-                value={this.state.password} />
+                <TextInput
+                  style={textIn.input}
+                  secureTextEntry={isPassword}
+                  onChangeText={(password) => {
+                    this.setState({
+                      password,
+                    });
+                  }}
+                  value={this.state.password}
+                />
                 <Icon
                   style={styles.icon}
                   name={icEye}
@@ -178,7 +221,7 @@ class Login extends React.Component {
               style={{
                 justifyContent: "flex-end",
                 alignItems: "flex-end",
-                marginTop: 10
+                marginTop: 10,
               }}
             >
               <LatoText
@@ -187,42 +230,38 @@ class Login extends React.Component {
                 col="#B50000"
                 text={"Forgot Password?"}
               />
-            </TouchableOpacity> 
+            </TouchableOpacity>
           </View>
           <View>
-              <Text style={{textAlign: "center", color: "red", fontWeight: "bold"}}>{this.state.msg}</Text>
+            <Text
+              style={{ textAlign: "center", color: "red", fontWeight: "bold" }}
+            >
+              {this.state.msg}
+            </Text>
           </View>
           <View
             style={{
               justifyContent: "space-evenly",
 
-              paddingHorizontal: wp("10%")
+              paddingHorizontal: wp("10%"),
             }}
           >
             <TouchableOpacity
               style={btnStyles.basic}
-              onPress={() => {
-                console.log("Pressed")
-                axios.post("https://sheltered-scrubland-52295.herokuapp.com/api/users/signin",{
-                  email: this.state.email.toLowerCase(),
-                  password: this.state.password
-                })
-                .then(resp => {
-                    console.log("resp",resp.data)
-                    this.setState({msg: ""})
-                    this.props.userAsync(resp.data)
-                    this.props.navigation.navigate("Map")
-                })
-                .catch(err => this.setState({msg: err.message})) 
-              
-              }}
+              onPress={() =>
+                this.setState({ loading: true }, this.handleLogin())
+              }
             >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={17}
-                col="white"
-                text={"SIGN IN"}
-              />
+              {this.state.loading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col="white"
+                  text={"SIGN IN"}
+                />
+              )}
             </TouchableOpacity>
             <TouchableOpacity
               style={{ alignItems: "center", marginTop: 20 }}
@@ -235,25 +274,26 @@ class Login extends React.Component {
                 text={" New memeber? Sign up "}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={{ alignItems: "center", marginTop: 20 }}
-            onPress={() => {
-              
-              // alert(getUniqueId())
-              var resp = {
-                token: "guest",
-                user: {
-                  name: "guest",
-                  _id: getUniqueId(),
-                  email: "",
-                  mobile: "",
-                  zipCode: ""
-                }
-              }
+            <TouchableOpacity
+              style={{ alignItems: "center", marginTop: 20 }}
+              onPress={() => {
+                // alert(getUniqueId())
+                var resp = {
+                  token: "guest",
+                  user: {
+                    name: "guest",
+                    _id: getUniqueId(),
+                    email: "",
+                    mobile: "",
+                    zipCode: "",
+                  },
+                };
 
-              this.props.userAsync(resp)
-              this.props.navigation.navigate("Home")
-              console.log("geust resp",resp)
-              }}>
+                this.props.userAsync(resp);
+                this.props.navigation.navigate("Home");
+                console.log("geust resp", resp);
+              }}
+            >
               <LatoText
                 fontName="Lato-Regular"
                 fonSiz={17}
@@ -262,27 +302,23 @@ class Login extends React.Component {
               />
             </TouchableOpacity>
           </View>
-          
         </ScrollView>
       </SafeAreaView>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  user: state.user.user, 
+const mapStateToProps = (state) => ({
+  user: state.user.user,
   loading: state.user.userLoading,
-  error: state.user.userError
+  error: state.user.userError,
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
-      {
-        userAsync
-      },
-      dispatch
+    {
+      userAsync,
+    },
+    dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
