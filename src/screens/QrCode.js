@@ -100,7 +100,7 @@ class QrCode extends Component {
               fontName="Lato-Regular"
               fonSiz={20}
               col="#5C5C5C"
-              text="Your order number is DBZ-876"
+              text={"Your order number is "+this.props.route.params.codeId.toUpperCase()}
             />
           </View>
           <View
