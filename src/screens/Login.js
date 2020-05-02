@@ -233,11 +233,15 @@ class Login extends React.Component {
             </TouchableOpacity>
           </View>
           <View>
-            <Text
-              style={{ textAlign: "center", color: "red", fontWeight: "bold" }}
-            >
-              {this.state.msg}
-            </Text>
+       
+             {this.state.errMessage &&
+              <LatoText
+              fontName="Lato-Regular"
+              fonSiz={17}
+              col="#B50000"
+              text={this.state.errMessage}
+            />
+             }
           </View>
           <View
             style={{

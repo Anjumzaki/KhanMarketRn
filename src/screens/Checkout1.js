@@ -16,6 +16,7 @@ import {
   listenOrientationChangeText as lor,
   removeOrientationListener as rol,
 } from "react-native-responsive-screen";
+import CodeInput from "react-native-confirmation-code-input";
 import Carousel from "react-native-looped-carousel";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LatoText from "../Helpers/LatoText";
@@ -58,7 +59,14 @@ class Cart extends Component {
       end: "",
       startUnit: "",
       endUnit: "",
-      timeArray: []
+      timeArray: [],
+      name: "",
+      email: "",
+      mobile: "",
+      num: "",
+      tax: '',
+      numVerified: false,
+      codeMsg: false
     };
   }
 
@@ -68,12 +76,16 @@ class Cart extends Component {
     var d = new Date();
       var n = d.getDay();
       this.getTimings(days[n])
+
+      if(!this.props.user.user.isGuest){
+        this.setState({numVerified: true})
+      }
   }
 
 
   getTimings(day){
 
-    axios.get("http://192.168.0.105:3000/get/store/"+this.props.store.id)
+    axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/store/"+this.props.store.id)
     .then(resp => {
       console.log('RESP DATAA',resp.data)
       
@@ -81,9 +93,9 @@ class Cart extends Component {
       // console.log("daya",n,resp.data.storeTimings.length)
       var ishalf =false
       for(var i=0; i< resp.data.storeTimings.length; i++){
-        console.log("asdsds",resp.data.storeTimings[i].day.substring(0,3) , day)
+        // console.log("asdsds",resp.data.storeTimings[i].day.substring(0,3) , day)
         if(resp.data.storeTimings[i].day.substring(0,3) === day){
-          console.log("in cond")
+          // console.log("in cond")
           if(resp.data.storeTimings[i].openTime.includes("30")){
             ishalf=true
           }
@@ -155,7 +167,8 @@ class Cart extends Component {
              startUnit: su,
              endUnit: eu,
              timeArray: arr,
-             orderTime: arr[0]
+             orderTime: arr[0],
+             tax: resp.data.tax
             })
         }
       }
@@ -185,7 +198,7 @@ class Cart extends Component {
 
   getDayName(dateStr)
   {
-    console.log("before",dateStr)
+    // console.log("before",dateStr)
     var days= ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; 
     var tes = dateStr.replace("-", "/");
     var tes = tes.replace("-", "/");
@@ -203,12 +216,22 @@ class Cart extends Component {
       
   }
 
+  makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }
+ 
   render() {
-    console.log("DATEEEEEEEEE", new Date(), console.log(timestamp()));
-    console.log(timestamp("DDMMYYYY"));
-    console.log(timestamp("YYYY-MM-DD"));
-
-    console.log("CO props user", this.props.user);
+    // console.log("DATEEEEEEEEE", new Date(), console.log(timestamp()));
+    // console.log(timestamp("DDMMYYYY"));
+    // console.log(timestamp("YYYY-MM-DD"));
+    var codeId= this.makeid(6)
+    // console.log("CO props user", this.props.user);
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
     } else {
@@ -252,13 +275,93 @@ class Cart extends Component {
       dates.push(day + "-" + month + "-" + year)
     }
 
-    console.log("datesssssssssss",dates)
+    // console.log("datesssssssssss",dates)
     console.log("stateeee",this.state)
+    var nameCheck = false
+    if(!this.props.user.user.isGuest){
+      nameCheck = true
+    }
 
+    if(this.state.name && this.state.name){
+      nameCheck = true
+    }
+    console.log("name check", nameCheck)
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
+
+      <Modal
+          style={[styles.modal, styles.modal6]}
+          position={"center"}
+          ref={"modal6"}
+          isDisabled={this.state.isDisabled}
+        >
+          <LatoText
+            fontName="Lato-Regular"
+            fonSiz={20}
+            col="#5C5C5C"
+            text={"Please enter the code!"}
+          />
+          <View style={{ paddingBottom: 10 }} />
+          <LatoText
+            fontName="Lato-Regular"
+            fonSiz={15}
+            col="#5C5C5C"
+            txtAlign={"center"}
+            text={"A 6-digit code has been sent to your number"}
+          />
+          {this.state.num.length > 0 ? (
+            <CodeInput
+              ref="codeInputRef2"
+              // compareWithCode={this.state.num}
+              compareWithCode={this.state.num}
+              activeColor="#000000"
+              inactiveColor="#000000"
+              autoFocus={true}
+              ignoreCase={true}
+              codeLength={6}
+              inputPosition="center"
+              size={wp(8)}
+              onFulfill={(isValid) =>
+                isValid
+                  ? this.setState(
+                      { codeMsg: false, numVerified: true },
+                      this.refs.modal6.close()
+                    )
+                  : this.setState({ codeMsg: true })
+              }
+              containerStyle={{ marginTop: 30 }}
+              codeInputStyle={{
+                borderWidth: 1.5,
+                borderRadius: 5,
+                borderColor: "#EFEFF4",
+                color: "#000000",
+              }}
+            />
+          ) : null}
+          {this.state.codeMsg && (
+            <LatoText
+              fontName="Lato-Regular"
+              fonSiz={15}
+              col="red"
+              txtAlign={"center"}
+              text={"Code is incorect"}
+            />
+          )}
+          <View style={{ paddingBottom: 10 }} />
+          <TouchableOpacity onPress={() => this.refs.modal3.close()}>
+            <LatoText
+              fontName="Lato-Regular"
+              fonSiz={15}
+              col="#B50000"
+              txtAlign={"center"}
+              text={"Cancel"}
+            />
+          </TouchableOpacity>
+        </Modal>
+
+
         <Modal
           style={[styles.modal, styles.modal3]}
           position={"center"}
@@ -474,12 +577,12 @@ class Cart extends Component {
                   <View>
                     <TextInput
                       style={[textIn.input, { width: "100%" }]}
-                      onChangeText={(name) =>
+                      onChangeText={(email) =>
                         this.setState({
-                          name,
+                          email,
                         })
                       }
-                      value={this.state.name}
+                      value={this.state.email}
                     />
                   </View>
                 </View>
@@ -502,7 +605,12 @@ class Cart extends Component {
                   text={"Cancel"}
                 />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.refs.modal4.close()}>
+              <TouchableOpacity onPress={() => {
+                if(this.state.name && this.state.name){
+                  nameCheck = true
+                }
+                this.refs.modal4.close()
+                }}>
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={15}
@@ -609,15 +717,35 @@ class Cart extends Component {
                 txtAlign={"center"}
                 text={(months[parseInt(this.state.orderDate.substring(3,4))-1] === undefined ? new Date().toDateString().substring(0,15) : months[parseInt(this.state.orderDate.substring(3,4))-1]) +" "+ this.state.orderDate.substring(0,2)}
               />
+              {this.state.storeTimings.isClosed ? (
               <LatoText
                 fontName="Lato-Regular"
                 fonSiz={17}
                 col={"#2E2E2E"}
                 txtAlign={"center"}
-                text={" " + days[this.state.date]}
+                text={" "}
               />
-
+              ):(
+                <LatoText
+                fontName="Lato-Regular"
+                fonSiz={17}
+                col={"#2E2E2E"}
+                txtAlign={"center"}
+                text={" " +
+                days[this.state.date]}
+              />
+              )}
+              {this.state.storeTimings.isClosed ? (
               <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col={"#2E2E2E"}
+                txtAlign={"center"}
+                text={
+                  " Store Closed"
+                }
+              />):(
+                <LatoText
                 fontName="Lato-Regular"
                 fonSiz={15}
                 col={"#2E2E2E"}
@@ -627,6 +755,7 @@ class Cart extends Component {
                   this.state.orderTime 
                 }
               />
+              )}
             </View>
             <TouchableOpacity
               style={{ paddingHorizontal: 10 }}
@@ -640,6 +769,7 @@ class Cart extends Component {
             </TouchableOpacity>
           </View>
           <View style={lines.simple} />
+          
           <View
             style={{
               flexDirection: "row",
@@ -656,16 +786,19 @@ class Cart extends Component {
               col="#2E2E2E"
               text="Contact Details"
             />
-            <TouchableOpacity
-              style={{ paddingHorizontal: 10 }}
-              onPress={() => this.refs.modal4.open()}
-            >
-              <MaterialCommunityIcons
-                name="pencil"
-                size={20}
-                color={"#2E2E2E"}
-              />
-            </TouchableOpacity>
+            {this.props.user.user.isGuest ? (
+                <TouchableOpacity
+                style={{ paddingHorizontal: 10 }}
+                onPress={() => this.refs.modal4.open()}
+                >
+                <MaterialCommunityIcons
+                  name="pencil"
+                  size={20}
+                  color={"#2E2E2E"}
+                />
+                </TouchableOpacity>
+            ): null}
+           
           </View>
           <View
             style={{
@@ -686,7 +819,7 @@ class Cart extends Component {
               fontName="Lato-Regular"
               fonSiz={17}
               col="#2E2E2E"
-              text={this.props.user.user.name}
+              text={this.props.user.user.name ? this.props.user.user.name : this.state.name}
             />
           </View>
           <View
@@ -708,7 +841,7 @@ class Cart extends Component {
               fontName="Lato-Regular"
               fonSiz={17}
               col="#2E2E2E"
-              text={this.props.user.user.mobile}
+              text={this.props.user.user.mobile ? this.props.user.user.mobile: this.state.mobile}
             />
           </View>
           <View
@@ -730,12 +863,40 @@ class Cart extends Component {
               fontName="Lato-Regular"
               fonSiz={17}
               col="#2E2E2E"
-              text={this.props.user.user.email}
+              text={this.props.user.user.email ? this.props.user.user.email: this.state.email}
             />
           </View>
           <View style={{ alignItems: "flex-end", paddingHorizontal: 20 }}>
+          {this.state.numVerified ? (
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={17}
+                    col="#2AA034"
+                    text={"Verified"}
+                  />
+                ) : (
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("Checkout1")}
+              onPress={async () => {
+                // this.props.navigation.navigate("Checkout1")
+
+                var num = Math.floor(100000 + Math.random() * 900000);
+                      await this.setState({ num: num.toString() });
+                      this.forceUpdate();
+
+                axios
+                        .get(
+                          "https://sheltered-scrubland-52295.herokuapp.com/api/number/verification/" +
+                            "+" +
+                            this.state.mobile +
+                            "/" +
+                            num
+                        )
+                        .then((resp) => {
+                          console.log("sdjkasdkbasbd")
+                          this.refs.modal6.open()
+                        })
+                        .catch((err) => console.log("sdf",err));
+              }}
               style={[btnStyles.cartBtnOutline, { width: "35%" }]}
             >
               <LatoText
@@ -744,7 +905,7 @@ class Cart extends Component {
                 col="#2E2E2E"
                 text="VERIFY"
               ></LatoText>
-            </TouchableOpacity>
+            </TouchableOpacity>)}
           </View>
           <View style={lines.simple} />
           <View
@@ -889,12 +1050,12 @@ class Cart extends Component {
                     <View>
                       <TextInput
                         style={[textIn.input, { width: "100%" }]}
-                        onChangeText={(name) =>
+                        onChangeText={(email) =>
                           this.setState({
-                            name,
+                            email,
                           })
                         }
-                        value={this.state.name}
+                        value={this.state.email}
                       />
                     </View>
                   </View>
@@ -905,6 +1066,7 @@ class Cart extends Component {
         </ScrollView>
         <View style={bottomTab.cartSheet}>
           <TouchableOpacity
+            disabled={this.state.storeTimings.isClosed || !nameCheck || !this.state.numVerified}
             onPress={() => {
               this.setState({ cart: true })
               axios.post('https://sheltered-scrubland-52295.herokuapp.com/add/order',{
@@ -915,18 +1077,20 @@ class Cart extends Component {
                 storeAddress: this.props.store.address,
                 storePhone: this.props.store.phone,
                 userId: this.props.user.user._id,
-                name: this.props.user.user.name,
-                phone: this.props.user.user.mobile,
-                email: this.props.user.user.email,
-                address: "bac Street",
+                name: this.state.name ? this.state.name : this.props.user.user.name,
+                phone: this.state.mobile ? this.state.mobile : this.props.user.user.mobile,
+                email: this.state.email ? this.state.email : this.props.user.user.email,
+                // address: "bac Street",
                 orderTime: this.state.orderTime,
                 orderDate: this.state.orderDate === "" ? todaysDate : this.state.orderDate,
-                orderTimeZone: "UST",
-                tax: "2.78",
-                orderNumber: "zk342"
+                // orderTimeZone: "UST",
+                tax: (parseFloat(this.state.tax)/100)*subTotal,
+                orderNumber: codeId,
+                isGuest: this.props.user.user.isGuest
               }).then(resp =>  {
                 this.props.navigation.navigate('QrCode',{
-                  orderId: resp.data.order1._id
+                  orderId: resp.data.order1._id,
+                  codeId: codeId 
                 })
               })
             }}
@@ -1007,7 +1171,10 @@ const styles = StyleSheet.create({
   modal4: {
     height: 300,
   },
-
+  modal6: {
+    height: 230,
+    width: Dimensions.get("window").width - 100,
+  },
   btn: {
     margin: 10,
     backgroundColor: "#3B5998",
