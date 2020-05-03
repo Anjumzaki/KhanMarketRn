@@ -88,16 +88,24 @@ class Login extends React.Component {
                   }
                 )
                 .then((resp) => {
-                  alert(JSON.stringify(resp));
-                  if (resp.data == "Incorrect password") {
-                    this.props.userAsync(resp.data);
+                  // alert(JSON.stringify(resp));
+                  console.log(resp.data)
+                  if (resp.data === "Incorrect password.") {
+                    // this.props.userAsync(resp.data);
                     this.setState({
                       errMessage: "Password is incorrect",
                       loading: false,
                     });
                     Î;
-                  } else {
-                    this.props.navigation.navigate("Map");
+                  } else if(resp.data === "Email does not exist."){
+                    // this.props.navigation.navigate("Map");
+                    this.setState({errMessage: "Email does not exist.",
+                    loading: false,
+                  })
+                  }else{
+                      this.props.userAsync(resp.data);
+                      this.props.navigation.navigate("Map");
+
                   }
                 })
                 .catch((err) =>
@@ -128,7 +136,7 @@ class Login extends React.Component {
   handleForgot = () => {
     Alert.alert(
       "Reset Password",
-      "A password reset link has been sent to abc@example.com. Please check your inbox. Also, don’t forget to check your spam folder",
+      "A password reset link has been sent to your Email. Please check your inbox. Also, don’t forget to check your spam folder",
       [
         {
           text: "Dismiss",
