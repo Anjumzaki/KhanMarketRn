@@ -32,16 +32,13 @@ class SingleStoreHeader extends React.Component {
     super(props);
 
     this.state = {
-      abc:""
+      abc:"",
+      cartData:this.props.cartData.length
     };
   }
+
   render() {
-    // var num =1
-    // setInterval(() => {
-    //   console.log("aheader [rops",num,this.props.cartData)
-    //   this.setState({abc: "a"})
-    //   num++
-    // }, 2000);
+    // const {cartLength} = this.props
     return (
       <View
         style={{
@@ -97,9 +94,9 @@ class SingleStoreHeader extends React.Component {
               <View style={headerStyles.cartTxt}>
                 <LatoText
                   fontName="Lato-Regular"
-                  fonSiz={7}
-                  col="white" 
-                  text={this.props.cartData.length}
+                  fonSiz={10}
+                  col="white"  
+                  text={this.props.cartLength}
                 />
               </View>
               <MaterialIcons name="shopping-cart" size={26} color={"white"} />
@@ -159,7 +156,8 @@ const mapStateToProps = state => ({
   store: state.Store.storeData, 
   cartData: state.Cart.cartData, 
   loading: state.Store.storeLoading,
-  error: state.Store.storeError
+  error: state.Store.storeError,
+  cartLength:state.CartSize.cartSizeData
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
