@@ -477,6 +477,7 @@ export default class SignUp1 extends React.Component {
             }}
           >
             <TouchableOpacity
+            disabled={this.state.numVerified}
               style={btnStyles.basic}
               onPress={() => this.handleSignUp()}
             >
