@@ -448,7 +448,10 @@ class Cart extends Component {
                 text={"Cancel"}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.refs.modal3.close()}>
+            <TouchableOpacity onPress={() => { this.refs.modal3.close()
+              
+              
+              }}>
               <LatoText
                 fontName="Lato-Regular"
                 fonSiz={15}
@@ -609,7 +612,19 @@ class Cart extends Component {
                 if(this.state.name && this.state.name){
                   nameCheck = true
                 }
-                this.refs.modal4.close()
+
+                console.log("CLICKED")
+                axios.put("http://192.168.0.105:3000/api/users/guest/edit/"+this.props.user.user._id,{
+                  name: this.state.name,
+                  email: this.state.email,
+                  mobile: this.state.mobile,
+                })
+                .then(resp => {
+                  console.log("kjhjjjjjjjjjjjjjjjjjjj",resp.data)
+                  this.refs.modal4.close()})
+                .catch(err => console.log(err))
+                
+                // this.refs.modal4.close()
                 }}>
                 <LatoText
                   fontName="Lato-Regular"
@@ -841,7 +856,7 @@ class Cart extends Component {
               fontName="Lato-Regular"
               fonSiz={17}
               col="#2E2E2E"
-              text={this.props.user.user.mobile ? this.props.user.user.mobile: this.state.mobile}
+              text={"+"+(this.props.user.user.mobile ? this.props.user.user.mobile: this.state.mobile)}
             />
           </View>
           <View
