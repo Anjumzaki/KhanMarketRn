@@ -3,9 +3,15 @@ import { View, Text, Image, TextInput, Switch, Button } from "react-native";
 import LatoText from "../Helpers/LatoText";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { btnStyles, bottomTab, lines } from "../styles/base";
-import * as ImagePicker from "expo-image-picker";
-import Constants from "expo-constants";
-import * as Permissions from "expo-permissions";
+import ImagePicker from "react-native-image-picker";
+const options = {
+  title: "Select Avatar",
+  customButtons: [{ name: "fb", title: "Choose Photo from Facebook" }],
+  storageOptions: {
+    skipBackup: true,
+    path: "images",
+  },
+};
 export default class Settings extends React.Component {
   constructor(props) {
     super(props);
@@ -13,38 +19,11 @@ export default class Settings extends React.Component {
       isEnabled: true,
       isEnabled1: true,
       image: null,
+      images: null,
+      avatarSource: null,
     };
   }
-  componentDidMount() {
-    this.getPermissionAsync();
-  }
 
-  getPermissionAsync = async () => {
-    if (Constants.platform.ios) {
-      const { status } = await Permissions.askAsync(ImagePicker.CAMERA_ROLL);
-      if (status !== "granted") {
-        alert("Sorry, we need camera roll permissions to make this work!");
-      }
-    }
-  };
-
-  _pickImage = async () => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      if (!result.cancelled) {
-        this.setState({ image: result.uri });
-      }
-
-      console.log(result);
-    } catch (E) {
-      console.log(E);
-    }
-  };
   render() {
     let { image } = this.state;
     return (
@@ -68,10 +47,33 @@ export default class Settings extends React.Component {
         >
           <Image
             style={{ width: 80, height: 80, borderRadius: 80 }}
-            source={require("../../assets/Ellipse20.png")}
+            source={
+              this.state.avatarSource
+                ? { uri: this.state.avatarSource.uri }
+                : require("../../assets/Ellipse20.png")
+            }
           />
           <TouchableOpacity
-            onPress={()=>this._pickImage()}
+            onPress={() =>
+              ImagePicker.showImagePicker(options, (response) => {
+                console.log("Response = ", response);
+                if (response.didCancel) {
+                  console.log("User cancelled image picker");
+                } else if (response.error) {
+                  console.log("ImagePicker Error: ", response.error);
+                } else if (response.customButton) {
+                  console.log(
+                    "User tapped custom button: ",
+                    response.customButton
+                  );
+                } else {
+                  const source = { uri: response.uri };
+                  this.setState({
+                    avatarSource: source,
+                  });
+                }
+              })
+            }
             style={{ paddingHorizontal: 20 }}
           >
             <LatoText
