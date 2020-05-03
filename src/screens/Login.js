@@ -17,6 +17,7 @@ import { BackStack } from "../Helpers/BackStack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import * as Font from "expo-font";
+import * as EmailValidator from "email-validator";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -69,36 +70,56 @@ class Login extends React.Component {
     });
   };
   handleLogin = () => {
-    if(this.state.email){
-      if(this.state.password){
-        console.log("Pressed");
-        axios
-          .post(
-            "https://sheltered-scrubland-52295.herokuapp.com/api/users/signin",
-            {
-              email: this.state.email.toLowerCase(),
-              password: this.state.password,
+    this.setState(
+      {
+        loading: true,
+      },
+      () => {
+        if (this.state.email) {
+          if (EmailValidator.validate(this.state.email)) {
+            if (this.state.password) {
+              console.log("Pressed");
+              axios
+                .post(
+                  "https://sheltered-scrubland-52295.herokuapp.com/api/users/signin",
+                  {
+                    email: this.state.email.toLowerCase(),
+                    password: this.state.password,
+                  }
+                )
+                .then((resp) => {
+                  console.log("resp", resp.data);
+                  this.setState({ msg: "" });
+                  this.props.userAsync(resp.data);
+                  this.setState({ errMessage: " ", loading: false });
+                  this.props.navigation.navigate("Map");
+                })
+                .catch((err) =>
+                  this.setState({ msg: err.message, loading: false })
+                );
+            } else {
+              this.setState({
+                errMessage: "Please Enter Your Password",
+                loading: false,
+              });
             }
-          )
-          .then((resp) => {
-            console.log("resp", resp.data);
-            this.setState({ msg: "" });
-            this.props.userAsync(resp.data);
-            this.props.navigation.navigate("Map");
-          })
-          .catch((err) => this.setState({ msg: err.message,loading:false }));
+          } else {
+            this.setState({
+              errMessage: "Please enter a valid email",
+              loading: false,
+            });
+          }
+        } else {
+          this.setState({
+            errMessage: "Please Enter Your Email",
+            loading: false,
+          });
+        }
       }
-      else{
-        this.setState({errMessage:'Please Enter Your Password'})
-      }
-    }
-    else{
-      this.setState({errMessage:'Please Enter Your Email'})
-    }
-    
+    );
   };
+
   handleForgot = () => {
-    
     Alert.alert(
       "Reset Password",
       "A password reset link has been sent to abc@example.com. Please check your inbox. Also, don’t forget to check your spam folder",
@@ -232,17 +253,29 @@ class Login extends React.Component {
               />
             </TouchableOpacity>
           </View>
-          <View>
-       
-             {this.state.errMessage &&
-              <LatoText
-              fontName="Lato-Regular"
-              fonSiz={17}
-              col="#B50000"
-              text={this.state.errMessage}
-            />
-             }
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {this.state.errMessage && (
+              <>
+                <Image
+                  style={{ marginRight: 10 }}
+                  source={require("../../assets/Vector.png")}
+                />
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col="#5C5C5C"
+                  text={this.state.errMessage}
+                />
+              </>
+            )}
           </View>
+
           <View
             style={{
               justifyContent: "space-evenly",
@@ -252,9 +285,7 @@ class Login extends React.Component {
           >
             <TouchableOpacity
               style={btnStyles.basic}
-              onPress={() =>
-                this.setState({ loading: true }, this.handleLogin())
-              }
+              onPress={() => this.handleLogin()}
             >
               {this.state.loading ? (
                 <ActivityIndicator size="small" color="white" />
