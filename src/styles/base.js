@@ -53,7 +53,8 @@ const headerStyles = StyleSheet.create({
     elevation: 5,
     backgroundColor: "#7AB87F",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    zIndex:5
   }
 });
 const textStyles = StyleSheet.create({
