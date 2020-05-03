@@ -88,11 +88,17 @@ class Login extends React.Component {
                   }
                 )
                 .then((resp) => {
-                  console.log("resp", resp.data);
-                  this.setState({ msg: "" });
-                  this.props.userAsync(resp.data);
-                  this.setState({ errMessage: " ", loading: false });
-                  this.props.navigation.navigate("Map");
+                  alert(JSON.stringify(resp));
+                  if (resp.data == "Incorrect password") {
+                    this.props.userAsync(resp.data);
+                    this.setState({
+                      errMessage: "Password is incorrect",
+                      loading: false,
+                    });
+                    Î;
+                  } else {
+                    this.props.navigation.navigate("Map");
+                  }
                 })
                 .catch((err) =>
                   this.setState({ msg: err.message, loading: false })
@@ -275,7 +281,6 @@ class Login extends React.Component {
               </>
             )}
           </View>
-
           <View
             style={{
               justifyContent: "space-evenly",
