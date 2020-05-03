@@ -65,7 +65,9 @@ export default class Map extends React.Component {
               }}
             >
               <TouchableOpacity 
-                onPress={() => this.props.navigation.push("App")}
+                onPress={() => this.props.navigation.push("App",{
+                  location: this.state.location
+                })}
                 style={[btnStyles.basic, { width: "80%", marginBottom: 100 }]}
               >
                 <LatoText
