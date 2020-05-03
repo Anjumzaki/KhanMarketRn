@@ -25,6 +25,7 @@ import { connect } from "react-redux";
 const { width } = Dimensions.get("window");
 const { height } = 300;
 
+
 class QrCode extends Component {
   constructor(props) {
     super(props);

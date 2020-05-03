@@ -11,7 +11,7 @@ import Login from "./src/screens/Login";
 import Map from "./src/screens/Map";
 import StackHeader from "./src/Helpers/StackHeader";
 import StoreHeader from "./src/Helpers/StoreHeader";
-
+import Settings from './src/screens/Settings'
 import {
   Entypo,
   MaterialCommunityIcons
@@ -146,7 +146,7 @@ const HomeStackScreen = () => (
       }}
     />
    
-    <HomeStack.Screen name="Profile" component={Profile}  options={{ header: props => <StackGrayHeader nameTitle="My Profile" {...props} />, }}/>
+    <HomeStack.Screen name="Profile" component={Settings}  options={{ header: props => <StackGrayHeader nameTitle="Settings" {...props} />, }}/>
 
   </HomeStack.Navigator>
 );
