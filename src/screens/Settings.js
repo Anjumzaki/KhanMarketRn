@@ -1,19 +1,52 @@
 import React from "react";
-import { View, Text, Image, TextInput, Switch } from "react-native";
+import { View, Text, Image, TextInput, Switch, Button } from "react-native";
 import LatoText from "../Helpers/LatoText";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { btnStyles, bottomTab, lines } from "../styles/base";
-
+import * as ImagePicker from "expo-image-picker";
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
 export default class Settings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isEnabled: true,
       isEnabled1: true,
-
+      image: null,
     };
   }
+  componentDidMount() {
+    this.getPermissionAsync();
+  }
+
+  getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(ImagePicker.CAMERA_ROLL);
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
+      }
+    }
+  };
+
+  _pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        this.setState({ image: result.uri });
+      }
+
+      console.log(result);
+    } catch (E) {
+      console.log(E);
+    }
+  };
   render() {
+    let { image } = this.state;
     return (
       <ScrollView
         contentContainerStyle={{ padding: 20, backgroundColor: "white" }}
@@ -31,15 +64,16 @@ export default class Settings extends React.Component {
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
-            alignContent: "center",
-            alignItems: "center",
           }}
         >
           <Image
             style={{ width: 80, height: 80, borderRadius: 80 }}
             source={require("../../assets/Ellipse20.png")}
           />
-          <TouchableOpacity style={{ paddingHorizontal: 20 }}>
+          <TouchableOpacity
+            onPress={()=>this._pickImage()}
+            style={{ paddingHorizontal: 20 }}
+          >
             <LatoText
               fontName="Lato-Bold"
               fonSiz={15}
@@ -230,7 +264,7 @@ export default class Settings extends React.Component {
             text="Terms & conditions"
           />
         </TouchableOpacity>
-        <TouchableOpacity style={{marginTop:30 }}>
+        <TouchableOpacity style={{ marginTop: 30 }}>
           <LatoText
             fontName="Lato-Bold"
             fonSiz={15}
