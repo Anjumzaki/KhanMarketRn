@@ -10,12 +10,15 @@ import {
   TouchableOpacity,
   StatusBar,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import { BackStack } from "../Helpers/BackStack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Modal from "react-native-modalbox";
 import CodeInput from "react-native-confirmation-code-input";
+import * as EmailValidator from "email-validator";
+
 import * as Font from "expo-font";
 import {
   widthPercentageToDP as wp,
@@ -30,10 +33,8 @@ import axios from "axios";
 
 export default class SignUp1 extends React.Component {
   static navigationOptions = { header: null };
-
   constructor(props) {
     super(props);
-
     this.state = {
       icEye: "visibility-off",
       isPassword: true,
@@ -51,6 +52,10 @@ export default class SignUp1 extends React.Component {
       codeMsg: false,
       numVerified: false,
       num: "",
+      loading: false,
+      errMessage: "",
+      loading: false,
+      verifi:false
     };
   }
   onClose() {
@@ -87,13 +92,62 @@ export default class SignUp1 extends React.Component {
       isPassword: !isPassword,
     });
   };
-
+  handleSignUp = () => {
+    this.setState(
+      {
+        loading: true,
+      },
+      () => {
+        if (this.state.name) {
+          if (this.state.email) {
+            if (EmailValidator.validate(this.state.email)) {
+              if (this.state.mobile) {
+                if (this.state.zipCode) {
+                  this.props.navigation.navigate("ChoosePass", {
+                    name: this.state.name,
+                    email: this.state.email.toLowerCase(),
+                    mobile: this.state.mobile,
+                    zipCode: this.state.zipCode,
+                    password: this.state.password,
+                    isGuest: false,
+                    guestId: "",
+                  });
+                } else {
+                  this.setState({
+                    errMessage: "Please enter Zip code",
+                    loading: false,
+                  });
+                }
+              } else {
+                this.setState({
+                  errMessage: "Please enter mobile number",
+                  loading: false,
+                });
+              }
+            } else {
+              this.setState({
+                errMessage: "Please enter correct email",
+                loading: false,
+              });
+            }
+          } else {
+            this.setState({
+              errMessage: "Please enter your email",
+              loading: false,
+            });
+          }
+        } else {
+          this.setState({
+            errMessage: "Please enter your name",
+            loading: false,
+          });
+        }
+      }
+    );
+  };
   render() {
     const { icEye, isPassword } = this.state;
-
     console.log("this", this.state);
-    // console.log();
-    // console.log("num", num)
     return (
       <SafeAreaView
         style={[conStyles.safeAreaMy, { backgroundColor: "white" }]}
@@ -280,8 +334,13 @@ export default class SignUp1 extends React.Component {
                   placeholder={"(555) 555-5678"}
                   keyboardType={"numeric"}
                   onChangeText={(mobile) =>
+                    mobile.length < 10 ?
                     this.setState({
                       mobile,
+                    }) :
+                    this.setState({
+                      mobile,
+                      verifi:true
                     })
                   }
                   value={this.state.mobile}
@@ -303,6 +362,7 @@ export default class SignUp1 extends React.Component {
                     text={"Verified"}
                   />
                 ) : (
+                  !this.state.verifi ?
                   <TouchableOpacity
                     style={{
                       paddingHorizontal: 20,
@@ -344,7 +404,23 @@ export default class SignUp1 extends React.Component {
                       col="#C9C9C9"
                       text={"Verify"}
                     />
-                  </TouchableOpacity>
+                  </TouchableOpacity> :
+                   <TouchableOpacity
+                   style={{
+                     paddingHorizontal: 20,
+                     paddingVertical: 10,
+                     borderColor: "#5C5C5C",
+                     borderWidth: 1,
+                     borderRadius: 5,
+                   }}
+                 >
+                   <LatoText
+                     fontName="Lato-Regular"
+                     fonSiz={17}
+                     col="#5C5C5C"
+                     text={"Verify"}
+                   />
+                 </TouchableOpacity>
                 )}
               </View>
               <View>
@@ -373,6 +449,28 @@ export default class SignUp1 extends React.Component {
           </View>
           <View
             style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {this.state.errMessage !== "" && (
+              <>
+                <Image
+                  style={{ marginRight: 10 }}
+                  source={require("../../assets/Vector.png")}
+                />
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col="#5C5C5C"
+                  text={this.state.errMessage}
+                />
+              </>
+            )}
+          </View>
+          <View
+            style={{
               justifyContent: "space-evenly",
 
               paddingHorizontal: wp("10%"),
@@ -380,22 +478,18 @@ export default class SignUp1 extends React.Component {
           >
             <TouchableOpacity
               style={btnStyles.basic}
-              onPress={() => this.props.navigation.navigate("ChoosePass", {
-                name: this.state.name,
-                email: this.state.email.toLowerCase(),
-                mobile: this.state.mobile,
-                zipCode: this.state.zipCode,
-                password: this.state.password,
-                isGuest: false,
-                guestId: "" 
-              })}
+              onPress={() => this.handleSignUp()}
             >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={17}
-                col="white"
-                text={"Verify"}
-              />
+              {this.state.loading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col="white"
+                  text={"Verify"}
+                />
+              )}
             </TouchableOpacity>
             <TouchableOpacity
               style={{ alignItems: "center", marginTop: 20 }}
