@@ -86,7 +86,7 @@ class StackHeader extends React.Component {
                       fontName="Lato-Regular"
                       fonSiz={7}
                       col="white"
-                      text={this.props.cartData.length}
+                      text={this.props.cartLength}
                     />
                   </View>
                   <MaterialIcons
@@ -130,7 +130,9 @@ const mapStateToProps = state => ({
   store: state.Store.storeData, 
   cartData: state.Cart.cartData, 
   loading: state.Store.storeLoading,
-  error: state.Store.storeError
+  error: state.Store.storeError,
+  cartLength:state.CartSize.cartSizeData
+
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(

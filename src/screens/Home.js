@@ -88,7 +88,7 @@ class Home extends React.Component {
 
         <ScrollView style={Platform.OS == 'ios' ? {marginTop:70} : {marginTop:100,marginBottom:2}}> 
           {this.state.stores.length > 0 &&
-            this.state.stores.slice(0).reverse().map((item,ind) => (
+            this.state.stores.map((item,ind) => (
               <StoreCard key={ind}
               key={item._id}
               navigation={this.props.navigation}

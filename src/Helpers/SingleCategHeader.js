@@ -86,7 +86,7 @@ class SingleCategHeader extends React.Component {
                   fontName="Lato-Regular"
                   fonSiz={7}
                   col="white"
-                  text={this.props.cartSize}
+                  text={this.props.cartLength}
                 />
               </View>
               <MaterialIcons name="shopping-cart" size={26} color={"white"} />
@@ -134,7 +134,9 @@ const mapStateToProps = state => ({
   cartSize: state.CartSize.cartSizeData,
   loading: state.Store.storeLoading,
   error: state.Store.storeError,
-  name: state.SingleCatName.singleCatData
+  name: state.SingleCatName.singleCatData,
+  cartLength:state.CartSize.cartSizeData
+
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(

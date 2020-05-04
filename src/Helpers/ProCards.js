@@ -72,7 +72,13 @@ class ProCards extends React.Component {
   }
   render() {
     console.log("PRop CRAD props", this.props.cart.length, "cartSize",this.props.cartSize)
-    this.props.cartSizeAsync(this.props.cart.length)
+    console.log("REDUX CART", this.props.cart)
+    var cSize=0
+    for(var i=0; i<this.props.cart.length; i++){
+        cSize=cSize + parseInt(this.props.cart[i].quantity)
+    }
+
+    this.props.cartSizeAsync(cSize)
     return (
       <View style={styles.procards}>
         <TouchableOpacity
