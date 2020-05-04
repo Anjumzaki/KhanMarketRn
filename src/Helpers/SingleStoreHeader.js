@@ -96,7 +96,7 @@ class SingleStoreHeader extends React.Component {
                   fontName="Lato-Regular"
                   fonSiz={10}
                   col="white"  
-                  text={this.props.cartLength}
+                  text={this.props.cartLength }
                 />
               </View>
               <MaterialIcons name="shopping-cart" size={26} color={"white"} />
