@@ -1,12 +1,21 @@
 import React from "react";
-import { View, Text, Image, TextInput, Switch, Button } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  Switch,
+  Button,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
 import LatoText from "../Helpers/LatoText";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { btnStyles, bottomTab, lines } from "../styles/base";
 import ImagePicker from "react-native-image-picker";
+import Modal from "react-native-modalbox";
 const options = {
   title: "Select Avatar",
-  customButtons: [{ name: "fb", title: "Choose Photo from Facebook" }],
   storageOptions: {
     skipBackup: true,
     path: "images",
@@ -21,260 +30,367 @@ export default class Settings extends React.Component {
       image: null,
       images: null,
       avatarSource: null,
+      editName: false,
+      name: "Bernard Murphy",
     };
   }
 
   render() {
     let { image } = this.state;
     return (
-      <ScrollView
-        contentContainerStyle={{ padding: 20, backgroundColor: "white" }}
-      >
-        <View style={{ marginTop: 20 }} />
-        <LatoText
-          fontName="Lato-Regular"
-          fonSiz={25}
-          col="#5C5C5C"
-          text="Profile"
-        />
-        <View style={{ marginTop: 20 }} />
-
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
+      <>
+        <Modal
+          style={[styles.modal, styles.modal3]}
+          position={"center"}
+          ref={"modal3"}
+          isDisabled={this.state.isDisabled}
         >
-          <Image
-            style={{ width: 80, height: 80, borderRadius: 80 }}
-            source={
-              this.state.avatarSource
-                ? { uri: this.state.avatarSource.uri }
-                : require("../../assets/Ellipse20.png")
-            }
+          <View style={{flex:1, padding: 15, width: "100%",justifyContent:'space-between' }}>
+            <View>
+              <TextInput
+                placeholder={"Old Password"}
+                style={{
+                  borderColor: "#5c5c5c",
+                  borderWidth: 1,
+                  padding: 10,
+                  borderRadius: 10,
+                  marginBottom: 20,
+                }}
+              />
+              <TextInput
+                placeholder={"New Password"}
+                style={{
+                  borderColor: "#5c5c5c",
+                  borderWidth: 1,
+                  padding: 10,
+                  borderRadius: 10,
+                }}
+              />
+            </View>
+            <View style={{flexDirection:'row',justifyContent:'space-evenly'}}>
+            <TouchableOpacity onPress={() => this.refs.modal3.close()}>
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col="#B50000"
+                txtAlign={"center"}
+                text={"Cancel"}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.refs.modal3.close()}>
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col="#B50000"
+                txtAlign={"center"}
+                text={"Save"}
+              />
+            </TouchableOpacity>
+            </View>
+
+          </View>
+        </Modal>
+        <ScrollView
+          contentContainerStyle={{ padding: 20, backgroundColor: "white" }}
+        >
+          <View style={{ marginTop: 20 }} />
+          <LatoText
+            fontName="Lato-Regular"
+            fonSiz={25}
+            col="#5C5C5C"
+            text="Profile"
           />
-          <TouchableOpacity
-            onPress={() =>
-              ImagePicker.showImagePicker(options, (response) => {
-                console.log("Response = ", response);
-                if (response.didCancel) {
-                  console.log("User cancelled image picker");
-                } else if (response.error) {
-                  console.log("ImagePicker Error: ", response.error);
-                } else if (response.customButton) {
-                  console.log(
-                    "User tapped custom button: ",
-                    response.customButton
-                  );
-                } else {
-                  const source = { uri: response.uri };
-                  this.setState({
-                    avatarSource: source,
-                  });
-                }
-              })
-            }
-            style={{ paddingHorizontal: 20 }}
+          <View style={{ marginTop: 20 }} />
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
           >
+            <Image
+              style={{ width: 80, height: 80, borderRadius: 80 }}
+              source={
+                this.state.avatarSource
+                  ? { uri: this.state.avatarSource.uri }
+                  : require("../../assets/Ellipse20.png")
+              }
+            />
+            <TouchableOpacity
+              onPress={() =>
+                ImagePicker.showImagePicker(options, (response) => {
+                  console.log("Response = ", response);
+                  if (response.didCancel) {
+                    console.log("User cancelled image picker");
+                  } else if (response.error) {
+                    console.log("ImagePicker Error: ", response.error);
+                  } else if (response.customButton) {
+                    console.log(
+                      "User tapped custom button: ",
+                      response.customButton
+                    );
+                  } else {
+                    const source = { uri: response.uri };
+                    this.setState({
+                      avatarSource: source,
+                    });
+                  }
+                })
+              }
+              style={{ paddingHorizontal: 20 }}
+            >
+              <LatoText
+                fontName="Lato-Bold"
+                fonSiz={15}
+                col="black"
+                text="Change"
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={{ marginTop: 30 }} />
+          <View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col="#5C5C5C"
+                text="Name"
+              />
+              {this.state.editName ? (
+                <TouchableOpacity
+                  onPress={() => this.setState({ editName: false })}
+                  style={{ paddingHorizontal: 20 }}
+                >
+                  <LatoText
+                    fontName="Lato-Bold"
+                    fonSiz={15}
+                    col="black"
+                    text="Save"
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => this.setState({ editName: true })}
+                  style={{ paddingHorizontal: 20 }}
+                >
+                  <LatoText
+                    fontName="Lato-Bold"
+                    fonSiz={15}
+                    col="black"
+                    text="Change"
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+            <View style={{ paddingTop: 15 }}>
+              <TextInput
+                onChangeText={(name) => this.setState({ name })}
+                editable={this.state.editName}
+                style={
+                  this.state.editName
+                    ? {
+                        borderColor: "#5C5C5C",
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        padding: 10,
+                      }
+                    : { borderColor: "white", borderWidth: 1, borderRadius: 5 }
+                }
+                value={this.state.name}
+              />
+            </View>
+          </View>
+          <View style={{ marginTop: 30 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col="#5C5C5C"
+                text="Phone number"
+              />
+            </View>
+            <View style={{ paddingTop: 15 }}>
+              <TextInput
+                editable={false}
+                style={{ fontSize: 17 }}
+                value={"(555) 576 349"}
+              />
+            </View>
+          </View>
+          <View style={{ marginTop: 30 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col="#5C5C5C"
+                text="Email"
+              />
+            </View>
+            <View style={{ paddingTop: 15 }}>
+              <TextInput
+                editable={false}
+                style={{ fontSize: 17 }}
+                value={"b.murhpy@gmail.com"}
+              />
+            </View>
+          </View>
+          <View style={{ marginTop: 30 }} />
+          <View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col="#5C5C5C"
+                text="Password"
+              />
+              <TouchableOpacity
+                onPress={() => this.refs.modal3.open()}
+                style={{ paddingHorizontal: 20 }}
+              >
+                <LatoText
+                  fontName="Lato-Bold"
+                  fonSiz={15}
+                  col="black"
+                  text="Change"
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={{ paddingTop: 15 }}>
+              <TextInput
+                editable={false}
+                secureTextEntry={true}
+                style={{ fontSize: 17 }}
+                value={"Bernard Murphy"}
+              />
+            </View>
+          </View>
+          <View style={[lines.simple, { marginVertical: 30 }]} />
+          <View style={{ marginTop: 0 }} />
+          <LatoText
+            fontName="Lato-Regular"
+            fonSiz={25}
+            col="#5C5C5C"
+            text="General"
+          />
+          <View style={{ marginTop: 20 }} />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <LatoText
+              fontName="Lato-Regular"
+              fonSiz={18}
+              col="#5C5C5C"
+              text="Email notifications"
+            />
+            <Switch
+              trackColor={{ false: "#5C5C5C", true: "#2AA034" }}
+              thumbColor={this.state.isEnabled ? "white" : "white"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={() =>
+                this.setState({ isEnabled: !this.state.isEnabled })
+              }
+              value={this.state.isEnabled}
+            />
+          </View>
+          <View style={{ marginTop: 20 }} />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <LatoText
+              fontName="Lato-Regular"
+              fonSiz={18}
+              col="#5C5C5C"
+              text="Sms notifications"
+            />
+            <Switch
+              trackColor={{ false: "#5C5C5C", true: "#2AA034" }}
+              thumbColor={this.state.isEnabled1 ? "white" : "white"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={() =>
+                this.setState({ isEnabled1: !this.state.isEnabled1 })
+              }
+              value={this.state.isEnabled1}
+            />
+          </View>
+          <View style={[lines.simple, { marginVertical: 30 }]} />
+          <TouchableOpacity>
             <LatoText
               fontName="Lato-Bold"
               fonSiz={15}
               col="black"
-              text="Change"
+              text="Terms & conditions"
             />
           </TouchableOpacity>
-        </View>
-        <View style={{ marginTop: 30 }} />
-        <View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <TouchableOpacity style={{ marginTop: 30 }}>
             <LatoText
-              fontName="Lato-Regular"
+              fontName="Lato-Bold"
               fonSiz={15}
-              col="#5C5C5C"
-              text="Name"
+              col="black"
+              text="Sign Out"
             />
-            <TouchableOpacity style={{ paddingHorizontal: 20 }}>
-              <LatoText
-                fontName="Lato-Bold"
-                fonSiz={15}
-                col="black"
-                text="Change"
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={{ paddingTop: 15 }}>
-            <TextInput
-              editable={false}
-              style={{ fontSize: 17 }}
-              value={"Bernard Murphy"}
-            />
-          </View>
-        </View>
-        <View style={{ marginTop: 30 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={15}
-              col="#5C5C5C"
-              text="Phone number"
-            />
-          </View>
-          <View style={{ paddingTop: 15 }}>
-            <TextInput
-              editable={false}
-              style={{ fontSize: 17 }}
-              value={"(555) 576 349"}
-            />
-          </View>
-        </View>
-        <View style={{ marginTop: 30 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={15}
-              col="#5C5C5C"
-              text="Email"
-            />
-          </View>
-          <View style={{ paddingTop: 15 }}>
-            <TextInput
-              editable={false}
-              style={{ fontSize: 17 }}
-              value={"b.murhpy@gmail.com"}
-            />
-          </View>
-        </View>
-        <View style={{ marginTop: 30 }} />
-        <View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={15}
-              col="#5C5C5C"
-              text="Password"
-            />
-            <TouchableOpacity style={{ paddingHorizontal: 20 }}>
-              <LatoText
-                fontName="Lato-Bold"
-                fonSiz={15}
-                col="black"
-                text="Change"
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={{ paddingTop: 15 }}>
-            <TextInput
-              editable={false}
-              secureTextEntry={true}
-              style={{ fontSize: 17 }}
-              value={"Bernard Murphy"}
-            />
-          </View>
-        </View>
-        <View style={[lines.simple, { marginVertical: 30 }]} />
-        <View style={{ marginTop: 0 }} />
-        <LatoText
-          fontName="Lato-Regular"
-          fonSiz={25}
-          col="#5C5C5C"
-          text="General"
-        />
-        <View style={{ marginTop: 20 }} />
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <LatoText
-            fontName="Lato-Regular"
-            fonSiz={18}
-            col="#5C5C5C"
-            text="Email notifications"
-          />
-          <Switch
-            trackColor={{ false: "#5C5C5C", true: "#2AA034" }}
-            thumbColor={this.state.isEnabled ? "white" : "white"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={() =>
-              this.setState({ isEnabled: !this.state.isEnabled })
-            }
-            value={this.state.isEnabled}
-          />
-        </View>
-        <View style={{ marginTop: 20 }} />
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <LatoText
-            fontName="Lato-Regular"
-            fonSiz={18}
-            col="#5C5C5C"
-            text="Sms notifications"
-          />
-          <Switch
-            trackColor={{ false: "#5C5C5C", true: "#2AA034" }}
-            thumbColor={this.state.isEnabled1 ? "white" : "white"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={() =>
-              this.setState({ isEnabled1: !this.state.isEnabled1 })
-            }
-            value={this.state.isEnabled1}
-          />
-        </View>
-        <View style={[lines.simple, { marginVertical: 30 }]} />
-        <TouchableOpacity>
-          <LatoText
-            fontName="Lato-Bold"
-            fonSiz={15}
-            col="black"
-            text="Terms & conditions"
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={{ marginTop: 30 }}>
-          <LatoText
-            fontName="Lato-Bold"
-            fonSiz={15}
-            col="black"
-            text="Sign Out"
-          />
-        </TouchableOpacity>
-      </ScrollView>
+          </TouchableOpacity>
+        </ScrollView>
+      </>
     );
   }
 }
+const styles = StyleSheet.create({
+  wrapper: {
+    paddingTop: 50,
+    flex: 1,
+  },
+
+  modal: {
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+  },
+
+  modal2: {
+    height: 230,
+    backgroundColor: "#3B5998",
+  },
+
+  modal3: {
+    height: 230,
+    width: Dimensions.get("window").width - 100,
+  },
+});

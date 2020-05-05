@@ -7,7 +7,6 @@ import CardsRow from '../Components/CardsRow'
 import axios from "axios";
 import SingleStoreHeader from "../Helpers/SingleStoreHeader";
 
-
 class StoreDetails extends React.Component {
 
   constructor(props) {
@@ -21,6 +20,7 @@ class StoreDetails extends React.Component {
   }
 
   componentDidMount() {
+
     axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/all/products/" + this.props.route.params.storeId)
       .then(resp => {
         console.log("PRODUCTS", resp.data)
