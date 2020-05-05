@@ -7,7 +7,8 @@ import {
   Image,
   StyleSheet,
   LinearGradient,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LatoText from "../Helpers/LatoText";
@@ -77,7 +78,7 @@ class MyOrders extends Component {
             ))}
     
           </View>
-          ): null}
+          ): <ActivityIndicator style={{marginTop:100}} size="large" color='black' />}
 
         {past.length > 0 ? (
 

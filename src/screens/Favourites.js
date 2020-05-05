@@ -7,7 +7,8 @@ import {
   Image,
   StyleSheet,
   LinearGradient,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 import Carousel from "react-native-looped-carousel";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -53,20 +54,15 @@ class Favourites extends Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
-             
-          
-
         <ScrollView style={{ backgroundColor: "white" }}>
-          <View style={{ marginVertical: 10, flexDirection: "row",width:'100%',flexWrap: 'wrap' }}>
+          <View style={{ marginVertical: 10, flexDirection: "row",width:'100%',flexWrap: 'wrap',justifyContent:'center' }}>
             {this.state.favourites.length > 0 ? this.state.favourites.map((item,ind) => (
                   <FavCards
                   navigation={this.props.navigation}
                   key={1}
                   product={item}
                   />
-            )): null}
-           
-           
+            )): <ActivityIndicator style={{marginTop:100}} size="large" color='black' />}
           </View>
         </ScrollView>
       </View>
