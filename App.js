@@ -173,7 +173,6 @@ const TabsScreen = () => (
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
-
         if (route.name === "Home") {
           return (
             <Entypo
