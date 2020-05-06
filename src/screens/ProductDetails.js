@@ -21,7 +21,7 @@ const { width } = Dimensions.get("window");
 const { height } = 300;
 import firebase from "firebase";
 import { bindActionCreators } from "redux";
-import { cartAsync } from "../store/actions";
+import { cartAsync, cartSizeAsync } from "../store/actions";
 import { connect } from "react-redux";
 import axios from "axios";
 
@@ -57,12 +57,36 @@ class ProductDetails extends Component {
     const layout = e.nativeEvent.layout;
     this.setState({ size: { width: layout.width, height: layout.height } });
   };
-  handleChange (num){
-    var preNum = this.state.qt
-    preNum =num + preNum
-    if(preNum>=1){
-      this.setState({qt:preNum})
+  // handleChange (num){
+  //   var preNum = this.state.qt
+  //   preNum =num + preNum
+  //   if(preNum>=1){
+  //     this.setState({qt:preNum})
+  //   }
+  // }
+  handleChange(num) {
+    var preNum = this.state.qt;
+    preNum = num + preNum;
+    if (preNum >= 1) {
+      this.setState({ qt: preNum });
     }
+
+
+    var pCart=this.props.cart;
+    console.log("pcartttttt76666666666666666666666666666",pCart)
+    var that =this
+      pCart.map(function(pro,ind) {
+       console.log("cehck",pro.product.productName ,that.props.route.params.product.productName)
+       if(pro.product.productName === that.props.route.params.product.productName){
+          pro.quantity = that.state.qt+num
+       }
+
+    });
+
+    console.log("pacart 11111",pCart)
+
+      this.props.cartAsync(pCart)
+
   }
   render() {
 
@@ -74,8 +98,20 @@ class ProductDetails extends Component {
       temp.push(i)
     }
     var abc= [1,2,3]
+
+    console.log("PRop CRAD props", this.props.cart.length, "cartSize",this.props.cartSize)
+    console.log("REDUX CART3333333333333", this.props.cart)
+    
+    var cSize=0
+
+    for(var i=0; i<this.props.cart.length; i++){
+        cSize=cSize + parseInt(this.props.cart[i].quantity)
+    }
+
+    this.props.cartSizeAsync(cSize)
+
     return (
-      <View style={{ flex: 1, backgroundColor: "white"  }}>
+      <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
           <View
             onLayout={this._onLayoutDidChange}
@@ -349,13 +385,14 @@ const mapStateToProps = state => ({
   loading: state.Cart.cartLoading,
   error: state.Cart.cartError,
   user: state.user.user,
-  store: state.Store.storeData
-
+  store: state.Store.storeData,
+  cartSize: state.CartSize.cartSizeData
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
       {
-          cartAsync
+          cartAsync,
+          cartSizeAsync
       },
       dispatch
   );
