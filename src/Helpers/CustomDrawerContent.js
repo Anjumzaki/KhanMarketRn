@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -7,11 +7,41 @@ import {
 import { View, Image } from "react-native";
 import LatoText from "../Helpers/LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
-export default function CustomDrawerContent(props) {
+import { bindActionCreators } from "redux";
+import { cartAsync } from "../store/actions";
+import { connect } from "react-redux";
+import firebase from "firebase";
+
+// function CustomDrawerContent(props) 
+class CustomDrawerContent extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      image: ''
+    };
+  }
+
+  componentDidMount(){
+    const ref = firebase
+    .storage()
+    .ref('profile_images/'+ this.props.user.user._id+".jpg");
+    ref.getDownloadURL().then(url => {
+      console.log("Imageee urllllllll2222ll",url)
+    this.setState({ image: url });
+    });
+  }
+
+
+
+  render() {
+
+    console.log("bar propsssssssssssssssssssssssss",this.props)
+    console.log("bar stateeeeeee",this.state)
   return (
-    <DrawerContentScrollView style={{ backgroundColor: "#5C5C5C" }} {...props}>
+    <DrawerContentScrollView style={{ backgroundColor: "#5C5C5C" }} {...this.props}>
       <TouchableOpacity
-        onPress={() => props.navigation.navigate("Profile")}
+        onPress={() => this.props.navigation.navigate("Profile")}
         style={{
           flexDirection: "row",
           alignItems: "center",
@@ -22,14 +52,14 @@ export default function CustomDrawerContent(props) {
         }}
       >
         <View>
-          <Image source={require("../../assets/Ellipse20.png")} />
+          <Image source={this.state.image ? { uri: this.state.image } : require("../../assets/Ellipse20.png")} />
         </View>
         <View style={{ paddingLeft: 10 }}>
           <LatoText
             col="#FFFFFF"
             fontName={"Lato-Bold"}
             fontSiz={20}
-            text="Bernard Murphy"
+            text={this.props.user.user.name}
           />
           <View style={{ paddingTop: 2 }}>
             <LatoText
@@ -38,10 +68,24 @@ export default function CustomDrawerContent(props) {
               fontSiz={12}
               text="Profile 90% complete"
             />
-          </View>
+          </View> 
         </View>
       </TouchableOpacity>
-      <DrawerItemList {...props} />
+      <DrawerItemList {...this.props} />
     </DrawerContentScrollView>
   );
+  }
 }
+
+const mapStateToProps = (state) => ({
+  user: state.user.user,
+});
+const mapDispatchToProps = (dispatch, ownProps) =>
+  bindActionCreators(
+    {
+      cartAsync,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(CustomDrawerContent);

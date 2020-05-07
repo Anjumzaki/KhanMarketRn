@@ -888,7 +888,7 @@ class Cart extends Component {
                     fonSiz={17}
                     col="#2AA034"
                     text={"Verified"}
-                  />
+                  /> 
                 ) : (
             <TouchableOpacity
               onPress={async () => {
