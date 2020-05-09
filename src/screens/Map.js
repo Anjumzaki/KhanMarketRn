@@ -51,7 +51,7 @@ export default class Map extends React.Component {
                 latitude: this.state.location.coords.latitude,
                 longitude: this.state.location.coords.longitude,
               }}
-              title={"title"}
+              title={"Google"}
               description={"description"}
             />
           </MapView>
