@@ -33,30 +33,37 @@ class Cart extends Component {
       heart: false,
       qt: 1, 
       image: '',
-      tax: ''
+      tax: '',
+      isStore: true
     };
   }
 
   componentDidMount(){
 
-    const ref = firebase
-    .storage()
-    .ref("/store_logos/" + this.props.store.id + ".jpg");
-      ref.getDownloadURL().then(url => {
-      this.setState({ image: url });
-      }); 
-
-      axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/store/"+this.props.store.id)
-      .then(resp => {
-        console.log('RESP DATAA',resp.data)
-        this.setState({tax: resp.data.tax})
-      })
+    if(this.props.store){
+      const ref = firebase
+      .storage()
+      .ref("/store_logos/" + this.props.store.id + ".jpg");
+        ref.getDownloadURL().then(url => {
+        this.setState({ image: url });
+        }); 
+  
+        axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/store/"+this.props.store.id)
+        .then(resp => {
+          console.log('RESP DATAA',resp.data)
+          this.setState({tax: resp.data.tax})
+        })
+    }else{
+        this.setState({isStore: false})
+    }
+    
   }
 
   _onLayoutDidChange = e => {
     const layout = e.nativeEvent.layout;
     this.setState({ size: { width: layout.width, height: layout.height } });
   };
+
   handleChange(num) {
     var preNum = this.state.qt;
     preNum = num + preNum;
@@ -64,6 +71,7 @@ class Cart extends Component {
       this.setState({ qt: preNum });
     }
   }
+
   render() {
     var subTotal = 0
     
@@ -77,25 +85,44 @@ class Cart extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingVertical: 30,
-              alignItems: "center"
-            }}
-          >
-            <Image
-              style={{ width: 44, height: 44, marginRight: 10 }}
-              source={{uri: this.state.image}}
-            />
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={20} 
-              col="#2E2E2E"
-              text={this.props.store.name}
-            ></LatoText>
-          </View>
+          {this.state.isStore ? (
+                <View
+                style={{
+                  flexDirection: "row",
+                  paddingHorizontal: 20,
+                  paddingVertical: 30,
+                  alignItems: "center"
+                }}
+                >
+                <Image
+                  style={{ width: 44, height: 44, marginRight: 10 }}
+                  source={{uri: this.state.image}}
+                />
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={20} 
+                  col="#2E2E2E"
+                  text={this.props.store.name}
+                ></LatoText>
+                </View>
+          ): (
+                <View
+                style={{
+                  flexDirection: "row",
+                  paddingHorizontal: 20,
+                  paddingVertical: 30,
+                  alignItems: "center"
+                }}
+              >
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={20} 
+                  col="#2E2E2E"
+                  text="No Store Selected"
+                ></LatoText>
+              </View>
+          )}
+         
           <View style={lines.simple} />
           {
             this.props.cart.map((item,index) => (

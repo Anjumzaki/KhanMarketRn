@@ -8,12 +8,19 @@ import {
   Button,
   StyleSheet,
   Dimensions,
+  Alert,
 } from "react-native";
 import LatoText from "../Helpers/LatoText";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { btnStyles, bottomTab, lines } from "../styles/base";
 import ImagePicker from "react-native-image-picker";
 import Modal from "react-native-modalbox";
+import { bindActionCreators } from "redux";
+import { cartAsync } from "../store/actions";
+import { connect } from "react-redux";
+import firebase from "firebase";
+import axios from "axios";
+
 const options = {
   title: "Select Avatar",
   storageOptions: {
@@ -21,7 +28,7 @@ const options = {
     path: "images",
   },
 };
-export default class Settings extends React.Component {
+class Settings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,8 +38,44 @@ export default class Settings extends React.Component {
       images: null,
       avatarSource: null,
       editName: false,
-      name: "Bernard Murphy",
+      name: this.props.user.user.name,
+      image: '',
+      old: '',
+      newP: ''
     };
+  }
+
+  componentDidMount(){
+   
+          const ref = firebase
+          .storage()
+          .ref('profile_images/'+ this.props.user.user._id+".jpg");
+          ref.getDownloadURL().then(url => {
+            console.log("Imageee urllllllllll",url)
+          this.setState({ image: url });
+          });
+  }
+
+
+  editName(){
+    axios.put('http://192.168.0.105:3000/edit/user/name/'+this.props.user.user._id+"/"+this.state.name)
+    .then(resp => console.log(resp))
+    .catch(err => console.log(err))
+  }
+
+  editPass(){
+    console.log("In edit pass")
+    axios.put('http://192.168.0.105:3000/reset/password/'+this.state.old+"/"+this.state.newP+"/"+this.props.user.user.email)
+    .then(resp => console.log(resp))
+    .catch(err => console.log(err))
+  }
+  
+
+  uploadImage = async(uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    var ref = firebase.storage().ref().child('profile_images/'+ this.props.user.user._id+".jpg");
+    return ref.put(blob);
   }
 
   render() {
@@ -56,6 +99,7 @@ export default class Settings extends React.Component {
                   borderRadius: 10,
                   marginBottom: 20,
                 }}
+                onChangeText={(old) => this.setState({old})}
               />
               <TextInput
                 placeholder={"New Password"}
@@ -65,6 +109,8 @@ export default class Settings extends React.Component {
                   padding: 10,
                   borderRadius: 10,
                 }}
+                onChangeText={(newP) => this.setState({newP})}
+
               />
             </View>
             <View style={{flexDirection:'row',justifyContent:'space-evenly'}}>
@@ -77,14 +123,18 @@ export default class Settings extends React.Component {
                 text={"Cancel"}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.refs.modal3.close()}>
+            <TouchableOpacity 
+            onPress={() => {
+              this.editPass()
+              this.refs.modal3.close()
+              }}>
               <LatoText
                 fontName="Lato-Regular"
                 fonSiz={15}
                 col="#B50000"
                 txtAlign={"center"}
                 text={"Save"}
-              />
+              /> 
             </TouchableOpacity>
             </View>
 
@@ -113,7 +163,7 @@ export default class Settings extends React.Component {
               source={
                 this.state.avatarSource
                   ? { uri: this.state.avatarSource.uri }
-                  : require("../../assets/Ellipse20.png")
+                  : (this.state.image ? { uri: this.state.image }: require("../../assets/Ellipse20.png"))
               }
             />
             <TouchableOpacity
@@ -131,6 +181,11 @@ export default class Settings extends React.Component {
                     );
                   } else {
                     const source = { uri: response.uri };
+                    // this.saveImage(source);
+                    this.uploadImage(source.uri)
+                    .then(resp => Alert("success"))
+                    .then(err => Alert(err))
+
                     this.setState({
                       avatarSource: source,
                     });
@@ -165,7 +220,10 @@ export default class Settings extends React.Component {
               />
               {this.state.editName ? (
                 <TouchableOpacity
-                  onPress={() => this.setState({ editName: false })}
+                  onPress={() => {
+                    this.setState({ editName: false })
+                    this.editName()
+                  }}
                   style={{ paddingHorizontal: 20 }}
                 >
                   <LatoText
@@ -227,7 +285,7 @@ export default class Settings extends React.Component {
               <TextInput
                 editable={false}
                 style={{ fontSize: 17 }}
-                value={"(555) 576 349"}
+                value={this.props.user.user.mobile}
               />
             </View>
           </View>
@@ -251,7 +309,7 @@ export default class Settings extends React.Component {
               <TextInput
                 editable={false}
                 style={{ fontSize: 17 }}
-                value={"b.murhpy@gmail.com"}
+                value={this.props.user.user.email}
               />
             </View>
           </View>
@@ -394,3 +452,16 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width - 100,
   },
 });
+
+const mapStateToProps = (state) => ({
+  user: state.user.user,
+});
+const mapDispatchToProps = (dispatch, ownProps) =>
+  bindActionCreators(
+    {
+      cartAsync,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);

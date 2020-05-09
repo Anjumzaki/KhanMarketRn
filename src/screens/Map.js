@@ -11,18 +11,41 @@ import {
 import Geolocation from "@react-native-community/geolocation";
 import { conStyles, textStyles, textIn, btnStyles } from "../styles/base";
 import LatoText from "../Helpers/LatoText";
-
-export default class Map extends React.Component {
+import { bindActionCreators } from "redux";
+import { locationAsync } from "../store/actions";
+import { connect } from "react-redux";
+import axios from 'axios'
+class Map extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       location: "",
-    };
+      lat: '',
+      lng: ''
+    }; 
   }
   componentDidMount() {
+
+    var lat1=''
+    var lng1=''
     Geolocation.getCurrentPosition(
       (info) => {
-        this.setState({ location: info }, 
+        // console.log("ONFFOOO",info.coords.latitude)
+        // lat=info.coords.latitude
+        // lng=info.coords.longitude
+
+        
+    fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + info.coords.latitude+ ',' + info.coords.longitude + '&key=AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI')
+    .then((response) => response.json())
+    .then((responseJson) => {
+        // console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].formatted_address));
+        // alert(JSON.stringify(responseJson.results[0].formatted_address))
+        this.props.locationAsync(JSON.stringify(responseJson.results[0].formatted_address))
+     })
+     .catch(err => console.log("err", err))
+
+        this.setState({ location: info, lat: info.coords.latitude, lng: info.coords.longitude }, 
+          
           // alert(JSON.stringify(info))
           );
       },
@@ -31,6 +54,9 @@ export default class Map extends React.Component {
       },
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
     );
+      console.log("lat longgg", lat1,lng1)
+
+
   }
   render() {
     if (this.state.location) {
@@ -111,3 +137,17 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height + 50,
   },
 });
+
+
+const mapStateToProps = (state) => ({
+  location: state.Location.locationData
+});
+const mapDispatchToProps = (dispatch, ownProps) =>
+  bindActionCreators(
+    {
+      locationAsync,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(Map);

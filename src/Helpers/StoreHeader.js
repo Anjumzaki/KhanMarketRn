@@ -43,7 +43,7 @@ class StoreHeader extends React.Component {
               />
             </View>
             <TouchableOpacity onPress={()=>this.props.navigation.navigate('Cart')}   style={{padding:20}}>
-               {/* <View>
+               <View>
                   <View style={headerStyles.cartTxt}>
                     <LatoText
                       fontName="Lato-Regular"
@@ -57,7 +57,7 @@ class StoreHeader extends React.Component {
                     size={26}
                     color={"white"}
                   />
-                </View> */}
+                </View>
             </TouchableOpacity>
           </View>
 
@@ -67,7 +67,7 @@ class StoreHeader extends React.Component {
               fontName="Lato-Light"
               fonSiz={17}
               col="white"
-              text={"4228 Homestead Rd Cedar Hill, California..."}
+              text={this.props.userLocation.substring(0,42)}
               textDec={"underline"}
             />
           </View>
@@ -82,7 +82,8 @@ const mapStateToProps = state => ({
   cartData: state.Cart.cartData, 
   loading: state.Store.storeLoading,
   error: state.Store.storeError,
-  cartLength:state.CartSize.cartSizeData
+  cartLength:state.CartSize.cartSizeData,
+  userLocation: state.Location.locationData
 
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
