@@ -67,7 +67,7 @@ class StoreHeader extends React.Component {
               fontName="Lato-Light"
               fonSiz={17}
               col="white"
-              text={"4228 Homestead Rd Cedar Hill, California..."}
+              text={this.props.userLocation.substring(0,42)}
               textDec={"underline"}
             />
           </View>
@@ -82,7 +82,8 @@ const mapStateToProps = state => ({
   cartData: state.Cart.cartData, 
   loading: state.Store.storeLoading,
   error: state.Store.storeError,
-  cartLength:state.CartSize.cartSizeData
+  cartLength:state.CartSize.cartSizeData,
+  userLocation: state.Location.locationData
 
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
