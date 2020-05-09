@@ -60,14 +60,16 @@ class Settings extends React.Component {
   editName(){
     axios.put('http://192.168.0.105:3000/edit/user/name/'+this.props.user.user._id+"/"+this.state.name)
     .then(resp => console.log(resp))
+    .then(()=>this.refs.modal3.close)
     .catch(err => console.log(err))
   }
 
   editPass(){
-    console.log("In edit pass")
-    axios.put('http://192.168.0.105:3000/reset/password/'+this.state.old+"/"+this.state.newP+"/"+this.props.user.user.email)
-    .then(resp => console.log(resp))
-    .catch(err => console.log(err))
+   alert("In edit pass")
+    // axios.put('http://192.168.0.105:3000/reset/password/'+this.state.old+"/"+this.state.newP+"/"+this.props.user.user.email)
+    // .then(resp => console.log(resp))
+    // .catch(err => console.log(err))
+    this.refs.modal3.close()
   }
   
 
@@ -126,7 +128,7 @@ class Settings extends React.Component {
             <TouchableOpacity 
             onPress={() => {
               this.editPass()
-              this.refs.modal3.close()
+             
               }}>
               <LatoText
                 fontName="Lato-Regular"
@@ -163,7 +165,7 @@ class Settings extends React.Component {
               source={
                 this.state.avatarSource
                   ? { uri: this.state.avatarSource.uri }
-                  : (this.state.image ? { uri: this.state.image }: require("../../assets/Ellipse20.png"))
+                  : (this.state.image && { uri: this.state.image })
               }
             />
             <TouchableOpacity
