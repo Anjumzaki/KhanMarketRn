@@ -614,7 +614,7 @@ class Cart extends Component {
                 }
 
                 console.log("CLICKED")
-                axios.put("http://192.168.0.105:3000/api/users/guest/edit/"+this.props.user.user._id,{
+                axios.put("https://sheltered-scrubland-52295.herokuapp.com/api/users/guest/edit/"+this.props.user.user._id,{
                   name: this.state.name,
                   email: this.state.email,
                   mobile: this.state.mobile,
