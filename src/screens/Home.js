@@ -101,7 +101,7 @@ class Home extends React.Component {
           <View>
 
           <ScrollView
-            style={
+            style={ 
               Platform.OS == "ios"
                 ? { marginTop: 70 }
                 : { marginTop: 100, marginBottom: 2 }

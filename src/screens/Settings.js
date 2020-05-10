@@ -58,7 +58,7 @@ class Settings extends React.Component {
 
 
   editName(){
-    axios.put('http://192.168.0.105:3000/edit/user/name/'+this.props.user.user._id+"/"+this.state.name)
+    axios.put('https://sheltered-scrubland-52295.herokuapp.com/edit/user/name/'+this.props.user.user._id+"/"+this.state.name)
     .then(resp => {
 
       var temp = this.props.user
@@ -76,12 +76,12 @@ class Settings extends React.Component {
 
   editPass(){
    console.log("In edit pass")
-    // axios.put('http://192.168.0.105:3000/reset/password/'+this.state.old+"/"+this.state.newP+"/"+this.props.user.user.email)
-    // .then(resp => {
-    //   this.refs.modal3.close()
-    //   console.log(resp)
-    // })
-    // .catch(err => console.log(err))
+    axios.put('https://sheltered-scrubland-52295.herokuapp.com/reset/password/'+this.state.old+"/"+this.state.newP+"/"+this.props.user.user.email)
+    .then(resp => {
+      this.refs.modal3.close()
+      console.log(resp)
+    })
+    .catch(err => console.log(err))
     
   }
   
