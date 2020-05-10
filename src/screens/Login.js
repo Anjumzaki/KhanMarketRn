@@ -28,7 +28,7 @@ import { conStyles, textStyles, textIn, btnStyles } from "../styles/base";
 import LatoText from "../Helpers/LatoText";
 import axios from "axios";
 import { bindActionCreators } from "redux";
-import { userAsync, cartLoading } from "../store/actions";
+import { userAsync, locationAsync } from "../store/actions";
 import { connect } from "react-redux";
 import { getUniqueId, getManufacturer } from "react-native-device-info";
 class Login extends React.Component {
@@ -103,8 +103,21 @@ class Login extends React.Component {
                     loading: false,
                   })
                   }else{
+                    axios.get('https://sheltered-scrubland-52295.herokuapp.com/get/location/'+resp.data.user._id)
+                    .then(resp1 => {
+                      console.log("loc resp",resp1.data)
+
                       this.props.userAsync(resp.data);
-                      this.props.navigation.navigate("Map");
+                      // this.props.navigation.navigate("Map");
+                      if(resp1.data.length > 0){
+                        this.props.locationAsync(resp1.data[0].address1+" "+resp1.data[0].address2+" "+resp1.data[0].city+" "+resp1.data[0].country)
+                        this.props.navigation.navigate("App");
+                      }else{
+                        this.props.navigation.navigate("Map");
+                      }
+                    })
+                    .catch(err => console.log(err))
+                     
 
                   }
                 })
@@ -325,22 +338,34 @@ class Login extends React.Component {
             <TouchableOpacity
               style={{ alignItems: "center", marginTop: 20 }}
               onPress={() => {
-                // alert(getUniqueId())
-                var resp = {
-                  token: "guest",
-                  user: {
-                    name: "guest",
-                    _id: getUniqueId(),
-                    email: "",
-                    mobile: "",
-                    zipCode: "",
-                  },
-                };
+              
+                  axios.post("https://sheltered-scrubland-52295.herokuapp.com/api/users/guest/register",{
+                    isGuest: true,
+                    guestId: getUniqueId()
+                  })
+                  .then(resp => {
+                      console.log("resp guest",resp.data)
 
-                this.props.userAsync(resp);
-                this.props.navigation.navigate("Map");
-                console.log("geust resp", resp);
-              }}
+                      axios.get('https://sheltered-scrubland-52295.herokuapp.com/get/location/'+resp.data.user._id)
+                        .then(resp1 => {
+                          console.log("loc resp",resp1.data)
+
+                          this.props.userAsync(resp.data);
+                          // this.props.navigation.navigate("Map");
+                          if(resp1.data.length > 0){
+                            this.props.locationAsync(resp1.data[0].address1+" "+resp1.data[0].address2+" "+resp1.data[0].city+" "+resp1.data[0].country)
+                            this.props.navigation.navigate("App");
+                          }else{
+                            this.props.navigation.navigate("Map");
+                          }
+                        })
+                        .catch(err => console.log(err))
+
+
+                  })
+                  .catch(err => this.setState({msg: "Email already exist!"}))  
+    
+                  }}
             >
               <LatoText
                 fontName="Lato-Regular"
@@ -365,6 +390,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
     {
       userAsync,
+      locationAsync
     },
     dispatch
   );
