@@ -21,7 +21,8 @@ class Map extends React.Component {
     this.state = {
       location: "",
       lat: '',
-      lng: ''
+      lng: '',
+      completeLoc: ""
     }; 
   }
   componentDidMount() {
@@ -38,8 +39,14 @@ class Map extends React.Component {
     fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + info.coords.latitude+ ',' + info.coords.longitude + '&key=AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI')
     .then((response) => response.json())
     .then((responseJson) => {
-        // console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].formatted_address));
+        // console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[0].long_name))
+        //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[1].long_name))
+        //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[2].long_name))
+        //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[3].long_name))
+        //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[4].long_name))
+        //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[5].long_name));
         // alert(JSON.stringify(responseJson.results[0].formatted_address))
+        this.setState({completeLoc: responseJson})
         this.props.locationAsync(JSON.stringify(responseJson.results[0].formatted_address))
      })
      .catch(err => console.log("err", err))
@@ -59,6 +66,7 @@ class Map extends React.Component {
 
   }
   render() {
+    console.log(this.state)
     if (this.state.location) {
       loc = (
         <View style={styles.container}>
@@ -91,9 +99,25 @@ class Map extends React.Component {
               }}
             >
               <TouchableOpacity 
-                onPress={() => this.props.navigation.push("App",{
+
+                onPress={() => {
+                  axios.post('https://sheltered-scrubland-52295.herokuapp.com/add/location',{
+                    refId: this.props.user.user._id,
+                    type: "Customer",
+                    address1:  this.state.completeLoc.results[0].address_components[0].long_name+ " " + this.state.completeLoc.results[0].address_components[1].long_name,
+                    address2:  this.state.completeLoc.results[0].address_components[2].long_name+" " + this.state.completeLoc.results[0].address_components[3].long_name,
+                    city: this.state.completeLoc.results[0].address_components[4].long_name,
+                    country: this.state.completeLoc.results[0].address_components[5].long_name,
+                    zipCode: this.state.completeLoc.results[0].address_components[6].long_name
+                  })
+                  .then((resp1) => {
+
+                  this.props.navigation.push("App",{
                   location: this.state.location
-                })}
+                })
+                  })
+                  .catch(err => console.log(err))
+              }}
                 style={[btnStyles.basic, { width: "80%", marginBottom: 100 }]}
               >
                 <LatoText
@@ -140,7 +164,8 @@ const styles = StyleSheet.create({
 
 
 const mapStateToProps = (state) => ({
-  location: state.Location.locationData
+  location: state.Location.locationData,
+  user: state.user.user
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
