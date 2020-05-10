@@ -39,46 +39,61 @@ class Settings extends React.Component {
       avatarSource: null,
       editName: false,
       name: this.props.user.user.name,
-      image: '',
-      old: '',
-      newP: ''
+      image: "",
+      old: "",
+      newP: "",
     };
   }
 
-  componentDidMount(){
-   
-          const ref = firebase
-          .storage()
-          .ref('profile_images/'+ this.props.user.user._id+".jpg");
-          ref.getDownloadURL().then(url => {
-            console.log("Imageee urllllllllll",url)
-          this.setState({ image: url });
-          });
+  componentDidMount() {
+    const ref = firebase
+      .storage()
+      .ref("profile_images/" + this.props.user.user._id + ".jpg");
+    ref.getDownloadURL().then((url) => {
+      console.log("Imageee urllllllllll", url);
+      this.setState({ image: url });
+    });
   }
 
-
-  editName(){
-    axios.put('http://192.168.0.105:3000/edit/user/name/'+this.props.user.user._id+"/"+this.state.name)
-    .then(resp => console.log(resp))
-    .then(()=>this.refs.modal3.close)
-    .catch(err => console.log(err))
+  editName() {
+    axios
+      .put(
+        "https://sheltered-scrubland-52295.herokuapp.com/edit/user/name/" +
+          this.props.user.user._id +
+          "/" +
+          this.state.name
+      )
+      .then((resp) => console.log(resp))
+      .then(() => this.refs.modal3.close)
+      .catch((err) => console.log(err));
+      
   }
 
-  editPass(){
-   alert("In edit pass")
-    // axios.put('http://192.168.0.105:3000/reset/password/'+this.state.old+"/"+this.state.newP+"/"+this.props.user.user.email)
-    // .then(resp => console.log(resp))
-    // .catch(err => console.log(err))
-    this.refs.modal3.close()
+  editPass() {
+    alert("In edit pass");
+    axios
+      .put(
+        "https://sheltered-scrubland-52295.herokuapp.com/reset/password/" +
+          this.state.old +
+          "/" +
+          this.state.newP +
+          "/" +
+          this.props.user.user.email
+      )
+      .then((resp) => console.log(resp))
+      .then(() => this.refs.modal3.close())
+      .catch((err) => console.log(err));
   }
-  
 
-  uploadImage = async(uri) => {
+  uploadImage = async (uri) => {
     const response = await fetch(uri);
     const blob = await response.blob();
-    var ref = firebase.storage().ref().child('profile_images/'+ this.props.user.user._id+".jpg");
+    var ref = firebase
+      .storage()
+      .ref()
+      .child("profile_images/" + this.props.user.user._id + ".jpg");
     return ref.put(blob);
-  }
+  };
 
   render() {
     let { image } = this.state;
@@ -90,7 +105,14 @@ class Settings extends React.Component {
           ref={"modal3"}
           isDisabled={this.state.isDisabled}
         >
-          <View style={{flex:1, padding: 15, width: "100%",justifyContent:'space-between' }}>
+          <View
+            style={{
+              flex: 1,
+              padding: 15,
+              width: "100%",
+              justifyContent: "space-between",
+            }}
+          >
             <View>
               <TextInput
                 placeholder={"Old Password"}
@@ -101,7 +123,7 @@ class Settings extends React.Component {
                   borderRadius: 10,
                   marginBottom: 20,
                 }}
-                onChangeText={(old) => this.setState({old})}
+                onChangeText={(old) => this.setState({ old })}
               />
               <TextInput
                 placeholder={"New Password"}
@@ -111,35 +133,35 @@ class Settings extends React.Component {
                   padding: 10,
                   borderRadius: 10,
                 }}
-                onChangeText={(newP) => this.setState({newP})}
-
+                onChangeText={(newP) => this.setState({ newP })}
               />
             </View>
-            <View style={{flexDirection:'row',justifyContent:'space-evenly'}}>
-            <TouchableOpacity onPress={() => this.refs.modal3.close()}>
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={15}
-                col="#B50000"
-                txtAlign={"center"}
-                text={"Cancel"}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity 
-            onPress={() => {
-              this.editPass()
-             
-              }}>
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={15}
-                col="#B50000"
-                txtAlign={"center"}
-                text={"Save"}
-              /> 
-            </TouchableOpacity>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-evenly" }}
+            >
+              <TouchableOpacity onPress={() => this.refs.modal3.close()}>
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={15}
+                  col="#B50000"
+                  txtAlign={"center"}
+                  text={"Cancel"}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  this.editPass();
+                }}
+              >
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={15}
+                  col="#B50000"
+                  txtAlign={"center"}
+                  text={"Save"}
+                />
+              </TouchableOpacity>
             </View>
-
           </View>
         </Modal>
         <ScrollView
@@ -165,7 +187,7 @@ class Settings extends React.Component {
               source={
                 this.state.avatarSource
                   ? { uri: this.state.avatarSource.uri }
-                  : (this.state.image && { uri: this.state.image })
+                  : this.state.image && { uri: this.state.image }
               }
             />
             <TouchableOpacity
@@ -185,8 +207,8 @@ class Settings extends React.Component {
                     const source = { uri: response.uri };
                     // this.saveImage(source);
                     this.uploadImage(source.uri)
-                    .then(resp => Alert("success"))
-                    .then(err => Alert(err))
+                      .then((resp) => Alert("success"))
+                      .then((err) => Alert(err));
 
                     this.setState({
                       avatarSource: source,
@@ -223,8 +245,8 @@ class Settings extends React.Component {
               {this.state.editName ? (
                 <TouchableOpacity
                   onPress={() => {
-                    this.setState({ editName: false })
-                    this.editName()
+                    this.setState({ editName: false });
+                    this.editName();
                   }}
                   style={{ paddingHorizontal: 20 }}
                 >
