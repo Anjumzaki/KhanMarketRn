@@ -16,7 +16,7 @@ import { btnStyles, bottomTab, lines } from "../styles/base";
 import ImagePicker from "react-native-image-picker";
 import Modal from "react-native-modalbox";
 import { bindActionCreators } from "redux";
-import { cartAsync } from "../store/actions";
+import { cartAsync,userAsync } from "../store/actions";
 import { connect } from "react-redux";
 import firebase from "firebase";
 import axios from "axios";
@@ -59,17 +59,30 @@ class Settings extends React.Component {
 
   editName(){
     axios.put('http://192.168.0.105:3000/edit/user/name/'+this.props.user.user._id+"/"+this.state.name)
-    .then(resp => console.log(resp))
+    .then(resp => {
+
+      var temp = this.props.user
+      console.log("before user",temp)
+      temp.user.name= this.state.name
+      console.log("after user",temp)
+
+      this.props.userAsync(temp);
+
+      console.log(resp)
+    })
     .then(()=>this.refs.modal3.close)
     .catch(err => console.log(err))
   }
 
   editPass(){
-   alert("In edit pass")
+   console.log("In edit pass")
     // axios.put('http://192.168.0.105:3000/reset/password/'+this.state.old+"/"+this.state.newP+"/"+this.props.user.user.email)
-    // .then(resp => console.log(resp))
+    // .then(resp => {
+    //   this.refs.modal3.close()
+    //   console.log(resp)
+    // })
     // .catch(err => console.log(err))
-    this.refs.modal3.close()
+    
   }
   
 
@@ -117,7 +130,7 @@ class Settings extends React.Component {
             </View>
             <View style={{flexDirection:'row',justifyContent:'space-evenly'}}>
             <TouchableOpacity onPress={() => this.refs.modal3.close()}>
-              <LatoText
+            <LatoText
                 fontName="Lato-Regular"
                 fonSiz={15}
                 col="#B50000"
@@ -462,6 +475,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
     {
       cartAsync,
+      userAsync
     },
     dispatch
   );
