@@ -61,7 +61,7 @@ const HomeStackScreen = () => (
   >
     <HomeStack.Screen
       name="Home"
-      component={Home}
+      component={TabsScreen}
       options={{ header: props => <StoreHeader {...props} />}}
 
     />
@@ -209,7 +209,7 @@ const TabsScreen = () => (
     
   >
     <Tabs.Screen name="Favourites" component={FavouritesStackScreen} />
-    <Tabs.Screen name="Home" component={HomeStackScreen} />
+    <Tabs.Screen name="Home" component={Home} />
     <Tabs.Screen name="My Orders" component={MyOrderStackScreen} />
   </Tabs.Navigator>
 );
@@ -289,7 +289,7 @@ const DrawerScreen = () => (
   })}
   
   >
-    <Drawer.Screen name="Home" component={TabsScreen} />
+    <Drawer.Screen name="Home" component={HomeStackScreen} />
     <Drawer.Screen name="Favourites" component={FavouritesStackScreen} />
     <Drawer.Screen name="My Orders" component={MyOrderStackScreen} />
     <Drawer.Screen name="About Us" component={TabsScreen} />

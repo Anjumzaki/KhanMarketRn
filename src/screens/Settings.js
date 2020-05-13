@@ -20,7 +20,6 @@ import { cartAsync,userAsync } from "../store/actions";
 import { connect } from "react-redux";
 import firebase from "firebase";
 import axios from "axios";
-
 const options = {
   title: "Select Avatar",
   storageOptions: {

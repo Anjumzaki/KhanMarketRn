@@ -59,7 +59,7 @@ export default class StoreInfo extends Component {
     .ref("/store_logos/" + this.props.route.params.storeId + ".jpg");
       ref.getDownloadURL().then(url => {
       this.setState({ image: url });
-      }); 
+      }).catch(err=>console.log(err)); 
   }
 
 

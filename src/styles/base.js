@@ -128,7 +128,7 @@ const bottomTab = StyleSheet.create({
     },
     shadowOpacity: 0.58,
     shadowRadius: 16.0,
-
+    paddingBottom:30,
     elevation: 24
   }
 });
