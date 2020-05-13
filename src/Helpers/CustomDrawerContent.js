@@ -4,7 +4,7 @@ import {
   DrawerItemList,
   DrawerItem,
 } from "@react-navigation/drawer";
-import { View, Image,Text } from "react-native";
+import { View, Image, Text } from "react-native";
 import LatoText from "../Helpers/LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { bindActionCreators } from "redux";
@@ -18,7 +18,7 @@ class CustomDrawerContent extends Component {
     super(props);
 
     this.state = {
-      image: '',
+      image: "",
     };
   }
 
@@ -28,6 +28,8 @@ class CustomDrawerContent extends Component {
       .ref("profile_images/" + this.props.user.user._id + ".jpg");
     ref.getDownloadURL().then((url) => {
       this.setState({ image: url });
+    }).catch((err)=>{
+      console.log(err)
     });
   }
 
@@ -53,7 +55,7 @@ class CustomDrawerContent extends Component {
           <View>
             {this.state.image != '' && <Image style={{width:60,height:60,borderRadius:100}} source={{ uri: this.state.image }} />}
           </View>
-          
+
           <View style={{ paddingLeft: 10 }}>
             <LatoText
               col="#FFFFFF"
