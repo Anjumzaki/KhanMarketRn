@@ -52,8 +52,14 @@ class OrderDetails extends Component {
         this.setState({ image: url });
       })
       .catch((err) => console.log(err));
-  }
-
+      this._unsubscribe = this.props.navigation.addListener('focus', () => {
+        // do something
+      });
+    }
+    componentWillUnmount() {
+      this._unsubscribe();
+    }
+  
   _onLayoutDidChange = (e) => {
     const layout = e.nativeEvent.layout;
     this.setState({ size: { width: layout.width, height: layout.height } });

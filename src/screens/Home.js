@@ -19,6 +19,7 @@ import { bindActionCreators } from "redux";
 import { userAsync } from "../store/actions";
 import { connect } from "react-redux";
 import Geolocation from "@react-native-community/geolocation";
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 class Home extends React.Component {
   static navigationOptions = {
@@ -92,6 +93,7 @@ class Home extends React.Component {
     console.log("propsssss", this.props.user);
     return (
       <View style={{ justifyContent: "center" }}>
+        <StoreHeader navigation={this.props.navigation}/>
         <StatusBar
           translucent={true}
           barStyle="light-content"
@@ -103,7 +105,7 @@ class Home extends React.Component {
           <ScrollView
             style={ 
               Platform.OS == "ios"
-                ? { marginTop: 70 }
+                ? {marginTop: getStatusBarHeight() + 110 }
                 : { marginTop: 100, marginBottom: 2 }
             }
           >

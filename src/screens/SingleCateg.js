@@ -7,7 +7,7 @@ import {
   Image,
   StyleSheet,
   LinearGradient,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import Carousel from "react-native-looped-carousel";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -27,86 +27,105 @@ const { height } = 300;
 
 class SingleCateg extends Component {
   constructor(props) {
-    super(props); 
+    super(props);
 
     this.state = {
       heart: false,
-      qt: 1
+      qt: 1,
     };
   }
+  componentDidMount() {
+    this._unsubscribe = this.props.navigation.addListener("focus", () => {
+      // do something
+    });
+  }
+  componentWillUnmount() {
+    this._unsubscribe();
+  }
+
   render() {
-    console.log("Signle cat props",this.props.route.params, this.props.filtered)
-    var searchedProducts=[];
+    console.log(
+      "Signle cat props",
+      this.props.route.params,
+      this.props.filtered
+    );
+    var searchedProducts = [];
     var key1 = this.props.searchInput;
     if (this.props.searchInput) {
       let totalProducts = [...this.props.route.params.products];
-      console.log("TOTAL PODUCT111",totalProducts)
+      console.log("TOTAL PODUCT111", totalProducts);
       searchedProducts = totalProducts.filter(function (product) {
-          return (product.productName ? product.productName.toLowerCase().includes(key1.toLowerCase()) : null);
+        return product.productName
+          ? product.productName.toLowerCase().includes(key1.toLowerCase())
+          : null;
       });
-      console.log("searchedProducts111",searchedProducts)
-     }
-
+      console.log("searchedProducts111", searchedProducts);
+    }
 
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
-        {this.props.searchInput ? (
-          <View style={{ marginVertical: 10, flexDirection: "row",width:'100%',flexWrap: 'wrap' }}>
-
-          {this.props.filtered === "Asc" ? (
-          searchedProducts.map((item,ind) => (
-            
-          <ProcardsSmall
-            navigation={this.props.navigation}
-            key={1}
-            product={item}
-            filter1={this.props.searchInput}
-
-          />
-          ))
-          ): (
-            searchedProducts.slice(0).reverse().map((item,ind) => (
-            
-              <ProcardsSmall
-                navigation={this.props.navigation}
-                key={1}
-                product={item}
-                filter1={this.props.filtered}
-              />
-              ))
-          )
-        }
-        
-        </View>
-        ): (
-          <View style={{ marginVertical: 10, flexDirection: "row",width:'100%',flexWrap: 'wrap' }}>
-
-            {this.props.filtered === "Asc" ? (
-            this.props.route.params.products.map((item,ind) => (
-              
-            <ProcardsSmall
-              navigation={this.props.navigation}
-              key={1}
-              product={item}
-              filter1={this.props.searchInput}
-
-            />
-            ))
-            ): (
-              this.props.route.params.products.slice(0).reverse().map((item,ind) => (
-              
-                <ProcardsSmall
-                  navigation={this.props.navigation}
-                  key={1}
-                  product={item}
-                  filter1={this.props.filtered}
-                />
-                ))
-            )
-          }
-          
-          </View>)}
+          {this.props.searchInput ? (
+            <View
+              style={{
+                marginVertical: 10,
+                flexDirection: "row",
+                width: "100%",
+                flexWrap: "wrap",
+              }}
+            >
+              {this.props.filtered === "Asc"
+                ? searchedProducts.map((item, ind) => (
+                    <ProcardsSmall
+                      navigation={this.props.navigation}
+                      key={1}
+                      product={item}
+                      filter1={this.props.searchInput}
+                    />
+                  ))
+                : searchedProducts
+                    .slice(0)
+                    .reverse()
+                    .map((item, ind) => (
+                      <ProcardsSmall
+                        navigation={this.props.navigation}
+                        key={1}
+                        product={item}
+                        filter1={this.props.filtered}
+                      />
+                    ))}
+            </View>
+          ) : (
+            <View
+              style={{
+                marginVertical: 10,
+                flexDirection: "row",
+                width: "100%",
+                flexWrap: "wrap",
+              }}
+            >
+              {this.props.filtered === "Asc"
+                ? this.props.route.params.products.map((item, ind) => (
+                    <ProcardsSmall
+                      navigation={this.props.navigation}
+                      key={1}
+                      product={item}
+                      filter1={this.props.searchInput}
+                    />
+                  ))
+                : this.props.route.params.products
+                    .slice(0)
+                    .reverse()
+                    .map((item, ind) => (
+                      <ProcardsSmall
+                        navigation={this.props.navigation}
+                        key={1}
+                        product={item}
+                        filter1={this.props.filtered}
+                      />
+                    ))}
+            </View>
+          )}
         </ScrollView>
       </View>
     );
@@ -117,14 +136,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   imgCon: {
     width: Dimensions.get("window").width,
-    height: 250
+    height: 250,
   },
   topRight: {
-    alignSelf: "flex-end"
+    alignSelf: "flex-end",
   },
   wrapTop: {
     alignSelf: "flex-end",
@@ -134,11 +153,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderTopLeftRadius: 15,
-    borderBottomLeftRadius: 15
+    borderBottomLeftRadius: 15,
   },
   bottomText: {
     height: 200,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   buybBtn: {
     alignSelf: "center",
@@ -149,30 +168,25 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
 
-    elevation: 5
-  }
+    elevation: 5,
+  },
 });
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   filtered: state.Filter.filterData,
-  searchInput: state.Search.searchData
+  searchInput: state.Search.searchData,
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
-      {
-        filterAsync, 
-      },
-      dispatch
+    {
+      filterAsync,
+    },
+    dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SingleCateg);
-
-
+export default connect(mapStateToProps, mapDispatchToProps)(SingleCateg);

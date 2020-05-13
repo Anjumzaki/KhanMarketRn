@@ -55,14 +55,14 @@ const AuthStackScreen = () => (
 const Tabs = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const FavouritesStack = createStackNavigator();
-const HomeStackScreen = () => (
+const HomeStackScreen = (route) => (
   <HomeStack.Navigator
   headerMode="screen"
   >
     <HomeStack.Screen
       name="Home"
       component={TabsScreen}
-      options={{ header: props => <StoreHeader {...props} />}}
+      options={{ header: props => null}}
 
     />
     <HomeStack.Screen
@@ -169,6 +169,7 @@ const MyOrderStackScreen = () => (
 
 const TabsScreen = () => (
   <Tabs.Navigator
+  headerMode={"none"}
     initialRouteName="Home"
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {

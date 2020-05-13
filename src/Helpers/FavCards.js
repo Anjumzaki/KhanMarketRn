@@ -34,7 +34,7 @@ class FavCards extends React.Component {
       .ref("/product_images/" + this.props.product.product._id + "_1.jpg");
     ref.getDownloadURL().then(url => {
       this.setState({ image: url });
-    });
+    }).catch(err=>console.log(err));
 
     console.log("FAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",this.props.product._id,this.props.product.product.favourites) 
     if(this.props.product.product.favourites === undefined){
