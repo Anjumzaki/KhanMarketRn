@@ -21,7 +21,7 @@ class StoreCard extends React.Component {
           .ref("/store_images/"+this.props.id+".jpg");
         ref.getDownloadURL().then(url => {
           this.setState({ image: url });
-        });
+        }).catch(err=>console.log(err));
   }
   render() {
     const { name, distance, address, id, phone } = this.props;

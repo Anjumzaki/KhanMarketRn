@@ -24,7 +24,7 @@ class CartCards extends React.Component {
       .ref("/product_images/"+this.props.id+"_1.jpg");
     ref.getDownloadURL().then(url => {
       this.setState({ image: url });
-    });
+    }).catch(err=>console.log(err));
     
     if(this.props.isFeatured){
       this.setState({qt: this.props.product.quantity})

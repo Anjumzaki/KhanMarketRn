@@ -30,7 +30,7 @@ class CustomDrawerContent extends Component {
       this.setState({ image: url });
     }).catch((err)=>{
       console.log(err)
-    });
+    }).catch(err=>console.log(err));
   }
 
   render() {
