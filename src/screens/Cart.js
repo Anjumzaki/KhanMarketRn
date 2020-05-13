@@ -46,7 +46,7 @@ class Cart extends Component {
       .ref("/store_logos/" + this.props.store.id + ".jpg");
         ref.getDownloadURL().then(url => {
         this.setState({ image: url });
-        }); 
+        }).catch(err=>console.log(err)); 
   
         axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/store/"+this.props.store.id)
         .then(resp => {

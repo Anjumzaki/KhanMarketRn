@@ -16,14 +16,16 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { bindActionCreators } from "redux";
 import { storeAsync, cartAsync } from "../store/actions";
 import { connect } from "react-redux";
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+
 
 
 class StoreHeader extends React.Component {
   render() {
     return (
-      <SafeAreaView style={[conStyles.safeAreaMy, { backgroundColor: '#2E2E2E' }]}>
+      <View style={[conStyles.safeAreaMy, { backgroundColor: 'blue'}]}>
         <StatusBar translucent={true} barStyle='light-content'/>
-        <View style={headerStyles.storeStyles}>
+        <View style={[headerStyles.storeStyles,{minHeight:getStatusBarHeight()+110,paddingTop:getStatusBarHeight()-10}]}>
           <View
             style={{ justifyContent: "space-between", flexDirection: "row" }}
           >
@@ -73,7 +75,7 @@ class StoreHeader extends React.Component {
             />
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 }
