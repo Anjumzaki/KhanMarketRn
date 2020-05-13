@@ -17,16 +17,21 @@ import Expandable from "../Helpers/Expandable";
 import { btnStyles, bottomTab, lines } from "../styles/base";
 import { Row } from "native-base";
 import CheckBox from "react-native-check-box";
+import { bindActionCreators } from "redux";
+import { filterAsync } from "../store/actions";
+import { connect } from "react-redux";
 const { width } = Dimensions.get("window");
 const { height } = 300;
-
-export default class Filters extends Component {
+ 
+class Filters extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       heart: false,
-      qt: 1
+      qt: 1,
+      isCheckedDec: false,
+      isCheckedAsc: false
     };
   }
 
@@ -41,7 +46,18 @@ export default class Filters extends Component {
       this.setState({ qt: preNum });
     }
   }
+
+  componentDidMount(){
+    if(this.props.filtered === "Asc"){
+      this.setState({isCheckedAsc: true})
+    }else{
+      this.setState({isCheckedDec: true})
+    }
+  }
+
   render() {
+
+    console.log("props of filter",this.props.filtered)
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
@@ -73,11 +89,15 @@ export default class Filters extends Component {
               style={{ flex: 1 }}
               onClick={() => {
                 this.setState({
-                  isChecked: !this.state.isChecked
+                  isCheckedAsc: !this.state.isCheckedAsc,
                 });
+                console.log(this.state.isCheckedAsc)
+                if(!this.state.isCheckedAsc){
+                    this.props.filterAsync("Asc")
+                }
               }}
-              isChecked={this.state.isChecked}
-              rightText={"CheckBox"}
+              isChecked={this.state.isCheckedAsc}
+              rightText={"Ascending"}
             />
           </View>
           <View
@@ -93,268 +113,19 @@ export default class Filters extends Component {
               style={{ flex: 1 }}
               onClick={() => {
                 this.setState({
-                  isChecked: !this.state.isChecked
+                  isCheckedDec: !this.state.isCheckedDec
                 });
+                console.log(this.state.isCheckedDec)
+
+                if(!this.state.isCheckedDec){
+                  this.props.filterAsync("Dec")
+              }
               }}
-              isChecked={this.state.isChecked}
-              rightText={"CheckBox"}
+              isChecked={this.state.isCheckedDec}
+              rightText={"Descending"}
             />
           </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom:20,
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <CheckBox
-              style={{ flex: 1 }}
-              onClick={() => {
-                this.setState({
-                  isChecked: !this.state.isChecked
-                });
-              }}
-              isChecked={this.state.isChecked}
-              rightText={"CheckBox"}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom:20,
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <CheckBox
-              style={{ flex: 1 }}
-              onClick={() => {
-                this.setState({
-                  isChecked: !this.state.isChecked
-                });
-              }}
-              isChecked={this.state.isChecked}
-              rightText={"CheckBox"}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom:20,
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <CheckBox
-              style={{ flex: 1 }}
-              onClick={() => {
-                this.setState({
-                  isChecked: !this.state.isChecked
-                });
-              }}
-              isChecked={this.state.isChecked}
-              rightText={"CheckBox"}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom:20,
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <CheckBox
-              style={{ flex: 1 }}
-              onClick={() => {
-                this.setState({
-                  isChecked: !this.state.isChecked
-                });
-              }}
-              isChecked={this.state.isChecked}
-              rightText={"CheckBox"}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom:20,
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <CheckBox
-              style={{ flex: 1 }}
-              onClick={() => {
-                this.setState({
-                  isChecked: !this.state.isChecked
-                });
-              }}
-              isChecked={this.state.isChecked}
-              rightText={"CheckBox"}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingVertical: 30,
-              alignItems: "center",
-            }}
-          >
-           <LatoText
-              fontName="Lato-Regular"
-              fonSiz={20}
-              col="#5C5C5C"
-              text="Filter"
-            ></LatoText>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom:20,
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <CheckBox
-              style={{ flex: 1 }}
-              onClick={() => {
-                this.setState({
-                  isChecked: !this.state.isChecked
-                });
-              }}
-              isChecked={this.state.isChecked}
-              rightText={"CheckBox"}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom:20,
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <CheckBox
-              style={{ flex: 1 }}
-              onClick={() => {
-                this.setState({
-                  isChecked: !this.state.isChecked
-                });
-              }}
-              isChecked={this.state.isChecked}
-              rightText={"CheckBox"}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom:20,
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <CheckBox
-              style={{ flex: 1 }}
-              onClick={() => {
-                this.setState({
-                  isChecked: !this.state.isChecked
-                });
-              }}
-              isChecked={this.state.isChecked}
-              rightText={"CheckBox"}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom:20,
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <CheckBox
-              style={{ flex: 1 }}
-              onClick={() => {
-                this.setState({
-                  isChecked: !this.state.isChecked
-                });
-              }}
-              isChecked={this.state.isChecked}
-              rightText={"CheckBox"}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom:20,
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <CheckBox
-              style={{ flex: 1 }}
-              onClick={() => {
-                this.setState({
-                  isChecked: !this.state.isChecked
-                });
-              }}
-              isChecked={this.state.isChecked}
-              rightText={"CheckBox"}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom:20,
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <CheckBox
-              style={{ flex: 1 }}
-              onClick={() => {
-                this.setState({
-                  isChecked: !this.state.isChecked
-                });
-              }}
-              isChecked={this.state.isChecked}
-              rightText={"CheckBox"}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom:20,
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <CheckBox
-              style={{ flex: 1 }}
-              onClick={() => {
-                this.setState({
-                  isChecked: !this.state.isChecked
-                });
-              }}
-              isChecked={this.state.isChecked}
-              rightText={"CheckBox"}
-            />
-          </View>
+       
           </ScrollView>
       </View>
     );
@@ -405,3 +176,23 @@ const styles = StyleSheet.create({
     elevation: 5
   }
 });
+
+
+const mapStateToProps = state => ({
+  cart: state.Cart.cartData,
+  filtered: state.Filter.filterData
+
+
+});
+const mapDispatchToProps = (dispatch, ownProps) =>
+  bindActionCreators(
+      {
+        filterAsync, 
+      },
+      dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Filters);

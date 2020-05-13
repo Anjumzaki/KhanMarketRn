@@ -24,13 +24,24 @@ import {
 import LatoText from "./LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { bindActionCreators } from "redux";
-import { storeAsync, cartAsync, cartSizeAsync, singleCatAsync } from "../store/actions";
+import { storeAsync, cartAsync, cartSizeAsync, singleCatAsync,searchAsync } from "../store/actions";
 import { connect } from "react-redux";
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 class SingleCategHeader extends React.Component {
+  constructor(props) {
+    super(props); 
+
+    this.state = {
+      inputText: ''
+    };
+  }
+
+  
+
   render() {
-    console.log("single heaer props",this.props)
+    console.log("single heaer props",this.props, this.state,this.props.searchInput)
+    console.log("single heaer props111", this.state)
     return (
       <View
         style={{
@@ -96,13 +107,16 @@ class SingleCategHeader extends React.Component {
         <View style={{ flexDirection: "row" ,paddingHorizontal:10,justifyContent:'space-between',alignItems:'center',marginBottom:10,}}>
           <View style={styles.wrapperText}>
             <EvilIcons name="search" size={26} color="#89898c" />
-            <TextInput style={styles.textI} placeholder="Search..." />
+            <TextInput style={styles.textI} placeholder="Search..." onChangeText={(inputText) => {
+              this.setState({inputText})
+              this.props.searchAsync(inputText)
+              }} />
           </View>
           <TouchableOpacity onPress={()=>this.props.navigation.navigate('Filters')}>
           <Image source={require('../../assets/filters.png')} />
 
           </TouchableOpacity>
-
+ 
         </View>
       </View>
     );
@@ -135,7 +149,8 @@ const mapStateToProps = state => ({
   loading: state.Store.storeLoading,
   error: state.Store.storeError,
   name: state.SingleCatName.singleCatData,
-  cartLength:state.CartSize.cartSizeData
+  cartLength:state.CartSize.cartSizeData,
+  searchInput: state.Search.searchData
 
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
@@ -144,7 +159,8 @@ const mapDispatchToProps = (dispatch, ownProps) =>
           storeAsync,
           cartAsync,
           cartSizeAsync,
-          singleCatAsync
+          singleCatAsync,
+          searchAsync
       },
       dispatch
   );

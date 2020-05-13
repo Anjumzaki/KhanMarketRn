@@ -24,7 +24,7 @@ import {
 import LatoText from "./LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { bindActionCreators } from "redux";
-import { storeAsync, cartAsync } from "../store/actions";
+import { storeAsync, cartAsync, searchAsync } from "../store/actions";
 import { connect } from "react-redux";
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 class SingleStoreHeader extends React.Component {
@@ -33,7 +33,8 @@ class SingleStoreHeader extends React.Component {
 
     this.state = {
       abc:"",
-      cartData:this.props.cartData.length
+      cartData:this.props.cartData.length,
+      inputText: ''
     };
   }
 
@@ -123,7 +124,10 @@ class SingleStoreHeader extends React.Component {
         <View style={{ flexDirection: "row" }}>
           <View style={styles.wrapperText}>
             <EvilIcons name="search" size={26} color="#89898c" />
-            <TextInput style={styles.textI} placeholder="Search..." />
+            <TextInput style={styles.textI} placeholder="Search..." onChangeText={(inputText) => {
+              this.setState({inputText})
+              this.props.searchAsync(inputText)
+              }} />
           </View>
         </View>
       </View>
@@ -163,7 +167,8 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
       {
           storeAsync,
-          cartAsync
+          cartAsync,
+          searchAsync
       },
       dispatch
   );
