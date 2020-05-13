@@ -52,6 +52,8 @@ class Settings extends React.Component {
     ref.getDownloadURL().then((url) => {
       console.log("Imageee urllllllllll", url);
       this.setState({ image: url });
+    }).catch((err)=>{
+      console.log(err)
     });
   }
 
@@ -179,14 +181,14 @@ class Settings extends React.Component {
               justifyContent: "space-between",
             }}
           >
-            <Image
+            {/* <Image
               style={{ width: 80, height: 80, borderRadius: 80 }}
               source={
                 this.state.avatarSource
                   ? { uri: this.state.avatarSource.uri }
                   : this.state.image && { uri: this.state.image }
               }
-            />
+            /> */}
             <TouchableOpacity
               onPress={() =>
                 ImagePicker.showImagePicker(options, (response) => {
