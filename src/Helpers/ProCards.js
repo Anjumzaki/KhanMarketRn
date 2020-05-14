@@ -40,7 +40,7 @@ class ProCards extends React.Component {
       for(var i=0; i<this.props.product.favourites.length; i++){
         if(this.props.product.favourites[i].userId === this.props.user.user._id){
           this.setState({heart: true})
-        }
+        } 
       }
       this.setState({favourites: this.props.product.favourites})
     }

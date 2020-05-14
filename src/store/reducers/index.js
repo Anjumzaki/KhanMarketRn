@@ -5,6 +5,8 @@ import Store from './Store';
 import CartSize from './CartSize';
 import SingleCatName from './SingleCatName';
 import Location from './Location';
+import Filter from './Filter';
+import Search from './Search';
 
 
 
@@ -14,5 +16,7 @@ export default combineReducers({
     Store,
     CartSize,
     SingleCatName,
-    Location
+    Location,
+    Filter,
+    Search
 })

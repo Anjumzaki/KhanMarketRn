@@ -16,12 +16,14 @@ import { btnStyles } from "../styles/base";
 import { bindActionCreators } from "redux";
 import { cartAsync, cartSizeAsync } from "../store/actions";
 import { connect } from "react-redux";
+import axios from "axios";
 
 class FavCards extends React.Component {
   state = {
     heart: true,
     image: "",
     qt: 1,
+    favourites: []
   };
 
 
@@ -33,6 +35,23 @@ class FavCards extends React.Component {
     ref.getDownloadURL().then(url => {
       this.setState({ image: url });
     });
+
+    console.log("FAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",this.props.product._id,this.props.product.product.favourites) 
+    if(this.props.product.product.favourites === undefined){
+
+      console.log("IN OIFFFFFFFFFFFFFFFFF")
+        this.setState({favourites: []})
+    }else{
+      console.log("IN Elseeeeeeeeeee")
+
+      for(var i=0; i<this.props.product.product.favourites.length; i++){
+        if(this.props.product.product.favourites[i].userId === this.props.user.user._id){
+          this.setState({heart: true})
+        } 
+      }
+      this.setState({favourites: this.props.product.product.favourites})
+    }
+
   }
 
   // handleChange(num) {
@@ -42,7 +61,7 @@ class FavCards extends React.Component {
   //     this.setState({ qt: preNum });
   //   }
   // }
-
+ 
   handleChange(num) {
 
     console.log("CHNAGE QUNTIYTTYyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
@@ -70,6 +89,7 @@ class FavCards extends React.Component {
 
   }
   render() {
+    console.log("PROPS and users", this.props.user,this.props.product, this.state)
     return (
       <View style={styles.procards}>
     
@@ -103,13 +123,47 @@ class FavCards extends React.Component {
               ></LatoText>
 
               <TouchableOpacity
-                onPress={() =>
-                  this.setState((prevState) => {
+                onPress={async() => {
+                  console.log("HEARTTTTTTTTT",this.state.heart)
+                console.log("fav",this.state.favourites)
+                if(this.state.heart === false){
+                    await this.state.favourites.push({userId: this.props.user.user._id})
+
+                    axios.post('https://sheltered-scrubland-52295.herokuapp.com/add/favourite',{
+                        userId: this.props.user.user._id,
+                        product: this.props.product,
+                        storeName: this.props.store.name
+                    })
+                    .then(resp => console.log(resp))
+                    .catch(err => console.log(err))
+                }else{
+                  console.log("iNCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
+                  var that=this
+                  this.state.favourites = this.state.favourites.filter(function(el){
+                    return el.userId !== that.props.user.user._id;
+                    // console.log("asd",el.userId,that.props.user.user._id)
+                  });
+
+                  axios.delete('https://sheltered-scrubland-52295.herokuapp.com/delete/favourite/'+this.props.user.user._id+'/'+this.props.product.product._id)
+                  .then(resp =>console.log("asd",resp))
+                  .catch(err => err)
+                  console.log("afteeeeeeeeeeeeeeeeeeeeeeee")
+
+                }
+                console.log("FAVVVVVVVVV33",this.state.favourites)
+
+                axios.put('https://sheltered-scrubland-52295.herokuapp.com/edit/favourites/'+this.props.product.product._id,{
+                  favourites: this.state.favourites
+                })
+                .then(resp => {
+                  this.setState(prevState => {
                     return {
-                      heart: !prevState.heart,
+                      heart: !prevState.heart
                     };
                   })
-                }
+                })
+                .catch(err => console.log(err))
+              }}
               >
                 {this.state.heart ? (
                   <AntDesign color="#B50000" size={18} name="heart" />
