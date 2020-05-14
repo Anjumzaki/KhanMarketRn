@@ -76,6 +76,7 @@ class Settings extends React.Component {
 
   editPass(){
    console.log("In edit pass")
+   alert('I am in')
     axios.put('https://sheltered-scrubland-52295.herokuapp.com/reset/password/'+this.state.old+"/"+this.state.newP+"/"+this.props.user.user.email)
     .then(resp => {
       this.refs.modal3.close()
@@ -149,7 +150,6 @@ class Settings extends React.Component {
             <TouchableOpacity 
             onPress={() => {
               this.editPass()
-             
               }}>
               <LatoText
                 fontName="Lato-Regular"
