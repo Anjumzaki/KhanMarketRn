@@ -6,6 +6,9 @@ import Slider from '../Components/Slider'
 import CardsRow from '../Components/CardsRow'
 import axios from "axios";
 import SingleStoreHeader from "../Helpers/SingleStoreHeader";
+import { bindActionCreators } from "redux";
+import { filterAsync } from "../store/actions";
+import { connect } from "react-redux";
 
 class StoreDetails extends React.Component {
 
@@ -63,17 +66,46 @@ class StoreDetails extends React.Component {
     console.log("PROPSSSSSS", this.props)
     console.log("stateeeeeeeee", this.state)
 
+    var searchedProducts=[];
+    var key1 = this.props.searchInput;
+    if (this.props.searchInput) {
+
+      for(var i=0; i<fp.length; i++){
+        let totalProducts = [...fp[i].products];
+        console.log("TOTAL PODUCT111",totalProducts)
+        var temp = totalProducts.filter(function (product) {
+            return (product.productName ? product.productName.toLowerCase().includes(key1.toLowerCase()) : null);
+        });
+        searchedProducts.push({
+          name: fp[i].name,
+          products: temp
+        })
+      }
+   
+     }
+     console.log("searchedProducts111",searchedProducts)
+
+
     return (
       <View>
         <ScrollView showsVerticalScrollIndicator={false} >
-          {this.state.featuredProducts.length > 0 ? (
+          {!this.props.searchInput && this.state.featuredProducts.length > 0 ? (
             <Slider featuredProducts={this.state.featuredProducts} navigation={this.props.navigation}/>
           ) : null}
-          {fp.map((cat, index) => (
+          {this.props.searchInput ? (
+              searchedProducts.map((cat, index) => (
+                cat.products.length > 0 ? (
+                  <CardsRow navigation={this.props.navigation} key={index} products={cat.products} name={this.capitalize(cat.name)} />
+                ) : null
+              ))
+          ): (
+          fp.map((cat, index) => (
             cat.products.length > 0 ? (
               <CardsRow navigation={this.props.navigation} key={index} products={cat.products} name={this.capitalize(cat.name)} />
             ) : null
-          ))}
+          ))
+          )
+          }
           <View style={{ paddingTop: 10 }}>
 
           </View>
@@ -83,7 +115,7 @@ class StoreDetails extends React.Component {
     );
   }
 }
-export default StoreDetails
+// export default StoreDetails
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -92,3 +124,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+const mapStateToProps = state => ({
+  searchInput: state.Search.searchData
+});
+const mapDispatchToProps = (dispatch, ownProps) =>
+  bindActionCreators(
+      {
+        filterAsync, 
+      },
+      dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(StoreDetails);

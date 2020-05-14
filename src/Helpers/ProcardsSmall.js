@@ -9,22 +9,36 @@ import {
   import { bindActionCreators } from "redux";
   import { cartAsync, cartSizeAsync } from "../store/actions";
   import { connect } from "react-redux";
+  import axios from "axios";
 
 class ProCards extends React.Component {
   state = {
     heart:false,
     image: "",
     qt:1,
+    favourites: []
   } 
 
 
-  componentDidMount(){
+  componentDidMount(){ 
     const ref = firebase
     .storage()
     .ref("/product_images/" + this.props.product._id + "_1.jpg");
     ref.getDownloadURL().then(url => {
       this.setState({ image: url });
     });
+
+    console.log("FAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",this.props.product, this.props.filter1) 
+    if(this.props.product.favourites === undefined){
+      this.setState({favourites: []})
+  }else{
+    for(var i=0; i<this.props.product.favourites.length; i++){
+      if(this.props.product.favourites[i].userId === this.props.user.user._id){
+        this.setState({heart: true})
+      } 
+    }
+    this.setState({favourites: this.props.product.favourites})
+  }
   }
 
 // handleChange(num) {
@@ -61,18 +75,63 @@ handleChange(num) {
 }
 
   render() {
+    console.log("satte",this.state)
+    console.log("sdsdsdsdsdds", this.props.user.user._id,this.props.product, this.props.store.name)
+
     return (
       <View  style={styles.procards}>
-        <TouchableOpacity onPress={()=>this.props.navigation.navigate('ProductDetails',{
-        product: this.props.product
-      })}>
+        <TouchableOpacity 
+      //   onPress={()=>this.props.navigation.navigate('ProductDetails',{
+      //   product: this.props.product
+      // })}
+      >
         <ImageBackground  style={styles.proCardsImage} source={{uri: this.state.image}}>
           
-          <TouchableOpacity onPress={()=>this.setState(prevState => {
-      return {
-        heart : !prevState.heart
-      };
-    })} style={{alignSelf:'flex-end',backgroundColor:'rgba(255, 255, 255,0.5)',margin:10,padding:7,borderRadius:50}} > 
+          <TouchableOpacity 
+             onPress={async() =>{
+              console.log("HEARTTTTTTTTT",this.state.heart)
+              console.log("FAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",this.state.favourites)
+              if(this.state.heart === false){
+                  await this.state.favourites.push({userId: this.props.user.user._id})
+
+                  // console.log("sdsdsdsdsdds", this.props.user.user._id,this.props.product, this.props.store.name)
+                  axios.post('https://sheltered-scrubland-52295.herokuapp.com/add/favourite',{
+                      userId: this.props.user.user._id,
+                      product: this.props.product,
+                      storeName: this.props.store.name
+                  })
+                  .then(resp => console.log("fav addedd",resp))
+                  .catch(err => console.log("sds",err))
+              }else{
+                console.log("iNCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
+                var that=this
+                this.state.favourites = this.state.favourites.filter(function(el){
+                  return el.userId !== that.props.user.user._id;
+                  // console.log("asd",el.userId,that.props.user.user._id)
+                });
+
+                axios.delete('https://sheltered-scrubland-52295.herokuapp.com/delete/favourite/'+this.props.user.user._id+'/'+this.props.product._id)
+                .then(resp =>console.log(resp))
+                .catch(err => err)
+                console.log("afteeeeeeeeeeeeeeeeeeeeeeee")
+
+              }
+              console.log("FAVVVVVVVVVVVVV11111111111111111111111111",this.state.favourites)
+
+              axios.put('https://sheltered-scrubland-52295.herokuapp.com/edit/favourites/'+this.props.product._id,{
+                favourites: this.state.favourites
+              })
+              .then(resp => {
+                this.setState(prevState => {
+                  return {
+                    heart: !prevState.heart
+                  };
+                })
+              })
+              .catch(err => console.log(err))
+            }
+            }
+          style={{alignSelf:'flex-end',backgroundColor:'rgba(255, 255, 255,0.5)',margin:10,padding:7,borderRadius:50}} > 
           {this.state.heart ?<AntDesign color='#B50000' size={18} name="heart"/>:<AntDesign color='#B50000' size={18} name="hearto"/> }
           </TouchableOpacity>
         </ImageBackground>
@@ -186,7 +245,11 @@ const mapStateToProps = state => ({
   cart: state.Cart.cartData, 
   loading: state.Cart.cartLoading,
   cartSize: state.CartSize.cartSizeData,
-  error: state.Cart.cartError
+  error: state.Cart.cartError,
+  user: state.user.user,
+  store: state.Store.storeData
+
+
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
