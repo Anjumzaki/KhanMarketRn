@@ -4,7 +4,6 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 const conStyles = StyleSheet.create({
   safeAreaMy: {
     flex: 1,
-    backgroundColor: "white"
   },
   scroll: {
     justifyContent: "space-evenly",

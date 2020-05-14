@@ -19,7 +19,7 @@ import { bindActionCreators } from "redux";
 import { userAsync } from "../store/actions";
 import { connect } from "react-redux";
 import Geolocation from "@react-native-community/geolocation";
-import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 class Home extends React.Component {
   static navigationOptions = {
@@ -69,8 +69,13 @@ class Home extends React.Component {
     //     });
 
     //   });
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
+      // do something
+    });
   }
-
+  componentWillUnmount() {
+    this._unsubscribe();
+  }
   getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     var R = 6371; // Radius of the earth in km
     var dLat = this.deg2rad(lat2 - lat1); // this.deg2rad below
@@ -92,8 +97,8 @@ class Home extends React.Component {
   render() {
     console.log("propsssss", this.props.user);
     return (
-      <View style={{ justifyContent: "center" }}>
-        <StoreHeader navigation={this.props.navigation}/>
+      <View style={{ flex: 1}}>
+        <StoreHeader navigation={this.props.navigation} />
         <StatusBar
           translucent={true}
           barStyle="light-content"
@@ -101,40 +106,39 @@ class Home extends React.Component {
         />
         {this.state.stores.length > 0 ? (
           <View>
-
-          <ScrollView
-            style={ 
-              Platform.OS == "ios"
-                ? {marginTop: getStatusBarHeight() + 110 }
-                : { marginTop: 100, marginBottom: 2 }
-            }
-          >
-            {this.state.stores.length > 0 &&
-              this.state.stores.map((item, ind) => (
-                <StoreCard
-                  key={ind}
-                  key={item._id}
-                  navigation={this.props.navigation}
-                  name={item.storeName}
-                  distance={
-                    this.getDistanceFromLatLonInKm(
-                      this.state.location.latitude,
-                      this.state.location.longitude,
-                      item.lat,
-                      item.lng
-                    ).toFixed(2) + " km"
-                  }
-                  address={item.storeAddress}
-                  id={item._id}
-                  phone={item.phoneNumber}
-                />
-              ))}
-          </ScrollView>
+            <ScrollView>
+              {this.state.stores.length > 0 &&
+                this.state.stores.map((item, ind) => (
+                  <StoreCard
+                    key={ind}
+                    key={item._id}
+                    navigation={this.props.navigation}
+                    name={item.storeName}
+                    distance={
+                      this.getDistanceFromLatLonInKm(
+                        this.state.location.latitude,
+                        this.state.location.longitude,
+                        item.lat,
+                        item.lng
+                      ).toFixed(2) + " km"
+                    }
+                    address={item.storeAddress}
+                    id={item._id}
+                    phone={item.phoneNumber}
+                  />
+                ))}
+            </ScrollView>
           </View>
         ) : (
-          <View style={{flex:1,justifyContent:'center',alignItems:'center',marginTop:200}}>
-
-          <ActivityIndicator size="large" color="black" />
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: 200,
+            }}
+          >
+            <ActivityIndicator size="large" color="black" />
           </View>
         )}
       </View>
