@@ -36,39 +36,39 @@ class Home extends React.Component {
     };
   }
   componentDidMount() {
-    var cords = {};
-    Geolocation.getCurrentPosition(
-      (info) => {
-        axios
-          .get(
-            "https://sheltered-scrubland-52295.herokuapp.com/get/stores/" +
-              info.coords.latitude +
-              "/" +
-              info.coords.longitude
-          )
-          .then((resp) => {
-            this.setState({
-              stores: resp.data,
-            });
-          });
-        this.setState({ location: info.coords });
-        cords = info;
-      },
-      (error) => {
-        console.log(error);
-      },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
-    );
-    console.log("loc", cords);
+    // var cords = {};
+    // Geolocation.getCurrentPosition(
+    //   (info) => {
+    //     axios
+    //       .get(
+    //         "https://sheltered-scrubland-52295.herokuapp.com/get/stores/" +
+    //           info.coords.latitude +
+    //           "/" +
+    //           info.coords.longitude
+    //       )
+    //       .then((resp) => {
+    //         this.setState({
+    //           stores: resp.data,
+    //         });
+    //       });
+    //     this.setState({ location: info.coords });
+    //     cords = info;
+    //   },
+    //   (error) => {
+    //     console.log(error);
+    //   },
+    //   { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
+    // );
+    // console.log("loc", cords);
 
-    // axios
-    //   .get("https://sheltered-scrubland-52295.herokuapp.com/get/stores/")
-    //   .then(resp => {
-    //     this.setState({
-    //       stores: resp.data
-    //     });
+    axios
+      .get("https://sheltered-scrubland-52295.herokuapp.com/get/stores/")
+      .then(resp => {
+        this.setState({
+          stores: resp.data
+        });
 
-    //   });
+      });
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
       // do something
     });
@@ -106,7 +106,7 @@ class Home extends React.Component {
         />
         {this.state.stores.length > 0 ? (
           <View>
-            <ScrollView>
+            <ScrollView contentContainerStyle={{paddingBottom:180}}>
               {this.state.stores.length > 0 &&
                 this.state.stores.map((item, ind) => (
                   <StoreCard
@@ -114,14 +114,14 @@ class Home extends React.Component {
                     key={item._id}
                     navigation={this.props.navigation}
                     name={item.storeName}
-                    distance={
-                      this.getDistanceFromLatLonInKm(
-                        this.state.location.latitude,
-                        this.state.location.longitude,
-                        item.lat,
-                        item.lng
-                      ).toFixed(2) + " km"
-                    }
+                    // distance={
+                    //   this.getDistanceFromLatLonInKm(
+                    //     this.state.location.latitude,
+                    //     this.state.location.longitude,
+                    //     item.lat,
+                    //     item.lng
+                    //   ).toFixed(2) + " km"
+                    // }
                     address={item.storeAddress}
                     id={item._id}
                     phone={item.phoneNumber}
