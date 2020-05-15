@@ -59,10 +59,11 @@ class StoreHeader extends React.Component {
           </View>
 
           <TouchableOpacity
-            style={{ flexDirection: "row", justifyContent: "center",flexWrap:'wrap',paddingHorizontal:20,paddingBottom:20 }}
+            style={{ flexDirection: "row", justifyContent: "center",paddingBottom:20 }}
             onPress={() => this.props.navigation.navigate("Map")}
           >
             <EvilIcons name="location" size={26} color={"white"} />
+            <View style={{width:'70%'}}>
             <LatoText
               fontName="Lato-Light"
               fonSiz={17}
@@ -70,6 +71,8 @@ class StoreHeader extends React.Component {
               text={this.props.userLocation.substring(0, 42)}
               textDec={"underline"}
             />
+            </View>
+           
           </TouchableOpacity>
         </View>
     );

@@ -36,7 +36,6 @@ class SingleCateg extends Component {
   }
   componentDidMount() {
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
-      // do something
     });
   }
   componentWillUnmount() {
