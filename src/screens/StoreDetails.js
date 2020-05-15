@@ -37,8 +37,6 @@ class StoreDetails extends React.Component {
       })
       .catch(err => console.log(err))
 
-
-
     axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/all/subCategories")
       .then(resp => {
         // console.log("Cat", resp.data)

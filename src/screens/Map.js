@@ -27,63 +27,63 @@ class Map extends React.Component {
   }
   componentDidMount() {
 
-    var lat1=''
-    var lng1=''
-    Geolocation.getCurrentPosition(
-      (info) => {
-        // console.log("ONFFOOO",info.coords.latitude)
-        // lat=info.coords.latitude
-        // lng=info.coords.longitude
+    // var lat1=''
+    // var lng1=''
+    // Geolocation.getCurrentPosition(
+    //   (info) => {
+    //     // console.log("ONFFOOO",info.coords.latitude)
+    //     // lat=info.coords.latitude
+    //     // lng=info.coords.longitude
 
         
-    fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + info.coords.latitude+ ',' + info.coords.longitude + '&key=AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI')
-    .then((response) => response.json())
-    .then((responseJson) => {
-        // console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[0].long_name))
-        //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[1].long_name))
-        //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[2].long_name))
-        //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[3].long_name))
-        //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[4].long_name))
-        //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[5].long_name));
-        // alert(JSON.stringify(responseJson.results[0].formatted_address))
-        this.setState({completeLoc: responseJson})
-        this.props.locationAsync(JSON.stringify(responseJson.results[0].formatted_address))
-     })
-     .catch(err => console.log("err", err))
+    // fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + info.coords.latitude+ ',' + info.coords.longitude + '&key=AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI')
+    // .then((response) => response.json())
+    // .then((responseJson) => {
+    //     // console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[0].long_name))
+    //     //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[1].long_name))
+    //     //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[2].long_name))
+    //     //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[3].long_name))
+    //     //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[4].long_name))
+    //     //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[5].long_name));
+    //     // alert(JSON.stringify(responseJson.results[0].formatted_address))
+    //     this.setState({completeLoc: responseJson})
+    //     this.props.locationAsync(JSON.stringify(responseJson.results[0].formatted_address))
+    //  })
+    //  .catch(err => console.log("err", err))
 
-        this.setState({ location: info, lat: info.coords.latitude, lng: info.coords.longitude }, 
+    //     this.setState({ location: info, lat: info.coords.latitude, lng: info.coords.longitude }, 
           
-          // alert(JSON.stringify(info))
-          );
-      },
-      (error) => {
-        console.log(error);
-      },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
-    );
-      console.log("lat longgg", lat1,lng1)
+    //       // alert(JSON.stringify(info))
+    //       );
+    //   },
+    //   (error) => {
+    //     console.log(error);
+    //   },
+    //   { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
+    // );
+    //   console.log("lat longgg", lat1,lng1)
 
 
   }
   render() {
     console.log(this.state)
-    if (this.state.location) {
+    if (!this.state.location) {
       loc = (
         <View style={styles.container}>
 
           <MapView
           style={styles.map}
             initialRegion={{
-              latitude: this.state.location.coords.latitude,
-              longitude: this.state.location.coords.longitude,
+              latitude: 37.421998333333335,
+              longitude: -122.08400000000002,
               latitudeDelta: 0.0,
               longitudeDelta: 0.0,
             }}
           >
             <Marker
               coordinate={{
-                latitude: this.state.location.coords.latitude,
-                longitude: this.state.location.coords.longitude,
+                latitude: 37.421998333333335,
+                longitude: -122.08400000000002,
               }}
               title={"Google"}
               description={"description"}
@@ -100,24 +100,25 @@ class Map extends React.Component {
             >
               <TouchableOpacity 
 
-                onPress={() => {
-                  axios.post('https://sheltered-scrubland-52295.herokuapp.com/add/location',{
-                    refId: this.props.user.user._id,
-                    type: "Customer",
-                    address1:  this.state.completeLoc.results[0].address_components[0].long_name+ " " + this.state.completeLoc.results[0].address_components[1].long_name,
-                    address2:  this.state.completeLoc.results[0].address_components[2].long_name+" " + this.state.completeLoc.results[0].address_components[3].long_name,
-                    city: this.state.completeLoc.results[0].address_components[4].long_name,
-                    country: this.state.completeLoc.results[0].address_components[5].long_name,
-                    zipCode: this.state.completeLoc.results[0].address_components[6].long_name
-                  })
-                  .then((resp1) => {
+              //   onPress={() => {
+              //     axios.post('https://sheltered-scrubland-52295.herokuapp.com/add/location',{
+              //       refId: this.props.user.user._id,
+              //       type: "Customer",
+              //       address1:  this.state.completeLoc.results[0].address_components[0].long_name+ " " + this.state.completeLoc.results[0].address_components[1].long_name,
+              //       address2:  this.state.completeLoc.results[0].address_components[2].long_name+" " + this.state.completeLoc.results[0].address_components[3].long_name,
+              //       city: this.state.completeLoc.results[0].address_components[4].long_name,
+              //       country: this.state.completeLoc.results[0].address_components[5].long_name,
+              //       zipCode: this.state.completeLoc.results[0].address_components[6].long_name
+              //     })
+              //     .then((resp1) => {
 
-                  this.props.navigation.push("App",{
-                  location: this.state.location
-                })
-                  })
-                  .catch(err => console.log(err))
-              }}
+              //     this.props.navigation.push("App",{
+              //     location: this.state.location
+              //   })
+              //     })
+              //     .catch(err => console.log(err))
+              // }}
+              onPress={()=>this.props.navigation.push("App")}
                 style={[btnStyles.basic, { width: "80%", marginBottom: 100 }]}
               >
                 <LatoText
