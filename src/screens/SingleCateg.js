@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   filtered: state.Filter.filterData,
-  searchInput: state.Search.searchData,
+  searchInput: state.Search1.searchData1,
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(

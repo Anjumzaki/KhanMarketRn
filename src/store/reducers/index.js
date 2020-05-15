@@ -7,6 +7,7 @@ import SingleCatName from './SingleCatName';
 import Location from './Location';
 import Filter from './Filter';
 import Search from './Search';
+import Search1 from './Search1';
 
 
 
@@ -18,5 +19,6 @@ export default combineReducers({
     SingleCatName,
     Location,
     Filter,
-    Search
+    Search,
+    Search1
 })
