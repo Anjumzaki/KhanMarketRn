@@ -24,7 +24,7 @@ import {
 import LatoText from "./LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { bindActionCreators } from "redux";
-import { storeAsync, cartAsync, cartSizeAsync, singleCatAsync,searchAsync } from "../store/actions";
+import { storeAsync, cartAsync, cartSizeAsync, singleCatAsync,search1Async } from "../store/actions";
 import { connect } from "react-redux";
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
@@ -112,7 +112,7 @@ class SingleCategHeader extends React.Component {
             <EvilIcons name="search" size={26} color="#89898c" />
             <TextInput style={styles.textI} placeholder="Search..." onChangeText={(inputText) => {
               this.setState({inputText})
-              this.props.searchAsync(inputText)
+              this.props.search1Async(inputText)
               }} />
           </View>
           <TouchableOpacity onPress={()=>this.props.navigation.navigate('Filters')}>
@@ -163,7 +163,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
           cartAsync,
           cartSizeAsync,
           singleCatAsync,
-          searchAsync
+          search1Async
       },
       dispatch
   );
