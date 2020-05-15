@@ -19,7 +19,7 @@ import { Row } from "native-base";
 import CheckBox from "react-native-check-box";
 import ProcardsSmall from "../Helpers/ProcardsSmall";
 import { bindActionCreators } from "redux";
-import { filterAsync } from "../store/actions";
+import { filterAsync, searchAsync } from "../store/actions";
 import { connect } from "react-redux";
 
 const { width } = Dimensions.get("window");
@@ -41,6 +41,7 @@ class SingleCateg extends Component {
   }
   componentWillUnmount() {
     this._unsubscribe();
+    this.props.searchAsync('')
   }
 
   render() {
@@ -185,6 +186,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
     {
       filterAsync,
+      searchAsync
     },
     dispatch
   );
