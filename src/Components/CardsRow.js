@@ -5,7 +5,7 @@ import LatoText from '../Helpers/LatoText'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { bindActionCreators } from "redux";
-import { singleCatAsync } from "../store/actions";
+import { singleCatAsync, searchAsync } from "../store/actions";
 import { connect } from "react-redux";
 
 class Cart extends React.Component {
@@ -19,6 +19,7 @@ class Cart extends React.Component {
                         <LatoText fontName="Sarabun-Light" fonSiz={25} col='#5C5C5C' text={this.props.name} ></LatoText>
                     </View>
                     <TouchableOpacity onPress={()=>{
+                        this.props.searchAsync('')
                         this.props.singleCatAsync(this.props.name)
                         this.props.navigation.navigate('SingleCateg',{products:this.props.products, name: this.props.name})
                         
@@ -67,7 +68,8 @@ const mapStateToProps = state => ({
   const mapDispatchToProps = (dispatch, ownProps) =>
     bindActionCreators(
         {
-          singleCatAsync
+          singleCatAsync,
+          searchAsync
         },
         dispatch
     );

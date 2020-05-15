@@ -77,7 +77,7 @@ class Settings extends React.Component {
   editPass(){
    console.log("In edit pass")
    alert('I am in')
-    axios.put('https://sheltered-scrubland-52295.herokuapp.com/reset/password/'+this.state.old+"/"+this.state.newP+"/"+this.props.user.user.email)
+    axios.put('https://sheltered-scrubland-52295.herokuapp.com/api/users/reset/password/'+this.state.old+"/"+this.state.newP+"/"+this.props.user.user.email)
     .then(resp => {
       this.refs.modal3.close()
       console.log(resp)
@@ -439,7 +439,10 @@ class Settings extends React.Component {
               text="Terms & conditions"
             />
           </TouchableOpacity>
-          <TouchableOpacity style={{ marginTop: 30 }}>
+          <TouchableOpacity style={{ marginTop: 30 }} onPress={() => {
+            this.props.userAsync("");
+            this.props.navigation.navigate('Login')
+          }}>
             <LatoText
               fontName="Lato-Bold"
               fonSiz={15}

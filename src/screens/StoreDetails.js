@@ -7,7 +7,7 @@ import CardsRow from '../Components/CardsRow'
 import axios from "axios";
 import SingleStoreHeader from "../Helpers/SingleStoreHeader";
 import { bindActionCreators } from "redux";
-import { filterAsync } from "../store/actions";
+import { filterAsync, searchAsync } from "../store/actions";
 import { connect } from "react-redux";
 
 class StoreDetails extends React.Component {
@@ -52,6 +52,9 @@ class StoreDetails extends React.Component {
     return s.charAt(0).toUpperCase() + s.slice(1)
   }
 
+  componentWillUnmount() {
+    this.props.searchAsync('')
+  }
   render() {
     var fp = []
     this.state.categories.map((category, index) => (
@@ -132,6 +135,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
       {
         filterAsync, 
+        searchAsync
       },
       dispatch
   );
