@@ -362,7 +362,7 @@ export default class SignUp1 extends React.Component {
                     text={"Verified"}
                   />
                 ) : (
-                  !this.state.verifi ?
+                  this.state.verifi ?
                   <TouchableOpacity
                     style={{
                       paddingHorizontal: 20,
@@ -372,6 +372,7 @@ export default class SignUp1 extends React.Component {
                       borderRadius: 5,
                     }}
                     onPress={async () => {
+                      console.log("cALLED VERIFY")
                       var num = Math.floor(100000 + Math.random() * 900000);
                       await this.setState({ num: num.toString() });
                       this.forceUpdate();
@@ -396,7 +397,7 @@ export default class SignUp1 extends React.Component {
                         )
                         .then((resp) => this.refs.modal3.open())
                         .catch((err) => console.log(err));
-                    }}
+                    }} 
                   >
                     <LatoText
                       fontName="Lato-Regular"
@@ -413,6 +414,35 @@ export default class SignUp1 extends React.Component {
                      borderWidth: 1,
                      borderRadius: 5,
                    }}
+
+                   onPress={async () => {
+                    console.log("cALLED VERIFY")
+                    var num = Math.floor(100000 + Math.random() * 900000);
+                    await this.setState({ num: num.toString() });
+                    this.forceUpdate();
+
+                    axios
+                      .get(
+                        "https://sheltered-scrubland-52295.herokuapp.com/api/email/verification/" +
+                          this.state.email +
+                          "/" +
+                          num
+                      )
+                      .then((resp) => this.refs.modal3.open())
+                      .catch((err) => console.log(err));
+
+                    axios
+                      .get(
+                        "https://sheltered-scrubland-52295.herokuapp.com/api/number/verification/" +
+                          "+" +
+                          this.state.mobile +
+                          "/" +
+                          num
+                      )
+                      .then((resp) => this.refs.modal3.open())
+                      .catch((err) => console.log(err));
+                  }} 
+
                  >
                    <LatoText
                      fontName="Lato-Regular"
@@ -477,7 +507,7 @@ export default class SignUp1 extends React.Component {
             }}
           >
             <TouchableOpacity
-            disabled={this.state.numVerified}
+              disabled={!this.state.numVerified}
               style={btnStyles.basic}
               onPress={() => this.handleSignUp()}
             >
