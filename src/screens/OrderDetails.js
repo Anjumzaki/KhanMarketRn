@@ -43,17 +43,17 @@ class OrderDetails extends Component {
   }
 
   componentDidMount() {
-    const ref = firebase
-      .storage()
-      .ref("/store_logos/" + this.props.route.params.order.storeId + ".jpg");
-    ref
-      .getDownloadURL()
-      .then((url) => {
-        this.setState({ image: url });
-      })
-      .catch((err) => console.log(err));
+
       this._unsubscribe = this.props.navigation.addListener('focus', () => {
-        // do something
+        const ref = firebase
+        .storage()
+        .ref("/store_logos/" + this.props.route.params.order.storeId + ".jpg");
+      ref
+        .getDownloadURL()
+        .then((url) => {
+          this.setState({ image: url });
+        })
+        .catch((err) => console.log(err));
       });
     }
     componentWillUnmount() {

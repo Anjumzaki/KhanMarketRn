@@ -38,11 +38,11 @@ class MyOrders extends Component {
   }
 
   componentDidMount(){
-    axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/my/orders/"+this.props.user.user._id)
-    .then(resp => this.setState({myOrders: resp.data}))
-    .catch(err => console.log(err))
+
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
-      // do something
+      axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/my/orders/"+this.props.user.user._id)
+      .then(resp => this.setState({myOrders: resp.data}))
+      .catch(err => console.log(err))
     });
   }
   componentWillUnmount() {
