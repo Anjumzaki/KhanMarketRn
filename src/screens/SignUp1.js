@@ -367,7 +367,7 @@ export default class SignUp1 extends React.Component {
                     style={{
                       paddingHorizontal: 20,
                       paddingVertical: 10,
-                      borderColor: "#C9C9C9",
+                      borderColor: "#5c5c5c",
                       borderWidth: 1,
                       borderRadius: 5,
                     }}
@@ -402,7 +402,7 @@ export default class SignUp1 extends React.Component {
                     <LatoText
                       fontName="Lato-Regular"
                       fonSiz={17}
-                      col="#C9C9C9"
+                      col="#5c5c5c"
                       text={"Verify"}
                     />
                   </TouchableOpacity> :
@@ -410,44 +410,19 @@ export default class SignUp1 extends React.Component {
                    style={{
                      paddingHorizontal: 20,
                      paddingVertical: 10,
-                     borderColor: "#5C5C5C",
+                     borderColor: "#c9c9c9",
                      borderWidth: 1,
                      borderRadius: 5,
                    }}
 
-                   onPress={async () => {
-                    console.log("cALLED VERIFY")
-                    var num = Math.floor(100000 + Math.random() * 900000);
-                    await this.setState({ num: num.toString() });
-                    this.forceUpdate();
+                   onPress={async () => {alert('Please enter correct number')}}
 
-                    axios
-                      .get(
-                        "https://sheltered-scrubland-52295.herokuapp.com/api/email/verification/" +
-                          this.state.email +
-                          "/" +
-                          num
-                      )
-                      .then((resp) => this.refs.modal3.open())
-                      .catch((err) => console.log(err));
-
-                    axios
-                      .get(
-                        "https://sheltered-scrubland-52295.herokuapp.com/api/number/verification/" +
-                          "+" +
-                          this.state.mobile +
-                          "/" +
-                          num
-                      )
-                      .then((resp) => this.refs.modal3.open())
-                      .catch((err) => console.log(err));
-                  }} 
 
                  >
                    <LatoText
                      fontName="Lato-Regular"
                      fonSiz={17}
-                     col="#5C5C5C"
+                     col="#c9c9c9"
                      text={"Verify"}
                    />
                  </TouchableOpacity>
