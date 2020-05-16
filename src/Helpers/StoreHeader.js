@@ -21,49 +21,53 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 class StoreHeader extends React.Component {
   render() {
     return (
-      <View style={{  backgroundColor: "#2E2E2E" ,paddingTop:getStatusBarHeight()}}>
+      <View
+        style={{ backgroundColor: "#2E2E2E", paddingTop: getStatusBarHeight() }}
+      >
         <StatusBar translucent={true} barStyle="light-content" />
-          <View
-            style={{justifyContent: "space-between", flexDirection: "row" }}
-          >
-            <TouchableOpacity
-              style={{ padding: 20 }}
-              onPress={() => this.props.navigation.toggleDrawer()}
-            >
-              <Image source={require("../../assets/menu-1.png")} />
-            </TouchableOpacity>
-            <View style={{ padding: 20 }}>
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={20}
-                col="white"
-                text={"STORES NEAR YOU"}
-              />
-            </View>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("Cart")}
-              style={{ padding: 20 }}
-            >
-              <View>
-                <View style={headerStyles.cartTxt}>
-                  <LatoText
-                    fontName="Lato-Regular"
-                    fonSiz={7}
-                    col="white"
-                    text={this.props.cartLength}
-                  />
-                </View>
-                <MaterialIcons name="shopping-cart" size={26} color={"white"} />
-              </View>
-            </TouchableOpacity>
-          </View>
-
+        <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
           <TouchableOpacity
-            style={{ flexDirection: "row", justifyContent: "center",paddingBottom:20 }}
-            onPress={() => this.props.navigation.navigate("Map")}
+            style={{ padding: 20 }}
+            onPress={() => this.props.navigation.toggleDrawer()}
           >
-            <EvilIcons name="location" size={26} color={"white"} />
-            <View style={{width:'70%'}}>
+            <Image source={require("../../assets/menu-1.png")} />
+          </TouchableOpacity>
+          <View style={{ padding: 20 }}>
+            <LatoText
+              fontName="Lato-Regular"
+              fonSiz={20}
+              col="white"
+              text={"STORES NEAR YOU"}
+            />
+          </View>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("Cart")}
+            style={{ padding: 20 }}
+          >
+            <View>
+              <View style={headerStyles.cartTxt}>
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={7}
+                  col="white"
+                  text={this.props.cartLength}
+                />
+              </View>
+              <MaterialIcons name="shopping-cart" size={26} color={"white"} />
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            paddingBottom: 20,
+          }}
+          onPress={() => this.props.navigation.navigate("Map")}
+        >
+          <EvilIcons name="location" size={26} color={"white"} />
+          <View>
             <LatoText
               fontName="Lato-Light"
               fonSiz={17}
@@ -71,10 +75,9 @@ class StoreHeader extends React.Component {
               text={this.props.userLocation.substring(0, 42)}
               textDec={"underline"}
             />
-            </View>
-           
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
+      </View>
     );
   }
 }

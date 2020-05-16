@@ -61,7 +61,9 @@ class Home extends React.Component {
     // );
     // console.log("loc", cords);
 
-    axios
+   
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
+      axios
       .get("https://sheltered-scrubland-52295.herokuapp.com/get/stores/")
       .then(resp => {
         this.setState({
@@ -69,8 +71,6 @@ class Home extends React.Component {
         });
 
       });
-    this._unsubscribe = this.props.navigation.addListener('focus', () => {
-      // do something
     });
   }
   componentWillUnmount() {

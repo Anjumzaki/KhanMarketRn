@@ -57,6 +57,19 @@ class Login extends React.Component {
     });
     //Unique Id
     this.setState({ fontLoaded: true });
+    this._unsubscribe = this.props.navigation.addListener("focus", () => {
+      this.setState({
+        icEye: "visibility-off",
+        isPassword: true,
+        fontLoaded: false,
+        email: "",
+        password: "",
+        msg: "",
+      });
+    });
+  }
+  componentWillUnmount() {
+    this._unsubscribe();
   }
   getRef = (ref) => {
     if (this.props.getRef) this.props.getRef(ref);
@@ -89,7 +102,7 @@ class Login extends React.Component {
                 )
                 .then((resp) => {
                   // alert(JSON.stringify(resp));
-                  console.log(resp.data)
+                  console.log(resp.data);
                   if (resp.data === "Incorrect password.") {
                     // this.props.userAsync(resp.data);
                     this.setState({
@@ -97,28 +110,39 @@ class Login extends React.Component {
                       loading: false,
                     });
                     Î;
-                  } else if(resp.data === "Email does not exist."){
+                  } else if (resp.data === "Email does not exist.") {
                     // this.props.navigation.navigate("Map");
-                    this.setState({errMessage: "Email does not exist.",
-                    loading: false,
-                  })
-                  }else{
-                    axios.get('https://sheltered-scrubland-52295.herokuapp.com/get/location/'+resp.data.user._id)
-                    .then(resp1 => {
-                      console.log("loc resp",resp1.data)
+                    this.setState({
+                      errMessage: "Email does not exist.",
+                      loading: false,
+                    });
+                  } else {
+                    axios
+                      .get(
+                        "https://sheltered-scrubland-52295.herokuapp.com/get/location/" +
+                          resp.data.user._id
+                      )
+                      .then((resp1) => {
+                        console.log("loc resp", resp1.data);
 
-                      this.props.userAsync(resp.data);
-                      // this.props.navigation.navigate("Map");
-                      if(resp1.data.length > 0){
-                        this.props.locationAsync(resp1.data[0].address1+" "+resp1.data[0].address2+" "+resp1.data[0].city+" "+resp1.data[0].country)
-                        this.props.navigation.navigate("App");
-                      }else{
-                        this.props.navigation.navigate("Map");
-                      }
-                    })
-                    .catch(err => console.log(err))
-                     
-
+                        this.props.userAsync(resp.data);
+                        // this.props.navigation.navigate("Map");
+                        if (resp1.data.length > 0) {
+                          this.props.locationAsync(
+                            resp1.data[0].address1 +
+                              " " +
+                              resp1.data[0].address2 +
+                              " " +
+                              resp1.data[0].city +
+                              " " +
+                              resp1.data[0].country
+                          );
+                          this.props.navigation.navigate("App");
+                        } else {
+                          this.props.navigation.navigate("Map");
+                        }
+                      })
+                      .catch((err) => console.log(err));
                   }
                 })
                 .catch((err) =>
@@ -338,34 +362,48 @@ class Login extends React.Component {
             <TouchableOpacity
               style={{ alignItems: "center", marginTop: 20 }}
               onPress={() => {
-              
-                  axios.post("https://sheltered-scrubland-52295.herokuapp.com/api/users/guest/register",{
-                    isGuest: true,
-                    guestId: getUniqueId()
+                axios
+                  .post(
+                    "https://sheltered-scrubland-52295.herokuapp.com/api/users/guest/register",
+                    {
+                      isGuest: true,
+                      guestId: getUniqueId(),
+                    }
+                  )
+                  .then((resp) => {
+                    console.log("resp guest", resp.data);
+
+                    axios
+                      .get(
+                        "https://sheltered-scrubland-52295.herokuapp.com/get/location/" +
+                          resp.data.user._id
+                      )
+                      .then((resp1) => {
+                        console.log("loc resp", resp1.data);
+
+                        this.props.userAsync(resp.data);
+                        // this.props.navigation.navigate("Map");
+                        if (resp1.data.length > 0) {
+                          this.props.locationAsync(
+                            resp1.data[0].address1 +
+                              " " +
+                              resp1.data[0].address2 +
+                              " " +
+                              resp1.data[0].city +
+                              " " +
+                              resp1.data[0].country
+                          );
+                          this.props.navigation.navigate("App");
+                        } else {
+                          this.props.navigation.navigate("Map");
+                        }
+                      })
+                      .catch((err) => console.log(err));
                   })
-                  .then(resp => {
-                      console.log("resp guest",resp.data)
-
-                      axios.get('https://sheltered-scrubland-52295.herokuapp.com/get/location/'+resp.data.user._id)
-                        .then(resp1 => {
-                          console.log("loc resp",resp1.data)
-
-                          this.props.userAsync(resp.data);
-                          // this.props.navigation.navigate("Map");
-                          if(resp1.data.length > 0){
-                            this.props.locationAsync(resp1.data[0].address1+" "+resp1.data[0].address2+" "+resp1.data[0].city+" "+resp1.data[0].country)
-                            this.props.navigation.navigate("App");
-                          }else{
-                            this.props.navigation.navigate("Map");
-                          }
-                        })
-                        .catch(err => console.log(err))
-
-
-                  })
-                  .catch(err => this.setState({msg: "Email already exist!"}))  
-    
-                  }}
+                  .catch((err) =>
+                    this.setState({ msg: "Email already exist!" })
+                  );
+              }}
             >
               <LatoText
                 fontName="Lato-Regular"
@@ -390,7 +428,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
     {
       userAsync,
-      locationAsync
+      locationAsync,
     },
     dispatch
   );
