@@ -74,7 +74,7 @@ class Settings extends React.Component {
     .catch(err => console.log(err))
   }
 
-  editPass(){
+  editPass(){ 
    console.log("In edit pass")
    alert('I am in')
     axios.put('https://sheltered-scrubland-52295.herokuapp.com/api/users/reset/password/'+this.state.old+"/"+this.state.newP+"/"+this.props.user.user.email)
