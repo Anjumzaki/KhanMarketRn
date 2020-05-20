@@ -190,7 +190,7 @@ const TabsScreen = () => (
               color={focused ? "#2e2e2e" : "#89898c"}
             />
           );
-        } else if (route.name === "My Orders") {
+        } else if (route.name === "MyOrderStackScreen") {
           return (
             <MaterialCommunityIcons
               name="clipboard-text"
@@ -211,7 +211,10 @@ const TabsScreen = () => (
   >
     <Tabs.Screen name="Favourites" component={FavouritesStackScreen} />
     <Tabs.Screen name="Home" component={Home} />
-    <Tabs.Screen name="My Orders" component={MyOrderStackScreen} />
+    <Tabs.Screen   options={{
+          tabBarLabel: 'My Orders',
+          
+        }} name="MyOrderStackScreen" component={MyOrderStackScreen} />
   </Tabs.Navigator>
 );
 const Drawer = createDrawerNavigator();

@@ -13,6 +13,7 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
+import Geolocation from "@react-native-community/geolocation";
 import { BackStack } from "../Helpers/BackStack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -67,6 +68,10 @@ class Login extends React.Component {
         msg: "",
       });
     });
+  }
+  componentDidMount(){
+    Geolocation.getCurrentPosition(
+      (info) => {alert(  info.coords.latitude)})
   }
   componentWillUnmount() {
     this._unsubscribe();

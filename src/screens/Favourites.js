@@ -8,7 +8,7 @@ import {
   StyleSheet,
   LinearGradient,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import Carousel from "react-native-looped-carousel";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -23,34 +23,38 @@ import { bindActionCreators } from "redux";
 import { cartAsync, cartSizeAsync } from "../store/actions";
 import { connect } from "react-redux";
 import axios from "axios";
-import { NavigationEvents } from '@react-navigation/native';
+import { NavigationEvents } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
 const { height } = 300;
 
 class Favourites extends Component {
   constructor(props) {
-    super(props); 
+    super(props);
 
     this.state = {
       heart: false,
       qt: 1,
-      favourites: []
+      favourites: [],
     };
   }
 
-  componentWillMount(){
-      axios.get('https://sheltered-scrubland-52295.herokuapp.com/get/all/favourites/'+this.props.user.user._id)
-      .then(resp => this.setState({favourites: resp.data}))
-      .catch(err => console.log(err))
-  }
-
-  componentDidMount(){
-  
-    this._unsubscribe = this.props.navigation.addListener('focus', () => {
-      axios.get('https://sheltered-scrubland-52295.herokuapp.com/get/all/favourites/'+this.props.user.user._id)
-    .then(resp => this.setState({favourites: resp.data}))
-    .catch(err => console.log(err))
+  componentDidMount() {
+    axios
+      .get(
+        "https://sheltered-scrubland-52295.herokuapp.com/get/all/favourites/" +
+          this.props.user.user._id
+      )
+      .then((resp) => this.setState({ favourites: resp.data }))
+      .catch((err) => console.log(err));
+    this._unsubscribe = this.props.navigation.addListener("focus", () => {
+      axios
+        .get(
+          "https://sheltered-scrubland-52295.herokuapp.com/get/all/favourites/" +
+            this.props.user.user._id
+        )
+        .then((resp) => this.setState({ favourites: resp.data }))
+        .catch((err) => console.log(err));
     });
   }
 
@@ -58,19 +62,34 @@ class Favourites extends Component {
     this._unsubscribe();
   }
 
-
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
-          <View style={{ marginVertical: 10, flexDirection: "row",width:'100%',flexWrap: 'wrap',justifyContent:'center' }}>
-            {this.state.favourites.length > 0 ? this.state.favourites.map((item,ind) => (
-                  <FavCards
+          <View
+            style={{
+              marginVertical: 10,
+              flexDirection: "row",
+              width: "100%",
+              flexWrap: "wrap",
+              justifyContent: "center",
+            }}
+          >
+            {this.state.favourites.length > 0 ? (
+              this.state.favourites.map((item, ind) => (
+                <FavCards
                   navigation={this.props.navigation}
                   key={1}
                   product={item}
-                  />
-            )): <ActivityIndicator style={{marginTop:100}} size="large" color='black' />}
+                />
+              ))
+            ) : (
+              <ActivityIndicator
+                style={{ marginTop: 100 }}
+                size="large"
+                color="black"
+              />
+            )}
           </View>
         </ScrollView>
       </View>
@@ -82,14 +101,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   imgCon: {
     width: Dimensions.get("window").width,
-    height: 250
+    height: 250,
   },
   topRight: {
-    alignSelf: "flex-end"
+    alignSelf: "flex-end",
   },
   wrapTop: {
     alignSelf: "flex-end",
@@ -99,11 +118,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderTopLeftRadius: 15,
-    borderBottomLeftRadius: 15
+    borderBottomLeftRadius: 15,
   },
   bottomText: {
     height: 200,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   buybBtn: {
     alignSelf: "center",
@@ -114,34 +133,30 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
 
-    elevation: 5
-  }
+    elevation: 5,
+  },
 });
 
-const mapStateToProps = state => ({
-  cart: state.Cart.cartData, 
+const mapStateToProps = (state) => ({
+  cart: state.Cart.cartData,
   loading: state.Cart.cartLoading,
   cartSize: state.CartSize.cartSizeData,
   error: state.Cart.cartError,
   user: state.user.user,
-  store: state.Store.storeData, 
-
+  store: state.Store.storeData,
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
-      {
-          cartAsync, 
-          cartSizeAsync
-      },
-      dispatch
+    {
+      cartAsync,
+      cartSizeAsync,
+    },
+    dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Favourites);
+export default connect(mapStateToProps, mapDispatchToProps)(Favourites);
