@@ -8,10 +8,11 @@ import { View, Image, Text } from "react-native";
 import LatoText from "../Helpers/LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { bindActionCreators } from "redux";
-import { cartAsync } from "../store/actions";
+import { cartAsync, userAsync } from "../store/actions";
+
 import { connect } from "react-redux";
 import firebase from "firebase";
-
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 // function CustomDrawerContent(props)
 class CustomDrawerContent extends Component {
   constructor(props) {
@@ -26,11 +27,15 @@ class CustomDrawerContent extends Component {
     const ref = firebase
       .storage()
       .ref("profile_images/" + this.props.user.user._id + ".jpg");
-    ref.getDownloadURL().then((url) => {
-      this.setState({ image: url });
-    }).catch((err)=>{
-      console.log(err)
-    }).catch(err=>console.log(err));
+    ref
+      .getDownloadURL()
+      .then((url) => {
+        this.setState({ image: url });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .catch((err) => console.log(err));
   }
 
   render() {
@@ -53,7 +58,12 @@ class CustomDrawerContent extends Component {
           }}
         >
           <View>
-            {this.state.image != '' && <Image style={{width:60,height:60,borderRadius:100}} source={{ uri: this.state.image }} />}
+            {this.state.image != "" && (
+              <Image
+                style={{ width: 60, height: 60, borderRadius: 100 }}
+                source={{ uri: this.state.image }}
+              />
+            )}
           </View>
 
           <View style={{ paddingLeft: 10 }}>
@@ -74,6 +84,28 @@ class CustomDrawerContent extends Component {
           </View>
         </TouchableOpacity>
         <DrawerItemList {...this.props} />
+        <TouchableOpacity
+          onPress={() => {
+            this.props.userAsync("");
+            this.props.navigation.navigate("Login");
+          }}
+          style={{
+            paddingHorizontal: 20,
+            flexDirection: "row",
+            alignItems: "center",
+            marginTop: 15,
+          }}
+        >
+          <MaterialCommunityIcons name="logout" size={26} color={"#89898c"} />
+          <View style={{ marginLeft: 30 }}>
+            <LatoText
+              col="#FFFFFF"
+              fontName={"Lato-Regular"}
+              fontSiz={12}
+              text="Sign Out"
+            />
+          </View>
+        </TouchableOpacity>
       </DrawerContentScrollView>
     );
   }
@@ -86,6 +118,8 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
     {
       cartAsync,
+      userAsync,
+
     },
     dispatch
   );
