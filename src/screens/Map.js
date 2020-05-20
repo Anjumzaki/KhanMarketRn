@@ -14,28 +14,30 @@ import LatoText from "../Helpers/LatoText";
 import { bindActionCreators } from "redux";
 import { locationAsync } from "../store/actions";
 import { connect } from "react-redux";
-import axios from 'axios'
+import axios from "axios";
 class Map extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       location: "",
-      lat: '',
-      lng: '',
-      completeLoc: ""
-    }; 
+      lat: "",
+      lng: "",
+      completeLoc: "",
+    };
   }
   componentDidMount() {
+    var lat = "";
+    var lng = "";
+    Geolocation.getCurrentPosition((info) => {
+      console.log("ONFFOOO", info.coords.latitude);
+      lat = info.coords.latitude;
+      lng = info.coords.longitude;
+      this.setState({
+        lat,
+        lng,
+      });
+    });
 
-    // var lat1=''
-    // var lng1=''
-    // Geolocation.getCurrentPosition(
-    //   (info) => {
-    //     // console.log("ONFFOOO",info.coords.latitude)
-    //     // lat=info.coords.latitude
-    //     // lng=info.coords.longitude
-
-        
     // fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + info.coords.latitude+ ',' + info.coords.longitude + '&key=AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI')
     // .then((response) => response.json())
     // .then((responseJson) => {
@@ -51,8 +53,8 @@ class Map extends React.Component {
     //  })
     //  .catch(err => console.log("err", err))
 
-    //     this.setState({ location: info, lat: info.coords.latitude, lng: info.coords.longitude }, 
-          
+    //     this.setState({ location: info, lat: info.coords.latitude, lng: info.coords.longitude },
+
     //       // alert(JSON.stringify(info))
     //       );
     //   },
@@ -62,44 +64,40 @@ class Map extends React.Component {
     //   { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
     // );
     //   console.log("lat longgg", lat1,lng1)
-
-
   }
   render() {
-    console.log(this.state)
+    console.log(this.state);
     if (!this.state.location) {
       loc = (
         <View style={styles.container}>
-
           <MapView
-          style={styles.map}
+            style={styles.map}
             initialRegion={{
-              latitude: 37.421998333333335,
-              longitude: -122.08400000000002,
+              latitude:  Number(this.state.lat) ,
+              longitude: Number(this.state.lng) ,
               latitudeDelta: 0.0,
               longitudeDelta: 0.0,
             }}
           >
             <Marker
               coordinate={{
-                latitude: 37.421998333333335,
-                longitude: -122.08400000000002,
+                latitude:  Number(this.state.lat) ,
+                longitude: Number(this.state.lng) ,
               }}
               title={"Google"}
               description={"description"}
             />
           </MapView>
-         
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "flex-end",
-                alignItems: "center",
-                width:'100%'
-              }}
-            >
-              <TouchableOpacity 
 
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "flex-end",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <TouchableOpacity
               //   onPress={() => {
               //     axios.post('https://sheltered-scrubland-52295.herokuapp.com/add/location',{
               //       refId: this.props.user.user._id,
@@ -118,19 +116,18 @@ class Map extends React.Component {
               //     })
               //     .catch(err => console.log(err))
               // }}
-              onPress={()=>this.props.navigation.push("App")}
-                style={[btnStyles.basic, { width: "80%", marginBottom: 100 }]}
-              >
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={17}
-                  col="white"
-                  text={"Done"}
-                />
-              </TouchableOpacity>
-            </View>
+              onPress={() => this.props.navigation.push("App")}
+              style={[btnStyles.basic, { width: "80%", marginBottom: 100 }]}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={17}
+                col="white"
+                text={"Done"}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
-
       );
     } else {
       loc = <Text>Loading</Text>;
@@ -163,10 +160,9 @@ const styles = StyleSheet.create({
   },
 });
 
-
 const mapStateToProps = (state) => ({
   location: state.Location.locationData,
-  user: state.user.user
+  user: state.user.user,
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(

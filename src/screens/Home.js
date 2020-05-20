@@ -36,30 +36,30 @@ class Home extends React.Component {
     };
   }
   componentDidMount() {
-    // var cords = {};
-    // Geolocation.getCurrentPosition(
-    //   (info) => {
-    //     axios
-    //       .get(
-    //         "https://sheltered-scrubland-52295.herokuapp.com/get/stores/" +
-    //           info.coords.latitude +
-    //           "/" +
-    //           info.coords.longitude
-    //       )
-    //       .then((resp) => {
-    //         this.setState({
-    //           stores: resp.data,
-    //         });
-    //       });
-    //     this.setState({ location: info.coords });
-    //     cords = info;
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   },
-    //   { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
-    // );
-    // console.log("loc", cords);
+    var cords = {};
+    Geolocation.getCurrentPosition(
+      (info) => {
+        axios
+          .get(
+            "https://sheltered-scrubland-52295.herokuapp.com/get/stores/" +
+              info.coords.latitude +
+              "/" +
+              info.coords.longitude
+          )
+          .then((resp) => {
+            this.setState({
+              stores: resp.data,
+            });
+          });
+        this.setState({ location: info.coords });
+        cords = info;
+      },
+      (error) => {
+        console.log(error);
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
+    );
+    console.log("loc", cords);
 
    
     this._unsubscribe = this.props.navigation.addListener('focus', () => {

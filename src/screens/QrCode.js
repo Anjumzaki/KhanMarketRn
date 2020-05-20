@@ -172,7 +172,7 @@ class QrCode extends Component {
             ></LatoText>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => this.setState({ cart: true })}
+            onPress={() => this.props.navigation.navigate('MyOrderStackScreen', { screen: 'MyOrders' })}
             style={[btnStyles.cartBtn, { width: "40%" }]}
           >
             <LatoText
