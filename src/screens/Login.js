@@ -47,35 +47,13 @@ class Login extends React.Component {
       msg: "",
     };
   }
-  async componentDidMount() {
-    await Font.loadAsync({
-      "Lato-Light": require("../../assets/fonts/Lato-Light.ttf"),
-      "Lato-Bold": require("../../assets/fonts/Lato-Bold.ttf"),
-      "Lato-Regular": require("../../assets/fonts/Lato-Regular.ttf"),
-      "Sarabun-Regular": require("../../assets/fonts/Sarabun-Regular.ttf"),
-      "Sarabun-Medium": require("../../assets/fonts/Sarabun-Medium.ttf"),
-      "Sarabun-Light": require("../../assets/fonts/Sarabun-Light.ttf"),
-    });
-    //Unique Id
-    this.setState({ fontLoaded: true });
-    this._unsubscribe = this.props.navigation.addListener("focus", () => {
-      this.setState({
-        icEye: "visibility-off",
-        isPassword: true,
-        fontLoaded: false,
-        email: "",
-        password: "",
-        msg: "",
-      });
-    });
-  }
-  componentDidMount(){
-    Geolocation.getCurrentPosition(
-      (info) => {alert(  info.coords.latitude)})
-  }
-  componentWillUnmount() {
-    this._unsubscribe();
-  }
+
+  // componentDidMount() {
+  //   Geolocation.getCurrentPosition((info) => {
+  //     alert(info.coords.latitude);
+  //   });
+  // }
+
   getRef = (ref) => {
     if (this.props.getRef) this.props.getRef(ref);
   };
@@ -142,9 +120,31 @@ class Login extends React.Component {
                               " " +
                               resp1.data[0].country
                           );
-                          this.props.navigation.navigate("App");
+                          this.setState(
+                            {
+                              icEye: "visibility-off",
+                              isPassword: true,
+                              fontLoaded: false,
+                              email: "",
+                              password: "",
+                              msg: "",
+                              loading: false,
+                            },
+                            () => this.props.navigation.navigate("App")
+                          );
                         } else {
-                          this.props.navigation.navigate("Map");
+                          this.setState(
+                            {
+                              icEye: "visibility-off",
+                              isPassword: true,
+                              fontLoaded: false,
+                              email: "",
+                              password: "",
+                              msg: "",
+                              loading: false,
+                            },
+                            () => this.props.navigation.navigate("Map")
+                          );
                         }
                       })
                       .catch((err) => console.log(err));
