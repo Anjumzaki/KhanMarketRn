@@ -139,9 +139,9 @@ handleChange(num) {
         <View style={styles.underCard}>
         <LatoText fontName="Lato-Regular" fonSiz={15} col='#5C5C5C' text={this.props.product.productName} ></LatoText>
           <View style={{flex: 1, flexDirection: 'row',paddingTop:5}}>
-          <LatoText fontName="Lato-Regular" fonSiz={13} col='#89898C'  lineThrough='line-through' text= { '$' +this.props.product.price + ' / kg'} ></LatoText>
+          <LatoText fontName="Lato-Regular" fonSiz={13} col='#2E2E2E' text= { '$' +(this.props.product.price - ((this.props.product.price * this.props.product.discount)/100)).toFixed(2) + ' / lb'} ></LatoText>
           <Text>     </Text>
-          <LatoText fontName="Lato-Regular" fonSiz={13} col='#2E2E2E' text= { '$' +(this.props.product.price - ((this.props.product.price * this.props.product.discount)/100)).toFixed(2) + ' / kg'} ></LatoText>
+          <LatoText fontName="Lato-Regular" fonSiz={13} col='#89898C'  lineThrough='line-through' text= { '$' +this.props.product.price + ' / lb'} ></LatoText>
 
           </View>
           <View>

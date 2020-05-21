@@ -172,13 +172,13 @@ class FavCards extends React.Component {
                 )}
               </TouchableOpacity>
             </View>
-            <View style={{ flex: 1, flexDirection: "row", paddingTop: 5 }}>
+            {/* <View style={{ flex: 1, flexDirection: "row", paddingTop: 5 }}>
               <LatoText
                 fontName="Lato-Regular"
                 fonSiz={13}
                 col="#89898C"
                 lineThrough="line-through"
-                text={"$" + this.props.product.product.price + " / kg"}
+                text={"$" + this.props.product.product.price + " / lb"}
               ></LatoText>
               <Text> 
 
@@ -192,10 +192,39 @@ class FavCards extends React.Component {
                   (parseInt(this.props.product.product.price) -
                     (parseInt(this.props.product.product.price) * parseInt(this.props.product.product.discount)) /
                       100) +
-                  " / kg"
+                  " / lb"
                 }
               ></LatoText>
-            </View>
+            </View> */}
+
+            <View style={{ flex: 1, flexDirection: "row", paddingTop: 5 }}>
+
+              <View style={{marginRight:5}} >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={13}
+                col="#2E2E2E"
+                text={
+                  "$" +
+                  (parseInt(this.props.product.product.price) -
+                    (parseInt(this.props.product.product.price) * parseInt(this.props.product.product.discount)) /
+                      100) +
+                  " / lb"
+                }
+              ></LatoText>
+                </View>
+              <View style={{marginLeft:5}}>
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={13}
+                  col="#89898C"
+                  lineThrough="line-through"
+                  text={"$" + this.props.product.product.price + " / lb"}
+                ></LatoText>
+                </View>
+
+
+              </View>
             <View style={{marginBottom:10}}>
               <LatoText
                 fontName="Lato-Regular"

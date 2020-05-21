@@ -61,7 +61,8 @@ class OrderCards extends React.Component {
                 fontName="Lato-Regular"
                 fonSiz={17}
                 col="#5C5C5C"
-                text={"Order # "+this.props.order.orderNumber}
+                text={"Order # "+this.props.order.orderNumber ? (this.props.order.orderNumber).toUpperCase() : null}
+                // text={"Order # "+ this.props.order.orderNumber !== undefined ? this.props.order.orderNumber.toUpperCase() : null}
               />
               {this.props.order.isRejected === true ? (
 
@@ -106,7 +107,7 @@ class OrderCards extends React.Component {
                   fontName="Lato-Regular"
                   fonSiz={15}
                   col="#5C5C5C"
-                  text={this.props.order.orderDate + " "+ this.props.order.orderTime}
+                  text={this.props.order.orderDate + "       "+ this.props.order.orderTime}
                 />
                  <LatoText
                   fontName="Lato-Regular"

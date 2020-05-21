@@ -261,18 +261,19 @@ class ProductDetails extends Component {
                   alignItems: "center"
                 }}
               >
+                 <LatoText
+                  fontName="Lato-Bold"
+                  fonSiz={20}
+                  col="#5C5C5C"
+                  text={` $  ${ parseFloat(product.price - ((product.price * product.discount)/100)).toFixed(1)} / lb `}
+                />
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={17}
                   col="#89898C"
                   text={`$${product.price} / lb `}
                 />
-                <LatoText
-                  fontName="Lato-Bold"
-                  fonSiz={20}
-                  col="#5C5C5C"
-                  text={` $  ${ parseFloat(product.price - ((product.price * product.discount)/100)).toFixed(1)} / lb `}
-                />
+               
               </View>
               <View style={{ marginTop: 22 }}>
                 <LatoText
