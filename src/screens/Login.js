@@ -13,6 +13,8 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
+
 import Geolocation from "@react-native-community/geolocation";
 import { BackStack } from "../Helpers/BackStack";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -47,16 +49,15 @@ class Login extends React.Component {
       msg: "",
     };
   }
-
-  // componentDidMount() {
-  //   Geolocation.getCurrentPosition((info) => {
-  //     alert(info.coords.latitude);
-  //   });
-  // }
-
   getRef = (ref) => {
     if (this.props.getRef) this.props.getRef(ref);
   };
+async  componentWillMount (){
+  const jsonValue = await AsyncStorage.getItem('user')
+  alert(jsonValue)
+  this.props.userAsync(JSON.parse(jsonValue))
+  this.props.navigation.navigate('App')
+  }
   changePwdType = () => {
     const { isPassword } = this.state;
     // set new state value
@@ -65,6 +66,46 @@ class Login extends React.Component {
       isPassword: !isPassword,
     });
   };
+  handleApp = async (value) => {
+
+    try {
+      await AsyncStorage.setItem('user', JSON.stringify(value) )
+    } catch (e) {
+      alert(error)
+    }
+
+    this.setState(
+      {
+        icEye: "visibility-off",
+        isPassword: true,
+        fontLoaded: false,
+        email: "",
+        password: "",
+        msg: "",
+        loading: false,
+      },
+      () => this.props.navigation.navigate("App")
+    );
+  }
+  handleMap = async (value) => {
+    try {
+      await AsyncStorage.setItem('user', JSON.stringify(value) )
+    } catch (e) {
+      // saving error
+    }
+    this.setState(
+      {
+        icEye: "visibility-off",
+        isPassword: true,
+        fontLoaded: false,
+        email: "",
+        password: "",
+        msg: "",
+        loading: false,
+      },
+      () => this.props.navigation.navigate("Map")
+    );
+  }
   handleLogin = () => {
     this.setState(
       {
@@ -111,40 +152,11 @@ class Login extends React.Component {
                         this.props.userAsync(resp.data);
                         // this.props.navigation.navigate("Map");
                         if (resp1.data.length > 0) {
-                          this.props.locationAsync(
-                            resp1.data[0].address1 +
-                              " " +
-                              resp1.data[0].address2 +
-                              " " +
-                              resp1.data[0].city +
-                              " " +
-                              resp1.data[0].country
-                          );
-                          this.setState(
-                            {
-                              icEye: "visibility-off",
-                              isPassword: true,
-                              fontLoaded: false,
-                              email: "",
-                              password: "",
-                              msg: "",
-                              loading: false,
-                            },
-                            () => this.props.navigation.navigate("App")
-                          );
+                          
+                          this.handleApp(resp.data)
                         } else {
-                          this.setState(
-                            {
-                              icEye: "visibility-off",
-                              isPassword: true,
-                              fontLoaded: false,
-                              email: "",
-                              password: "",
-                              msg: "",
-                              loading: false,
-                            },
-                            () => this.props.navigation.navigate("Map")
-                          );
+                          this.handleMap(res.data)
+                          
                         }
                       })
                       .catch((err) => console.log(err));

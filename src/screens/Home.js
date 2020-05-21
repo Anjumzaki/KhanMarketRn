@@ -10,6 +10,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import StoreCard from "../Components/StoreCard";
+import AsyncStorage from '@react-native-community/async-storage';
+
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import axios from "axios";
 import fb from "../config/Fire";
@@ -35,7 +37,17 @@ class Home extends React.Component {
       image: "",
     };
   }
-  componentDidMount() {
+  getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user')
+     jsonValue != null ? alert(jsonValue) : null;
+    } catch(e) {
+      // error reading value
+    }
+  }
+ async componentDidMount() {
+  const jsonValue = await AsyncStorage.getItem('user')
+  alert(jsonValue)
     var cords = {};
     Geolocation.getCurrentPosition(
       (info) => {
@@ -114,14 +126,14 @@ class Home extends React.Component {
                     key={item._id}
                     navigation={this.props.navigation}
                     name={item.storeName}
-                    // distance={
-                    //   this.getDistanceFromLatLonInKm(
-                    //     this.state.location.latitude,
-                    //     this.state.location.longitude,
-                    //     item.lat,
-                    //     item.lng
-                    //   ).toFixed(2) + " km"
-                    // }
+                    distance={
+                      this.getDistanceFromLatLonInKm(
+                        this.state.location.latitude,
+                        this.state.location.longitude,
+                        item.lat,
+                        item.lng
+                      ).toFixed(2) + " km"
+                    }
                     address={item.storeAddress}
                     id={item._id}
                     phone={item.phoneNumber}
