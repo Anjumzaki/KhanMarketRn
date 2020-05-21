@@ -13,7 +13,7 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from "@react-native-community/async-storage";
 
 import Geolocation from "@react-native-community/geolocation";
 import { BackStack } from "../Helpers/BackStack";
@@ -49,15 +49,25 @@ class Login extends React.Component {
       msg: "",
     };
   }
+  async componentWillMount() {
+    const jsonValue = await AsyncStorage.getItem("user");
+    const loc1 = await AsyncStorage.getItem("userLocation");
+    const loc = JSON.parse(loc1)
+    this.props.userAsync(JSON.parse(jsonValue));
+    this.props.locationAsync(
+      loc[0].address1 +
+        " " +
+        loc[0].address2 +
+        " " +
+        loc[0].city +
+        " " +
+        loc[0].country
+    );
+    this.props.navigation.navigate("App");
+  }
   getRef = (ref) => {
     if (this.props.getRef) this.props.getRef(ref);
   };
-async  componentWillMount (){
-  const jsonValue = await AsyncStorage.getItem('user')
-  alert(jsonValue)
-  this.props.userAsync(JSON.parse(jsonValue))
-  this.props.navigation.navigate('App')
-  }
   changePwdType = () => {
     const { isPassword } = this.state;
     // set new state value
@@ -66,14 +76,22 @@ async  componentWillMount (){
       isPassword: !isPassword,
     });
   };
-  handleApp = async (value) => {
-
+  handleApp = async (value, loc) => {
     try {
-      await AsyncStorage.setItem('user', JSON.stringify(value) )
+      await AsyncStorage.setItem("user", JSON.stringify(value));
+      await AsyncStorage.setItem("userLocation", JSON.stringify(loc));
     } catch (e) {
-      alert(error)
+      alert(error);
     }
-
+    this.props.locationAsync(
+      loc[0].address1 +
+        " " +
+        loc[0].address2 +
+        " " +
+        loc[0].city +
+        " " +
+        loc[0].country
+    );
     this.setState(
       {
         icEye: "visibility-off",
@@ -86,10 +104,10 @@ async  componentWillMount (){
       },
       () => this.props.navigation.navigate("App")
     );
-  }
+  };
   handleMap = async (value) => {
     try {
-      await AsyncStorage.setItem('user', JSON.stringify(value) )
+      await AsyncStorage.setItem("user", JSON.stringify(value));
     } catch (e) {
       // saving error
     }
@@ -105,7 +123,7 @@ async  componentWillMount (){
       },
       () => this.props.navigation.navigate("Map")
     );
-  }
+  };
   handleLogin = () => {
     this.setState(
       {
@@ -152,11 +170,9 @@ async  componentWillMount (){
                         this.props.userAsync(resp.data);
                         // this.props.navigation.navigate("Map");
                         if (resp1.data.length > 0) {
-                          
-                          this.handleApp(resp.data)
+                          this.handleApp(resp.data, resp1.data);
                         } else {
-                          this.handleMap(res.data)
-                          
+                          this.handleMap(res.data);
                         }
                       })
                       .catch((err) => console.log(err));

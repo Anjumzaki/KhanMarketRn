@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import StoreCard from "../Components/StoreCard";
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from "@react-native-community/async-storage";
 
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import axios from "axios";
@@ -39,15 +39,14 @@ class Home extends React.Component {
   }
   getData = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('user')
-     jsonValue != null ? alert(jsonValue) : null;
-    } catch(e) {
-      // error reading value
+      const jsonValue = await AsyncStorage.getItem("user");
+      jsonValue != null ? alert(jsonValue) : null;
+    } catch (e) {
     }
-  }
- async componentDidMount() {
-  const jsonValue = await AsyncStorage.getItem('user')
-  alert(jsonValue)
+  };
+  async componentDidMount() {
+    const jsonValue = await AsyncStorage.getItem("user");
+    const jsonValue1 = await AsyncStorage.getItem("userLocation");
     var cords = {};
     Geolocation.getCurrentPosition(
       (info) => {
@@ -73,16 +72,14 @@ class Home extends React.Component {
     );
     console.log("loc", cords);
 
-   
-    this._unsubscribe = this.props.navigation.addListener('focus', () => {
+    this._unsubscribe = this.props.navigation.addListener("focus", () => {
       axios
-      .get("https://sheltered-scrubland-52295.herokuapp.com/get/stores/")
-      .then(resp => {
-        this.setState({
-          stores: resp.data
+        .get("https://sheltered-scrubland-52295.herokuapp.com/get/stores/")
+        .then((resp) => {
+          this.setState({
+            stores: resp.data,
+          });
         });
-
-      });
     });
   }
   componentWillUnmount() {
@@ -109,7 +106,7 @@ class Home extends React.Component {
   render() {
     console.log("propsssss", this.props.user);
     return (
-      <View style={{ flex: 1}}>
+      <View style={{ flex: 1 }}>
         <StoreHeader navigation={this.props.navigation} />
         <StatusBar
           translucent={true}
@@ -118,7 +115,7 @@ class Home extends React.Component {
         />
         {this.state.stores.length > 0 ? (
           <View>
-            <ScrollView contentContainerStyle={{paddingBottom:180}}>
+            <ScrollView contentContainerStyle={{ paddingBottom: 180 }}>
               {this.state.stores.length > 0 &&
                 this.state.stores.map((item, ind) => (
                   <StoreCard
