@@ -9,7 +9,6 @@ import LatoText from "../Helpers/LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { bindActionCreators } from "redux";
 import { cartAsync, userAsync } from "../store/actions";
-
 import { connect } from "react-redux";
 import firebase from "firebase";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
