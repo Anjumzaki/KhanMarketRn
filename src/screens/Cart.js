@@ -73,15 +73,21 @@ class Cart extends Component {
   }
 
   render() {
+    var storeProducts =  this.props.cart.filter((item,index) => {
+      return (item.product.storeId === this.props.store.id)
+    })
+
     var subTotal = 0
     
-    for(var i=0; i < this.props.cart.length; i++){
+    for(var i=0; i < storeProducts.length; i++){
       // var temp = (this.props.cart[i].product.price - ((this.props.cart[i].product.price * this.props.cart[i].product.discount)/100) * this.props.cart[i].quantity)
       var temp=this.props.cart[i].price
       // var temp=0
       subTotal = subTotal + parseFloat(temp) 
     }
+   
 
+    console.log("storeProducts", storeProducts)
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
@@ -125,7 +131,7 @@ class Cart extends Component {
          
           <View style={lines.simple} />
           {
-            this.props.cart.map((item,index) => (
+            storeProducts.map((item,index) => (
                 <CartCard product={item} index={index} isFeatured={item.isFeatured} id={item.product._id}/> 
             ))
           }
@@ -148,7 +154,7 @@ class Cart extends Component {
               fontName="Lato-Bold"
               fonSiz={25}
               col="#2E2E2E"
-              text={`$${subTotal.toFixed(3)}`}
+              text={`$${subTotal.toFixed(2)}`}
             ></LatoText>
           </View>
           <View
@@ -169,9 +175,32 @@ class Cart extends Component {
               fontName="Lato-Bold"
               fonSiz={25}
               col="#2E2E2E"
-              text={'$'+(parseFloat(this.state.tax)/100)*subTotal.toFixed(3)}
+              text={'$'+((parseFloat(this.state.tax ? this.state.tax: 0)/100)*subTotal).toFixed(2)}
             ></LatoText>
           </View>
+        {subTotal.toFixed(2) > 0 ? (
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              alignItems: "center",
+              justifyContent:'space-between'
+            }}
+          >
+            <LatoText
+              fontName="Lato-Regular"
+              fonSiz={20}
+              col="#2E2E2E"
+              text="Total"
+            ></LatoText>
+            <LatoText
+              fontName="Lato-Bold"
+              fonSiz={25}
+              col="#2E2E2E"
+              text={'$'+parseFloat(parseFloat(((parseFloat(this.state.tax ? this.state.tax: 0)/100)*subTotal).toFixed(2)) + parseFloat(subTotal.toFixed(2)))}
+            ></LatoText>
+          </View>
+          ): null}
               
         </ScrollView>
 

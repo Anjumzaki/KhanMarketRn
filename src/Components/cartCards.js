@@ -113,7 +113,7 @@ class CartCards extends React.Component {
                     this.setState({qt: this.state.qt+1})
 
                     var temp=this.state.cart[this.props.index]
-                    temp.price = ((this.props.product.product.price - ((this.props.product.product.price * this.props.product.product.discount)/100))*parseInt(this.state.qt+1)).toFixed(3)
+                    temp.price = ((this.props.product.product.price - ((this.props.product.product.price * this.props.product.product.discount)/100))*parseInt(this.state.qt+1)).toFixed(2)
                     temp.quantity = parseInt(this.state.qt+1)
                     this.state.cart[this.props.index] = temp
                     this.props.cartAsync(this.state.cart)
@@ -122,12 +122,13 @@ class CartCards extends React.Component {
                   <AntDesign color="#B50000" size={18} name="plus" />
                 </TouchableOpacity> 
               </View>
+              
               <View style={{marginRight:20}}>
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={15}
                   col="#5C5C5C"
-                  text={!this.props.isFeatured ? (`$${((this.props.product.product.price - ((this.props.product.product.price * this.props.product.product.discount)/100))*parseInt(this.state.qt)).toFixed(3)}`) : "$"+this.props.product.product.price}
+                  text={!this.props.isFeatured ? (`$${((this.props.product.product.price - ((this.props.product.product.price * this.props.product.product.discount)/100))*parseInt(this.state.qt)).toFixed(2)}`) : "$"+this.props.product.product.price}
                 />
               </View>
             </View>

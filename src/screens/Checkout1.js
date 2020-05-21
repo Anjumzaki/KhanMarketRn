@@ -66,7 +66,8 @@ class Cart extends Component {
       num: "",
       tax: '',
       numVerified: false,
-      codeMsg: false
+      codeMsg: false,
+      on: ''
     };
   }
 
@@ -87,7 +88,7 @@ class Cart extends Component {
 
     axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/store/"+this.props.store.id)
     .then(resp => {
-      console.log('RESP DATAA',resp.data)
+      // console.log('RESP DATAA',resp.data)
       
       // console.log("aaaa",days[n])
       // console.log("daya",n,resp.data.storeTimings.length)
@@ -111,7 +112,7 @@ class Cart extends Component {
           }else{
             eu="AM"
           }
-          console.log("ishalf",ishalf)
+          // console.log("ishalf",ishalf)
           var st= resp.data.storeTimings[i].openTime.substring(0,2)
           var et= resp.data.storeTimings[i].ClosingTime.substring(0,2)
           if(ishalf){
@@ -223,14 +224,37 @@ class Cart extends Component {
     for ( var i = 0; i < length; i++ ) {
        result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    return result;
+
+    console.log("asdklllllllllllllllllllllllllllllllllll",result)
+
+    axios.get('http://192.168.0.105:3000/get/order/bynumber/'+result)
+    .then(resp => {
+      console.log("Order num resp",resp.data)
+      if(resp.data === null){
+        console.log("in iffffffffffffff")
+      }else{
+        console.log("in elseeeeeeeeeeeeee")
+        this.makeid(6)
+      }
+    })
+    .then(err => console.log(err))
+
+    if(result){
+      console.log("onnnnnnnnnnn",result)
+      return result
+    }
+
+
+
+    // ;
  }
- 
+//  ejIEyo
   render() {
     // console.log("DATEEEEEEEEE", new Date(), console.log(timestamp()));
     // console.log(timestamp("DDMMYYYY"));
     // console.log(timestamp("YYYY-MM-DD"));
     var codeId= this.makeid(6)
+    console.log("ssssssssssssssssssssidddddddddddddddddddddddddd",codeId)
     // console.log("CO props user", this.props.user);
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
@@ -255,7 +279,7 @@ class Cart extends Component {
     if(month1 < 10){
       month1="0"+month1
     }
-    console.log("todays date", day + "-" + month1 + "-" + year)
+    // console.log("todays date", day + "-" + month1 + "-" + year)
     var todaysDate = day + "-" + month1 + "-" + year
     var dates=[]
     
@@ -276,7 +300,7 @@ class Cart extends Component {
     }
 
     // console.log("datesssssssssss",dates)
-    console.log("stateeee",this.state)
+    // console.log("stateeee",this.state)
     var nameCheck = false
     if(!this.props.user.user.isGuest){
       nameCheck = true
@@ -285,7 +309,12 @@ class Cart extends Component {
     if(this.state.name && this.state.name){
       nameCheck = true
     }
-    console.log("name check", nameCheck)
+    // console.log("name check", nameCheck)
+
+    var storeProducts =  this.props.cart.filter((item,index) => {
+      return (item.product.storeId === this.props.store.id)
+    })
+
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return (
@@ -1086,7 +1115,7 @@ class Cart extends Component {
               this.setState({ cart: true })
               axios.post('https://sheltered-scrubland-52295.herokuapp.com/add/order',{
                 storeId: sId,
-                products: this.props.cart,
+                products: storeProducts,
                 totalAmount: subTotal,
                 storeName: this.props.store.name,
                 storeAddress: this.props.store.address,
