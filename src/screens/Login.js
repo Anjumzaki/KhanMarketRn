@@ -52,7 +52,7 @@ class Login extends React.Component {
   async componentWillMount() {
     const jsonValue = await AsyncStorage.getItem("user");
     const loc1 = await AsyncStorage.getItem("userLocation");
-    const loc = JSON.parse(loc1)
+    const loc = JSON.parse(loc1);
     this.props.userAsync(JSON.parse(jsonValue));
     this.props.locationAsync(
       loc[0].address1 +
@@ -166,7 +166,6 @@ class Login extends React.Component {
                       )
                       .then((resp1) => {
                         console.log("loc resp", resp1.data);
-
                         this.props.userAsync(resp.data);
                         // this.props.navigation.navigate("Map");
                         if (resp1.data.length > 0) {
