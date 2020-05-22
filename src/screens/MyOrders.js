@@ -33,7 +33,9 @@ class MyOrders extends Component {
     this.state = {
       heart: false,
       qt: 1,
-      myOrders: []
+      myOrders: [],
+      loading: true
+
     };
   }
 
@@ -41,7 +43,7 @@ class MyOrders extends Component {
 
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
       axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/my/orders/"+this.props.user.user._id)
-      .then(resp => this.setState({myOrders: resp.data}))
+      .then(resp => this.setState({myOrders: resp.data, loading: false}))
       .catch(err => console.log(err))
     });
   }
@@ -85,7 +87,13 @@ class MyOrders extends Component {
             ))}
     
           </View>
-          ): <ActivityIndicator style={{marginTop:100}} size="large" color='black' />}
+          ): (
+            this.state.loading ? (
+              <ActivityIndicator style={{marginTop:100}} size="large" color='black' />
+            ): (
+              <Text style={{textAlign:"center", marginTop: 100}}>No recent orders</Text>
+            )
+          )}
 
         {past.length > 0 ? (
 
