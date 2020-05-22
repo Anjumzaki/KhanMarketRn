@@ -1,11 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Button,Dimensions } from "react-native";
 import { cardStyles } from "../styles/base";
 import LatoText from "../Helpers/LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import firebase from "firebase";
 import { bindActionCreators } from "redux";
-import { storeAsync, cartAsync } from "../store/actions";
+import { storeAsync, cartAsync, cartSizeAsync } from "../store/actions";
 import { connect } from "react-redux";
 import Modal from "react-native-modalbox";
 
@@ -13,7 +13,8 @@ class StoreCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-     image:""
+     image:"",
+     isEnabled: true,
     };
   } 
   componentDidMount() {
@@ -54,7 +55,9 @@ class StoreCard extends React.Component {
               storeId: id
               })
             }else{
-              alert("change store")
+              // alert("change store"/)
+              this.refs.modal3.open()
+
             }
           }
           
@@ -102,26 +105,52 @@ class StoreCard extends React.Component {
           </View>
         </View>
 
-        {/* <Modal
-          // style={[styles.modal, styles.modal3]}
+        <Modal
+          style={[styles.modal, styles.modal3]}
           position={"center"}
           ref={"modal3"}
           isDisabled={this.state.isDisabled}
         >
             <Text>You are changing the store, so you will lost your cart items</Text>
             <View>
-              <Button>
-                 Cancel
+              <Button onPress={() => this.refs.modal3.close()} title="Cancel">
               </Button>
-              <Button>
-                 Okay
+              <Button onPress={() => {
+                this.props.cartAsync([])
+                this.refs.modal3.close()
+                this.props.storeAsync({
+                  name: name,
+                  address: address,
+                  id: id,
+                  phone : phone
+                })
+                this.props.cartSizeAsync(0)
+
+                this.props.navigation.push("StoreDetails",{
+                  storeId: id
+                })
+
+                }} title="Okay">
               </Button>
             </View>
-        </Modal> */}
+        </Modal>
       </TouchableOpacity>
     );
   }
 }
+
+const styles = StyleSheet.create({
+
+  modal: {
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+  },
+  modal3: {
+    height: 230,
+    width: Dimensions.get("window").width - 100,
+  },
+});
 
 
 const mapStateToProps = state => ({
@@ -136,7 +165,8 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
       {
           storeAsync,
-          cartAsync
+          cartAsync,
+          cartSizeAsync
       },
       dispatch
   );

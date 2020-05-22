@@ -36,6 +36,7 @@ class Favourites extends Component {
       heart: false,
       qt: 1,
       favourites: [],
+      loading: true
     };
   }
 
@@ -45,7 +46,10 @@ class Favourites extends Component {
         "https://sheltered-scrubland-52295.herokuapp.com/get/all/favourites/" +
           this.props.user.user._id
       )
-      .then((resp) => this.setState({ favourites: resp.data }))
+      .then((resp) => {
+        this.setState({ favourites: resp.data, loading: false })
+      
+      })
       .catch((err) => console.log(err));
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
       axios
@@ -84,11 +88,17 @@ class Favourites extends Component {
                 />
               ))
             ) : (
+
+              this.state.loading ? (
               <ActivityIndicator
                 style={{ marginTop: 100 }}
                 size="large"
                 color="black"
               />
+              ): (
+                <Text style={{textAlign:"center", marginTop: 100}}>No favourite items</Text>
+              )
+              
             )}
           </View>
         </ScrollView>
