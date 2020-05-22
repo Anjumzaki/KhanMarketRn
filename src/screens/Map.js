@@ -25,18 +25,42 @@ class Map extends React.Component {
       completeLoc: "",
     };
   }
+
+  getLocationName = () => {
+    fetch(
+      "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+        this.state.location.coords.latitude +
+        "," +
+        this.state.location.coords.longitude +
+        "&key=AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI"
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({ completeLoc: responseJson });
+        this.props.locationAsync(
+          JSON.stringify(responseJson.results[0].formatted_address)
+        );
+      })
+      .catch((err) => console.log("err", err));
+  };
   componentDidMount() {
     var lat = "";
     var lng = "";
-    Geolocation.getCurrentPosition((info) => {
-      console.log("ONFFOOO", info.coords.latitude);
-      lat = info.coords.latitude;
-      lng = info.coords.longitude;
-      this.setState({
-        lat,
-        lng,
-      },alert(lat + ' ' +lng));
-
+    var newInfo = ''
+    Geolocation.getCurrentPosition(
+      (info) => {
+        console.log("ONFFOOO", info.coords.latitude);
+        lat = info.coords.latitude;
+        lng = info.coords.longitude;
+        newInfo = info
+        this.setState(
+          {
+            lat,
+            lng,
+            location: newInfo,
+          },
+          () => this.getLocationName()
+        );
       },
       (error) => {
         console.log(error);
@@ -78,24 +102,40 @@ class Map extends React.Component {
             }}
           >
             <TouchableOpacity
-              //   onPress={() => {
-              //     axios.post('https://sheltered-scrubland-52295.herokuapp.com/add/location',{
-              //       refId: this.props.user.user._id,
-              //       type: "Customer",
-              //       address1:  this.state.completeLoc.results[0].address_components[0].long_name+ " " + this.state.completeLoc.results[0].address_components[1].long_name,
-              //       address2:  this.state.completeLoc.results[0].address_components[2].long_name+" " + this.state.completeLoc.results[0].address_components[3].long_name,
-              //       city: this.state.completeLoc.results[0].address_components[4].long_name,
-              //       country: this.state.completeLoc.results[0].address_components[5].long_name,
-              //       zipCode: this.state.completeLoc.results[0].address_components[6].long_name
-              //     })
-              //     .then((resp1) => {
-
-              //     this.props.navigation.push("App",{
-              //     location: this.state.location
-              //   })
-              //     })
-              //     .catch(err => console.log(err))
-              // }}
+              onPress={() => {
+                axios
+                  .post(
+                    "https://sheltered-scrubland-52295.herokuapp.com/add/location",
+                    {
+                      refId: this.props.user.user._id,
+                      type: "Customer",
+                      address1:
+                        this.state.completeLoc.results[0].address_components[0]
+                          .long_name +
+                        " " +
+                        this.state.completeLoc.results[0].address_components[1]
+                          .long_name,
+                      address2:
+                        this.state.completeLoc.results[0].address_components[2]
+                          .long_name +
+                        " " +
+                        this.state.completeLoc.results[0].address_components[3]
+                          .long_name,
+                      city: this.state.completeLoc.results[0]
+                        .address_components[4].long_name,
+                      country: this.state.completeLoc.results[0]
+                        .address_components[5].long_name,
+                      zipCode: this.state.completeLoc.results[0]
+                        .address_components[6].long_name,
+                    }
+                  )
+                  .then((resp1) => {
+                    this.props.navigation.push("App", {
+                      location: this.state.location,
+                    });
+                  })
+                  .catch((err) => console.log(err));
+              }}
               // onPress={() => this.props.navigation.push("App")}
               style={[btnStyles.basic, { width: "80%", marginBottom: 100 }]}
             >
@@ -110,7 +150,7 @@ class Map extends React.Component {
         </View>
       );
     } else {
-      loc = <Text style={{marginTop:20}}>Loading</Text>
+      loc = <Text style={{ marginTop: 20 }}>Loading</Text>;
     }
 
     return loc;
