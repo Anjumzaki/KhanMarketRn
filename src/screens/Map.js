@@ -32,51 +32,38 @@ class Map extends React.Component {
       console.log("ONFFOOO", info.coords.latitude);
       lat = info.coords.latitude;
       lng = info.coords.longitude;
-      this.setState(
-        {
-          lat,
-          lng,
-        },
-        () => {
-          fetch(
-            "https://maps.googleapis.com/maps/api/geocode/json?address=" +
-              info.coords.latitude +
-              "," +
-              info.coords.longitude +
-              "&key=AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI"
-          )
-            .then((response) => response.json())
-            .then((responseJson) => {
-              // console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[0].long_name))
-              //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[1].long_name))
-              //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[2].long_name))
-              //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[3].long_name))
-              //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[4].long_name))
-              //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[5].long_name));
-              // alert(JSON.stringify(responseJson.results[0].formatted_address))
-              this.setState({ completeLoc: responseJson });
-              this.props.locationAsync(
-                JSON.stringify(responseJson.results[0].formatted_address)
-              );
-            })
-            .catch((err) => console.log("err", err));
+      this.setState({
+        lat,
+        lng,
+      });
+    
 
-          this.setState(
-            {
-              location: info,
-              lat: info.coords.latitude,
-              lng: info.coords.longitude,
-            }
+    fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + info.coords.latitude+ ',' + info.coords.longitude + '&key=AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI')
+    .then((response) => response.json())
+    .then((responseJson) => {
+        // console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[0].long_name))
+        //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[1].long_name))
+        //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[2].long_name))
+        //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[3].long_name))
+        //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[4].long_name))
+        //   console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson.results[0].address_components[5].long_name));
+        // alert(JSON.stringify(responseJson.results[0].formatted_address))
+        this.setState({completeLoc: responseJson})
+        this.props.locationAsync(JSON.stringify(responseJson.results[0].formatted_address))
+     })
+     .catch(err => console.log("err", err))
 
-            // alert(JSON.stringify(info))
+        this.setState({ location: info, lat: info.coords.latitude, lng: info.coords.longitude },
+
+          // alert(JSON.stringify(info))
           );
-        },
-        (error) => {
-          console.log(error);
-        },
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
-      );
-    });
+      },
+      (error) => {
+        console.log(error);
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
+    );
+    //   console.log("lat longgg", lat1,lng1)
   }
   render() {
     console.log(this.state);
@@ -129,7 +116,7 @@ class Map extends React.Component {
                   })
                   .catch(err => console.log(err))
               }}
-              onPress={() => this.props.navigation.push("App")}
+              // onPress={() => this.props.navigation.push("App")}
               style={[btnStyles.basic, { width: "80%", marginBottom: 100 }]}
             >
               <LatoText
