@@ -4,7 +4,6 @@ export const FILTER_DATA_LOADING = "FILTER_DATA_LOADING";
 export const FILTER_DATA_ERROR = "FILTER_DATA_ERROR";
 
 export const filterAsync = (filter) => {
-    console.log("FILTERDILTER",filter)
   return (dispatch, getState) => {
    
     dispatch(filterLoading(true))

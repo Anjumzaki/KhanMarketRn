@@ -50,7 +50,6 @@ class Cart extends Component {
   
         axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/store/"+this.props.store.id)
         .then(resp => {
-          console.log('RESP DATAA',resp.data)
           this.setState({tax: resp.data.tax})
         })
     }else{
@@ -85,9 +84,6 @@ class Cart extends Component {
       // var temp=0
       subTotal = subTotal + parseFloat(temp) 
     }
-   
-
-    console.log("storeProducts", storeProducts)
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
