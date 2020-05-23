@@ -46,7 +46,7 @@ class MyOrders extends Component {
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
       axios
         .get(
-          "https://sheltered-scrubland-52295.herokuapp.com/get/my/orders/" +
+          "https://lit-peak-13067.herokuapp.com/get/my/orders/" +
             this.props.user.user._id
         )
         .then((resp) => this.setState({ myOrders: resp.data, loading: false }))

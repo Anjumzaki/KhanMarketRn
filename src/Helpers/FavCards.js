@@ -131,7 +131,7 @@ class FavCards extends React.Component {
                 if(this.state.heart === false){
                     await this.state.favourites.push({userId: this.props.user.user._id})
 
-                    axios.post('https://sheltered-scrubland-52295.herokuapp.com/add/favourite',{
+                    axios.post('https://lit-peak-13067.herokuapp.com/add/favourite',{
                         userId: this.props.user.user._id,
                         product: this.props.product,
                         storeName: this.props.store.name
@@ -144,13 +144,13 @@ class FavCards extends React.Component {
                     return el.userId !== that.props.user.user._id;
                   });
 
-                  axios.delete('https://sheltered-scrubland-52295.herokuapp.com/delete/favourite/'+this.props.user.user._id+'/'+this.props.product.product._id)
+                  axios.delete('https://lit-peak-13067.herokuapp.com/delete/favourite/'+this.props.user.user._id+'/'+this.props.product.product._id)
                   .then(resp =>console.log("asd",resp))
                   .catch(err => err)
 
                 }
 
-                axios.put('https://sheltered-scrubland-52295.herokuapp.com/edit/favourites/'+this.props.product.product._id,{
+                axios.put('https://lit-peak-13067.herokuapp.com/edit/favourites/'+this.props.product.product._id,{
                   favourites: this.state.favourites
                 })
                 .then(resp => {
@@ -288,7 +288,7 @@ class FavCards extends React.Component {
                     this.setState({cart: true})
 
                     if(this.props.store === ''){
-                      axios.get('https://sheltered-scrubland-52295.herokuapp.com/get/store/'+this.props.product.product.storeId)
+                      axios.get('https://lit-peak-13067.herokuapp.com/get/store/'+this.props.product.product.storeId)
                       .then(resp => {
                         this.props.storeAsync({
                           name: resp.data.storeName,
@@ -354,7 +354,7 @@ class FavCards extends React.Component {
                this.setState({cart: true})
 
                 
-                axios.get('https://sheltered-scrubland-52295.herokuapp.com/get/store/'+this.state.temp)
+                axios.get('https://lit-peak-13067.herokuapp.com/get/store/'+this.state.temp)
                 .then(resp => {
                   this.props.storeAsync({
                     name: resp.data.storeName,

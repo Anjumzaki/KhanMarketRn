@@ -61,7 +61,7 @@ class Settings extends React.Component {
   editName() {
     axios
       .put(
-        "https://sheltered-scrubland-52295.herokuapp.com/edit/user/name/" +
+        "https://lit-peak-13067.herokuapp.com/edit/user/name/" +
           this.props.user.user._id +
           "/" +
           this.state.name
@@ -81,7 +81,7 @@ class Settings extends React.Component {
     console.log("In edit pass");
     axios
       .put(
-        "https://sheltered-scrubland-52295.herokuapp.com/api/users/reset/password/" +
+        "https://lit-peak-13067.herokuapp.com/api/users/reset/password/" +
           this.state.old +
           "/" +
           this.state.newP +
