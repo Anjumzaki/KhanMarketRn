@@ -184,7 +184,8 @@ class Cart extends Component {
               flexDirection: "row",
               paddingHorizontal: 20,
               alignItems: "center",
-              justifyContent:'space-between'
+              justifyContent:'space-between',
+              marginTop: 5
             }}
           >
             <LatoText
@@ -197,7 +198,7 @@ class Cart extends Component {
               fontName="Lato-Bold"
               fonSiz={25}
               col="#2E2E2E"
-              text={'$'+parseFloat(parseFloat(((parseFloat(this.state.tax ? this.state.tax: 0)/100)*subTotal).toFixed(2)) + parseFloat(subTotal.toFixed(2)))}
+              text={'$'+parseFloat(parseFloat(((parseFloat(this.state.tax ? this.state.tax: 0)/100)*subTotal).toFixed(2)) + parseFloat(subTotal.toFixed(2))).toFixed(2)}
             ></LatoText>
           </View>
           ): null}
