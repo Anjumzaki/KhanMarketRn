@@ -172,7 +172,7 @@ class Login extends React.Component {
                         if (resp1.data.length > 0) {
                           this.handleApp(resp.data, resp1.data);
                         } else {
-                          this.handleMap(res.data);
+                          this.handleMap(resp.data);
                         }
                       })
                       .catch((err) => console.log(err));

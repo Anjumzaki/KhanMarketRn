@@ -462,20 +462,6 @@ class Settings extends React.Component {
               text="Terms & conditions"
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{ marginTop: 30 }}
-            onPress={() => {
-              this.props.userAsync("");
-              this.props.navigation.navigate("Login");
-            }}
-          >
-            <LatoText
-              fontName="Lato-Bold"
-              fonSiz={15}
-              col="black"
-              text="Sign Out"
-            />
-          </TouchableOpacity>
         </ScrollView>
       </>
     );
