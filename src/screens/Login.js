@@ -199,30 +199,58 @@ class Login extends React.Component {
     );
   };
 
-  handleForgot = () => {
-    Alert.alert(
-      "Reset Password",
-      "A password reset link has been sent to your Email. Please check your inbox. Also, don’t forget to check your spam folder",
-      [
-        {
-          text: "Dismiss",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        {
-          text: "Okay",
-          onPress: () =>
-            axios
-              .get(
-                "https://lit-peak-13067.herokuapp.com/api/forgot/password/" +
-                  this.state.email
+  handleForgot () {
+    var txt =''
+    if(this.state.email){
+      txt = "A password reset link has been sent to your Email. Please check your inbox. Also, don’t forget to check your spam folder"
+    }else{
+      txt= "Please enter your email first"
+    }
+    var that = this
+          Alert.alert(
+            "Reset Password",
+            txt,
+            [
+              that.state.email ? (
+              {
+                text: "Dismiss",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel",
+              },
+              {
+                text: "Send",
+                onPress: () =>
+                  axios
+                    .get(
+                      "https://lit-peak-13067.herokuapp.com/api/forgot/password/" +
+                        this.state.email
+                    )
+                    .then((resp) => console.log(resp))
+                    .catch((err) => console.log(err)),
+              }): (
+                {
+                  text: "Okay1",
+                  onPress: () => console.log("Cancel Pressed"),
+                  style: "cancel",
+                }
               )
-              .then((resp) => console.log(resp))
-              .catch((err) => console.log(err)),
-        },
-      ],
-      { cancelable: false }
-    );
+            ],
+            { cancelable: true }
+          );
+    // }{
+    //   Alert.alert(
+    //     "Reset Password",
+    //     "Please enter your email first",
+    //     [
+    //       {
+    //         text: "Okay",
+    //         onPress: () => console.log("Cancel Pressed"),
+    //         style: "cancel",
+    //       }
+    //     ],
+    //     { cancelable: true }
+    //   );
+    // }
   };
   render() {
     const { icEye, isPassword } = this.state;
@@ -317,7 +345,7 @@ class Login extends React.Component {
               </View>
             </View>
             <TouchableOpacity
-              onPress={this.handleForgot}
+              onPress={() => this.handleForgot()}
               style={{
                 justifyContent: "flex-end",
                 alignItems: "flex-end",
