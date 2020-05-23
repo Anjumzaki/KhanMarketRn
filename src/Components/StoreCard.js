@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, Button,Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Button,
+  Dimensions,
+} from "react-native";
 import { cardStyles } from "../styles/base";
 import LatoText from "../Helpers/LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -13,61 +20,87 @@ class StoreCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-     image:"",
-     isEnabled: true,
+      image: "",
+      isEnabled: true,
     };
-  } 
+  }
   componentDidMount() {
-        const ref = firebase
-          .storage()
-          .ref("/store_images/"+this.props.id+".jpg");
-        ref.getDownloadURL().then(url => {
-          this.setState({ image: url });
-        }).catch(err=>console.log(err));
+    const ref = firebase
+      .storage()
+      .ref("/store_images/" + this.props.id + ".jpg");
+    ref
+      .getDownloadURL()
+      .then((url) => {
+        this.setState({ image: url });
+      })
+      .catch((err) => console.log(err));
   }
   render() {
     const { name, distance, address, id, phone } = this.props;
     return (
       <TouchableOpacity
         onPress={() => {
-
-          if(this.props.cart.length === 0){
+          if (this.props.cart.length === 0) {
             this.props.storeAsync({
               name: name,
               address: address,
               id: id,
-              phone : phone
-            })
-            this.props.navigation.push("StoreDetails",{
-            storeId: id
-            })
-          }else{
-            if(this.props.store.name === name ){
+              phone: phone,
+            });
+            this.props.navigation.push("StoreDetails", {
+              storeId: id,
+            });
+          } else {
+            if (this.props.store.name === name) {
               this.props.storeAsync({
                 name: name,
                 address: address,
                 id: id,
-                phone : phone
-              })
-              this.props.navigation.push("StoreDetails",{
-              storeId: id
-              })
-            }else{
+                phone: phone,
+              });
+              this.props.navigation.push("StoreDetails", {
+                storeId: id,
+              });
+            } else {
               // alert("change store"/)
-              this.refs.modal3.open()
+              Alert.alert(
+                "Alert!",
+                "You are changing the store, so you will lost your cart items",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  {
+                    text: "OK",
+                    onPress: () => {
+                      this.props.cartAsync([]);
+                      this.props.storeAsync({
+                        name: name,
+                        address: address,
+                        id: id,
+                        phone: phone,
+                      });
+                      this.props.cartSizeAsync(0);
 
+                      this.props.navigation.push("StoreDetails", {
+                        storeId: id,
+                      });
+                    },
+                  },
+                ],
+                { cancelable: false }
+              );
             }
           }
-          
-          
-      
-      }}
+        }}
         style={cardStyles.storeCard}
       >
-        <View style={cardStyles.cImgWrap}> 
+        <View style={cardStyles.cImgWrap}>
           <Image
             style={{ width: "100%", height: 200 }}
-            source={{uri:this.state.image}}
+            source={{ uri: this.state.image }}
           />
         </View>
         <View style={cardStyles.cTextWrap}>
@@ -78,7 +111,7 @@ class StoreCard extends React.Component {
               fontName="Lato-Bold"
               fonSiz={20}
               col="#5C5C5C"
-              text={name.substring(0,18)}
+              text={name.substring(0, 18)}
             />
             <LatoText
               fontName="Lato-Regular"
@@ -91,7 +124,7 @@ class StoreCard extends React.Component {
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
-              paddingTop: 10
+              paddingTop: 10,
             }}
           >
             <LatoText
@@ -109,28 +142,16 @@ class StoreCard extends React.Component {
           ref={"modal3"}
           isDisabled={this.state.isDisabled}
         >
-            <Text>You are changing the store, so you will lost your cart items</Text>
-            <View>
-              <Button onPress={() => this.refs.modal3.close()} title="Cancel">
-              </Button>
-              <Button onPress={() => {
-                this.props.cartAsync([])
-                this.refs.modal3.close()
-                this.props.storeAsync({
-                  name: name,
-                  address: address,
-                  id: id,
-                  phone : phone
-                })
-                this.props.cartSizeAsync(0)
-
-                this.props.navigation.push("StoreDetails",{
-                  storeId: id
-                })
-
-                }} title="Okay">
-              </Button>
-            </View>
+          <Text>
+            You are changing the store, so you will lost your cart items
+          </Text>
+          <View>
+            <Button
+              onPress={() => this.refs.modal3.close()}
+              title="Cancel"
+            ></Button>
+            <Button onPress={() => {}} title="Okay"></Button>
+          </View>
         </Modal>
       </TouchableOpacity>
     );
@@ -138,7 +159,6 @@ class StoreCard extends React.Component {
 }
 
 const styles = StyleSheet.create({
-
   modal: {
     borderRadius: 10,
     padding: 20,
@@ -150,27 +170,21 @@ const styles = StyleSheet.create({
   },
 });
 
-
-const mapStateToProps = state => ({
-  store: state.Store.storeData, 
+const mapStateToProps = (state) => ({
+  store: state.Store.storeData,
   loading: state.Store.storeLoading,
   error: state.Store.storeError,
   store: state.Store.storeData,
-  cart: state.Cart.cartData, 
-
+  cart: state.Cart.cartData,
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
-      {
-          storeAsync,
-          cartAsync,
-          cartSizeAsync
-      },
-      dispatch
+    {
+      storeAsync,
+      cartAsync,
+      cartSizeAsync,
+    },
+    dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(StoreCard);
-
+export default connect(mapStateToProps, mapDispatchToProps)(StoreCard);
