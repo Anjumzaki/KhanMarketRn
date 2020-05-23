@@ -11,6 +11,9 @@ import { bindActionCreators } from "redux";
 import { cartAsync, userAsync } from "../store/actions";
 import { connect } from "react-redux";
 import firebase from "firebase";
+import AsyncStorage from "@react-native-community/async-storage";
+
+
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 // function CustomDrawerContent(props)
 class CustomDrawerContent extends Component {
@@ -37,6 +40,14 @@ class CustomDrawerContent extends Component {
       .catch((err) => console.log(err));
   }
 
+  async removeItemValue(key) {
+    try {
+      await AsyncStorage.removeItem(key);
+      return true;
+    } catch (exception) {
+      return false;
+    }
+  }
   render() {
     console.log("bar propsssssssssssssssssssssssss", this.props);
     console.log("bar stateeeeeee", this.state);
@@ -85,8 +96,11 @@ class CustomDrawerContent extends Component {
         <DrawerItemList {...this.props} />
         <TouchableOpacity
           onPress={() => {
-            this.props.userAsync("");
-            this.props.navigation.navigate("Login");
+            AsyncStorage.removeItem('user')
+            AsyncStorage.removeItem('userLocation')
+                this.props.userAsync("");
+                this.props.navigation.navigate("Login");
+              
           }}
           style={{
             paddingHorizontal: 20,
@@ -118,7 +132,6 @@ const mapDispatchToProps = (dispatch, ownProps) =>
     {
       cartAsync,
       userAsync,
-
     },
     dispatch
   );
