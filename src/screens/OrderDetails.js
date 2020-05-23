@@ -120,7 +120,7 @@ class OrderDetails extends Component {
               fontName="Lato-Regular"
               fonSiz={20}
               col="#2E2E2E"
-              text={"Order# " + this.props.route.params.order.orderNumber}
+              text={"Order# " + this.props.route.params.order.orderNumber.toUpperCase()}
             ></LatoText>
             {this.state.showNum ? (
               <TouchableOpacity
@@ -361,14 +361,14 @@ class OrderDetails extends Component {
 
           <View
             style={{
-              flexDirection: "row",
+              flexDirection: "column",
               paddingHorizontal: 20,
               paddingBottom: 20,
               alignItems: "center",
             }}
           >
             {this.props.route.params.order.products.map((item, ind) => (
-              <View style={{ display: "flex", flexDirection: "row" }}>
+              <View style={{ display: "flex", flexDirection: "row" , marginBottom: 5}}>
                 <View style={{ width: "55%" }}>
                   <LatoText
                     fontName="Lato-Regular"
