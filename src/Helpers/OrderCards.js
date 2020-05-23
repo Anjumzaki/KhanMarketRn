@@ -108,13 +108,16 @@ class OrderCards extends React.Component {
                   col="#5C5C5C"
                   text={this.props.order.orderDate + "       "+ this.props.order.orderTime}
                 />
-                 <LatoText
+                <Button>
+                <LatoText
                   fontName="Lato-Regular"
                   fonSiz={15}
                   col="#B50000"
                   text={"Cancel Order"}
                   onPress={() => console.log("ksjd")}
                 />
+                </Button>
+                
               </View>
             </View>
           </View>
