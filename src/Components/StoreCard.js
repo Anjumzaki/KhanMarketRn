@@ -5,8 +5,9 @@ import LatoText from "../Helpers/LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import firebase from "firebase";
 import { bindActionCreators } from "redux";
-import { storeAsync } from "../store/actions";
+import { storeAsync, cartAsync } from "../store/actions";
 import { connect } from "react-redux";
+import Modal from "react-native-modalbox";
 
 class StoreCard extends React.Component {
   constructor(props) {
@@ -24,19 +25,42 @@ class StoreCard extends React.Component {
         }).catch(err=>console.log(err));
   }
   render() {
+    console.log("cart",this.props.cart)
+    console.log("cart",this.props.store)
     const { name, distance, address, id, phone } = this.props;
     return (
       <TouchableOpacity
         onPress={() => {
-          this.props.storeAsync({
-            name: name,
-            address: address,
-            id: id,
-            phone : phone
-          })
-          this.props.navigation.push("StoreDetails",{
-          storeId: id
-        })}}
+
+          if(this.props.cart.length === 0){
+            this.props.storeAsync({
+              name: name,
+              address: address,
+              id: id,
+              phone : phone
+            })
+            this.props.navigation.push("StoreDetails",{
+            storeId: id
+            })
+          }else{
+            if(this.props.store.name === name ){
+              this.props.storeAsync({
+                name: name,
+                address: address,
+                id: id,
+                phone : phone
+              })
+              this.props.navigation.push("StoreDetails",{
+              storeId: id
+              })
+            }else{
+              alert("change store")
+            }
+          }
+          
+          
+      
+      }}
         style={cardStyles.storeCard}
       >
         <View style={cardStyles.cImgWrap}> 
@@ -77,6 +101,23 @@ class StoreCard extends React.Component {
             />
           </View>
         </View>
+
+        {/* <Modal
+          // style={[styles.modal, styles.modal3]}
+          position={"center"}
+          ref={"modal3"}
+          isDisabled={this.state.isDisabled}
+        >
+            <Text>You are changing the store, so you will lost your cart items</Text>
+            <View>
+              <Button>
+                 Cancel
+              </Button>
+              <Button>
+                 Okay
+              </Button>
+            </View>
+        </Modal> */}
       </TouchableOpacity>
     );
   }
@@ -86,12 +127,16 @@ class StoreCard extends React.Component {
 const mapStateToProps = state => ({
   store: state.Store.storeData, 
   loading: state.Store.storeLoading,
-  error: state.Store.storeError
+  error: state.Store.storeError,
+  store: state.Store.storeData,
+  cart: state.Cart.cartData, 
+
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
       {
-          storeAsync
+          storeAsync,
+          cartAsync
       },
       dispatch
   );
