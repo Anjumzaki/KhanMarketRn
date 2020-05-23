@@ -73,17 +73,14 @@ class ProductDetails extends Component {
 
 
     var pCart=this.props.cart;
-    console.log("pcartttttt76666666666666666666666666666",pCart)
     var that =this
       pCart.map(function(pro,ind) {
-       console.log("cehck",pro.product.productName ,that.props.route.params.product.productName)
        if(pro.product.productName === that.props.route.params.product.productName){
           pro.quantity = that.state.qt+num
        }
 
     });
 
-    console.log("pacart 11111",pCart)
 
       this.props.cartAsync(pCart)
 
@@ -99,8 +96,6 @@ class ProductDetails extends Component {
     }
     var abc= [1,2,3]
 
-    console.log("PRop CRAD props", this.props.cart.length, "cartSize",this.props.cartSize)
-    console.log("REDUX CART3333333333333", this.props.cart)
     
     var cSize=0
 
@@ -159,8 +154,6 @@ class ProductDetails extends Component {
 
           <TouchableOpacity
                 onPress={async() =>{
-                console.log("HEARTTTTTTTTT",this.state.heart)
-                console.log("FAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",this.state.favourites)
                 if(this.state.heart === false){
                     await this.state.favourites.push({userId: this.props.user.user._id})
 
@@ -173,7 +166,6 @@ class ProductDetails extends Component {
                   .catch(err => console.log(err))
 
                 }else{
-                  console.log("iNCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
                   var that=this
                   this.state.favourites = this.state.favourites.filter(function(el){
                     return el.userId !== that.props.user.user._id;
@@ -184,10 +176,8 @@ class ProductDetails extends Component {
                   .then(resp =>console.log(resp))
                   .catch(err => err)
 
-                  console.log("afteeeeeeeeeeeeeeeeeeeeeeee")
 
                 }
-                console.log("FAVVVVVVVVVVVVV11111111111111111111111111",this.state.favourites)
 
                 axios.put('https://sheltered-scrubland-52295.herokuapp.com/edit/favourites/'+product._id,{
                   favourites: this.state.favourites
@@ -201,7 +191,6 @@ class ProductDetails extends Component {
                 })
                 .catch(err => console.log(err))
 
-                console.log("AFTERR Call")
               }
               }
             style={{

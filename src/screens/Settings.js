@@ -51,7 +51,6 @@ class Settings extends React.Component {
     ref
       .getDownloadURL()
       .then((url) => {
-        console.log("Imageee urllllllllll", url);
         this.setState({ image: url });
       })
       .catch((err) => {
@@ -69,13 +68,10 @@ class Settings extends React.Component {
       )
       .then((resp) => {
         var temp = this.props.user;
-        console.log("before user", temp);
         temp.user.name = this.state.name;
-        console.log("after user", temp);
 
         this.props.userAsync(temp);
 
-        console.log(resp);
       })
       .then(() => this.refs.modal3.close)
       .catch((err) => console.log(err));
@@ -214,16 +210,10 @@ class Settings extends React.Component {
             <TouchableOpacity
               onPress={() =>
                 ImagePicker.showImagePicker(options, (response) => {
-                  console.log("Response = ", response);
                   if (response.didCancel) {
-                    console.log("User cancelled image picker");
                   } else if (response.error) {
-                    console.log("ImagePicker Error: ", response.error);
                   } else if (response.customButton) {
-                    console.log(
-                      "User tapped custom button: ",
-                      response.customButton
-                    );
+                   
                   } else {
                     const source = { uri: response.uri };
                     // this.saveImage(source);

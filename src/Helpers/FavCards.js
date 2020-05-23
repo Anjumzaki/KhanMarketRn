@@ -32,7 +32,6 @@ class FavCards extends React.Component {
 
 
   componentDidMount(){
-    console.log("FAVVV",this.props.product)
     const ref = firebase
       .storage()
       .ref("/product_images/" + this.props.product.product._id + "_1.jpg");
@@ -43,10 +42,8 @@ class FavCards extends React.Component {
     // console.log("FAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",this.props.product._id,this.props.product.product.favourites) 
     if(this.props.product.product.favourites === undefined){
 
-      console.log("IN OIFFFFFFFFFFFFFFFFF")
         this.setState({favourites: []})
     }else{
-      console.log("IN Elseeeeeeeeeee")
 
       for(var i=0; i<this.props.product.product.favourites.length; i++){
         if(this.props.product.product.favourites[i].userId === this.props.user.user._id){
@@ -68,7 +65,6 @@ class FavCards extends React.Component {
  
   handleChange(num) {
 
-    console.log("CHNAGE QUNTIYTTYyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
     var preNum = this.state.qt;
     preNum = num + preNum;
     if (preNum >= 1) {
@@ -77,24 +73,19 @@ class FavCards extends React.Component {
 
 
     var pCart=this.props.cart;
-    console.log("pcartttttt666666666666666666666666666666666666666666666",pCart)
     var that =this
       pCart.map(function(pro,ind) {
-       console.log("cehck",pro.product.productName ,that.props.product.product.productName)
        if(pro.product.productName === that.props.product.product.productName){
           pro.quantity = that.state.qt+num
        }
 
     });
 
-    console.log("pacart 111111111111111",pCart)
 
       this.props.cartAsync(pCart)
 
   }
   render() {
-    console.log("PROPS and users", this.props.cart)
-    console.log("PROPS and users1", this.props.store, this.props.favStore)
 
     var cSize=0
     for(var i=0; i<this.props.cart.length; i++){
@@ -137,8 +128,6 @@ class FavCards extends React.Component {
 
               <TouchableOpacity
                 onPress={async() => {
-                  console.log("HEARTTTTTTTTT",this.state.heart)
-                console.log("fav",this.state.favourites)
                 if(this.state.heart === false){
                     await this.state.favourites.push({userId: this.props.user.user._id})
 
@@ -160,7 +149,6 @@ class FavCards extends React.Component {
                   .catch(err => err)
 
                 }
-                console.log("FAVVVVVVVVV33",this.state.favourites)
 
                 axios.put('https://sheltered-scrubland-52295.herokuapp.com/edit/favourites/'+this.props.product.product._id,{
                   favourites: this.state.favourites

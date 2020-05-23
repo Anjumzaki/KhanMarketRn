@@ -49,7 +49,6 @@ class Map extends React.Component {
     var newInfo = ''
     Geolocation.getCurrentPosition(
       (info) => {
-        console.log("ONFFOOO", info.coords.latitude);
         lat = info.coords.latitude;
         lng = info.coords.longitude;
         newInfo = info

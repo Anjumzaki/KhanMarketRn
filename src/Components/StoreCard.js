@@ -26,8 +26,6 @@ class StoreCard extends React.Component {
         }).catch(err=>console.log(err));
   }
   render() {
-    console.log("cart",this.props.cart)
-    console.log("cart",this.props.store)
     const { name, distance, address, id, phone } = this.props;
     return (
       <TouchableOpacity

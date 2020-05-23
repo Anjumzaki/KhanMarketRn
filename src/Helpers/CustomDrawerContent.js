@@ -49,8 +49,6 @@ class CustomDrawerContent extends Component {
     }
   }
   render() {
-    console.log("bar propsssssssssssssssssssssssss", this.props);
-    console.log("bar stateeeeeee", this.state);
     var isUser = true
     if(this.props.user.user.isGuest){
       isUser = false

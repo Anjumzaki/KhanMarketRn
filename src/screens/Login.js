@@ -133,7 +133,6 @@ class Login extends React.Component {
         if (this.state.email) {
           if (EmailValidator.validate(this.state.email)) {
             if (this.state.password) {
-              console.log("Pressed");
               axios
                 .post(
                   "https://sheltered-scrubland-52295.herokuapp.com/api/users/signin",
@@ -144,7 +143,6 @@ class Login extends React.Component {
                 )
                 .then((resp) => {
                   // alert(JSON.stringify(resp));
-                  console.log(resp.data);
                   if (resp.data === "Incorrect password.") {
                     // this.props.userAsync(resp.data);
                     this.setState({
@@ -165,7 +163,6 @@ class Login extends React.Component {
                           resp.data.user._id
                       )
                       .then((resp1) => {
-                        console.log("loc resp", resp1.data);
                         this.props.userAsync(resp.data);
                         // this.props.navigation.navigate("Map");
                         if (resp1.data.length > 0) {
@@ -228,7 +225,6 @@ class Login extends React.Component {
     );
   };
   render() {
-    console.log("state L", this.state);
     const { icEye, isPassword } = this.state;
     // console.log(DeviceInfo.getUniqueID())
 
@@ -403,7 +399,6 @@ class Login extends React.Component {
                     }
                   )
                   .then((resp) => {
-                    console.log("resp guest", resp.data);
 
                     axios
                       .get(
@@ -411,7 +406,6 @@ class Login extends React.Component {
                           resp.data.user._id
                       )
                       .then((resp1) => {
-                        console.log("loc resp", resp1.data);
 
                         this.props.userAsync(resp.data);
                         // this.props.navigation.navigate("Map");

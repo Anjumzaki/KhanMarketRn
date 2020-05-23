@@ -111,7 +111,6 @@ class Home extends React.Component {
     return deg * (Math.PI / 180);
   }
   render() {
-    console.log("propsssss", this.props.user);
     return (
       <View style={{ flex: 1 }}>
         <StoreHeader navigation={this.props.navigation} />

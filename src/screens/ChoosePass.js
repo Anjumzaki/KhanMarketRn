@@ -42,7 +42,6 @@ class SignUp1 extends React.Component {
         };
     }
     async componentDidMount() {
-        console.log("cP", this.props.route.params)
         this.setState({user: this.props.route.params })
         await Font.loadAsync({
             "Lato-Light": require("../../assets/fonts/Lato-Light.ttf"),
@@ -67,7 +66,6 @@ class SignUp1 extends React.Component {
         });
     };
     render() {
-        console.log("state",this.state)
         const { icEye, isPassword } = this.state;
         const styles = StyleSheet.create({
             logo: {
@@ -166,10 +164,8 @@ class SignUp1 extends React.Component {
                         <TouchableOpacity
                             style={btnStyles.basic}
                             onPress={() => {
-                                console.log("PRESSED")
                                 axios.post("https://sheltered-scrubland-52295.herokuapp.com/api/users/signup",this.state.user)
                                 .then(resp => {
-                                    console.log("resp",resp)
                                     this.props.userAsync(resp.data)
                                     this.props.navigation.navigate("Login")
                                 })

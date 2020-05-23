@@ -58,7 +58,6 @@ class MyOrders extends Component {
   }
 
   render() {
-    console.log("my order state", this.state);
     var active = [];
     var past = [];
 

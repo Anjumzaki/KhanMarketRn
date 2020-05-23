@@ -58,17 +58,7 @@ export default class SignUp1 extends React.Component {
       verifi:false
     };
   }
-  onClose() {
-    console.log("Modal just closed");
-  }
 
-  onOpen() {
-    console.log("Modal just opened");
-  }
-
-  onClosingState(state) {
-    console.log("the open/close of the swipeToClose just changed");
-  }
   async componentDidMount() {
     await Font.loadAsync({
       "Lato-Light": require("../../assets/fonts/Lato-Light.ttf"),
@@ -147,7 +137,6 @@ export default class SignUp1 extends React.Component {
   };
   render() {
     const { icEye, isPassword } = this.state;
-    console.log("this", this.state);
     return (
       <SafeAreaView
         style={[conStyles.safeAreaMy, { backgroundColor: "white" }]}
@@ -372,7 +361,6 @@ export default class SignUp1 extends React.Component {
                       borderRadius: 5,
                     }}
                     onPress={async () => {
-                      console.log("cALLED VERIFY")
                       var num = Math.floor(100000 + Math.random() * 900000);
                       await this.setState({ num: num.toString() });
                       this.forceUpdate();

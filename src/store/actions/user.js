@@ -4,7 +4,6 @@ export const GET_USER_DATA_LOADING = "GET_USER_DATA_LOADING";
 export const GET_USER_DATA_ERROR = "GET_USER_DATA_ERROR";
 
 export const userAsync = (userData) => {
-  console.log("IN REDUX1", userData)
   return (dispatch, getState) => {
    
     dispatch(userLoading(true))

@@ -49,7 +49,6 @@ export default class StoreInfo extends Component {
 
   componentDidMount(){
     // this.props.route.params.storeId
-    console.log("INFO STORE INFO",this.props.route.params.storeId)
     axios.get('https://sheltered-scrubland-52295.herokuapp.com/get/store/'+this.props.route.params.storeId)
     .then(resp => this.setState({store: resp.data, timings: resp.data.storeTimings}))
     .catch(err => console.log(err))
@@ -64,7 +63,6 @@ export default class StoreInfo extends Component {
 
 
   render() {
-    console.log(this.state)
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
