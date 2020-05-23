@@ -48,7 +48,7 @@ class Home extends React.Component {
       (info) => {
         axios
           .get(
-            "https://sheltered-scrubland-52295.herokuapp.com/get/stores/" +
+            "https://lit-peak-13067.herokuapp.com/get/stores/" +
               info.coords.latitude +
               "/" +
               info.coords.longitude
@@ -70,7 +70,7 @@ class Home extends React.Component {
         (info) => {
           axios
             .get(
-              "https://sheltered-scrubland-52295.herokuapp.com/get/stores/" +
+              "https://lit-peak-13067.herokuapp.com/get/stores/" +
                 info.coords.latitude +
                 "/" +
                 info.coords.longitude

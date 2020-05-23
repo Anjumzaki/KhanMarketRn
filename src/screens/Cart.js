@@ -48,7 +48,7 @@ class Cart extends Component {
         this.setState({ image: url });
         }).catch(err=>console.log(err)); 
   
-        axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/store/"+this.props.store.id)
+        axios.get("https://lit-peak-13067.herokuapp.com/get/store/"+this.props.store.id)
         .then(resp => {
           this.setState({tax: resp.data.tax})
         })

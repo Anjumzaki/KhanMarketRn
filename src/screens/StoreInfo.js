@@ -49,7 +49,7 @@ export default class StoreInfo extends Component {
 
   componentDidMount(){
     // this.props.route.params.storeId
-    axios.get('https://sheltered-scrubland-52295.herokuapp.com/get/store/'+this.props.route.params.storeId)
+    axios.get('https://lit-peak-13067.herokuapp.com/get/store/'+this.props.route.params.storeId)
     .then(resp => this.setState({store: resp.data, timings: resp.data.storeTimings}))
     .catch(err => console.log(err))
 

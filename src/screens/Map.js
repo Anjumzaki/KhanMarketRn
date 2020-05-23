@@ -104,7 +104,7 @@ class Map extends React.Component {
               onPress={() => {
                 axios
                   .post(
-                    "https://sheltered-scrubland-52295.herokuapp.com/add/location",
+                    "https://lit-peak-13067.herokuapp.com/add/location",
                     {
                       refId: this.props.user.user._id,
                       type: "Customer",

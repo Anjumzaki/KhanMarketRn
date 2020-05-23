@@ -367,7 +367,7 @@ export default class SignUp1 extends React.Component {
 
                       axios
                         .get(
-                          "https://sheltered-scrubland-52295.herokuapp.com/api/email/verification/" +
+                          "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
                             this.state.email +
                             "/" +
                             num
@@ -377,7 +377,7 @@ export default class SignUp1 extends React.Component {
 
                       axios
                         .get(
-                          "https://sheltered-scrubland-52295.herokuapp.com/api/number/verification/" +
+                          "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
                             "+" +
                             this.state.mobile +
                             "/" +

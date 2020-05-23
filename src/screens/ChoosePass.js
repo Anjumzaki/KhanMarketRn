@@ -164,7 +164,7 @@ class SignUp1 extends React.Component {
                         <TouchableOpacity
                             style={btnStyles.basic}
                             onPress={() => {
-                                axios.post("https://sheltered-scrubland-52295.herokuapp.com/api/users/signup",this.state.user)
+                                axios.post("https://lit-peak-13067.herokuapp.com/api/users/signup",this.state.user)
                                 .then(resp => {
                                     this.props.userAsync(resp.data)
                                     this.props.navigation.navigate("Login")

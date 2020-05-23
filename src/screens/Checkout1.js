@@ -87,7 +87,7 @@ class Cart extends Component {
   getTimings(day) {
     axios
       .get(
-        "https://sheltered-scrubland-52295.herokuapp.com/get/store/" +
+        "https://lit-peak-13067.herokuapp.com/get/store/" +
           this.props.store.id
       )
       .then((resp) => {
@@ -661,7 +661,7 @@ class Cart extends Component {
                   
                   axios
                     .put(
-                      "https://sheltered-scrubland-52295.herokuapp.com/api/users/guest/edit/" +
+                      "https://lit-peak-13067.herokuapp.com/api/users/guest/edit/" +
                         this.props.user.user._id,
                       {
                         name: this.state.name,
@@ -993,7 +993,7 @@ class Cart extends Component {
                   }
                   axios
                     .get(
-                      "https://sheltered-scrubland-52295.herokuapp.com/api/number/verification/" +
+                      "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
                         "+" +
                         numV +
                         "/" +
@@ -1185,7 +1185,7 @@ class Cart extends Component {
               this.setState({ cart: true });
               axios
                 .post(
-                  "https://sheltered-scrubland-52295.herokuapp.com/add/order",
+                  "https://lit-peak-13067.herokuapp.com/add/order",
                   {
                     storeId: sId,
                     products: storeProducts,

@@ -439,7 +439,7 @@ class OrderDetails extends Component {
               if (this.props.route.params.order.isAccepted === false) {
                 axios
                   .put(
-                    "https://sheltered-scrubland-52295.herokuapp.com/edit/order/reject/" +
+                    "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
                       this.props.route.params.order._id
                   )
                   .then((resp) => alert("Order Cancelled."))

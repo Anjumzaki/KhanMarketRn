@@ -135,7 +135,7 @@ class Login extends React.Component {
             if (this.state.password) {
               axios
                 .post(
-                  "https://sheltered-scrubland-52295.herokuapp.com/api/users/signin",
+                  "https://lit-peak-13067.herokuapp.com/api/users/signin",
                   {
                     email: this.state.email.toLowerCase(),
                     password: this.state.password,
@@ -159,7 +159,7 @@ class Login extends React.Component {
                   } else {
                     axios
                       .get(
-                        "https://sheltered-scrubland-52295.herokuapp.com/get/location/" +
+                        "https://lit-peak-13067.herokuapp.com/get/location/" +
                           resp.data.user._id
                       )
                       .then((resp1) => {
@@ -214,7 +214,7 @@ class Login extends React.Component {
           onPress: () =>
             axios
               .get(
-                "https://sheltered-scrubland-52295.herokuapp.com/api/forgot/password/" +
+                "https://lit-peak-13067.herokuapp.com/api/forgot/password/" +
                   this.state.email
               )
               .then((resp) => console.log(resp))
@@ -392,7 +392,7 @@ class Login extends React.Component {
               onPress={() => {
                 axios
                   .post(
-                    "https://sheltered-scrubland-52295.herokuapp.com/api/users/guest/register",
+                    "https://lit-peak-13067.herokuapp.com/api/users/guest/register",
                     {
                       isGuest: true,
                       guestId: getUniqueId(),
@@ -402,7 +402,7 @@ class Login extends React.Component {
 
                     axios
                       .get(
-                        "https://sheltered-scrubland-52295.herokuapp.com/get/location/" +
+                        "https://lit-peak-13067.herokuapp.com/get/location/" +
                           resp.data.user._id
                       )
                       .then((resp1) => {
