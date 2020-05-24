@@ -51,13 +51,21 @@ class CustomDrawerContent extends Component {
   render() {
     console.log("bar propsssssssssssssssssssssssss", this.props);
     console.log("bar stateeeeeee", this.state);
+    var isUser = true
+    if(this.props.user.user.isGuest){
+      isUser = false
+    }
     return (
       <DrawerContentScrollView
         style={{ backgroundColor: "#5C5C5C" }}
         {...this.props}
       >
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("Profile")}
+          onPress={
+            isUser ? (
+              () => this.props.navigation.navigate("Profile")
+            ) : null
+            }
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -66,6 +74,7 @@ class CustomDrawerContent extends Component {
             borderBottomWidth: 1,
             marginBottom: 30,
           }}
+          // disabled={isUser}
         >
           <View>
             {this.state.image != "" && (
@@ -83,14 +92,14 @@ class CustomDrawerContent extends Component {
               fontSiz={20}
               text={this.props.user.user.name}
             />
-            <View style={{ paddingTop: 2 }}>
+            {/* <View style={{ paddingTop: 2 }}>
               <LatoText
                 col="#FFFFFF"
                 fontName={"Lato-LightItalic"}
                 fontSiz={12}
                 text="Profile 90% complete"
               />
-            </View>
+            </View> */}
           </View>
         </TouchableOpacity>
         <DrawerItemList {...this.props} />

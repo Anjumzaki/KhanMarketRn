@@ -8,6 +8,7 @@ import Location from './Location';
 import Filter from './Filter';
 import Search from './Search';
 import Search1 from './Search1';
+import favStore from './favStore';
 
 
 
@@ -20,5 +21,6 @@ export default combineReducers({
     Location,
     Filter,
     Search,
-    Search1
+    Search1,
+    favStore
 })
