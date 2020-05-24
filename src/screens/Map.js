@@ -69,7 +69,8 @@ class Map extends React.Component {
     //   console.log("lat longgg", lat1,lng1)
   }
   render() {
-    console.log(this.state);
+    this.state.completeLoc ? 
+    console.log("map",this.state.completeLoc.results[0]) : null
     if (this.state.lat && this.state.lng) {
       loc = (
         <View style={styles.container}>
@@ -102,30 +103,50 @@ class Map extends React.Component {
           >
             <TouchableOpacity
               onPress={() => {
+
+                var ad1="", ad2="",ct="",cnt="",zipc="";
+                for(var i=0; i<this.state.completeLoc.results[0].address_components.length; i++){
+                    if(this.state.completeLoc.results[0].address_components[i].types[0] === "street_number"){
+                      ad1= this.state.completeLoc.results[0].address_components[i].long_name
+                    }else if(this.state.completeLoc.results[0].address_components[i].types[0] === "route"){
+                      ad2= this.state.completeLoc.results[0].address_components[i].long_name
+                    }else if(this.state.completeLoc.results[0].address_components[i].types[0] === "administrative_area_level_1"){
+                      ct= this.state.completeLoc.results[0].address_components[i].long_name
+                    }else if(this.state.completeLoc.results[0].address_components[i].types[0] === "country"){
+                      cnt= this.state.completeLoc.results[0].address_components[i].long_name
+                    }else if(this.state.completeLoc.results[0].address_components[i].types[0] === "postal_code"){
+                      zipc= this.state.completeLoc.results[0].address_components[i].long_name
+                    }
+                }
                 axios
                   .post(
                     "https://lit-peak-13067.herokuapp.com/add/location",
                     {
                       refId: this.props.user.user._id,
                       type: "Customer",
-                      address1:
-                        this.state.completeLoc.results[0].address_components[0]
-                          .long_name +
-                        " " +
-                        this.state.completeLoc.results[0].address_components[1]
-                          .long_name,
-                      address2:
-                        this.state.completeLoc.results[0].address_components[2]
-                          .long_name +
-                        " " +
-                        this.state.completeLoc.results[0].address_components[3]
-                          .long_name,
-                      city: this.state.completeLoc.results[0]
-                        .address_components[4].long_name,
-                      country: this.state.completeLoc.results[0]
-                        .address_components[5].long_name,
-                      zipCode: this.state.completeLoc.results[0]
-                        .address_components[6].long_name,
+                      address1: ad1,
+                      address2: ad2,
+                      city: ct,
+                      country: cnt,
+                      zipCode: zipc
+                      // address1:
+                      //   this.state.completeLoc.results[0].address_components[0]
+                      //     .long_name +
+                      //   " " +
+                      //   this.state.completeLoc.results[0].address_components[1]
+                      //     .long_name,
+                      // address2:
+                      //   this.state.completeLoc.results[0].address_components[2]
+                      //     .long_name +
+                      //   " " +
+                      //   this.state.completeLoc.results[0].address_components[3]
+                      //     .long_name,
+                      // city: this.state.completeLoc.results[0]
+                      //   .address_components[4].long_name,
+                      // country: this.state.completeLoc.results[0]
+                      //   .address_components[5].long_name,
+                      // zipCode: this.state.completeLoc.results[0]
+                      //   .address_components[6].long_name,
                     }
                   )
                   .then((resp1) => {
