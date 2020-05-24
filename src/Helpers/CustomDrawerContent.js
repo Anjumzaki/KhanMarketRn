@@ -92,14 +92,14 @@ class CustomDrawerContent extends Component {
               fontSiz={20}
               text={this.props.user.user.name}
             />
-            <View style={{ paddingTop: 2 }}>
+            {/* <View style={{ paddingTop: 2 }}>
               <LatoText
                 col="#FFFFFF"
                 fontName={"Lato-LightItalic"}
                 fontSiz={12}
                 text="Profile 90% complete"
               />
-            </View>
+            </View> */}
           </View>
         </TouchableOpacity>
         <DrawerItemList {...this.props} />

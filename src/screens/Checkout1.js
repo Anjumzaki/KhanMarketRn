@@ -68,6 +68,7 @@ class Cart extends Component {
       numVerified: false,
       codeMsg: false,
       on: "",
+      isDisabled: false
     };
   }
 
@@ -90,15 +91,20 @@ class Cart extends Component {
           this.props.store.id
       )
       .then((resp) => {
-        // console.log('RESP DATAA',resp.data)
+        // 
+        console.log('RESP DATAA',resp.data)
 
-        // console.log("aaaa",days[n])
-        // console.log("daya",n,resp.data.storeTimings.length)
+        // 
+        console.log("aaaa",days[n])
+        // 
+        console.log("daya",n,resp.data.storeTimings.length)
         var ishalf = false;
         for (var i = 0; i < resp.data.storeTimings.length; i++) {
-          // console.log("asdsds",resp.data.storeTimings[i].day.substring(0,3) , day)
+          // 
+          console.log("asdsds",resp.data.storeTimings[i].day.substring(0,3) , day)
           if (resp.data.storeTimings[i].day.substring(0, 3) === day) {
-            // console.log("in cond")
+            // 
+            console.log("in cond")
             if (resp.data.storeTimings[i].openTime.includes("30")) {
               ishalf = true;
             }
@@ -114,7 +120,8 @@ class Cart extends Component {
             } else {
               eu = "AM";
             }
-            // console.log("ishalf",ishalf)
+            // 
+            console.log("ishalf",ishalf)
             var st = resp.data.storeTimings[i].openTime.substring(0, 2);
             var et = resp.data.storeTimings[i].ClosingTime.substring(0, 2);
             if (ishalf) {
@@ -175,9 +182,11 @@ class Cart extends Component {
             });
           }
         }
-        // console.log(this.state)
+        // 
+        console.log(this.state)
       })
-      .catch((err) => console.log(err));
+      .catch((err) => 
+      console.log(err));
   }
 
   _onLayoutDidChange = (e) => {
@@ -192,26 +201,34 @@ class Cart extends Component {
     }
   }
   onClose() {
+    
     console.log("Modal just closed");
   }
 
   onOpen() {
+    
     console.log("Modal just opened");
   }
 
   getDayName(dateStr) {
-    // console.log("before",dateStr)
+    // 
+    console.log("before",dateStr)
     var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     var tes = dateStr.replace("-", "/");
     var tes = tes.replace("-", "/");
     var dt = tes.split("/");
     var rt = dt[1] + "/" + dt[0] + "/" + dt[2];
-    // console.log("RRTTTT",rt)
+    // 
+    console.log("RRTTTT",rt)
     // // var tes = "05/23/2014";
-    // console.log("after",tes)
-    // console.log("convert",new Date(rt))
-    // console.log(".get date",new Date(rt).getDate(),new Date(rt).getDay())
-    // console.log("days",days[new Date(rt).getDate()], days[new Date(rt).getDay()]);
+    // 
+    console.log("after",tes)
+    // 
+    console.log("convert",new Date(rt))
+    // 
+    console.log(".get date",new Date(rt).getDate(),new Date(rt).getDay())
+    // 
+    console.log("days",days[new Date(rt).getDate()], days[new Date(rt).getDay()]);
 
     return days[new Date(rt).getDay()];
   }
@@ -225,22 +242,28 @@ class Cart extends Component {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
 
+    
     console.log("asdklllllllllllllllllllllllllllllllllll", result);
 
     axios
       .get("http://192.168.0.105:3000/get/order/bynumber/" + result)
       .then((resp) => {
+        
         console.log("Order num resp", resp.data);
         if (resp.data === null) {
+          
           console.log("in iffffffffffffff");
         } else {
+          
           console.log("in elseeeeeeeeeeeeee");
           this.makeid(6);
         }
       })
-      .then((err) => console.log(err));
+      .then((err) => 
+      console.log(err));
 
     if (result) {
+      
       console.log("onnnnnnnnnnn", result);
       return result;
     }
@@ -249,13 +272,20 @@ class Cart extends Component {
   }
   //  ejIEyo
   render() {
+    
     console.log("state,,this.state",this.state)
-    // console.log("DATEEEEEEEEE", new Date(), console.log(timestamp()));
-    // console.log(timestamp("DDMMYYYY"));
-    // console.log(timestamp("YYYY-MM-DD"));
+    // 
+    console.log("DATEEEEEEEEE", new Date(), 
+    console.log(timestamp()));
+    // 
+    console.log(timestamp("DDMMYYYY"));
+    // 
+    console.log(timestamp("YYYY-MM-DD"));
     var codeId = this.makeid(6);
+    
     console.log("ssssssssssssssssssssidddddddddddddddddddddddddd", codeId);
-    // console.log("CO props user", this.props.user);
+    // 
+    console.log("CO props user", this.props.user);
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
     } else {
@@ -279,7 +309,8 @@ class Cart extends Component {
     if (month1 < 10) {
       month1 = "0" + month1;
     }
-    // console.log("todays date", day + "-" + month1 + "-" + year)
+    // 
+    console.log("todays date", day + "-" + month1 + "-" + year)
     var todaysDate = day + "-" + month1 + "-" + year;
     var dates = [];
 
@@ -299,17 +330,20 @@ class Cart extends Component {
       dates.push(day + "-" + month + "-" + year);
     }
 
-    // console.log("datesssssssssss",dates)
-    // console.log("stateeee",this.state)
+    // 
+    console.log("datesssssssssss",dates)
+    // 
+    console.log("stateeee",this.state)
     var nameCheck = false;
     if (!this.props.user.user.isGuest) {
       nameCheck = true;
     }
 
-    if (this.state.name && this.state.name) {
+    if (this.state.name || this.props.user.user.name) {
       nameCheck = true;
     }
-    // console.log("name check", nameCheck)
+    // 
+    console.log("name check", nameCheck)
 
     var storeProducts = this.props.cart.filter((item, index) => {
       return item.product.storeId === this.props.store.id;
@@ -332,6 +366,7 @@ class Cart extends Component {
     ];
 
 
+    
     console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD", parseInt(this.state.orderDate.substring(3, 5)) - 1, parseInt(this.state.orderDate.substring(3, 5)), months[ parseInt(this.state.orderDate.substring(3, 4)) - 1])
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -665,6 +700,7 @@ class Cart extends Component {
                     nameCheck = true;
                   }
 
+                  
                   console.log("CLICKED");
                   axios
                     .put(
@@ -677,10 +713,12 @@ class Cart extends Component {
                       }
                     )
                     .then((resp) => {
+                      
                       console.log("kjhjjjjjjjjjjjjjjjjjjj", resp.data);
                       this.refs.modal4.close();
                     })
-                    .catch((err) => console.log(err));
+                    .catch((err) => 
+                    console.log(err));
 
                   // this.refs.modal4.close()
                 }}
@@ -940,7 +978,9 @@ class Cart extends Component {
               fonSiz={17}
               col="#2E2E2E"
               text={
-                "+" +
+                (this.props.user.user.mobile ? "+" : "")
+                 
+                +
                 (this.props.user.user.mobile
                   ? this.props.user.user.mobile
                   : this.state.mobile)
@@ -989,20 +1029,27 @@ class Cart extends Component {
                   var num = Math.floor(100000 + Math.random() * 900000);
                   await this.setState({ num: num.toString() });
                   this.forceUpdate();
-
+                  var numV 
+                  if(this.props.user.user.mobile){
+                    numV = this.props.user.user.mobile
+                  }else{
+                    numV = this.state.mobile
+                  }
                   axios
                     .get(
                       "https://sheltered-scrubland-52295.herokuapp.com/api/number/verification/" +
                         "+" +
-                        this.state.mobile +
+                        numV +
                         "/" +
                         num
                     )
                     .then((resp) => {
-                      console.log("sdjkasdkbasbd");
+                      
+                      console.log("sdjkasdkbasbd333333333333333333333333333333333333333333333333333333333333333333333333333333333333",resp.data);
                       this.refs.modal6.open();
                     })
-                    .catch((err) => console.log("sdf", err));
+                    .catch((err) => 
+                    console.log("sdf", err));
                 }}
                 style={[btnStyles.cartBtnOutline, { width: "35%" }]}
               >
