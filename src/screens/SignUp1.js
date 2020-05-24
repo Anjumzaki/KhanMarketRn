@@ -493,7 +493,7 @@ export default class SignUp1 extends React.Component {
                   fontName="Lato-Regular"
                   fonSiz={17}
                   col="white"
-                  text={"Verify"}
+                  text={"Next"}
                 />
               )}
             </TouchableOpacity>
