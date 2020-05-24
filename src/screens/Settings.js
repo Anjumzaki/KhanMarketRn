@@ -91,10 +91,10 @@ class Settings extends React.Component {
       .then((resp) => {
         console.log(resp);
         if (resp.data.success == "true") {
-          alert("Password chaged succesfully ");
+          alert("Password changed successfully ");
           this.refs.modal3.close();
         } else if (resp.data.success == "false") {
-          alert("Password mismatch");
+          alert("Password Mismatch");
         } else {
           alert("Something went wrong");
         }
