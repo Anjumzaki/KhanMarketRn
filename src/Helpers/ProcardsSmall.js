@@ -28,7 +28,6 @@ class ProCards extends React.Component {
       this.setState({ image: url });
     }).catch(err=>console.log(err));
 
-    console.log("FAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",this.props.product, this.props.filter1) 
     if(this.props.product.favourites === undefined){
       this.setState({favourites: []})
   }else{
@@ -58,25 +57,20 @@ handleChange(num) {
 
 
   var pCart=this.props.cart;
-  console.log("pcartttttt",pCart)
   var that =this
     pCart.map(function(pro,ind) {
-     console.log("cehck",pro.product.productName ,that.props.product.productName)
      if(pro.product.productName === that.props.product.productName){
         pro.quantity = that.state.qt+num
      }
 
   });
 
-  console.log("pacart 11111",pCart)
 
     this.props.cartAsync(pCart)
 
 }
 
   render() {
-    console.log("satte",this.state)
-    console.log("sdsdsdsdsdds", this.props.user.user._id,this.props.product, this.props.store.name)
 
     return (
       <View  style={styles.procards}>
@@ -89,13 +83,11 @@ handleChange(num) {
           
           <TouchableOpacity 
              onPress={async() =>{
-              console.log("HEARTTTTTTTTT",this.state.heart)
-              console.log("FAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",this.state.favourites)
               if(this.state.heart === false){
                   await this.state.favourites.push({userId: this.props.user.user._id})
 
                   // console.log("sdsdsdsdsdds", this.props.user.user._id,this.props.product, this.props.store.name)
-                  axios.post('https://sheltered-scrubland-52295.herokuapp.com/add/favourite',{
+                  axios.post('https://lit-peak-13067.herokuapp.com/add/favourite',{
                       userId: this.props.user.user._id,
                       product: this.props.product,
                       storeName: this.props.store.name
@@ -103,22 +95,19 @@ handleChange(num) {
                   .then(resp => console.log("fav addedd",resp))
                   .catch(err => console.log("sds",err))
               }else{
-                console.log("iNCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
                 var that=this
                 this.state.favourites = this.state.favourites.filter(function(el){
                   return el.userId !== that.props.user.user._id;
                   // console.log("asd",el.userId,that.props.user.user._id)
                 });
 
-                axios.delete('https://sheltered-scrubland-52295.herokuapp.com/delete/favourite/'+this.props.user.user._id+'/'+this.props.product._id)
+                axios.delete('https://lit-peak-13067.herokuapp.com/delete/favourite/'+this.props.user.user._id+'/'+this.props.product._id)
                 .then(resp =>console.log(resp))
                 .catch(err => err)
-                console.log("afteeeeeeeeeeeeeeeeeeeeeeee")
 
               }
-              console.log("FAVVVVVVVVVVVVV11111111111111111111111111",this.state.favourites)
 
-              axios.put('https://sheltered-scrubland-52295.herokuapp.com/edit/favourites/'+this.props.product._id,{
+              axios.put('https://lit-peak-13067.herokuapp.com/edit/favourites/'+this.props.product._id,{
                 favourites: this.state.favourites
               })
               .then(resp => {

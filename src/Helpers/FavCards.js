@@ -5,57 +5,62 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView, 
+  ScrollView,
   ImageBackground,
   Dimensions,
   Button,
   Image,
+  Alert,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import LatoText from "./LatoText";
 import { btnStyles } from "../styles/base";
 import { bindActionCreators } from "redux";
-import { cartAsync, cartSizeAsync, favStoreAsync, storeAsync } from "../store/actions";
+import {
+  cartAsync,
+  cartSizeAsync,
+  favStoreAsync,
+  storeAsync,
+} from "../store/actions";
 import { connect } from "react-redux";
 import axios from "axios";
 import Modal from "react-native-modalbox";
 
-class FavCards extends React.Component { 
+class FavCards extends React.Component {
   state = {
     heart: true,
     image: "",
     qt: 1,
     favourites: [],
-    currentStore: '',
-    temp: ''
+    currentStore: "",
+    temp: "",
   };
 
-
-  componentDidMount(){
-    console.log("FAVVV",this.props.product)
+  componentDidMount() {
     const ref = firebase
       .storage()
       .ref("/product_images/" + this.props.product.product._id + "_1.jpg");
-    ref.getDownloadURL().then(url => {
-      this.setState({ image: url });
-    }).catch(err=>console.log(err));
+    ref
+      .getDownloadURL()
+      .then((url) => {
+        this.setState({ image: url });
+      })
+      .catch((err) => console.log(err));
 
-    // console.log("FAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",this.props.product._id,this.props.product.product.favourites) 
-    if(this.props.product.product.favourites === undefined){
-
-      console.log("IN OIFFFFFFFFFFFFFFFFF")
-        this.setState({favourites: []})
-    }else{
-      console.log("IN Elseeeeeeeeeee")
-
-      for(var i=0; i<this.props.product.product.favourites.length; i++){
-        if(this.props.product.product.favourites[i].userId === this.props.user.user._id){
-          this.setState({heart: true})
-        } 
+    // console.log("FAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",this.props.product._id,this.props.product.product.favourites)
+    if (this.props.product.product.favourites === undefined) {
+      this.setState({ favourites: [] });
+    } else {
+      for (var i = 0; i < this.props.product.product.favourites.length; i++) {
+        if (
+          this.props.product.product.favourites[i].userId ===
+          this.props.user.user._id
+        ) {
+          this.setState({ heart: true });
+        }
       }
-      this.setState({favourites: this.props.product.product.favourites})
+      this.setState({ favourites: this.props.product.product.favourites });
     }
-
   }
 
   // handleChange(num) {
@@ -65,48 +70,34 @@ class FavCards extends React.Component {
   //     this.setState({ qt: preNum });
   //   }
   // }
- 
-  handleChange(num) {
 
-    console.log("CHNAGE QUNTIYTTYyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
+  handleChange(num) {
     var preNum = this.state.qt;
     preNum = num + preNum;
     if (preNum >= 1) {
       this.setState({ qt: preNum });
     }
 
-
-    var pCart=this.props.cart;
-    console.log("pcartttttt666666666666666666666666666666666666666666666",pCart)
-    var that =this
-      pCart.map(function(pro,ind) {
-       console.log("cehck",pro.product.productName ,that.props.product.product.productName)
-       if(pro.product.productName === that.props.product.product.productName){
-          pro.quantity = that.state.qt+num
-       }
-
+    var pCart = this.props.cart;
+    var that = this;
+    pCart.map(function (pro, ind) {
+      if (pro.product.productName === that.props.product.product.productName) {
+        pro.quantity = that.state.qt + num;
+      }
     });
 
-    console.log("pacart 111111111111111",pCart)
-
-      this.props.cartAsync(pCart)
-
+    this.props.cartAsync(pCart);
   }
   render() {
-    console.log("PROPS and users", this.props.cart)
-    console.log("PROPS and users1", this.props.store, this.props.favStore)
-
-    var cSize=0
-    for(var i=0; i<this.props.cart.length; i++){
-        cSize=cSize + parseInt(this.props.cart[i].quantity)
+    var cSize = 0;
+    for (var i = 0; i < this.props.cart.length; i++) {
+      cSize = cSize + parseInt(this.props.cart[i].quantity);
     }
 
-    this.props.cartSizeAsync(cSize)
+    this.props.cartSizeAsync(cSize);
 
     return (
       <View style={styles.procards}>
-    
-
         <View style={styles.wrapCards}>
           <TouchableOpacity
             onPress={() =>
@@ -117,7 +108,7 @@ class FavCards extends React.Component {
           >
             <Image
               style={styles.proCardsImage}
-              source={{uri: this.state.image}}
+              source={{ uri: this.state.image }}
             />
           </TouchableOpacity>
           <View style={styles.underCard}>
@@ -136,44 +127,59 @@ class FavCards extends React.Component {
               ></LatoText>
 
               <TouchableOpacity
-                onPress={async() => {
-                  console.log("HEARTTTTTTTTT",this.state.heart)
-                console.log("fav",this.state.favourites)
-                if(this.state.heart === false){
-                    await this.state.favourites.push({userId: this.props.user.user._id})
+                onPress={async () => {
+                  if (this.state.heart === false) {
+                    await this.state.favourites.push({
+                      userId: this.props.user.user._id,
+                    });
 
-                    axios.post('https://sheltered-scrubland-52295.herokuapp.com/add/favourite',{
-                        userId: this.props.user.user._id,
-                        product: this.props.product,
-                        storeName: this.props.store.name
+                    axios
+                      .post(
+                        "https://lit-peak-13067.herokuapp.com/add/favourite",
+                        {
+                          userId: this.props.user.user._id,
+                          product: this.props.product,
+                          storeName: this.props.store.name,
+                        }
+                      )
+                      .then((resp) => console.log(resp))
+                      .catch((err) => console.log(err));
+                  } else {
+                    var that = this;
+                    this.state.favourites = this.state.favourites.filter(
+                      function (el) {
+                        return el.userId !== that.props.user.user._id;
+                      }
+                    );
+
+                    axios
+                      .delete(
+                        "https://lit-peak-13067.herokuapp.com/delete/favourite/" +
+                          this.props.user.user._id +
+                          "/" +
+                          this.props.product.product._id
+                      )
+                      .then((resp) => console.log("asd", resp))
+                      .catch((err) => err);
+                  }
+
+                  axios
+                    .put(
+                      "https://lit-peak-13067.herokuapp.com/edit/favourites/" +
+                        this.props.product.product._id,
+                      {
+                        favourites: this.state.favourites,
+                      }
+                    )
+                    .then((resp) => {
+                      this.setState((prevState) => {
+                        return {
+                          heart: !prevState.heart,
+                        };
+                      });
                     })
-                    .then(resp => console.log(resp))
-                    .catch(err => console.log(err))
-                }else{
-                  var that=this
-                  this.state.favourites = this.state.favourites.filter(function(el){
-                    return el.userId !== that.props.user.user._id;
-                  });
-
-                  axios.delete('https://sheltered-scrubland-52295.herokuapp.com/delete/favourite/'+this.props.user.user._id+'/'+this.props.product.product._id)
-                  .then(resp =>console.log("asd",resp))
-                  .catch(err => err)
-
-                }
-                console.log("FAVVVVVVVVV33",this.state.favourites)
-
-                axios.put('https://sheltered-scrubland-52295.herokuapp.com/edit/favourites/'+this.props.product.product._id,{
-                  favourites: this.state.favourites
-                })
-                .then(resp => {
-                  this.setState(prevState => {
-                    return {
-                      heart: !prevState.heart
-                    };
-                  })
-                })
-                .catch(err => console.log(err))
-              }}
+                    .catch((err) => console.log(err));
+                }}
               >
                 {this.state.heart ? (
                   <AntDesign color="#B50000" size={18} name="heart" />
@@ -208,22 +214,22 @@ class FavCards extends React.Component {
             </View> */}
 
             <View style={{ flex: 1, flexDirection: "row", paddingTop: 5 }}>
-
-              <View style={{marginRight:5}} >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={13}
-                col="#2E2E2E"
-                text={
-                  "$" +
-                  (parseInt(this.props.product.product.price) -
-                    (parseInt(this.props.product.product.price) * parseInt(this.props.product.product.discount)) /
-                      100) +
-                  " / lb"
-                }
-              ></LatoText>
-                </View>
-              <View style={{marginLeft:5}}>
+              <View style={{ marginRight: 5 }}>
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={13}
+                  col="#2E2E2E"
+                  text={
+                    "$" +
+                    (parseInt(this.props.product.product.price) -
+                      (parseInt(this.props.product.product.price) *
+                        parseInt(this.props.product.product.discount)) /
+                        100) +
+                    " / lb"
+                  }
+                ></LatoText>
+              </View>
+              <View style={{ marginLeft: 5 }}>
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={13}
@@ -231,19 +237,19 @@ class FavCards extends React.Component {
                   lineThrough="line-through"
                   text={"$" + this.props.product.product.price + " / lb"}
                 ></LatoText>
-                </View>
-
-
               </View>
-            <View style={{marginBottom:10}}>
+            </View>
+            <View style={{ marginBottom: 10 }}>
               <LatoText
                 fontName="Lato-Regular"
                 fonSiz={15}
                 col="#B50000"
-                text={"You will save " + this.props.product.product.discount + "%"}
+                text={
+                  "You will save " + this.props.product.product.discount + "%"
+                }
               ></LatoText>
             </View>
-           <View>
+            <View>
               <LatoText
                 fontName="Lato-Regular"
                 fonSiz={13}
@@ -256,8 +262,8 @@ class FavCards extends React.Component {
                 col="#B50000"
                 text={"3 miles away"}
               />
-           </View>
-            
+            </View>
+
             <View style={{ marginTop: 10 }}>
               {this.state.cart ? (
                 <View
@@ -288,48 +294,101 @@ class FavCards extends React.Component {
                 </View>
               ) : (
                 <TouchableOpacity
-                onPress={() => {
-                  if(this.props.cart.length === 0){
-                    var pCart=this.props.cart;
-                    pCart.push({
-                      product: this.props.product.product,
-                      quantity: this.state.qt
-                    })
-                    this.props.favStoreAsync(this.props.product.product.storeId)
-                    this.props.cartAsync(pCart)
-                    this.setState({cart: true})
-
-                    if(this.props.store === ''){
-                      axios.get('https://sheltered-scrubland-52295.herokuapp.com/get/store/'+this.props.product.product.storeId)
-                      .then(resp => {
-                        this.props.storeAsync({
-                          name: resp.data.storeName,
-                          address: resp.data.storeAddress,
-                          id: resp.data._id,
-                          phone : resp.data.phoneNumber
-                        })
-                      })
-                    }
-                  }else{
-                    if(this.props.favStore === this.props.product.product.storeId ){
-                      var pCart=this.props.cart;
+                  onPress={() => {
+                    if (this.props.cart.length === 0) {
+                      var pCart = this.props.cart;
                       pCart.push({
                         product: this.props.product.product,
-                        quantity: this.state.qt
-                      })
-                      this.props.favStoreAsync(this.props.product.product.storeId)
-                      this.props.cartAsync(pCart)
-                      this.setState({cart: true})
-                      
-                    }else{
-                      this.setState({temp: this.props.product.product.storeId})
-                      this.refs.modal3.open()
-        
-                    }
-                  }
+                        quantity: this.state.qt,
+                      });
+                      this.props.favStoreAsync(
+                        this.props.product.product.storeId
+                      );
+                      this.props.cartAsync(pCart);
+                      this.setState({ cart: true });
 
-                }}                  
-                style={btnStyles.cartBtn}
+                      if (this.props.store === "") {
+                        axios
+                          .get(
+                            "https://lit-peak-13067.herokuapp.com/get/store/" +
+                              this.props.product.product.storeId
+                          )
+                          .then((resp) => {
+                            this.props.storeAsync({
+                              name: resp.data.storeName,
+                              address: resp.data.storeAddress,
+                              id: resp.data._id,
+                              phone: resp.data.phoneNumber,
+                            });
+                          });
+                      }
+                    } else {
+                      if (
+                        this.props.favStore ===
+                        this.props.product.product.storeId
+                      ) {
+                        var pCart = this.props.cart;
+                        pCart.push({
+                          product: this.props.product.product,
+                          quantity: this.state.qt,
+                        });
+                        this.props.favStoreAsync(
+                          this.props.product.product.storeId
+                        );
+                        this.props.cartAsync(pCart);
+                        this.setState({ cart: true });
+                      } else {
+                        this.setState(
+                          { temp: this.props.product.product.storeId },
+                          () => {
+                            Alert.alert(
+                              "Alert!",
+                              "You are changing the store, so you will lost your cart items",
+                              [
+                                {
+                                  text: "Cancel",
+                                  onPress: () => console.log("Cancel Pressed"),
+                                  style: "cancel",
+                                },
+                                {
+                                  text: "OK",
+                                  onPress: () => {
+                                    var pCart = [];
+                                    pCart.push({
+                                      product: this.props.product.product,
+                                      quantity: this.state.qt,
+                                    });
+                                    this.props.favStoreAsync(
+                                      this.props.product.product.storeId
+                                    );
+                                    this.props.cartAsync(pCart);
+                                    this.setState({ cart: true });
+
+                                    axios
+                                      .get(
+                                        "https://lit-peak-13067.herokuapp.com/get/store/" +
+                                          this.state.temp
+                                      )
+                                      .then((resp) => {
+                                        this.props.storeAsync({
+                                          name: resp.data.storeName,
+                                          address: resp.data.storeAddress,
+                                          id: resp.data._id,
+                                          phone: resp.data.phoneNumber,
+                                        });
+                                        this.refs.modal3.close();
+                                      });
+                                  },
+                                },
+                              ],
+                              { cancelable: true }
+                            );
+                          }
+                        );
+                      }
+                    }
+                  }}
+                  style={btnStyles.cartBtn}
                 >
                   <LatoText
                     fontName="Lato-Regular"
@@ -349,40 +408,22 @@ class FavCards extends React.Component {
           ref={"modal3"}
           isDisabled={this.state.isDisabled}
         >
-            <Text>You are changing the store, so you will lost your cart items</Text>
-            <View>
-              <Button onPress={() => this.refs.modal3.close()} title="Cancel">
-              </Button>
-              <Button onPress={() => {
-              // this.props.cartAsync([])
-
-               var pCart= [];
-               pCart.push({
-                 product: this.props.product.product,
-                 quantity: this.state.qt
-               })
-               this.props.favStoreAsync(this.props.product.product.storeId)
-               this.props.cartAsync(pCart)
-               this.setState({cart: true})
-
-                
-                axios.get('https://sheltered-scrubland-52295.herokuapp.com/get/store/'+this.state.temp)
-                .then(resp => {
-                  this.props.storeAsync({
-                    name: resp.data.storeName,
-                          address: resp.data.storeAddress,
-                          id: resp.data._id,
-                          phone : resp.data.phoneNumber
-                  })
-                  this.refs.modal3.close()
-                })
-              
-
-                }} title="Okay">
-              </Button>
-            </View>
+          <Text>
+            You are changing the store, so you will lost your cart items
+          </Text>
+          <View>
+            <Button
+              onPress={() => this.refs.modal3.close()}
+              title="Cancel"
+            ></Button>
+            <Button
+              onPress={() => {
+                // this.props.cartAsync([])
+              }}
+              title="Okay"
+            ></Button>
+          </View>
         </Modal>
-
       </View>
     );
   }
@@ -437,31 +478,26 @@ const styles = StyleSheet.create({
     height: 230,
     width: Dimensions.get("window").width - 100,
   },
-
 });
 
-const mapStateToProps = state => ({
-  cart: state.Cart.cartData, 
+const mapStateToProps = (state) => ({
+  cart: state.Cart.cartData,
   loading: state.Cart.cartLoading,
   cartSize: state.CartSize.cartSizeData,
   error: state.Cart.cartError,
   user: state.user.user,
   store: state.Store.storeData,
-  favStore: state.favStore.favStoreData
-
+  favStore: state.favStore.favStoreData,
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
-      {
-          cartAsync, 
-          cartSizeAsync,
-          favStoreAsync,
-          storeAsync
-      },
-      dispatch
+    {
+      cartAsync,
+      cartSizeAsync,
+      favStoreAsync,
+      storeAsync,
+    },
+    dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FavCards);
+export default connect(mapStateToProps, mapDispatchToProps)(FavCards);

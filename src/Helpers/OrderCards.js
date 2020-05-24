@@ -29,7 +29,6 @@ class OrderCards extends React.Component {
     }
   }
   render() {
-    console.log("order",this.props.order)
     return (
       <TouchableOpacity onPress={()=>this.props.navigation.navigate('OrderDetails',{
         order:this.props.order

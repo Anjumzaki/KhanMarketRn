@@ -24,20 +24,19 @@ class StoreDetails extends React.Component {
 
   componentDidMount() {
 
-    axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/all/products/" + this.props.route.params.storeId)
+    axios.get("https://lit-peak-13067.herokuapp.com/get/all/products/" + this.props.route.params.storeId)
       .then(resp => {
-        console.log("PRODUCTS", resp.data)
         this.setState({ products: resp.data })
       })
       .catch(err => console.log(err))
 
-    axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/all/featured/products/" + this.props.route.params.storeId)
+    axios.get("https://lit-peak-13067.herokuapp.com/get/all/featured/products/" + this.props.route.params.storeId)
       .then(resp => {
         this.setState({ featuredProducts: resp.data, loading: false })
       })
       .catch(err => console.log(err))
 
-    axios.get("https://sheltered-scrubland-52295.herokuapp.com/get/all/subCategories")
+    axios.get("https://lit-peak-13067.herokuapp.com/get/all/subCategories")
       .then(resp => {
         // console.log("Cat", resp.data)
         this.setState({ categories: resp.data })
@@ -63,9 +62,7 @@ class StoreDetails extends React.Component {
         })
       })
     ))
-    console.log("FFFFFPPPPPP", fp)
-    console.log("PROPSSSSSS", this.props)
-    console.log("stateeeeeeeee", this.state)
+
 
     var searchedProducts=[];
     var key1 = this.props.searchInput;
@@ -73,7 +70,6 @@ class StoreDetails extends React.Component {
 
       for(var i=0; i<fp.length; i++){
         let totalProducts = [...fp[i].products];
-        console.log("TOTAL PODUCT111",totalProducts)
         var temp = totalProducts.filter(function (product) {
             return (product.productName ? product.productName.toLowerCase().includes(key1.toLowerCase()) : null);
         });
@@ -84,7 +80,6 @@ class StoreDetails extends React.Component {
       }
    
      }
-     console.log("searchedProducts111",searchedProducts)
 
 
     return (

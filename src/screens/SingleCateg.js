@@ -44,22 +44,16 @@ class SingleCateg extends Component {
   }
 
   render() {
-    console.log(
-      "Signle cat props",
-      this.props.route.params,
-      this.props.filtered
-    );
+
     var searchedProducts = [];
     var key1 = this.props.searchInput;
     if (this.props.searchInput) {
       let totalProducts = [...this.props.route.params.products];
-      console.log("TOTAL PODUCT111", totalProducts);
       searchedProducts = totalProducts.filter(function (product) {
         return product.productName
           ? product.productName.toLowerCase().includes(key1.toLowerCase())
           : null;
       });
-      console.log("searchedProducts111", searchedProducts);
     }
 
     return (

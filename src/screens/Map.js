@@ -49,7 +49,6 @@ class Map extends React.Component {
     var newInfo = ''
     Geolocation.getCurrentPosition(
       (info) => {
-        console.log("ONFFOOO", info.coords.latitude);
         lat = info.coords.latitude;
         lng = info.coords.longitude;
         newInfo = info
@@ -105,7 +104,7 @@ class Map extends React.Component {
               onPress={() => {
                 axios
                   .post(
-                    "https://sheltered-scrubland-52295.herokuapp.com/add/location",
+                    "https://lit-peak-13067.herokuapp.com/add/location",
                     {
                       refId: this.props.user.user._id,
                       type: "Customer",
