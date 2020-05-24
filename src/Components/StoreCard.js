@@ -6,6 +6,7 @@ import {
   Image,
   Button,
   Dimensions,
+  Alert
 } from "react-native";
 import { cardStyles } from "../styles/base";
 import LatoText from "../Helpers/LatoText";
