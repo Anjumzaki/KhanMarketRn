@@ -249,6 +249,7 @@ class Cart extends Component {
   }
   //  ejIEyo
   render() {
+    console.log("state,,this.state",this.state)
     // console.log("DATEEEEEEEEE", new Date(), console.log(timestamp()));
     // console.log(timestamp("DDMMYYYY"));
     // console.log(timestamp("YYYY-MM-DD"));
@@ -329,6 +330,9 @@ class Cart extends Component {
       "Nov",
       "Dec",
     ];
+
+
+    console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD", parseInt(this.state.orderDate.substring(3, 5)) - 1, parseInt(this.state.orderDate.substring(3, 5)), months[ parseInt(this.state.orderDate.substring(3, 4)) - 1])
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <Modal
@@ -785,25 +789,41 @@ class Cart extends Component {
                 fonSiz={17}
                 col={"#2E2E2E"}
                 txtAlign={"center"}
+                // text={
+                //   (months[
+                //     parseInt(this.state.orderDate.substring(3, 4)) - 1
+                //   ] === undefined
+                //     ? new Date().toDateString().substring(0, 15)
+                //     : months[
+                //         parseInt(this.state.orderDate.substring(3, 4)) - 1
+                //       ]) 
+                //   // " " +
+                //   // this.state.orderDate.substring(0, 2)
+                // }
                 text={
-                  (months[
-                    parseInt(this.state.orderDate.substring(3, 4)) - 1
-                  ] === undefined
-                    ? new Date().toDateString().substring(0, 15)
-                    : months[
-                        parseInt(this.state.orderDate.substring(3, 4)) - 1
-                      ]) +
-                  " " +
-                  this.state.orderDate.substring(0, 2)
+                  this.state.orderDate ? (
+                    days[this.state.date] + " "+  months[ parseInt(this.state.orderDate.substring(3, 5)) - 1]
+                    + " "+ this.state.orderDate.substring(0, 2)+ " "+ this.state.orderDate.substring(6, 10)
+
+                  ) : (
+                    new Date().toDateString().substring(0, 15)
+                  )
                 }
+                    // ? 
+                    // : months[
+                    //     parseInt(this.state.orderDate.substring(3, 4)) - 1
+                    //   ]) 
+                  // " " +
+                  // this.state.orderDate.substring(0, 2)
+                
               />
-              {this.state.storeTimings.isClosed ? (
+              {/* {this.state.storeTimings.isClosed ? (
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={17}
                   col={"#2E2E2E"}
                   txtAlign={"center"}
-                  text={" "}
+                  text={"   "}
                 />
               ) : (
                 <LatoText
@@ -813,22 +833,22 @@ class Cart extends Component {
                   txtAlign={"center"}
                   text={" " + days[this.state.date]}
                 />
-              )}
+              )} */}
               {this.state.storeTimings.isClosed ? (
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={15}
                   col={"#2E2E2E"}
                   txtAlign={"center"}
-                  text={" Store Closed"}
-                />
+                  text={"    Store Closed"}
+                />   
               ) : (
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={15}
                   col={"#2E2E2E"}
                   txtAlign={"center"}
-                  text={" " + this.state.orderTime}
+                  text={"     " + this.state.orderTime}
                 />
               )}
             </View>
