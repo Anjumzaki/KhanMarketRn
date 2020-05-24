@@ -7,5 +7,6 @@ export * from './Location';
 export * from './Filter';
 export * from './Search';
 export * from './Search1';
+export * from './favStore';
 
 

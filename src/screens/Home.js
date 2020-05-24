@@ -41,13 +41,9 @@ class Home extends React.Component {
     try {
       const jsonValue = await AsyncStorage.getItem("user");
       jsonValue != null ? alert(jsonValue) : null;
-    } catch (e) {
-    }
+    } catch (e) {}
   };
-  async componentDidMount() {
-    const jsonValue = await AsyncStorage.getItem("user");
-    const jsonValue1 = await AsyncStorage.getItem("userLocation");
-    var cords = {};
+  componentDidMount() {
     Geolocation.getCurrentPosition(
       (info) => {
         axios
@@ -60,26 +56,37 @@ class Home extends React.Component {
           .then((resp) => {
             this.setState({
               stores: resp.data,
+              location: info.coords,
             });
           });
-        this.setState({ location: info.coords });
-        cords = info;
       },
       (error) => {
         console.log(error);
       },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 10000 }
     );
-    console.log("loc", cords);
-
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
-      axios
-        .get("https://sheltered-scrubland-52295.herokuapp.com/get/stores/")
-        .then((resp) => {
-          this.setState({
-            stores: resp.data,
-          });
-        });
+      Geolocation.getCurrentPosition(
+        (info) => {
+          axios
+            .get(
+              "https://sheltered-scrubland-52295.herokuapp.com/get/stores/" +
+                info.coords.latitude +
+                "/" +
+                info.coords.longitude
+            )
+            .then((resp) => {
+              this.setState({
+                stores: resp.data,
+                location: info.coords,
+              });
+            });
+        },
+        (error) => {
+          console.log(error);
+        },
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
+      );
     });
   }
   componentWillUnmount() {

@@ -155,7 +155,7 @@ const HomeStackScreen = (route) => (
 const FavouritesStackScreen = () => (
   <FavouritesStack.Navigator initialRouteName="Favourites">
     <FavouritesStack.Screen name="Favourites"   component={Favourites} 
-     options={{ header: props => <StackGrayHeader nameTitle="Favourites" {...props} />, }}
+     options={{ header: props => <StackGrayHeader cart={true} nameTitle="Favourites" {...props} />, }}
     />
     
   </FavouritesStack.Navigator>

@@ -8,22 +8,26 @@ import {
   ScrollView, 
   ImageBackground,
   Dimensions,
+  Button,
   Image,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import LatoText from "./LatoText";
 import { btnStyles } from "../styles/base";
 import { bindActionCreators } from "redux";
-import { cartAsync, cartSizeAsync } from "../store/actions";
+import { cartAsync, cartSizeAsync, favStoreAsync, storeAsync } from "../store/actions";
 import { connect } from "react-redux";
 import axios from "axios";
+import Modal from "react-native-modalbox";
 
-class FavCards extends React.Component {
+class FavCards extends React.Component { 
   state = {
     heart: true,
     image: "",
     qt: 1,
-    favourites: []
+    favourites: [],
+    currentStore: '',
+    temp: ''
   };
 
 
@@ -36,7 +40,7 @@ class FavCards extends React.Component {
       this.setState({ image: url });
     }).catch(err=>console.log(err));
 
-    console.log("FAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",this.props.product._id,this.props.product.product.favourites) 
+    // console.log("FAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",this.props.product._id,this.props.product.product.favourites) 
     if(this.props.product.product.favourites === undefined){
 
       console.log("IN OIFFFFFFFFFFFFFFFFF")
@@ -89,7 +93,16 @@ class FavCards extends React.Component {
 
   }
   render() {
-    console.log("PROPS and users", this.props.user,this.props.product, this.state)
+    console.log("PROPS and users", this.props.cart)
+    console.log("PROPS and users1", this.props.store, this.props.favStore)
+
+    var cSize=0
+    for(var i=0; i<this.props.cart.length; i++){
+        cSize=cSize + parseInt(this.props.cart[i].quantity)
+    }
+
+    this.props.cartSizeAsync(cSize)
+
     return (
       <View style={styles.procards}>
     
@@ -137,17 +150,14 @@ class FavCards extends React.Component {
                     .then(resp => console.log(resp))
                     .catch(err => console.log(err))
                 }else{
-                  console.log("iNCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
                   var that=this
                   this.state.favourites = this.state.favourites.filter(function(el){
                     return el.userId !== that.props.user.user._id;
-                    // console.log("asd",el.userId,that.props.user.user._id)
                   });
 
                   axios.delete('https://sheltered-scrubland-52295.herokuapp.com/delete/favourite/'+this.props.user.user._id+'/'+this.props.product.product._id)
                   .then(resp =>console.log("asd",resp))
                   .catch(err => err)
-                  console.log("afteeeeeeeeeeeeeeeeeeeeeeee")
 
                 }
                 console.log("FAVVVVVVVVV33",this.state.favourites)
@@ -279,14 +289,47 @@ class FavCards extends React.Component {
               ) : (
                 <TouchableOpacity
                 onPress={() => {
-                  var pCart=this.props.cart;
-                  pCart.push({
-                    product: this.props.product.product,
-                    quantity: this.state.qt
-                  })
-                  this.props.cartAsync(pCart)
-                  this.setState({cart: true})
-                }}                  style={btnStyles.cartBtn}
+                  if(this.props.cart.length === 0){
+                    var pCart=this.props.cart;
+                    pCart.push({
+                      product: this.props.product.product,
+                      quantity: this.state.qt
+                    })
+                    this.props.favStoreAsync(this.props.product.product.storeId)
+                    this.props.cartAsync(pCart)
+                    this.setState({cart: true})
+
+                    if(this.props.store === ''){
+                      axios.get('https://sheltered-scrubland-52295.herokuapp.com/get/store/'+this.props.product.product.storeId)
+                      .then(resp => {
+                        this.props.storeAsync({
+                          name: resp.data.storeName,
+                          address: resp.data.storeAddress,
+                          id: resp.data._id,
+                          phone : resp.data.phoneNumber
+                        })
+                      })
+                    }
+                  }else{
+                    if(this.props.favStore === this.props.product.product.storeId ){
+                      var pCart=this.props.cart;
+                      pCart.push({
+                        product: this.props.product.product,
+                        quantity: this.state.qt
+                      })
+                      this.props.favStoreAsync(this.props.product.product.storeId)
+                      this.props.cartAsync(pCart)
+                      this.setState({cart: true})
+                      
+                    }else{
+                      this.setState({temp: this.props.product.product.storeId})
+                      this.refs.modal3.open()
+        
+                    }
+                  }
+
+                }}                  
+                style={btnStyles.cartBtn}
                 >
                   <LatoText
                     fontName="Lato-Regular"
@@ -299,6 +342,47 @@ class FavCards extends React.Component {
             </View>
           </View>
         </View>
+
+        <Modal
+          style={[styles.modal, styles.modal3]}
+          position={"center"}
+          ref={"modal3"}
+          isDisabled={this.state.isDisabled}
+        >
+            <Text>You are changing the store, so you will lost your cart items</Text>
+            <View>
+              <Button onPress={() => this.refs.modal3.close()} title="Cancel">
+              </Button>
+              <Button onPress={() => {
+              // this.props.cartAsync([])
+
+               var pCart= [];
+               pCart.push({
+                 product: this.props.product.product,
+                 quantity: this.state.qt
+               })
+               this.props.favStoreAsync(this.props.product.product.storeId)
+               this.props.cartAsync(pCart)
+               this.setState({cart: true})
+
+                
+                axios.get('https://sheltered-scrubland-52295.herokuapp.com/get/store/'+this.state.temp)
+                .then(resp => {
+                  this.props.storeAsync({
+                    name: resp.data.storeName,
+                          address: resp.data.storeAddress,
+                          id: resp.data._id,
+                          phone : resp.data.phoneNumber
+                  })
+                  this.refs.modal3.close()
+                })
+              
+
+                }} title="Okay">
+              </Button>
+            </View>
+        </Modal>
+
       </View>
     );
   }
@@ -344,6 +428,16 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").width / 2,
     flexDirection: "row",
   },
+  modal: {
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+  },
+  modal3: {
+    height: 230,
+    width: Dimensions.get("window").width - 100,
+  },
+
 });
 
 const mapStateToProps = state => ({
@@ -352,14 +446,17 @@ const mapStateToProps = state => ({
   cartSize: state.CartSize.cartSizeData,
   error: state.Cart.cartError,
   user: state.user.user,
-  store: state.Store.storeData
+  store: state.Store.storeData,
+  favStore: state.favStore.favStoreData
 
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
       {
           cartAsync, 
-          cartSizeAsync
+          cartSizeAsync,
+          favStoreAsync,
+          storeAsync
       },
       dispatch
   );
