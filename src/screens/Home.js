@@ -78,6 +78,7 @@ class Home extends React.Component {
             .then((resp) => {
               this.setState({
                 stores: resp.data,
+                location: info.coords,
               });
             });
         },
