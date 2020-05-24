@@ -11,7 +11,6 @@ import { connect } from "react-redux";
 class Cart extends React.Component {
 
     render() {
-        console.log("this.props.products",this.props.products)
         return ( 
             <View>
                 <View style={{ flexDirection: 'row', padding: 10 }}>

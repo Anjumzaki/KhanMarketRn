@@ -9,6 +9,7 @@ import {
   LinearGradient,
   TouchableOpacity,
   ActivityIndicator,
+  Alert
 } from "react-native";
 import Carousel from "react-native-looped-carousel";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -36,25 +37,24 @@ class Favourites extends Component {
       heart: false,
       qt: 1,
       favourites: [],
-      loading: true
+      loading: true,
     };
   }
 
   componentDidMount() {
     axios
       .get(
-        "https://sheltered-scrubland-52295.herokuapp.com/get/all/favourites/" +
+        "https://lit-peak-13067.herokuapp.com/get/all/favourites/" +
           this.props.user.user._id
       )
       .then((resp) => {
-        this.setState({ favourites: resp.data, loading: false })
-      
+        this.setState({ favourites: resp.data, loading: false });
       })
       .catch((err) => console.log(err));
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
       axios
         .get(
-          "https://sheltered-scrubland-52295.herokuapp.com/get/all/favourites/" +
+          "https://lit-peak-13067.herokuapp.com/get/all/favourites/" +
             this.props.user.user._id
         )
         .then((resp) => this.setState({ favourites: resp.data }))
@@ -87,18 +87,16 @@ class Favourites extends Component {
                   product={item}
                 />
               ))
-            ) : (
-
-              this.state.loading ? (
+            ) : this.state.loading ? (
               <ActivityIndicator
                 style={{ marginTop: 100 }}
                 size="large"
                 color="black"
               />
-              ): (
-                <Text style={{textAlign:"center", marginTop: 100}}>No favourite items</Text>
-              )
-              
+            ) : (
+              <Text style={{ textAlign: "center", marginTop: 100 }}>
+                No favourite items
+              </Text>
             )}
           </View>
         </ScrollView>

@@ -61,7 +61,6 @@ export default class CarouselExample extends Component {
     }
 
     render() {
-        // console.log("FeaturedProducts",this.props.featuredProducts)
         return (
             <View onLayout={this._onLayoutDidChange} style={{marginBottom:40}}>
                 {/* <Text>asd</Text> */}

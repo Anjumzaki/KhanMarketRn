@@ -40,8 +40,6 @@ class SingleCategHeader extends React.Component {
   
 
   render() {
-    console.log("single heaer props",this.props, this.state,this.props.searchInput)
-    console.log("single heaer props111", this.state)
     return (
       <View
         style={{

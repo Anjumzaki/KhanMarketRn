@@ -92,12 +92,6 @@ class OrderDetails extends Component {
     return "" + month_names[parseInt(date[1])] + " " + date[0] + "," + date[2];
   }
   render() {
-    console.log("this.props", this.props.route.params.order, this.props.store);
-    console.log("DATEEEEEEEEE", new Date(), console.log(timestamp()));
-    console.log(timestamp("DDMMYYYY"));
-    console.log(timestamp("YYYY-MM-DD"));
-
-    console.log("CO props user", this.props.user);
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
     } else {
@@ -445,13 +439,12 @@ class OrderDetails extends Component {
               if (this.props.route.params.order.isAccepted === false) {
                 axios
                   .put(
-                    "https://sheltered-scrubland-52295.herokuapp.com/edit/order/reject/" +
+                    "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
                       this.props.route.params.order._id
                   )
                   .then((resp) => alert("Order Cancelled."))
                   .catch((err) => console.log(err));
               } else {
-                console.log("can be canceled");
                 alert("Order cannot be cancelled after preperation state.");
               }
             }}

@@ -57,7 +57,6 @@ class Filters extends Component {
 
   render() {
 
-    console.log("props of filter",this.props.filtered)
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
@@ -91,7 +90,6 @@ class Filters extends Component {
                 this.setState({
                   isCheckedAsc: !this.state.isCheckedAsc,
                 });
-                console.log(this.state.isCheckedAsc)
                 if(!this.state.isCheckedAsc){
                     this.props.filterAsync("Asc")
                 }
@@ -115,7 +113,6 @@ class Filters extends Component {
                 this.setState({
                   isCheckedDec: !this.state.isCheckedDec
                 });
-                console.log(this.state.isCheckedDec)
 
                 if(!this.state.isCheckedDec){
                   this.props.filterAsync("Dec")
