@@ -69,8 +69,14 @@ class Map extends React.Component {
     //   console.log("lat longgg", lat1,lng1)
   }
   render() {
-    this.state.completeLoc ? 
-    console.log("map",this.state.completeLoc.results[0]) : null
+    // this.state.completeLoc ? 
+    if(this.state.completeLoc){
+      for(var i=0; i<this.state.completeLoc.results[0].address_components.length; i++){
+        console.log(this.state.completeLoc.results[0].address_components[i].types[0], this.state.completeLoc.results[0].address_components[i].long_name)
+      }
+    }
+    //  : null
+
     if (this.state.lat && this.state.lng) {
       loc = (
         <View style={styles.container}>
@@ -104,11 +110,13 @@ class Map extends React.Component {
             <TouchableOpacity
               onPress={() => {
 
-                var ad1="", ad2="",ct="",cnt="",zipc="";
+                var ad1="",temp="", ad2="",ct="",cnt="",zipc="";
                 for(var i=0; i<this.state.completeLoc.results[0].address_components.length; i++){
                     if(this.state.completeLoc.results[0].address_components[i].types[0] === "street_number"){
                       ad1= this.state.completeLoc.results[0].address_components[i].long_name
                     }else if(this.state.completeLoc.results[0].address_components[i].types[0] === "route"){
+                      temp= this.state.completeLoc.results[0].address_components[i].long_name
+                    }else if(this.state.completeLoc.results[0].address_components[i].types[0] === "locality"){
                       ad2= this.state.completeLoc.results[0].address_components[i].long_name
                     }else if(this.state.completeLoc.results[0].address_components[i].types[0] === "administrative_area_level_1"){
                       ct= this.state.completeLoc.results[0].address_components[i].long_name
@@ -124,7 +132,7 @@ class Map extends React.Component {
                     {
                       refId: this.props.user.user._id,
                       type: "Customer",
-                      address1: ad1,
+                      address1: ad1 + temp,
                       address2: ad2,
                       city: ct,
                       country: cnt,
