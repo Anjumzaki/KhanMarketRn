@@ -70,6 +70,7 @@ class Map extends React.Component {
   }
   render() {
     // this.state.completeLoc ? 
+    console.log("USer", this.props.user.user._id)
     if(this.state.completeLoc){
       for(var i=0; i<this.state.completeLoc.results[0].address_components.length; i++){
         console.log(this.state.completeLoc.results[0].address_components[i].types[0], this.state.completeLoc.results[0].address_components[i].long_name)
@@ -109,6 +110,10 @@ class Map extends React.Component {
           >
             <TouchableOpacity
               onPress={() => {
+                axios.delete('https://lit-peak-13067.herokuapp.com/delete/location/'+this.props.user.user._id)
+                .then(resp => console.log(resp))
+                .catch(err => console.log(err))
+
 
                 var ad1="",temp="", ad2="",ct="",cnt="",zipc="";
                 for(var i=0; i<this.state.completeLoc.results[0].address_components.length; i++){
@@ -126,6 +131,8 @@ class Map extends React.Component {
                       zipc= this.state.completeLoc.results[0].address_components[i].long_name
                     }
                 }
+               
+
                 axios
                   .post(
                     "https://lit-peak-13067.herokuapp.com/add/location",
@@ -137,24 +144,6 @@ class Map extends React.Component {
                       city: ct,
                       country: cnt,
                       zipCode: zipc
-                      // address1:
-                      //   this.state.completeLoc.results[0].address_components[0]
-                      //     .long_name +
-                      //   " " +
-                      //   this.state.completeLoc.results[0].address_components[1]
-                      //     .long_name,
-                      // address2:
-                      //   this.state.completeLoc.results[0].address_components[2]
-                      //     .long_name +
-                      //   " " +
-                      //   this.state.completeLoc.results[0].address_components[3]
-                      //     .long_name,
-                      // city: this.state.completeLoc.results[0]
-                      //   .address_components[4].long_name,
-                      // country: this.state.completeLoc.results[0]
-                      //   .address_components[5].long_name,
-                      // zipCode: this.state.completeLoc.results[0]
-                      //   .address_components[6].long_name,
                     }
                   )
                   .then((resp1) => {
