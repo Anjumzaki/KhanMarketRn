@@ -224,7 +224,7 @@ class Cart extends Component {
     
 
     axios
-      .get("http://192.168.0.105:3000/get/order/bynumber/" + result)
+      .get("https://lit-peak-13067.herokuapp.com/get/order/bynumber/" + result)
       .then((resp) => {
         
         if (resp.data === null) {
