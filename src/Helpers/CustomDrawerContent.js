@@ -26,7 +26,8 @@ class CustomDrawerContent extends Component {
   }
 
   componentDidMount() {
-    const ref = firebase
+    if(this.props.user){
+      const ref = firebase
       .storage()
       .ref("profile_images/" + this.props.user.user._id + ".jpg");
     ref
@@ -38,6 +39,8 @@ class CustomDrawerContent extends Component {
         console.log(err);
       })
       .catch((err) => console.log(err));
+    }
+   
   }
 
   async removeItemValue(key) {
