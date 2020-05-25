@@ -246,7 +246,7 @@ class Cart extends Component {
   }
   //  ejIEyo
   render() {
-    
+    console.log("SD",this.props.user.user)
     var codeId = this.makeid(6);
     
     // 
@@ -991,6 +991,8 @@ class Cart extends Component {
                   }else{
                     numV = this.state.mobile
                   }
+
+                  console.log("numv",numV)
                   axios
                     .get(
                       "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
@@ -1000,7 +1002,7 @@ class Cart extends Component {
                         num
                     )
                     .then((resp) => {
-                      
+                      console.log(resp)
                       this.refs.modal6.open();
                     })
                     .catch((err) => 
