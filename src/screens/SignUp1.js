@@ -55,7 +55,9 @@ export default class SignUp1 extends React.Component {
       loading: false,
       errMessage: "",
       loading: false,
-      verifi:false
+      verifi: false,
+      countryModal: false,
+      selectedCountry: "USA",
     };
   }
 
@@ -96,7 +98,10 @@ export default class SignUp1 extends React.Component {
                   this.props.navigation.navigate("ChoosePass", {
                     name: this.state.name,
                     email: this.state.email.toLowerCase(),
-                    mobile: this.state.mobile,
+                    mobile:
+                      this.state.selectedCountry == "USA"
+                        ? "+1"
+                        : "+92" + this.state.mobile,
                     zipCode: this.state.zipCode,
                     password: this.state.password,
                     isGuest: false,
@@ -136,12 +141,118 @@ export default class SignUp1 extends React.Component {
     );
   };
   render() {
+    var mainNumber =
+      this.state.selectedCountry == "USA" ? "+1" : "+92" + this.state.mobile;
+    console.log(mainNumber);
     const { icEye, isPassword } = this.state;
     return (
       <SafeAreaView
         style={[conStyles.safeAreaMy, { backgroundColor: "white" }]}
       >
         <StatusBar translucent={true} barStyle="dark-content" />
+        <Modal
+          style={[
+            styles.modal,
+            styles.modal3,
+            { justifyContent: "space-between" },
+          ]}
+          position={"center"}
+          ref={"coModal"}
+          isDisabled={this.state.countryModal}
+        >
+          <LatoText
+            fontName="Lato-Regular"
+            fonSiz={20}
+            col="#5C5C5C"
+            text={"Please select the Coutry"}
+          />
+          <View style={{ paddingBottom: 10 }} />
+          <LatoText
+            fontName="Lato-Regular"
+            fonSiz={12}
+            col="#5C5C5C"
+            txtAlign={"center"}
+            text={"Here are the availiable country"}
+          />
+          <View style={{ paddingBottom: 10 }} />
+
+          <TouchableOpacity
+            onPress={() =>
+              this.setState(
+                { selectedCountry: "PAK" },
+                this.refs.coModal.close()
+              )
+            }
+            style={{
+              marginBottom: 10,
+              flexDirection: "row",
+              alignContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Image
+              style={{ width: wp("8%"), height: wp("5%") }}
+              source={require("../../assets/pak.png")}
+            />
+            <View
+              style={{
+                justifyContent: "center",
+                alignContent: "center",
+                paddingLeft: 5,
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={17}
+                col="#5C5C5C"
+                text={"+92"}
+              />
+            </View>
+          </TouchableOpacity>
+          <View style={{ paddingBottom: 10 }} />
+          <TouchableOpacity
+            onPress={() =>
+              this.setState(
+                { selectedCountry: "USA" },
+                this.refs.coModal.close()
+              )
+            }
+            style={{
+              marginBottom: 10,
+              flexDirection: "row",
+              alignContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Image
+              style={{ width: wp("8%"), height: wp("5%") }}
+              source={require("../../assets/america.png")}
+            />
+            <View
+              style={{
+                justifyContent: "center",
+                alignContent: "center",
+                paddingLeft: 5,
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={17}
+                col="#5C5C5C"
+                text={"+1"}
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.refs.coModal.close()}>
+            <LatoText
+              fontName="Lato-Regular"
+              fonSiz={15}
+              col="#B50000"
+              txtAlign={"center"}
+              text={"close"}
+            />
+          </TouchableOpacity>
+        </Modal>
         <Modal
           style={[styles.modal, styles.modal3]}
           position={"center"}
@@ -292,7 +403,8 @@ export default class SignUp1 extends React.Component {
                   text={"Phone Number"}
                 />
               </View>
-              <View
+              <TouchableOpacity
+                onPress={() => this.refs.coModal.open()}
                 style={{
                   marginBottom: 10,
                   flexDirection: "row",
@@ -300,43 +412,69 @@ export default class SignUp1 extends React.Component {
                   alignItems: "center",
                 }}
               >
-                <Image
-                  style={{ width: wp("8%") }}
-                  source={require("../../assets/america.png")}
-                />
-                <View
-                  style={{
-                    width: wp("8%"),
-                    justifyContent: "center",
-                    alignContent: "center",
-                    paddingLeft: 5,
-                  }}
-                >
-                  <LatoText
-                    fontName="Lato-Regular"
-                    fonSiz={17}
-                    col="#5C5C5C"
-                    text={"+1"}
-                  />
-                </View>
+                {this.state.selectedCountry == "USA" ? (
+                  <>
+                    <Image
+                      style={{ width: wp("8%") }}
+                      source={require("../../assets/america.png")}
+                    />
+                    <View
+                      style={{
+                        minWidth: wp("12%"),
+                        justifyContent: "center",
+                        alignContent: "center",
+                        paddingLeft: 5,
+                      }}
+                    >
+                      <LatoText
+                        fontName="Lato-Regular"
+                        fonSiz={17}
+                        col="#5C5C5C"
+                        text={"+1"}
+                      />
+                    </View>
+                  </>
+                ) : (
+                  <>
+                    <Image
+                      style={{ width: wp("8%"), height: wp("5%") }}
+                      source={require("../../assets/pak.png")}
+                    />
+                    <View
+                      style={{
+                        minWidth: wp("12%"),
+                        justifyContent: "center",
+                        alignContent: "center",
+                        paddingLeft: 5,
+                      }}
+                    >
+                      <LatoText
+                        fontName="Lato-Regular"
+                        fonSiz={17}
+                        col="#5C5C5C"
+                        text={"+92"}
+                      />
+                    </View>
+                  </>
+                )}
+
                 <TextInput
                   placeholder={"(555) 555-5678"}
                   keyboardType={"numeric"}
                   onChangeText={(mobile) =>
-                    mobile.length < 10 ?
-                    this.setState({
-                      mobile,
-                    }) :
-                    this.setState({
-                      mobile,
-                      verifi:true
-                    })
+                    mobile.length < 10
+                      ? this.setState({
+                          mobile,
+                        })
+                      : this.setState({
+                          mobile,
+                          verifi: true,
+                        })
                   }
                   value={this.state.mobile}
                   style={[textIn.input, { width: wp("64%") }]}
                 />
-              </View>
-
+              </TouchableOpacity>
               <View
                 style={{
                   justifyContent: "flex-end",
@@ -350,8 +488,7 @@ export default class SignUp1 extends React.Component {
                     col="#2AA034"
                     text={"Verified"}
                   />
-                ) : (
-                  this.state.verifi ?
+                ) : this.state.verifi ? (
                   <TouchableOpacity
                     style={{
                       paddingHorizontal: 20,
@@ -378,14 +515,13 @@ export default class SignUp1 extends React.Component {
                       axios
                         .get(
                           "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
-                            "+" +
-                            this.state.mobile +
+                            mainNumber +
                             "/" +
                             num
                         )
                         .then((resp) => this.refs.modal3.open())
                         .catch((err) => console.log(err));
-                    }} 
+                    }}
                   >
                     <LatoText
                       fontName="Lato-Regular"
@@ -393,27 +529,27 @@ export default class SignUp1 extends React.Component {
                       col="#5c5c5c"
                       text={"Verify"}
                     />
-                  </TouchableOpacity> :
-                   <TouchableOpacity
-                   style={{
-                     paddingHorizontal: 20,
-                     paddingVertical: 10,
-                     borderColor: "#c9c9c9",
-                     borderWidth: 1,
-                     borderRadius: 5,
-                   }}
-
-                   onPress={async () => {alert('Please enter correct number')}}
-
-
-                 >
-                   <LatoText
-                     fontName="Lato-Regular"
-                     fonSiz={17}
-                     col="#c9c9c9"
-                     text={"Verify"}
-                   />
-                 </TouchableOpacity>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={{
+                      paddingHorizontal: 20,
+                      paddingVertical: 10,
+                      borderColor: "#c9c9c9",
+                      borderWidth: 1,
+                      borderRadius: 5,
+                    }}
+                    onPress={async () => {
+                      alert("Please enter correct number");
+                    }}
+                  >
+                    <LatoText
+                      fontName="Lato-Regular"
+                      fonSiz={17}
+                      col="#c9c9c9"
+                      text={"Verify"}
+                    />
+                  </TouchableOpacity>
                 )}
               </View>
               <View>

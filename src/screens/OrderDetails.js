@@ -43,9 +43,8 @@ class OrderDetails extends Component {
   }
 
   componentDidMount() {
-
-      this._unsubscribe = this.props.navigation.addListener('focus', () => {
-        const ref = firebase
+    this._unsubscribe = this.props.navigation.addListener("focus", () => {
+      const ref = firebase
         .storage()
         .ref("/store_logos/" + this.props.route.params.order.storeId + ".jpg");
       ref
@@ -54,12 +53,12 @@ class OrderDetails extends Component {
           this.setState({ image: url });
         })
         .catch((err) => console.log(err));
-      });
-    }
-    componentWillUnmount() {
-      this._unsubscribe();
-    }
-  
+    });
+  }
+  componentWillUnmount() {
+    this._unsubscribe();
+  }
+
   _onLayoutDidChange = (e) => {
     const layout = e.nativeEvent.layout;
     this.setState({ size: { width: layout.width, height: layout.height } });
@@ -91,6 +90,17 @@ class OrderDetails extends Component {
 
     return "" + month_names[parseInt(date[1])] + " " + date[0] + "," + date[2];
   }
+  makeCall = () => {
+    let phoneNumber = "";
+
+    if (Platform.OS === "android") {
+      phoneNumber = `tel:${this.props.route.params.order.storePhone}`;
+    } else {
+      phoneNumber = `telprompt:${this.props.route.params.order.storePhone}`;
+    }
+
+    Linking.openURL(phoneNumber);
+  };
   render() {
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
@@ -120,7 +130,10 @@ class OrderDetails extends Component {
               fontName="Lato-Regular"
               fonSiz={20}
               col="#2E2E2E"
-              text={"Order# " + this.props.route.params.order.orderNumber.toUpperCase()}
+              text={
+                "Order# " +
+                this.props.route.params.order.orderNumber.toUpperCase()
+              }
             ></LatoText>
             {this.state.showNum ? (
               <TouchableOpacity
@@ -222,7 +235,7 @@ class OrderDetails extends Component {
                 />
               </View>
 
-              <TouchableOpacity>
+              <TouchableOpacity onPress={this.makeCall}>
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={17}
@@ -368,7 +381,13 @@ class OrderDetails extends Component {
             }}
           >
             {this.props.route.params.order.products.map((item, ind) => (
-              <View style={{ display: "flex", flexDirection: "row" , marginBottom: 5}}>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginBottom: 5,
+                }}
+              >
                 <View style={{ width: "55%" }}>
                   <LatoText
                     fontName="Lato-Regular"
