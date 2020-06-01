@@ -8,7 +8,7 @@ import { View, Image, Text } from "react-native";
 import LatoText from "../Helpers/LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { bindActionCreators } from "redux";
-import { cartAsync, userAsync } from "../store/actions";
+import { cartAsync, userAsync,cartSizeAsync,favStoreAsync,storeHeaderAsync,storeAsync } from "../store/actions";
 import { connect } from "react-redux";
 import firebase from "firebase";
 import AsyncStorage from "@react-native-community/async-storage";
@@ -108,6 +108,12 @@ class CustomDrawerContent extends Component {
           onPress={() => {
             AsyncStorage.removeItem('user')
             AsyncStorage.removeItem('userLocation')
+                this.props.cartAsync([])
+                this.props.storeAsync('')
+                this.props.cartSizeAsync(0)
+                this.props.storeHeaderAsync('')
+                this.props.favStoreAsync('')
+                this.props.storeHeaderAsync('')
                 this.props.userAsync("");
                 this.props.navigation.navigate("Login");
               
@@ -142,6 +148,10 @@ const mapDispatchToProps = (dispatch, ownProps) =>
     {
       cartAsync,
       userAsync,
+      storeAsync,
+      cartSizeAsync,
+      favStoreAsync,
+      storeHeaderAsync
     },
     dispatch
   );
