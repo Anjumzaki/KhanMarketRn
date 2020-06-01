@@ -68,7 +68,7 @@ class Cart extends Component {
       numVerified: false,
       codeMsg: false,
       on: "",
-      isDisabled: false
+      isDisabled: false,
     };
   }
 
@@ -87,16 +87,15 @@ class Cart extends Component {
   getTimings(day) {
     axios
       .get(
-        "https://lit-peak-13067.herokuapp.com/get/store/" +
-          this.props.store.id
+        "https://lit-peak-13067.herokuapp.com/get/store/" + this.props.store.id
       )
       .then((resp) => {
-        // 
+        //
         var ishalf = false;
         for (var i = 0; i < resp.data.storeTimings.length; i++) {
-          // 
+          //
           if (resp.data.storeTimings[i].day.substring(0, 3) === day) {
-            // 
+            //
             if (resp.data.storeTimings[i].openTime.includes("30")) {
               ishalf = true;
             }
@@ -112,7 +111,7 @@ class Cart extends Component {
             } else {
               eu = "AM";
             }
-            // 
+            //
             var st = resp.data.storeTimings[i].openTime.substring(0, 2);
             var et = resp.data.storeTimings[i].ClosingTime.substring(0, 2);
             if (ishalf) {
@@ -173,10 +172,9 @@ class Cart extends Component {
             });
           }
         }
-        // 
+        //
       })
-      .catch((err) => 
-      console.log(err));
+      .catch((err) => console.log(err));
   }
 
   _onLayoutDidChange = (e) => {
@@ -190,24 +188,20 @@ class Cart extends Component {
       this.setState({ qt: preNum });
     }
   }
-  onClose() {
-    
-  }
+  onClose() {}
 
-  onOpen() {
-    
-  }
+  onOpen() {}
 
   getDayName(dateStr) {
-    // 
+    //
     var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     var tes = dateStr.replace("-", "/");
     var tes = tes.replace("-", "/");
     var dt = tes.split("/");
     var rt = dt[1] + "/" + dt[0] + "/" + dt[2];
-    // 
+    //
     // // var tes = "05/23/2014";
-    // 
+    //
 
     return days[new Date(rt).getDay()];
   }
@@ -221,24 +215,17 @@ class Cart extends Component {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
 
-    
-
     axios
       .get("https://lit-peak-13067.herokuapp.com/get/order/bynumber/" + result)
       .then((resp) => {
-        
         if (resp.data === null) {
-          
         } else {
-          
           this.makeid(6);
         }
       })
-      .then((err) => 
-      console.log(err));
+      .then((err) => console.log(err));
 
     if (result) {
-      
       return result;
     }
 
@@ -246,10 +233,10 @@ class Cart extends Component {
   }
   //  ejIEyo
   render() {
-    console.log("SD",this.props.user.user)
+    console.log("SD", this.props.user.user);
     var codeId = this.makeid(6);
-    
-    // 
+
+    //
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
     } else {
@@ -273,7 +260,7 @@ class Cart extends Component {
     if (month1 < 10) {
       month1 = "0" + month1;
     }
-    // 
+    //
     var todaysDate = day + "-" + month1 + "-" + year;
     var dates = [];
 
@@ -293,7 +280,7 @@ class Cart extends Component {
       dates.push(day + "-" + month + "-" + year);
     }
 
-    // 
+    //
     var nameCheck = false;
     if (!this.props.user.user.isGuest) {
       nameCheck = true;
@@ -302,7 +289,7 @@ class Cart extends Component {
     if (this.state.name || this.props.user.user.name) {
       nameCheck = true;
     }
-    // 
+    //
 
     var storeProducts = this.props.cart.filter((item, index) => {
       return item.product.storeId === this.props.store.id;
@@ -324,8 +311,6 @@ class Cart extends Component {
       "Dec",
     ];
 
-
-    
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <Modal
@@ -419,7 +404,10 @@ class Cart extends Component {
               marginBottom: 20,
             }}
           >
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+            >
               {dates.map((index, item) => (
                 <TouchableOpacity
                   onPress={() => {
@@ -658,7 +646,6 @@ class Cart extends Component {
                     nameCheck = true;
                   }
 
-                  
                   axios
                     .put(
                       "https://lit-peak-13067.herokuapp.com/api/users/guest/edit/" +
@@ -670,11 +657,9 @@ class Cart extends Component {
                       }
                     )
                     .then((resp) => {
-                      
                       this.refs.modal4.close();
                     })
-                    .catch((err) => 
-                    console.log(err));
+                    .catch((err) => console.log(err));
 
                   // this.refs.modal4.close()
                 }}
@@ -779,55 +764,41 @@ class Cart extends Component {
               }}
             >
               <LatoText
+                fontName="Lato-Bold"
+                fonSiz={18}
+                col={"#2E2E2E"}
+                txtAlign={"center"}
+                text={
+                  this.state.orderDate
+                    ? days[this.state.date]
+                    : new Date().toDateString().substring(0, 3)
+                }
+              />
+              <Text>
+                  {' '}
+              </Text>
+              <LatoText
                 fontName="Lato-Regular"
                 fonSiz={17}
                 col={"#2E2E2E"}
                 txtAlign={"center"}
-                // text={
-                //   (months[
-                //     parseInt(this.state.orderDate.substring(3, 4)) - 1
-                //   ] === undefined
-                //     ? new Date().toDateString().substring(0, 15)
-                //     : months[
-                //         parseInt(this.state.orderDate.substring(3, 4)) - 1
-                //       ]) 
-                //   // " " +
-                //   // this.state.orderDate.substring(0, 2)
-                // }
-                text={
-                  this.state.orderDate ? (
-                    days[this.state.date] + " "+  months[ parseInt(this.state.orderDate.substring(3, 5)) - 1]
-                    + " "+ this.state.orderDate.substring(0, 2)+ " "+ this.state.orderDate.substring(6, 10)
-
-                  ) : (
-                    new Date().toDateString().substring(0, 15)
-                  )
-                }
-                    // ? 
-                    // : months[
-                    //     parseInt(this.state.orderDate.substring(3, 4)) - 1
-                    //   ]) 
-                  // " " +
-                  // this.state.orderDate.substring(0, 2)
                 
+                text={
+                  this.state.orderDate
+                    ? days[this.state.date] +
+                      " " +
+                      months[
+                        parseInt(this.state.orderDate.substring(3, 5)) - 1
+                      ] +
+                      " " +
+                      this.state.orderDate.substring(0, 2) +
+                      " " +
+                      this.state.orderDate.substring(6, 10)
+                    : new Date().toDateString().substring(3, 15)
+                }
+               
               />
-              {/* {this.state.storeTimings.isClosed ? (
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={17}
-                  col={"#2E2E2E"}
-                  txtAlign={"center"}
-                  text={"   "}
-                />
-              ) : (
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={17}
-                  col={"#2E2E2E"}
-                  txtAlign={"center"}
-                  text={" " + days[this.state.date]}
-                />
-              )} */}
+              
               {this.state.storeTimings.isClosed ? (
                 <LatoText
                   fontName="Lato-Regular"
@@ -835,7 +806,7 @@ class Cart extends Component {
                   col={"#2E2E2E"}
                   txtAlign={"center"}
                   text={"    Store Closed"}
-                />   
+                />
               ) : (
                 <LatoText
                   fontName="Lato-Regular"
@@ -934,9 +905,7 @@ class Cart extends Component {
               fonSiz={17}
               col="#2E2E2E"
               text={
-                (this.props.user.user.mobile ? "+" : "")
-                 
-                +
+                (this.props.user.user.mobile ? "+" : "") +
                 (this.props.user.user.mobile
                   ? this.props.user.user.mobile
                   : this.state.mobile)
@@ -985,14 +954,14 @@ class Cart extends Component {
                   var num = Math.floor(100000 + Math.random() * 900000);
                   await this.setState({ num: num.toString() });
                   this.forceUpdate();
-                  var numV 
-                  if(this.props.user.user.mobile){
-                    numV = this.props.user.user.mobile
-                  }else{
-                    numV = this.state.mobile
+                  var numV;
+                  if (this.props.user.user.mobile) {
+                    numV = this.props.user.user.mobile;
+                  } else {
+                    numV = this.state.mobile;
                   }
 
-                  console.log("numv",numV)
+                  console.log("numv", numV);
                   axios
                     .get(
                       "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
@@ -1002,11 +971,10 @@ class Cart extends Component {
                         num
                     )
                     .then((resp) => {
-                      console.log(resp)
+                      console.log(resp);
                       this.refs.modal6.open();
                     })
-                    .catch((err) => 
-                    console.log("sdf", err));
+                    .catch((err) => console.log("sdf", err));
                 }}
                 style={[btnStyles.cartBtnOutline, { width: "35%" }]}
               >
@@ -1186,37 +1154,34 @@ class Cart extends Component {
             onPress={() => {
               this.setState({ cart: true });
               axios
-                .post(
-                  "https://lit-peak-13067.herokuapp.com/add/order",
-                  {
-                    storeId: sId,
-                    products: storeProducts,
-                    totalAmount: subTotal,
-                    storeName: this.props.store.name,
-                    storeAddress: this.props.store.address,
-                    storePhone: this.props.store.phone,
-                    userId: this.props.user.user._id,
-                    name: this.state.name
-                      ? this.state.name
-                      : this.props.user.user.name,
-                    phone: this.state.mobile
-                      ? this.state.mobile
-                      : this.props.user.user.mobile,
-                    email: this.state.email
-                      ? this.state.email
-                      : this.props.user.user.email,
-                    // address: "bac Street",
-                    orderTime: this.state.orderTime,
-                    orderDate:
-                      this.state.orderDate === ""
-                        ? todaysDate
-                        : this.state.orderDate,
-                    // orderTimeZone: "UST",
-                    tax: (parseFloat(this.state.tax) / 100) * subTotal,
-                    orderNumber: codeId,
-                    isGuest: this.props.user.user.isGuest,
-                  }
-                )
+                .post("https://lit-peak-13067.herokuapp.com/add/order", {
+                  storeId: sId,
+                  products: storeProducts,
+                  totalAmount: subTotal,
+                  storeName: this.props.store.name,
+                  storeAddress: this.props.store.address,
+                  storePhone: this.props.store.phone,
+                  userId: this.props.user.user._id,
+                  name: this.state.name
+                    ? this.state.name
+                    : this.props.user.user.name,
+                  phone: this.state.mobile
+                    ? this.state.mobile
+                    : this.props.user.user.mobile,
+                  email: this.state.email
+                    ? this.state.email
+                    : this.props.user.user.email,
+                  // address: "bac Street",
+                  orderTime: this.state.orderTime,
+                  orderDate:
+                    this.state.orderDate === ""
+                      ? todaysDate
+                      : this.state.orderDate,
+                  // orderTimeZone: "UST",
+                  tax: (parseFloat(this.state.tax) / 100) * subTotal,
+                  orderNumber: codeId,
+                  isGuest: this.props.user.user.isGuest,
+                })
                 .then((resp) => {
                   this.props.navigation.navigate("QrCode", {
                     orderId: resp.data.order1._id,
@@ -1317,7 +1282,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#2E2E2E",
     paddingVertical: 5,
-    marginRight:10,
+    marginRight: 10,
   },
   dSelect: {
     width: 60,
@@ -1326,8 +1291,7 @@ const styles = StyleSheet.create({
     borderColor: "#2E2E2E",
     paddingVertical: 5,
     backgroundColor: "#2E2E2E",
-    marginRight:10,
-
+    marginRight: 10,
   },
   tSelect: {
     width: Dimensions.get("window").width / 2,
