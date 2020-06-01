@@ -134,7 +134,7 @@ class SingleStoreHeader extends React.Component {
     );
   }
 }
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ 
   textI: {
     width: "100%",
     paddingLeft: 5,
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  store: state.Store.storeData, 
+  store: state.storeHeader.storeData1, 
   cartData: state.Cart.cartData, 
   loading: state.Store.storeLoading,
   error: state.Store.storeError,

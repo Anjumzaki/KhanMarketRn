@@ -9,6 +9,7 @@ import Filter from './Filter';
 import Search from './Search';
 import Search1 from './Search1';
 import favStore from './favStore';
+import storeHeader from './storeHeader';
 
 
 
@@ -22,5 +23,6 @@ export default combineReducers({
     Filter,
     Search,
     Search1,
-    favStore
+    favStore,
+    storeHeader
 })

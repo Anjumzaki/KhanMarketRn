@@ -7,7 +7,8 @@ import {
   Image,
   StyleSheet,
   LinearGradient,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from "react-native";
 import Carousel from "react-native-looped-carousel";
 import { AntDesign } from "@expo/vector-icons";
@@ -21,7 +22,7 @@ const { width } = Dimensions.get("window");
 const { height } = 300;
 import firebase from "firebase";
 import { bindActionCreators } from "redux";
-import { cartAsync, cartSizeAsync } from "../store/actions";
+import { cartAsync, cartSizeAsync,storeAsync, favStoreAsync } from "../store/actions";
 import { connect } from "react-redux";
 import axios from "axios";
 
@@ -259,6 +260,7 @@ class ProductDetails extends Component {
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={17}
+                  lineThrough="line-through"
                   col="#89898C"
                   text={`$${product.price} / lb `}
                 />
@@ -303,12 +305,92 @@ class ProductDetails extends Component {
           </View>
           <TouchableOpacity
             onPress={() => {
-              var pCart=this.props.cart;
-              pCart.push({
-                product: product, 
-                quantity: this.state.qt
-              })
-              this.props.cartAsync(pCart)
+              // var pCart=this.props.cart;
+              // pCart.push({
+              //   product: product, 
+              //   quantity: this.state.qt
+              // })
+              // this.props.cartAsync(pCart)
+
+              if (this.props.cart.length === 0) {
+                var pCart = this.props.cart;
+                pCart.push({
+                  product: product,
+                  quantity: this.state.qt,
+                });
+                this.props.storeAsync({
+                    name: this.props.storeHeader.name,
+                    address: this.props.storeHeader.address,
+                    id: this.props.storeHeader.id,
+                    phone: this.props.storeHeader.phone,
+                  });
+                this.props.favStoreAsync(
+                  product.storeId
+                );
+                this.props.cartAsync(pCart);
+                this.setState({ cart: true });
+
+              } else {
+                if (this.props.store.id === product.storeId) {
+                  var pCart = this.props.cart;
+                  pCart.push({
+                    product: product,
+                    quantity: this.state.qt,
+                  });
+                  this.props.storeAsync({
+                    name: this.props.storeHeader.name,
+                    address: this.props.storeHeader.address,
+                    id: this.props.storeHeader.id,
+                    phone: this.props.storeHeader.phone,
+                  });
+                  this.props.favStoreAsync(
+                    product.storeId
+                  );
+                  this.props.cartAsync(pCart);
+                  this.setState({ cart: true });
+                } else {
+                  this.setState(
+                    { temp: product.storeId },
+                    () => {
+                      Alert.alert(
+                        "Alert!",
+                        "You are changing the store, so you will lost your cart items",
+                        [
+                          {
+                            text: "Cancel",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel",
+                          },
+                          {
+                            text: "OK",
+                            onPress: () => {
+                              var pCart = [];
+                              pCart.push({
+                                product: product,
+                                quantity: this.state.qt,
+                              });
+                              this.props.storeAsync({
+                                name: this.props.storeHeader.name,
+                                address: this.props.storeHeader.address,
+                                id: this.props.storeHeader.id,
+                                phone: this.props.storeHeader.phone,
+                              });
+                              this.props.favStoreAsync(
+                                product.storeId
+                              );
+                              this.props.cartAsync(pCart);
+                              this.setState({ cart: true });
+
+                            
+                            },
+                          },
+                        ],
+                        { cancelable: true }
+                      );
+                    }
+                  );
+                }
+              }
             }}
             style={[btnStyles.cartBtn,{width:'40%'}]}
           >
@@ -376,13 +458,17 @@ const mapStateToProps = state => ({
   error: state.Cart.cartError,
   user: state.user.user,
   store: state.Store.storeData,
-  cartSize: state.CartSize.cartSizeData
+  cartSize: state.CartSize.cartSizeData,
+  storeHeader: state.storeHeader.storeData1, 
+
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
       {
           cartAsync,
-          cartSizeAsync
+          cartSizeAsync,
+          favStoreAsync,
+          storeAsync
       },
       dispatch
   );

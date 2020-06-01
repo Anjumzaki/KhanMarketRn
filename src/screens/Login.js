@@ -157,6 +157,7 @@ class Login extends React.Component {
                       loading: false,
                     });
                   } else {
+                    this.setState({errMessage: false});
                     axios
                       .get(
                         "https://lit-peak-13067.herokuapp.com/get/location/" +
@@ -377,7 +378,7 @@ class Login extends React.Component {
                   fontName="Lato-Regular"
                   fonSiz={17}
                   col="#5C5C5C"
-                  text={this.state.errMessage}
+                  text={this.state.errMessage || ''}
                 />
               </>
             )}
