@@ -21,6 +21,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import * as Font from "expo-font";
 import * as EmailValidator from "email-validator";
+import { CommonActions } from '@react-navigation/native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -451,9 +452,25 @@ class Login extends React.Component {
                               " " +
                               resp1.data[0].country
                           );
-                          this.props.navigation.navigate("App");
+                          this.props.navigation.dispatch(
+                            CommonActions.reset({
+                              index: 0,
+                              routes: [
+                                { name: 'App' },
+                               
+                              ],
+                            })
+                          );
                         } else {
-                          this.props.navigation.navigate("Map");
+                          this.props.navigation.dispatch(
+                            CommonActions.reset({
+                              index: 0,
+                              routes: [
+                                { name: 'Map' },
+                               
+                              ],
+                            })
+                          );
                         }
                       })
                       .catch((err) => console.log(err));

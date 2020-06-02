@@ -1,3 +1,5 @@
+!/.gitignore
+
 # Xcode
 !**/*.xcodeproj
 !**/*.pbxproj
@@ -22,11 +24,8 @@ DerivedData
 project.xcworkspace
 
 # Gradle
-<<<<<<< HEAD
 .gradle
 /android/.gradle
-=======
->>>>>>> 3f47a3134d5cb1fbfba272350669656fa382b0ba
 /build/
 /RNTester/android/app/build/
 /RNTester/android/app/gradle/

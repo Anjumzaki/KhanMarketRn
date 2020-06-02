@@ -147,7 +147,7 @@ class Map extends React.Component {
                     }
                   )
                   .then((resp1) => {
-                    this.props.navigation.push("App", {
+                    this.props.navigation.replace("App", {
                       location: this.state.location,
                     });
                   })
