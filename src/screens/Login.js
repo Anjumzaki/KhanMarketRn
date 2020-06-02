@@ -224,7 +224,7 @@ class Login extends React.Component {
                   axios
                     .get(
                       "https://lit-peak-13067.herokuapp.com/api/forgot/password/" +
-                        this.state.email
+                        this.state.email.toLowerCase()
                     )
                     .then((resp) => console.log(resp))
                     .catch((err) => console.log(err)),
@@ -309,10 +309,11 @@ class Login extends React.Component {
                   style={textIn.input}
                   onChangeText={(email) =>
                     this.setState({
-                      email:email.toLowerCase(),
+                      email:email,
                     })
                   }
                   value={this.state.email}
+                  autoCapitalize = 'none'
                   keyboardType="email-address"
                 />
               </View>
@@ -335,6 +336,7 @@ class Login extends React.Component {
                       password,
                     });
                   }}
+                  autoCapitalize = 'none'
                   value={this.state.password}
                 />
                 <Icon

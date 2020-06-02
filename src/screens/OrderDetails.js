@@ -8,6 +8,7 @@ import {
   StyleSheet,
   LinearGradient,
   TouchableOpacity,
+  Linking,
   Alert
 } from "react-native";
 import Carousel from "react-native-looped-carousel";

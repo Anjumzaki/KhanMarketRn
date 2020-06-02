@@ -133,6 +133,7 @@ class SignUp1 extends React.Component {
                     });
                     this.state.user.password = password;
                   }}
+                  autoCapitalize = 'none'
                   value={this.state.password}
                 />
                 <Icon

@@ -188,7 +188,7 @@ class MyOrders extends Component {
                   <TouchableOpacity
                     onPress={() =>
                       this.setState({
-                        activeCollapsed: false,
+                        pastCollapsed: false,
                       })
                     }
                   >
@@ -203,7 +203,7 @@ class MyOrders extends Component {
                   <TouchableOpacity
                     onPress={() =>
                       this.setState({
-                        activeCollapsed: true,
+                        pastCollapsed: true,
                       })
                     }
                   >

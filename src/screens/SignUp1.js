@@ -387,10 +387,11 @@ export default class SignUp1 extends React.Component {
                   style={textIn.input}
                   onChangeText={(email) =>
                     this.setState({
-                      email:email.toLowerCase(),
+                      email:email,
                     })
                   }
                   value={this.state.email}
+                  autoCapitalize = 'none'
                   keyboardType={'email-address'}
                 />
               </View>
@@ -513,7 +514,7 @@ export default class SignUp1 extends React.Component {
                               axios
                               .get(
                                 "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
-                                  this.state.email +
+                                  this.state.email.toLowerCase() +
                                   "/" +
                                   num
                               )
@@ -583,6 +584,7 @@ export default class SignUp1 extends React.Component {
                         zipCode,
                       })
                     }
+                    keyboardType={'number-pad'}
                     value={this.state.zipCode}
                   />
                 </View>
