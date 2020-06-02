@@ -230,7 +230,7 @@ class Login extends React.Component {
                     .catch((err) => console.log(err)),
               }): (
                 {
-                  text: "Okay1",
+                  text: "Okay",
                   onPress: () => console.log("Cancel Pressed"),
                   style: "cancel",
                 }
