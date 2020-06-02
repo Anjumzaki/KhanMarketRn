@@ -141,6 +141,8 @@ class MyOrders extends Component {
                       navigation={this.props.navigation}
                       key={ind}
                       order={item}
+                      type="active"
+
                     />
                   ))}
               </Collapsible>
@@ -223,6 +225,7 @@ class MyOrders extends Component {
                       navigation={this.props.navigation}
                       key={ind}
                       order={item}
+                      type="past"
                     />
                   ))}
               </Collapsible>
