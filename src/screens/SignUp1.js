@@ -91,13 +91,13 @@ export default class SignUp1 extends React.Component {
       },
       () => {
         if (this.state.name) {
-          if (this.state.email) {
-            if (EmailValidator.validate(this.state.email)) {
+          if (this.state.email.trim()) {
+            if (EmailValidator.validate(this.state.email.trim())) {
               if (this.state.mobile) {
                 if (this.state.zipCode) {
                   this.props.navigation.navigate("ChoosePass", {
                     name: this.state.name,
-                    email: this.state.email.toLowerCase(),
+                    email: this.state.email.toLowerCase().trim(),
                     mobile:
                       this.state.selectedCountry == "USA"
                         ? "+1" + this.state.mobile
@@ -390,7 +390,7 @@ export default class SignUp1 extends React.Component {
                       email:email,
                     })
                   }
-                  value={this.state.email}
+                  value={this.state.email.trim()}
                   autoCapitalize = 'none'
                   keyboardType={'email-address'}
                 />
@@ -503,7 +503,7 @@ export default class SignUp1 extends React.Component {
                       var num = Math.floor(100000 + Math.random() * 900000);
                       await this.setState({ num: num.toString() });
                       this.forceUpdate();
-                      axios.get("https://lit-peak-13067.herokuapp.com/get/user/"+this.state.email)
+                      axios.get("https://lit-peak-13067.herokuapp.com/get/user/"+this.state.email.trim())
                       .then(resp => {
                             if(resp.data === null){
                               var cd = "1"
@@ -514,7 +514,7 @@ export default class SignUp1 extends React.Component {
                               axios
                               .get(
                                 "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
-                                  this.state.email.toLowerCase() +
+                                  this.state.email.toLowerCase().trim() +
                                   "/" +
                                   num
                               )

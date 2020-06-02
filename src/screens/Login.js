@@ -130,14 +130,14 @@ class Login extends React.Component {
         loading: true,
       },
       () => {
-        if (this.state.email) {
-          if (EmailValidator.validate(this.state.email)) {
+        if (this.state.email.trim()) {
+          if (EmailValidator.validate(this.state.email.trim())) {
             if (this.state.password) {
               axios
                 .post(
                   "https://lit-peak-13067.herokuapp.com/api/users/signin",
                   {
-                    email: this.state.email.toLowerCase(),
+                    email: this.state.email.toLowerCase().trim(),
                     password: this.state.password,
                   }
                 )
@@ -202,7 +202,7 @@ class Login extends React.Component {
 
   handleForgot () {
     var txt =''
-    if(this.state.email){
+    if(this.state.email.trim()){
       txt = "A password reset link has been sent to your Email. Please check your inbox. Also, don’t forget to check your spam folder"
     }else{
       txt= "Please enter your email first"
@@ -224,7 +224,7 @@ class Login extends React.Component {
                   axios
                     .get(
                       "https://lit-peak-13067.herokuapp.com/api/forgot/password/" +
-                        this.state.email.toLowerCase()
+                        this.state.email.toLowerCase().trim()
                     )
                     .then((resp) => console.log(resp))
                     .catch((err) => console.log(err)),
@@ -312,7 +312,7 @@ class Login extends React.Component {
                       email:email,
                     })
                   }
-                  value={this.state.email}
+                  value={this.state.email.toLowerCase().trim()}
                   autoCapitalize = 'none'
                   keyboardType="email-address"
                 />
