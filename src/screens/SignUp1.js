@@ -100,7 +100,7 @@ export default class SignUp1 extends React.Component {
                     email: this.state.email.toLowerCase(),
                     mobile:
                       this.state.selectedCountry == "USA"
-                        ? "+1"
+                        ? "+1" + this.state.mobile
                         : "+92" + this.state.mobile,
                     zipCode: this.state.zipCode,
                     password: this.state.password,
@@ -387,10 +387,11 @@ export default class SignUp1 extends React.Component {
                   style={textIn.input}
                   onChangeText={(email) =>
                     this.setState({
-                      email,
+                      email:email.toLowerCase(),
                     })
                   }
                   value={this.state.email}
+                  keyboardType={'email-address'}
                 />
               </View>
             </View>
@@ -501,7 +502,6 @@ export default class SignUp1 extends React.Component {
                       var num = Math.floor(100000 + Math.random() * 900000);
                       await this.setState({ num: num.toString() });
                       this.forceUpdate();
-
                       axios.get("https://lit-peak-13067.herokuapp.com/get/user/"+this.state.email)
                       .then(resp => {
                             if(resp.data === null){
