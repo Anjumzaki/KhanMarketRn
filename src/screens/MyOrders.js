@@ -38,7 +38,7 @@ class MyOrders extends Component {
       myOrders: [],
       loading: true,
       activeCollapsed: false,
-      pastCollapsed: false,
+      pastCollapsed: true,
     };
   }
 
