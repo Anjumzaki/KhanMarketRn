@@ -483,6 +483,7 @@ class OrderDetails extends Component {
                       .then((resp) => {
                         this.setState({bd: true})
                         alert("Order Cancelled Successfully.")
+                        this.props.navigation.navigate('MyOrders')
                       })
                       .catch((err) => console.log(err));
                       },
