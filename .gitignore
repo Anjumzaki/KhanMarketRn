@@ -22,7 +22,7 @@ DerivedData
 project.xcworkspace
 
 # Gradle
-/.gradle/
+.gradle
 /build/
 /RNTester/android/app/build/
 /RNTester/android/app/gradle/
