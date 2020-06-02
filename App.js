@@ -35,6 +35,7 @@ import MyOrders from "./src/screens/MyOrders";
 import SignUp1 from "./src/screens/SignUp1"
 import ChoosePass from './src/screens/ChoosePass'
 import OrderDetails from './src/screens/OrderDetails'
+import AboutUs from './src/screens/AboutUs'
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
@@ -296,7 +297,7 @@ const DrawerScreen = () => (
     <Drawer.Screen name="Home" component={HomeStackScreen} />
     <Drawer.Screen name="Favourites" component={FavouritesStackScreen} />
     <Drawer.Screen name="My Orders" component={MyOrderStackScreen} />
-    <Drawer.Screen name="About Us" component={TabsScreen} />
+    <Drawer.Screen name="About Us" component={AboutUs} />
     <Drawer.Screen name="Rate Us" component={TabsScreen} />
     <Drawer.Screen name="Share" component={TabsScreen} />
   </Drawer.Navigator>
