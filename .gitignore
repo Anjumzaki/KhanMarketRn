@@ -23,6 +23,7 @@ project.xcworkspace
 
 # Gradle
 .gradle
+/android/.gradle
 /build/
 /RNTester/android/app/build/
 /RNTester/android/app/gradle/
