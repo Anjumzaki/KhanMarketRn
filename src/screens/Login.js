@@ -309,10 +309,11 @@ class Login extends React.Component {
                   style={textIn.input}
                   onChangeText={(email) =>
                     this.setState({
-                      email,
+                      email:email.toLowerCase(),
                     })
                   }
                   value={this.state.email}
+                  keyboardType="email-address"
                 />
               </View>
             </View>
