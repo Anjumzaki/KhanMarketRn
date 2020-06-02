@@ -69,6 +69,7 @@ class Cart extends Component {
       codeMsg: false,
       on: "",
       isDisabled: false,
+      selectdDay: ''
     };
   }
 
@@ -412,7 +413,7 @@ class Cart extends Component {
                 <TouchableOpacity
                   onPress={() => {
                     this.getTimings(this.getDayName(index));
-                    this.setState({ date: item, orderDate: dates[item] });
+                    this.setState({ date: item, orderDate: dates[item], selectdDay: this.getDayName(index) });
                   }}
                   style={
                     this.state.date == item ? styles.dSelect : styles.dUnSelect
@@ -787,8 +788,9 @@ class Cart extends Component {
                 txtAlign={"center"}
                 text={
                   this.state.orderDate
-                    ? days[this.state.date]
+                    ? this.state.selectdDay
                     : new Date().toDateString().substring(0, 3)
+                  
                 }
               />
               <Text>
@@ -802,11 +804,14 @@ class Cart extends Component {
                 
                 text={
                   this.state.orderDate
-                    ? days[this.state.date] +
-                      " " +
+                    ? 
+                    // days[this.state.date]
+                    //  +
+                    //   " " +
                       months[
                         parseInt(this.state.orderDate.substring(3, 5)) - 1
-                      ] +
+                      ] 
+                      +
                       " " +
                       this.state.orderDate.substring(0, 2) +
                       " " +
@@ -1203,6 +1208,7 @@ class Cart extends Component {
                   this.props.navigation.navigate("QrCode", {
                     orderId: resp.data.order1._id,
                     codeId: codeId,
+                    order: resp.data.order1
                   });
                 });
             }}

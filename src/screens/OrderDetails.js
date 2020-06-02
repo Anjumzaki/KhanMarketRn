@@ -500,7 +500,7 @@ class OrderDetails extends Component {
             <LatoText
               fontName="Lato-Bold"
               fonSiz={17}
-              col="#2E2E2E"
+              col={this.props.route.params.order.isRejected || this.state.bd || this.props.route.params.order.isPicked ? "#808080" : "#2E2E2E"}
               text="Cancel Order"
             />
           </TouchableOpacity>
