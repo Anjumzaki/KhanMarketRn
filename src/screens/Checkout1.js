@@ -69,7 +69,8 @@ class Cart extends Component {
       codeMsg: false,
       on: "",
       isDisabled: false,
-      selectdDay: ''
+      selectdDay: '',
+      isStoreClosed: false
     };
   }
 
@@ -95,8 +96,13 @@ class Cart extends Component {
         var ishalf = false;
         for (var i = 0; i < resp.data.storeTimings.length; i++) {
           //
+          
           if (resp.data.storeTimings[i].day.substring(0, 3) === day) {
             //
+            var temp ={}
+            if(resp.data.storeTimings[i].isClosed === true){
+                temp = {}
+            }else{
             if (resp.data.storeTimings[i].openTime.includes("30")) {
               ishalf = true;
             }
@@ -160,17 +166,34 @@ class Cart extends Component {
                 break;
               }
             }
+            temp = resp.data.storeTimings[i]
+            }
 
-            this.setState({
-              storeTimings: resp.data.storeTimings[i],
-              start: resp.data.storeTimings[i].openTime.substring(0, 2),
-              end: resp.data.storeTimings[i].ClosingTime.substring(0, 2),
-              startUnit: su,
-              endUnit: eu,
-              timeArray: arr,
-              orderTime: arr[0],
-              tax: resp.data.tax,
-            });
+            if(resp.data.storeTimings[i].isClosed){
+              this.setState({
+                storeTimings: "",
+                start: '',
+                end: '',
+                startUnit: '',
+                endUnit: '',
+                timeArray: ["Store Closed"],
+                orderTime: '',
+                tax: resp.data.tax,
+                isStoreClosed: true
+              });
+            }else{
+              this.setState({
+                storeTimings: resp.data.storeTimings[i],
+                start: resp.data.storeTimings[i].openTime.substring(0, 2),
+                end: resp.data.storeTimings[i].ClosingTime.substring(0, 2),
+                startUnit: su,
+                endUnit: eu,
+                timeArray: arr,
+                orderTime: arr[0],
+                tax: resp.data.tax,
+              });
+            }
+           
           }
         }
         //
@@ -234,7 +257,7 @@ class Cart extends Component {
   }
   //  ejIEyo
   render() {
-    console.log("SD", this.props.user);
+    console.log("SD", this.state, this.props.user);
     var codeId = this.makeid(6);
 
     //
@@ -821,7 +844,7 @@ class Cart extends Component {
                
               />
               
-              {this.state.storeTimings.isClosed ? (
+              {this.state.isStoreClosed ? (
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={15}
@@ -1171,7 +1194,8 @@ class Cart extends Component {
             disabled={
               this.state.storeTimings.isClosed ||
               !nameCheck ||
-              !this.state.numVerified
+              !this.state.numVerified ||
+              this.state.isStoreClosed
             }
             onPress={() => {
               this.setState({ cart: true });
