@@ -238,7 +238,20 @@ class Login extends React.Component {
             ],
             { cancelable: true }
           );
-          
+    // }{
+    //   Alert.alert(
+    //     "Reset Password",
+    //     "Please enter your email first",
+    //     [
+    //       {
+    //         text: "Okay",
+    //         onPress: () => console.log("Cancel Pressed"),
+    //         style: "cancel",
+    //       }
+    //     ],
+    //     { cancelable: true }
+    //   );
+    // }
   };
   render() {
     const { icEye, isPassword } = this.state;
