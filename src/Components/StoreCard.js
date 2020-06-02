@@ -13,7 +13,7 @@ import LatoText from "../Helpers/LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import firebase from "firebase";
 import { bindActionCreators } from "redux";
-import { storeAsync, cartAsync, cartSizeAsync } from "../store/actions";
+import { storeAsync, cartAsync, cartSizeAsync,favStoreAsync,storeHeaderAsync } from "../store/actions";
 import { connect } from "react-redux";
 import Modal from "react-native-modalbox";
 
@@ -41,60 +41,81 @@ class StoreCard extends React.Component {
     return (
       <TouchableOpacity
         onPress={() => {
-          if (this.props.cart.length === 0) {
-            this.props.storeAsync({
-              name: name,
-              address: address,
-              id: id,
-              phone: phone,
-            });
-            this.props.navigation.push("StoreDetails", {
-              storeId: id,
-            });
-          } else {
-            if (this.props.store.name === name) {
-              this.props.storeAsync({
+          // if (this.props.cart.length === 0) {
+          //   this.props.storeAsync({
+          //     name: name,
+          //     address: address,
+          //     id: id,
+          //     phone: phone,
+          //   });
+          //   this.props.navigation.push("StoreDetails", {
+          //     storeId: id,
+          //   });
+          //   this.props.favStoreAsync(
+          //     id
+          //   );
+          // } else {
+          //   if (this.props.store.name === name) {
+          //     this.props.storeAsync({
+          //       name: name,
+          //       address: address,
+          //       id: id,
+          //       phone: phone,
+          //     });
+          //     this.props.navigation.push("StoreDetails", {
+          //       storeId: id,
+          //     });
+          //     this.props.favStoreAsync(
+          //       id
+          //     );
+          //   } else {
+          //     // alert("change store"/)
+          //     Alert.alert(
+          //       "Alert!",
+          //       "You are changing the store, so you will lost your cart items",
+          //       [
+          //         {
+          //           text: "Cancel",
+          //           onPress: () => console.log("Cancel Pressed"),
+          //           style: "cancel",
+          //         },
+          //         {
+          //           text: "OK",
+          //           onPress: () => {
+          //             this.props.cartAsync([]);
+          //             this.props.favStoreAsync(
+          //               ''
+          //             );
+          //             this.props.storeAsync({
+          //               name: name,
+          //               address: address,
+          //               id: id,
+          //               phone: phone,
+          //             });
+          //             this.props.cartSizeAsync(0);
+
+          //             this.props.navigation.push("StoreDetails", {
+          //               storeId: id,
+          //             });
+          //           },
+          //         },
+          //       ],
+          //       { cancelable: false }
+          //     );
+          //   }
+          // }
+          this.props.storeHeaderAsync({
                 name: name,
                 address: address,
                 id: id,
                 phone: phone,
-              });
-              this.props.navigation.push("StoreDetails", {
-                storeId: id,
-              });
-            } else {
-              // alert("change store"/)
-              Alert.alert(
-                "Alert!",
-                "You are changing the store, so you will lost your cart items",
-                [
-                  {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  {
-                    text: "OK",
-                    onPress: () => {
-                      this.props.cartAsync([]);
-                      this.props.storeAsync({
-                        name: name,
-                        address: address,
-                        id: id,
-                        phone: phone,
-                      });
-                      this.props.cartSizeAsync(0);
-
-                      this.props.navigation.push("StoreDetails", {
-                        storeId: id,
-                      });
-                    },
-                  },
-                ],
-                { cancelable: false }
-              );
-            }
-          }
+          })
+          this.props.navigation.push("StoreDetails", {
+            storeId: id,
+            name: name,
+            address: address,
+            phone: phone,
+          });
         }}
         style={cardStyles.storeCard}
       >
@@ -184,6 +205,8 @@ const mapDispatchToProps = (dispatch, ownProps) =>
       storeAsync,
       cartAsync,
       cartSizeAsync,
+      favStoreAsync,
+      storeHeaderAsync
     },
     dispatch
   );

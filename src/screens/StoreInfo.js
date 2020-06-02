@@ -212,7 +212,7 @@ export default class StoreInfo extends Component {
               fontName="Lato-Regular"
               fonSiz={15}
               col="#5C5C5C"
-              text={this.state.timings.length > 0 && (this.state.timings[6].openTime+ "-"+this.state.timings[6].ClosingTime)}
+              text={this.state.timings.length > 0 && (this.state.timings[6].isClosed ? "Closed" : this.state.timings[6].openTime+ "-"+this.state.timings[6].ClosingTime)}
             />
           </View>
           {/* { this.state.timings.map((item,ind) => { */}
@@ -235,7 +235,7 @@ export default class StoreInfo extends Component {
               fontName="Lato-Regular"
               fonSiz={15}
               col="#5C5C5C"
-              text={this.state.timings.length > 0 && (this.state.timings[0].openTime+ "-"+this.state.timings[0].ClosingTime)}
+              text={this.state.timings.length > 0 && (this.state.timings[0].isClosed ? "Closed" : this.state.timings[0].openTime+ "-"+this.state.timings[0].ClosingTime)}
             />
           </View>
          {/* })}  */}
@@ -258,7 +258,7 @@ export default class StoreInfo extends Component {
               fontName="Lato-Regular"
               fonSiz={15}
               col="#5C5C5C"
-              text={this.state.timings.length > 0 && (this.state.timings[1].openTime+ "-"+this.state.timings[1].ClosingTime)}
+              text={this.state.timings.length > 0 && (this.state.timings[1].isClosed ? "Closed" : this.state.timings[1].openTime+ "-"+this.state.timings[1].ClosingTime)}
             />
           </View>
           <View
@@ -279,7 +279,7 @@ export default class StoreInfo extends Component {
               fontName="Lato-Regular"
               fonSiz={15}
               col="#5C5C5C"
-              text={this.state.timings.length > 0 && (this.state.timings[2].openTime+ "-"+this.state.timings[2].ClosingTime)}
+              text={this.state.timings.length > 0 && (this.state.timings[2].isClosed ? "Closed" : this.state.timings[2].openTime+ "-"+this.state.timings[2].ClosingTime)}
             />
           </View>
           <View
@@ -300,7 +300,7 @@ export default class StoreInfo extends Component {
               fontName="Lato-Regular"
               fonSiz={15}
               col="#5C5C5C"
-              text={this.state.timings.length > 0 && (this.state.timings[3].openTime+ "-"+this.state.timings[3].ClosingTime)}
+              text={this.state.timings.length > 0 && (this.state.timings[3].isClosed ? "Closed" : this.state.timings[3].openTime+ "-"+this.state.timings[3].ClosingTime)}
             />
           </View>
           <View
@@ -321,7 +321,7 @@ export default class StoreInfo extends Component {
               fontName="Lato-Regular"
               fonSiz={15}
               col="#5C5C5C"
-              text={this.state.timings.length > 0 && (this.state.timings[4].openTime+ "-"+this.state.timings[4].ClosingTime)}
+              text={this.state.timings.length > 0 && (this.state.timings[4].isClosed ? "Closed" : this.state.timings[4].openTime+ "-"+this.state.timings[4].ClosingTime)}
             />
           </View>
           <View
@@ -342,7 +342,7 @@ export default class StoreInfo extends Component {
               fontName="Lato-Regular"
               fonSiz={15}
               col="#5C5C5C"
-              text={this.state.timings.length > 0 && (this.state.timings[5].openTime+ "-"+this.state.timings[5].ClosingTime)}
+              text={this.state.timings.length > 0 && (this.state.timings[5].isClosed ? "Closed" : this.state.timings[5].openTime+ "-"+this.state.timings[5].ClosingTime)}
             />
           </View>
           <View style={lines.simple} />

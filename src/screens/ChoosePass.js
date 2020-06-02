@@ -194,7 +194,7 @@ class SignUp1 extends React.Component {
                 fontName="Lato-Regular"
                 fonSiz={17}
                 col="white"
-                text={"Next"}
+                text={"Sign Up"}
               />
             </TouchableOpacity>
           </View>
