@@ -142,7 +142,7 @@ export default class SignUp1 extends React.Component {
   };
   render() {
     var mainNumber =
-      this.state.selectedCountry == "USA" ? "+1" : "+92" + this.state.mobile;
+      this.state.selectedCountry === "USA" ? "+1" + this.state.mobile: "+92" + this.state.mobile;
     console.log(mainNumber);
     const { icEye, isPassword } = this.state;
     return (
@@ -505,6 +505,11 @@ export default class SignUp1 extends React.Component {
                       axios.get("https://lit-peak-13067.herokuapp.com/get/user/"+this.state.email)
                       .then(resp => {
                             if(resp.data === null){
+                              var cd = "1"
+                              if(this.state.selectedCountry == "PAK"){
+                                  cd ="92"
+                              }
+                              console.log("CDDDDDDDDD",cd)
                               axios
                               .get(
                                 "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
@@ -518,13 +523,12 @@ export default class SignUp1 extends React.Component {
                             axios
                               .get(
                                 "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
-                                  "+" +
-                                  this.state.mobile +
+                                mainNumber +
                                   "/" +
                                   num
                               )
                               .then((resp) => this.refs.modal3.open())
-                              .catch((err) => console.log(err));
+                              .catch((err) => console.log("num err",err));
                             }else{
                               this.setState({errMessage: "Email already exist."})
                             }

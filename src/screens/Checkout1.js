@@ -35,7 +35,7 @@ import CheckBox from "react-native-check-box";
 const { width } = Dimensions.get("window");
 const { height } = 300;
 import { bindActionCreators } from "redux";
-import { cartAsync } from "../store/actions";
+import { cartAsync,userAsync } from "../store/actions";
 import { connect } from "react-redux";
 import axios from "axios";
 import timestamp from "time-stamp";
@@ -233,7 +233,7 @@ class Cart extends Component {
   }
   //  ejIEyo
   render() {
-    console.log("SD", this.props.user.user);
+    console.log("SD", this.props.user);
     var codeId = this.makeid(6);
 
     //
@@ -646,17 +646,34 @@ class Cart extends Component {
                     nameCheck = true;
                   }
 
+                  var em = this.props.user.user.email
+                  if(this.state.email){
+                    em=this.state.email
+                  }
+
                   axios
                     .put(
                       "https://lit-peak-13067.herokuapp.com/api/users/guest/edit/" +
                         this.props.user.user._id,
                       {
                         name: this.state.name,
-                        email: this.state.email,
+                        email: em,
                         mobile: this.state.mobile,
                       }
                     )
                     .then((resp) => {
+                      var temp = this.props.user.user
+                      temp.name = this.state.name
+                        temp.email = em
+                    
+                      temp.mobile = this.state.mobile
+
+                      var data = {
+                        token: this.props.user.token,
+                        user: temp
+                      }
+
+                      this.props.userAsync(data)
                       this.refs.modal4.close();
                     })
                     .catch((err) => console.log(err));
@@ -669,7 +686,7 @@ class Cart extends Component {
                   fonSiz={15}
                   col="#B50000"
                   txtAlign={"center"}
-                  text={"Save"}
+                  text={"Sav1e"}
                 />
               </TouchableOpacity>
             </View>
@@ -1327,6 +1344,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
     {
       cartAsync,
+      userAsync
     },
     dispatch
   );
