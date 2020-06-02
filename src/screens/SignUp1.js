@@ -365,26 +365,34 @@ export default class SignUp1 extends React.Component {
                       await this.setState({ num: num.toString() });
                       this.forceUpdate();
 
-                      axios
-                        .get(
-                          "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
-                            this.state.email +
-                            "/" +
-                            num
-                        )
-                        .then((resp) => this.refs.modal3.open())
-                        .catch((err) => console.log(err));
-
-                      axios
-                        .get(
-                          "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
-                            "+" +
-                            this.state.mobile +
-                            "/" +
-                            num
-                        )
-                        .then((resp) => this.refs.modal3.open())
-                        .catch((err) => console.log(err));
+                      axios.get("https://lit-peak-13067.herokuapp.com/get/user/"+this.state.email)
+                      .then(resp => {
+                            if(resp.data === null){
+                              axios
+                              .get(
+                                "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
+                                  this.state.email +
+                                  "/" +
+                                  num
+                              )
+                              .then((resp) => this.refs.modal3.open())
+                              .catch((err) => console.log(err));
+      
+                            axios
+                              .get(
+                                "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
+                                  "+" +
+                                  this.state.mobile +
+                                  "/" +
+                                  num
+                              )
+                              .then((resp) => this.refs.modal3.open())
+                              .catch((err) => console.log(err));
+                            }else{
+                              this.setState({errMessage: "Email already exist."})
+                            }
+                      })
+                     
                     }} 
                   >
                     <LatoText
