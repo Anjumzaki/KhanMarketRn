@@ -30,7 +30,7 @@ class SliderItem extends React.Component {
                 <View style={styles.topRight}>
                     <LatoText fontName="Lato-Bold" fonSiz={16} col='white' text={"You will get "+this.props.data.discount+"% off"} />
                     <View style={{ marginTop: 5 }}>
-                        <LatoText fontName="Lato-Light" fonSiz={13} col='white' text={"Save $"+(parseFloat(this.props.data.discount/100) * parseFloat(this.props.data.price)).toFixed(2)} />
+                        <LatoText fontName="Lato-Light" fonSiz={13} col='white' text={"$"+(( parseFloat(this.props.data.price)).toFixed(2) -(parseFloat(this.props.data.discount/100) * parseFloat(this.props.data.price)).toFixed(2)) + " (Save $"+(parseFloat(this.props.data.discount/100) * parseFloat(this.props.data.price)).toFixed(2)+")"} />
                     </View>
                 </View>
             </View>
