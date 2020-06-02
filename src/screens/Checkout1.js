@@ -1208,6 +1208,7 @@ class Cart extends Component {
                   this.props.navigation.navigate("QrCode", {
                     orderId: resp.data.order1._id,
                     codeId: codeId,
+                    order: resp.data.order1
                   });
                 });
             }}

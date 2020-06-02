@@ -46,6 +46,7 @@ class Home extends React.Component {
   componentDidMount() {
     Geolocation.getCurrentPosition(
       (info) => {
+        console.log("INFOOOOOOOOOOOOOOOO",info)
         axios
           .get(
             "https://lit-peak-13067.herokuapp.com/get/stores/" +
@@ -61,7 +62,7 @@ class Home extends React.Component {
           });
       },
       (error) => {
-        console.log(error);
+        console.log("loc error0",error);
       },
       { enableHighAccuracy: false, timeout: 20000, maximumAge: 10000 }
     );
