@@ -8,6 +8,7 @@ import {
   StyleSheet,
   LinearGradient,
   TouchableOpacity,
+  Linking
 } from "react-native";
 import Carousel from "react-native-looped-carousel";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
