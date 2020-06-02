@@ -7,7 +7,8 @@ import {
   Image,
   StyleSheet,
   LinearGradient,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from "react-native";
 import Carousel from "react-native-looped-carousel";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -21,7 +22,7 @@ import InQrCode from './InQrCode'
 import { bindActionCreators } from "redux";
 import { cartAsync } from "../store/actions";
 import { connect } from "react-redux";
-
+import axios from 'axios'
 const { width } = Dimensions.get("window");
 const { height } = 300;
 
@@ -154,7 +155,7 @@ class QrCode extends Component {
                       .then((resp) => {
                         // this.setState({bd: true})
                         alert("Order Cancelled Successfully.")
-                        this.props.navigation.navigate('MyOrders')
+                        this.props.navigation.navigate('MyOrderStackScreen')
                       })
                       .catch((err) => console.log(err));
                       },
