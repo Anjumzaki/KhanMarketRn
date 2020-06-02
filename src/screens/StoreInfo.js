@@ -7,7 +7,8 @@ import {
   Image,
   StyleSheet,
   LinearGradient,
-  TouchableOpacity
+  TouchableOpacity,
+  Linking,
 } from "react-native";
 import Carousel from "react-native-looped-carousel";
 import { FontAwesome, Entypo } from "@expo/vector-icons";
@@ -20,7 +21,7 @@ import CheckBox from "react-native-check-box";
 import firebase from "firebase";
 import axios from "axios";
 const { width } = Dimensions.get("window");
-const { height } = 300; 
+const { height } = 300;
 
 export default class StoreInfo extends Component {
   constructor(props) {
@@ -31,11 +32,11 @@ export default class StoreInfo extends Component {
       qt: 1,
       store: "",
       timings: [],
-      image: ''
+      image: "",
     };
   }
 
-  _onLayoutDidChange = e => {
+  _onLayoutDidChange = (e) => {
     const layout = e.nativeEvent.layout;
     this.setState({ size: { width: layout.width, height: layout.height } });
   };
@@ -47,21 +48,40 @@ export default class StoreInfo extends Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     // this.props.route.params.storeId
-    axios.get('https://lit-peak-13067.herokuapp.com/get/store/'+this.props.route.params.storeId)
-    .then(resp => this.setState({store: resp.data, timings: resp.data.storeTimings}))
-    .catch(err => console.log(err))
+    axios
+      .get(
+        "https://lit-peak-13067.herokuapp.com/get/store/" +
+          this.props.route.params.storeId
+      )
+      .then((resp) =>
+        this.setState({ store: resp.data, timings: resp.data.storeTimings })
+      )
+      .catch((err) => console.log(err));
 
     const ref = firebase
-    .storage()
-    .ref("/store_logos/" + this.props.route.params.storeId + ".jpg");
-      ref.getDownloadURL().then(url => {
-      this.setState({ image: url });
-      }).catch(err=>console.log(err)); 
+      .storage()
+      .ref("/store_logos/" + this.props.route.params.storeId + ".jpg");
+    ref
+      .getDownloadURL()
+      .then((url) => {
+        this.setState({ image: url });
+      })
+      .catch((err) => console.log(err));
   }
 
+  makeCall = () => {
+    let phoneNumber = "";
 
+    if (Platform.OS === "android") {
+      phoneNumber = `tel:${this.state.store.phoneNumber}`;
+    } else {
+      phoneNumber = `telprompt:${this.state.store.phoneNumber}`;
+    }
+
+    Linking.openURL(phoneNumber);
+  };
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -71,7 +91,7 @@ export default class StoreInfo extends Component {
               flexDirection: "row",
               paddingHorizontal: 20,
               paddingVertical: 20,
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <LatoText
@@ -87,13 +107,13 @@ export default class StoreInfo extends Component {
               paddingHorizontal: 20,
               paddingBottom: 20,
               paddingTop: 0,
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <Image
               style={{ width: 44, height: 44, marginRight: 10 }}
               // source={require("../../assets/new.png")}
-              source={{uri: this.state.image}}
+              source={{ uri: this.state.image }}
             />
             <View>
               <LatoText
@@ -126,7 +146,7 @@ export default class StoreInfo extends Component {
               paddingHorizontal: 20,
               alignContent: "center",
               alignItems: "center",
-              marginBottom: 20
+              marginBottom: 20,
             }}
           >
             <Entypo
@@ -147,15 +167,15 @@ export default class StoreInfo extends Component {
               flexDirection: "row",
               justifyContent: "space-between",
               paddingHorizontal: 20,
-              paddingBottom:20,
+              paddingBottom: 20,
             }}
           >
             <View
               style={{
                 flexDirection: "row",
-              
+
                 alignContent: "center",
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <FontAwesome
@@ -171,12 +191,14 @@ export default class StoreInfo extends Component {
                 text={this.state.store.phoneNumber}
               />
             </View>
-            <LatoText
+            <TouchableOpacity onPress={this.makeCall}>
+              <LatoText
                 fontName="Lato-Bold"
                 fonSiz={17}
                 col="#5C5C5C"
                 text="Call"
               />
+            </TouchableOpacity>
           </View>
           <View style={lines.simple} />
           <View
@@ -184,7 +206,7 @@ export default class StoreInfo extends Component {
               flexDirection: "row",
               paddingHorizontal: 20,
               paddingVertical: 20,
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <LatoText
@@ -199,7 +221,7 @@ export default class StoreInfo extends Component {
               flexDirection: "row",
               paddingHorizontal: 20,
               paddingVertical: 10,
-              justifyContent: "space-between"
+              justifyContent: "space-between",
             }}
           >
             <LatoText
@@ -208,7 +230,7 @@ export default class StoreInfo extends Component {
               col="#5C5C5C"
               text={this.state.timings.length > 0 && this.state.timings[6].day}
             />
-             <LatoText
+            <LatoText
               fontName="Lato-Regular"
               fonSiz={15}
               col="#5C5C5C"
@@ -216,13 +238,13 @@ export default class StoreInfo extends Component {
             />
           </View>
           {/* { this.state.timings.map((item,ind) => { */}
-            <View
+          <View
             // key={ind}
             style={{
               flexDirection: "row",
               paddingHorizontal: 20,
               paddingVertical: 10,
-              justifyContent: "space-between"
+              justifyContent: "space-between",
             }}
           >
             <LatoText
@@ -238,14 +260,14 @@ export default class StoreInfo extends Component {
               text={this.state.timings.length > 0 && (this.state.timings[0].isClosed ? "Closed" : this.state.timings[0].openTime+ "-"+this.state.timings[0].ClosingTime)}
             />
           </View>
-         {/* })}  */}
-      
+          {/* })}  */}
+
           <View
             style={{
               flexDirection: "row",
               paddingHorizontal: 20,
               paddingVertical: 10,
-              justifyContent: "space-between"
+              justifyContent: "space-between",
             }}
           >
             <LatoText
@@ -254,7 +276,7 @@ export default class StoreInfo extends Component {
               col="#5C5C5C"
               text={this.state.timings.length > 0 && this.state.timings[1].day}
             />
-             <LatoText
+            <LatoText
               fontName="Lato-Regular"
               fonSiz={15}
               col="#5C5C5C"
@@ -266,7 +288,7 @@ export default class StoreInfo extends Component {
               flexDirection: "row",
               paddingHorizontal: 20,
               paddingVertical: 10,
-              justifyContent: "space-between"
+              justifyContent: "space-between",
             }}
           >
             <LatoText
@@ -275,7 +297,7 @@ export default class StoreInfo extends Component {
               col="#5C5C5C"
               text={this.state.timings.length > 0 && this.state.timings[2].day}
             />
-             <LatoText
+            <LatoText
               fontName="Lato-Regular"
               fonSiz={15}
               col="#5C5C5C"
@@ -287,7 +309,7 @@ export default class StoreInfo extends Component {
               flexDirection: "row",
               paddingHorizontal: 20,
               paddingVertical: 10,
-              justifyContent: "space-between"
+              justifyContent: "space-between",
             }}
           >
             <LatoText
@@ -296,7 +318,7 @@ export default class StoreInfo extends Component {
               col="#5C5C5C"
               text={this.state.timings.length > 0 && this.state.timings[3].day}
             />
-             <LatoText
+            <LatoText
               fontName="Lato-Regular"
               fonSiz={15}
               col="#5C5C5C"
@@ -308,7 +330,7 @@ export default class StoreInfo extends Component {
               flexDirection: "row",
               paddingHorizontal: 20,
               paddingVertical: 10,
-              justifyContent: "space-between"
+              justifyContent: "space-between",
             }}
           >
             <LatoText
@@ -317,7 +339,7 @@ export default class StoreInfo extends Component {
               col="#5C5C5C"
               text={this.state.timings.length > 0 && this.state.timings[4].day}
             />
-             <LatoText
+            <LatoText
               fontName="Lato-Regular"
               fonSiz={15}
               col="#5C5C5C"
@@ -329,7 +351,7 @@ export default class StoreInfo extends Component {
               flexDirection: "row",
               paddingHorizontal: 20,
               paddingVertical: 10,
-              justifyContent: "space-between"
+              justifyContent: "space-between",
             }}
           >
             <LatoText
@@ -338,7 +360,7 @@ export default class StoreInfo extends Component {
               col="#5C5C5C"
               text={this.state.timings.length > 0 && this.state.timings[5].day}
             />
-             <LatoText
+            <LatoText
               fontName="Lato-Regular"
               fonSiz={15}
               col="#5C5C5C"
@@ -347,101 +369,107 @@ export default class StoreInfo extends Component {
           </View>
           <View style={lines.simple} />
           {this.state.store.messageFromStore ? (
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              marginTop:20,
-              alignItems: "center"
-            }}
-          >
-            <LatoText
-              fontName="Lato-Bold"
-              fonSiz={20}
-              col="#2E2E2E"
-              text="Message From Store"
-            ></LatoText>
-          </View>): null}
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                marginTop: 20,
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Bold"
+                fonSiz={20}
+                col="#2E2E2E"
+                text="Message From Store"
+              ></LatoText>
+            </View>
+          ) : null}
           {this.state.store.messageFromStore ? (
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingVertical: 20,
-              alignItems: "center"
-            }}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={17}
-              col="#5C5C5C"
-              text={this.state.store.messageFromStore}
-            ></LatoText>
-          </View>): null}
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingVertical: 20,
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={17}
+                col="#5C5C5C"
+                text={this.state.store.messageFromStore}
+              ></LatoText>
+            </View>
+          ) : null}
           {this.state.store.orderCancellationPolicy ? (
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              marginTop:20,
-              alignItems: "center"
-            }}
-          >
-            <LatoText
-              fontName="Lato-Bold"
-              fonSiz={20}
-              col="#2E2E2E"
-              text="Order cancelation policy "
-            ></LatoText>
-          </View>): null}
-           {this.state.store.orderCancellationPolicy ? (
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingVertical: 20,
-              alignItems: "center"
-            }}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={17}
-              col="#5C5C5C"
-              text={this.state.store.orderCancellationPolicy}
-            ></LatoText>
-          </View>): null}
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                marginTop: 20,
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Bold"
+                fonSiz={20}
+                col="#2E2E2E"
+                text="Order cancelation policy "
+              ></LatoText>
+            </View>
+          ) : null}
+          {this.state.store.orderCancellationPolicy ? (
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingVertical: 20,
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={17}
+                col="#5C5C5C"
+                text={this.state.store.orderCancellationPolicy}
+              ></LatoText>
+            </View>
+          ) : null}
           {this.state.store.termsAndCondition ? (
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              marginTop:20,
-              alignItems: "center"
-            }}
-          >
-            <LatoText
-              fontName="Lato-Bold"
-              fonSiz={20}
-              col="#2E2E2E"
-              text="Terms & conditions"
-            ></LatoText>
-          </View>): null}
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                marginTop: 20,
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Bold"
+                fonSiz={20}
+                col="#2E2E2E"
+                text="Terms & conditions"
+              ></LatoText>
+            </View>
+          ) : null}
           {this.state.store.termsAndCondition ? (
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingVertical: 20,
-              alignItems: "center"
-            }}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={17}
-              col="#5C5C5C"
-              text={this.state.store.termsAndCondition}
-            ></LatoText>
-          </View>): null}
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingVertical: 20,
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={17}
+                col="#5C5C5C"
+                text={this.state.store.termsAndCondition}
+              ></LatoText>
+            </View>
+          ) : null}
         </ScrollView>
       </View>
     );
@@ -452,14 +480,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   imgCon: {
     width: Dimensions.get("window").width,
-    height: 250
+    height: 250,
   },
   topRight: {
-    alignSelf: "flex-end"
+    alignSelf: "flex-end",
   },
   wrapTop: {
     alignSelf: "flex-end",
@@ -469,11 +497,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderTopLeftRadius: 15,
-    borderBottomLeftRadius: 15
+    borderBottomLeftRadius: 15,
   },
   bottomText: {
     height: 200,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   buybBtn: {
     alignSelf: "center",
@@ -484,11 +512,11 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
 
-    elevation: 5
-  }
+    elevation: 5,
+  },
 });
