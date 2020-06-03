@@ -385,15 +385,15 @@ class Settings extends React.Component {
               />
             </View>
           </View>
-          <View style={[lines.simple, { marginVertical: 30 }]} />
-          <View style={{ marginTop: 0 }} />
-          <LatoText
+          {/* <View style={[lines.simple, { marginVertical: 30 }]} /> */}
+          {/* <View style={{ marginTop: 0 }} /> */}
+          {/* <LatoText
             fontName="Lato-Regular"
             fonSiz={25}
             col="#5C5C5C"
             text="General"
-          />
-          <View style={{ marginTop: 20 }} />
+          /> */}
+          {/* <View style={{ marginTop: 20 }} />
           <View
             style={{
               flexDirection: "row",
@@ -417,9 +417,9 @@ class Settings extends React.Component {
               }
               value={this.state.isEnabled}
             />
-          </View>
-          <View style={{ marginTop: 20 }} />
-          <View
+          </View> */}
+          {/* <View style={{ marginTop: 20 }} /> */}
+          {/* <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
@@ -442,8 +442,8 @@ class Settings extends React.Component {
               }
               value={this.state.isEnabled1}
             />
-          </View>
-          <View style={[lines.simple, { marginVertical: 30 }]} />
+          </View> */}
+          {/* <View style={[lines.simple, { marginVertical: 30 }]} />
           <TouchableOpacity>
             <LatoText
               fontName="Lato-Bold"
@@ -451,7 +451,7 @@ class Settings extends React.Component {
               col="black"
               text="Terms & conditions"
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </ScrollView>
       </>
     );
