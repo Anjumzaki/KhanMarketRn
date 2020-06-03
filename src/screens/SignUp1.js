@@ -60,7 +60,9 @@ export default class SignUp1 extends React.Component {
       selectedCountry: "USA",
     };
   }
-
+ isValidUSZip = (sZip) => {
+    return /^\d{5}(-\d{4})?$/.test(sZip);
+ }
   async componentDidMount() {
     await Font.loadAsync({
       "Lato-Light": require("../../assets/fonts/Lato-Light.ttf"),
@@ -90,24 +92,34 @@ export default class SignUp1 extends React.Component {
         loading: true,
       },
       () => {
-        if (this.state.name) {
+        if (this.state.name.trim()) {
           if (this.state.email.trim()) {
             if (EmailValidator.validate(this.state.email.trim())) {
-              if (this.state.mobile) {
-                if (this.state.zipCode) {
-                  this.props.navigation.navigate("ChoosePass", {
-                    name: this.state.name,
-                    email: this.state.email.toLowerCase().trim(),
-                    mobile:
-                      this.state.selectedCountry == "USA"
-                        ? "+1" + this.state.mobile
-                        : "+92" + this.state.mobile,
-                    zipCode: this.state.zipCode,
-                    password: this.state.password,
-                    isGuest: false,
-                    guestId: "",
-                  });
-                } else {
+              if (this.state.mobile.trim()) {
+                if (this.state.zipCode.trim()) {
+                  if( this.isValidUSZip(this.state.zipCode) ){
+                    this.props.navigation.navigate("ChoosePass", {
+                      name: this.state.name,
+                      email: this.state.email.toLowerCase().trim(),
+                      mobile:
+                        this.state.selectedCountry == "USA"
+                          ? "+1" + this.state.mobile
+                          : "+92" + this.state.mobile,
+                      zipCode: this.state.zipCode,
+                      password: this.state.password,
+                      isGuest: false,
+                      guestId: "",
+                    });
+                  } 
+                  else {
+                    this.setState({
+                      errMessage: "Please enter correct USA Zip code",
+                      loading: false,
+                    });
+                  }
+                 
+                }
+                 else {
                   this.setState({
                     errMessage: "Please enter Zip code",
                     loading: false,

@@ -189,7 +189,7 @@ class Settings extends React.Component {
             fontName="Lato-Regular"
             fonSiz={25}
             col="#5C5C5C"
-            text="Profile"
+            text="Account Settings"
           />
           <View style={{ marginTop: 20 }} />
 

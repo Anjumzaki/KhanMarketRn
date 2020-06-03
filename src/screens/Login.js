@@ -21,7 +21,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import * as Font from "expo-font";
 import * as EmailValidator from "email-validator";
-import { CommonActions } from '@react-navigation/native';
+import { CommonActions } from "@react-navigation/native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -48,23 +48,34 @@ class Login extends React.Component {
       email: "",
       password: "",
       msg: "",
+      mainLoading: true,
     };
   }
-  async componentWillMount() {
+  async componentDidMount() {
     const jsonValue = await AsyncStorage.getItem("user");
     const loc1 = await AsyncStorage.getItem("userLocation");
     const loc = JSON.parse(loc1);
-    this.props.userAsync(JSON.parse(jsonValue));
-    this.props.locationAsync(
-      loc[0].address1 +
-        // " " +
-        // loc[0].address2 +
-        " " +
-        loc[0].city +
-        " " +
-        loc[0].country
-    );
-    this.props.navigation.navigate("App");
+    if (loc) {
+      this.props.userAsync(JSON.parse(jsonValue));
+      this.props.locationAsync(
+        loc[0].address1 +
+          // " " +
+          // loc[0].address2 +
+          " " +
+          loc[0].city +
+          " " +
+          loc[0].country
+      );
+      this.setState({
+        mainLoading:false
+      },()=> this.props.navigation.navigate("App"))
+     
+    }
+    else{
+      this.setState({
+        mainLoading:false
+      })
+    }
   }
   getRef = (ref) => {
     if (this.props.getRef) this.props.getRef(ref);
@@ -135,13 +146,10 @@ class Login extends React.Component {
           if (EmailValidator.validate(this.state.email.trim())) {
             if (this.state.password) {
               axios
-                .post(
-                  "https://lit-peak-13067.herokuapp.com/api/users/signin",
-                  {
-                    email: this.state.email.toLowerCase().trim(),
-                    password: this.state.password,
-                  }
-                )
+                .post("https://lit-peak-13067.herokuapp.com/api/users/signin", {
+                  email: this.state.email.toLowerCase().trim(),
+                  password: this.state.password,
+                })
                 .then((resp) => {
                   // alert(JSON.stringify(resp));
                   if (resp.data === "Incorrect password.") {
@@ -158,7 +166,7 @@ class Login extends React.Component {
                       loading: false,
                     });
                   } else {
-                    this.setState({errMessage: false});
+                    this.setState({ errMessage: false });
                     axios
                       .get(
                         "https://lit-peak-13067.herokuapp.com/get/location/" +
@@ -201,44 +209,44 @@ class Login extends React.Component {
     );
   };
 
-  handleForgot () {
-    var txt =''
-    if(this.state.email.trim()){
-      txt = "A password reset link has been sent to your Email. Please check your inbox. Also, don’t forget to check your spam folder"
-    }else{
-      txt= "Please enter your email first"
+  handleForgot() {
+    var txt = "";
+    if (this.state.email.trim()) {
+      txt =
+        "A password reset link has been sent to your Email. Please check your inbox. Also, don’t forget to check your spam folder";
+    } else {
+      txt = "Please enter your email first";
     }
-    var that = this
-          Alert.alert(
-            "Reset Password",
-            txt,
-            [
-              that.state.email ? (
-              {
-                text: "Dismiss",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel",
-              },
-              {
-                text: "Send",
-                onPress: () =>
-                  axios
-                    .get(
-                      "https://lit-peak-13067.herokuapp.com/api/forgot/password/" +
-                        this.state.email.toLowerCase().trim()
-                    )
-                    .then((resp) => console.log(resp))
-                    .catch((err) => console.log(err)),
-              }): (
-                {
-                  text: "Okay",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel",
-                }
-              )
-            ],
-            { cancelable: true }
-          );
+    var that = this;
+    Alert.alert(
+      "Reset Password",
+      txt,
+      [
+        that.state.email
+          ? ({
+              text: "Dismiss",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel",
+            },
+            {
+              text: "Send",
+              onPress: () =>
+                axios
+                  .get(
+                    "https://lit-peak-13067.herokuapp.com/api/forgot/password/" +
+                      this.state.email.toLowerCase().trim()
+                  )
+                  .then((resp) => console.log(resp))
+                  .catch((err) => console.log(err)),
+            })
+          : {
+              text: "Okay",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel",
+            },
+      ],
+      { cancelable: true }
+    );
     // }{
     //   Alert.alert(
     //     "Reset Password",
@@ -253,7 +261,7 @@ class Login extends React.Component {
     //     { cancelable: true }
     //   );
     // }
-  };
+  }
   render() {
     const { icEye, isPassword } = this.state;
     // console.log(DeviceInfo.getUniqueID())
@@ -275,220 +283,218 @@ class Login extends React.Component {
         style={[conStyles.safeAreaMy, { backgroundColor: "white" }]}
       >
         <StatusBar translucent={true} barStyle="dark-content" />
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={conStyles.scroll}
-        >
-          <Image
-            style={styles.logo}
-            source={require(".././../assets/logo.png")}
-            resizeMode="contain"
-          />
-          <View
-            style={{
-              justifyContent: "flex-start",
-              paddingHorizontal: wp("10%"),
-            }}
+        {this.state.mainLoading ? (
+          <View style={{ flex: 1, justifyContent: "center" }}>
+            <ActivityIndicator color="gray" size="large" />
+          </View>
+        ) : (
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={conStyles.scroll}
           >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={20}
-              col="#000000"
-              text={"SIGN IN"}
+            <Image
+              style={styles.logo}
+              source={require(".././../assets/logo.png")}
+              resizeMode="contain"
             />
-            <View style={textIn.Flabel}>
-              <View>
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={17}
-                  col="#5C5C5C"
-                  text={"Email address"}
-                />
-              </View>
-              <View>
-                <TextInput
-                  style={textIn.input}
-                  onChangeText={(email) =>
-                    this.setState({
-                      email:email,
-                    })
-                  }
-                  value={this.state.email.toLowerCase().trim()}
-                  autoCapitalize = 'none'
-                  keyboardType="email-address"
-                />
-              </View>
-            </View>
-            <View>
-              <View style={textIn.label}>
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={17}
-                  col="#5C5C5C"
-                  text={"Password"}
-                />
-              </View>
-              <View>
-                <TextInput
-                  style={textIn.input}
-                  secureTextEntry={isPassword}
-                  onChangeText={(password) => {
-                    this.setState({
-                      password,
-                    });
-                  }}
-                  autoCapitalize = 'none'
-                  value={this.state.password}
-                />
-                <Icon
-                  style={styles.icon}
-                  name={icEye}
-                  size={20}
-                  color={"#000000"}
-                  onPress={this.changePwdType}
-                />
-              </View>
-            </View>
-            <TouchableOpacity
-              onPress={() => this.handleForgot()}
+            <View
               style={{
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-                marginTop: 10,
+                justifyContent: "flex-start",
+                paddingHorizontal: wp("10%"),
               }}
             >
               <LatoText
                 fontName="Lato-Regular"
-                fonSiz={17}
-                col="#B50000"
-                text={"Forgot Password?"}
+                fonSiz={20}
+                col="#000000"
+                text={"SIGN IN"}
               />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {this.state.errMessage && (
-              <>
-                <Image
-                  style={{ marginRight: 10 }}
-                  source={require("../../assets/Vector.png")}
-                />
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={17}
-                  col="#5C5C5C"
-                  text={this.state.errMessage || ''}
-                />
-              </>
-            )}
-          </View>
-          <View
-            style={{
-              justifyContent: "space-evenly",
-
-              paddingHorizontal: wp("10%"),
-            }}
-          >
-            <TouchableOpacity
-              style={btnStyles.basic}
-              onPress={() => this.handleLogin()}
-            >
-              {this.state.loading ? (
-                <ActivityIndicator size="small" color="white" />
-              ) : (
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={17}
-                  col="white"
-                  text={"SIGN IN"}
-                />
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{ alignItems: "center", marginTop: 20 }}
-              onPress={() => this.props.navigation.navigate("SignUp1")}
-            >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={17}
-                col="#B50000"
-                text={" New memeber? Sign up "}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{ alignItems: "center", marginTop: 20 }}
-              onPress={() => {
-                axios
-                  .post(
-                    "https://lit-peak-13067.herokuapp.com/api/users/guest/register",
-                    {
-                      isGuest: true,
-                      guestId: getUniqueId(),
-                    }
-                  )
-                  .then((resp) => {
-
-                    axios
-                      .get(
-                        "https://lit-peak-13067.herokuapp.com/get/location/" +
-                          resp.data.user._id
-                      )
-                      .then((resp1) => {
-
-                        this.props.userAsync(resp.data);
-                        // this.props.navigation.navigate("Map");
-                        if (resp1.data.length > 0) {
-                          this.props.locationAsync(
-                            resp1.data[0].address1 +
-                              // " " +
-                              // resp1.data[0].address2 +
-                              " " +
-                              resp1.data[0].city +
-                              " " +
-                              resp1.data[0].country
-                          );
-                          this.props.navigation.dispatch(
-                            CommonActions.reset({
-                              index: 0,
-                              routes: [
-                                { name: 'App' },
-                               
-                              ],
-                            })
-                          );
-                        } else {
-                          this.props.navigation.dispatch(
-                            CommonActions.reset({
-                              index: 0,
-                              routes: [
-                                { name: 'Map' },
-                               
-                              ],
-                            })
-                          );
-                        }
+              <View style={textIn.Flabel}>
+                <View>
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={17}
+                    col="#5C5C5C"
+                    text={"Email address"}
+                  />
+                </View>
+                <View>
+                  <TextInput
+                    style={textIn.input}
+                    onChangeText={(email) =>
+                      this.setState({
+                        email: email,
                       })
-                      .catch((err) => console.log(err));
-                  })
-                  .catch((err) =>
-                    this.setState({ msg: "Email already exist!" })
-                  );
+                    }
+                    value={this.state.email.toLowerCase().trim()}
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                  />
+                </View>
+              </View>
+              <View>
+                <View style={textIn.label}>
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={17}
+                    col="#5C5C5C"
+                    text={"Password"}
+                  />
+                </View>
+                <View>
+                  <TextInput
+                    style={textIn.input}
+                    secureTextEntry={isPassword}
+                    onChangeText={(password) => {
+                      this.setState({
+                        password,
+                      });
+                    }}
+                    autoCapitalize="none"
+                    value={this.state.password}
+                  />
+                  <Icon
+                    style={styles.icon}
+                    name={icEye}
+                    size={20}
+                    color={"#000000"}
+                    onPress={this.changePwdType}
+                  />
+                </View>
+              </View>
+              <TouchableOpacity
+                onPress={() => this.handleForgot()}
+                style={{
+                  justifyContent: "flex-end",
+                  alignItems: "flex-end",
+                  marginTop: 10,
+                }}
+              >
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col="#B50000"
+                  text={"Forgot Password?"}
+                />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={17}
-                col="#B50000"
-                text={"Skip this and continue as guest"}
-              />
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
+              {this.state.errMessage && (
+                <>
+                  <Image
+                    style={{ marginRight: 10 }}
+                    source={require("../../assets/Vector.png")}
+                  />
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={17}
+                    col="#5C5C5C"
+                    text={this.state.errMessage || ""}
+                  />
+                </>
+              )}
+            </View>
+            <View
+              style={{
+                justifyContent: "space-evenly",
+
+                paddingHorizontal: wp("10%"),
+              }}
+            >
+              <TouchableOpacity
+                style={btnStyles.basic}
+                onPress={() => this.handleLogin()}
+              >
+                {this.state.loading ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={17}
+                    col="white"
+                    text={"SIGN IN"}
+                  />
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ alignItems: "center", marginTop: 20 }}
+                onPress={() => this.props.navigation.navigate("SignUp1")}
+              >
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col="#B50000"
+                  text={" New memeber? Sign up "}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ alignItems: "center", marginTop: 20 }}
+                onPress={() => {
+                  axios
+                    .post(
+                      "https://lit-peak-13067.herokuapp.com/api/users/guest/register",
+                      {
+                        isGuest: true,
+                        guestId: getUniqueId(),
+                      }
+                    )
+                    .then((resp) => {
+                      axios
+                        .get(
+                          "https://lit-peak-13067.herokuapp.com/get/location/" +
+                            resp.data.user._id
+                        )
+                        .then((resp1) => {
+                          this.props.userAsync(resp.data);
+                          // this.props.navigation.navigate("Map");
+                          if (resp1.data.length > 0) {
+                            this.props.locationAsync(
+                              resp1.data[0].address1 +
+                                // " " +
+                                // resp1.data[0].address2 +
+                                " " +
+                                resp1.data[0].city +
+                                " " +
+                                resp1.data[0].country
+                            );
+                            this.props.navigation.dispatch(
+                              CommonActions.reset({
+                                index: 0,
+                                routes: [{ name: "App" }],
+                              })
+                            );
+                          } else {
+                            this.props.navigation.dispatch(
+                              CommonActions.reset({
+                                index: 0,
+                                routes: [{ name: "Map" }],
+                              })
+                            );
+                          }
+                        })
+                        .catch((err) => console.log(err));
+                    })
+                    .catch((err) =>
+                      this.setState({ msg: "Email already exist!" })
+                    );
+                }}
+              >
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col="#B50000"
+                  text={"Skip this and continue as guest"}
+                />
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        )}
       </SafeAreaView>
     );
   }

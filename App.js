@@ -42,12 +42,12 @@ import AboutUs from "./src/screens/AboutUs";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
-  <AuthStack.Navigator headerMode="none">
+  <AuthStack.Navigator initialRouteName={'Login'} headerMode="none">
+    <AuthStack.Screen name="Map" component={Map} />
     <AuthStack.Screen name="Login" component={Login} />
     <AuthStack.Screen name="SignUp1" component={SignUp1} />
     <AuthStack.Screen name="ChoosePass" component={ChoosePass} />
 
-    <AuthStack.Screen name="Map" component={Map} />
     <AuthStack.Screen
       name="CreateAccount"
       component={CreateAccount}
