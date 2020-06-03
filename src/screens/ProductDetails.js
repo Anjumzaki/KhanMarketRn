@@ -3,26 +3,32 @@ import {
   Text,
   View,
   Dimensions,
-  ImageBackground, 
+  ImageBackground,
   Image,
   StyleSheet,
   LinearGradient,
   TouchableOpacity,
-  Alert
+  Alert,
 } from "react-native";
+import Toast from 'react-native-simple-toast';
 import Carousel from "react-native-looped-carousel";
 import { AntDesign } from "@expo/vector-icons";
 import LatoText from "../Helpers/LatoText";
 import { ScrollView } from "react-native-gesture-handler";
 import Expandable from "../Helpers/Expandable";
 import CourselImage from "../Components/CourselImage";
-import { btnStyles,bottomTab } from "../styles/base";
+import { btnStyles, bottomTab } from "../styles/base";
 import { Row } from "native-base";
 const { width } = Dimensions.get("window");
 const { height } = 300;
 import firebase from "firebase";
 import { bindActionCreators } from "redux";
-import { cartAsync, cartSizeAsync,storeAsync, favStoreAsync } from "../store/actions";
+import {
+  cartAsync,
+  cartSizeAsync,
+  storeAsync,
+  favStoreAsync,
+} from "../store/actions";
 import { connect } from "react-redux";
 import axios from "axios";
 
@@ -32,29 +38,32 @@ class ProductDetails extends Component {
 
     this.state = {
       heart: false,
-        qt: 1,
-        favourites: []
+      qt: 1,
+      favourites: [],
     };
   }
 
-
-
-  componentDidMount(){
-
-
-    if(this.props.route.params.product.favourites === undefined){
-      this.setState({favourites: []})
-  }else{
-    for(var i=0; i<this.props.route.params.product.favourites.length; i++){
-      if(this.props.route.params.product.favourites[i].userId === this.props.user.user._id){
-        this.setState({heart: true})
+  componentDidMount() {
+    if (this.props.route.params.product.favourites === undefined) {
+      this.setState({ favourites: [] });
+    } else {
+      for (
+        var i = 0;
+        i < this.props.route.params.product.favourites.length;
+        i++
+      ) {
+        if (
+          this.props.route.params.product.favourites[i].userId ===
+          this.props.user.user._id
+        ) {
+          this.setState({ heart: true });
+        }
       }
+      this.setState({ favourites: this.props.route.params.product.favourites });
     }
-    this.setState({favourites: this.props.route.params.product.favourites})
-  }
   }
 
-  _onLayoutDidChange = e => {
+  _onLayoutDidChange = (e) => {
     const layout = e.nativeEvent.layout;
     this.setState({ size: { width: layout.width, height: layout.height } });
   };
@@ -72,39 +81,35 @@ class ProductDetails extends Component {
       this.setState({ qt: preNum });
     }
 
-
-    var pCart=this.props.cart;
-    var that =this
-      pCart.map(function(pro,ind) {
-       if(pro.product.productName === that.props.route.params.product.productName){
-          pro.quantity = that.state.qt+num
-       }
-
+    var pCart = this.props.cart;
+    var that = this;
+    pCart.map(function (pro, ind) {
+      if (
+        pro.product.productName === that.props.route.params.product.productName
+      ) {
+        pro.quantity = that.state.qt + num;
+      }
     });
 
-
-      this.props.cartAsync(pCart)
-
+    this.props.cartAsync(pCart);
   }
   render() {
-
-    var product = this.props.route.params.product
-    var noOfImg = product.noOfImages
-    noOfImg = parseInt(noOfImg)
-    var temp=[]
-    for(var i=0; i< noOfImg; i++){
-      temp.push(i)
+    var product = this.props.route.params.product;
+    var noOfImg = product.noOfImages;
+    noOfImg = parseInt(noOfImg);
+    var temp = [];
+    for (var i = 0; i < noOfImg; i++) {
+      temp.push(i);
     }
-    var abc= [1,2,3]
+    var abc = [1, 2, 3];
 
-    
-    var cSize=0
+    var cSize = 0;
 
-    for(var i=0; i<this.props.cart.length; i++){
-        cSize=cSize + parseInt(this.props.cart[i].quantity)
+    for (var i = 0; i < this.props.cart.length; i++) {
+      cSize = cSize + parseInt(this.props.cart[i].quantity);
     }
 
-    this.props.cartSizeAsync(cSize)
+    this.props.cartSizeAsync(cSize);
 
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -114,7 +119,7 @@ class ProductDetails extends Component {
             style={{
               justifyContent: "center",
               alignContent: "center",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             {/* <Text>asd</Text> */}
@@ -124,7 +129,7 @@ class ProductDetails extends Component {
                 width: Dimensions.get("window").width - 40,
                 height: 250,
                 marginTop: 20,
-                borderRadius: 10
+                borderRadius: 10,
               }}
               autoplay={true}
               bullets
@@ -133,67 +138,78 @@ class ProductDetails extends Component {
                 padding: 0,
                 margin: 3,
                 marginTop: 80,
-                borderColor: "#89898C"
+                borderColor: "#89898C",
               }}
               chosenBulletStyle={{
                 padding: 0,
                 margin: 3,
                 marginTop: 80,
-                backgroundColor: "#89898C"
+                backgroundColor: "#89898C",
               }}
-            > 
-            {/* <> */}
-            {temp.map((item,index) => (
-              // <View style={{ borderRadius: 10, overflow: "hidden" }}>
-            
-                  <CourselImage id={product._id} index={index+1}/>
-              // </View>
-                ))} 
-                {/* </> */}
+            >
+              {/* <> */}
+              {temp.map((item, index) => (
+                // <View style={{ borderRadius: 10, overflow: "hidden" }}>
+
+                <CourselImage id={product._id} index={index + 1} />
+                // </View>
+              ))}
+              {/* </> */}
             </Carousel>
           </View>
 
           <TouchableOpacity
-                onPress={async() =>{
-                if(this.state.heart === false){
-                    await this.state.favourites.push({userId: this.props.user.user._id})
+            onPress={async () => {
+              if (this.state.heart === false) {
+                await this.state.favourites.push({
+                  userId: this.props.user.user._id,
+                });
 
-                    axios.post('https://lit-peak-13067.herokuapp.com/add/favourite',{
-                      userId: this.props.user.user._id,
-                      product: product,
-                      storeName: this.props.store.name
+                axios
+                  .post("https://lit-peak-13067.herokuapp.com/add/favourite", {
+                    userId: this.props.user.user._id,
+                    product: product,
+                    storeName: this.props.store.name,
                   })
-                  .then(resp => console.log(resp))
-                  .catch(err => console.log(err))
+                  .then((resp) => console.log(resp))
+                  .catch((err) => console.log(err));
+              } else {
+                var that = this;
+                this.state.favourites = this.state.favourites.filter(function (
+                  el
+                ) {
+                  return el.userId !== that.props.user.user._id;
+                  // console.log("asd",el.userId,that.props.user.user._id)
+                });
 
-                }else{
-                  var that=this
-                  this.state.favourites = this.state.favourites.filter(function(el){
-                    return el.userId !== that.props.user.user._id;
-                    // console.log("asd",el.userId,that.props.user.user._id)
-                  });
+                axios
+                  .delete(
+                    "https://lit-peak-13067.herokuapp.com/delete/favourite/" +
+                      this.props.user.user._id +
+                      "/" +
+                      product._id
+                  )
+                  .then((resp) => console.log(resp))
+                  .catch((err) => err);
+              }
 
-                  axios.delete('https://lit-peak-13067.herokuapp.com/delete/favourite/'+this.props.user.user._id+'/'+product._id)
-                  .then(resp =>console.log(resp))
-                  .catch(err => err)
-
-
-                }
-
-                axios.put('https://lit-peak-13067.herokuapp.com/edit/favourites/'+product._id,{
-                  favourites: this.state.favourites
-                })
-                .then(resp => {
-                  this.setState(prevState => {
+              axios
+                .put(
+                  "https://lit-peak-13067.herokuapp.com/edit/favourites/" +
+                    product._id,
+                  {
+                    favourites: this.state.favourites,
+                  }
+                )
+                .then((resp) => {
+                  this.setState((prevState) => {
                     return {
-                      heart: !prevState.heart
+                      heart: !prevState.heart,
                     };
-                  })
+                  });
                 })
-                .catch(err => console.log(err))
-
-              }
-              }
+                .catch((err) => console.log(err));
+            }}
             style={{
               alignSelf: "flex-end",
               backgroundColor: "rgb(255, 255, 255)",
@@ -206,12 +222,12 @@ class ProductDetails extends Component {
               shadowColor: "#000",
               shadowOffset: {
                 width: 0,
-                height: 2
+                height: 2,
               },
               shadowOpacity: 0.25,
               shadowRadius: 3.84,
 
-              elevation: 5
+              elevation: 5,
             }}
           >
             {this.state.heart ? (
@@ -241,21 +257,23 @@ class ProductDetails extends Component {
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <View
                 style={{
                   flexDirection: "row",
                   marginTop: 22,
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
-                 <LatoText
+                <LatoText
                   fontName="Lato-Bold"
                   fonSiz={20}
                   col="#5C5C5C"
-                  text={` $  ${ parseFloat(product.price - ((product.price * product.discount)/100)).toFixed(1)} / lb `}
+                  text={` $  ${parseFloat(
+                    product.price - (product.price * product.discount) / 100
+                  ).toFixed(1)} / lb `}
                 />
                 <LatoText
                   fontName="Lato-Regular"
@@ -264,7 +282,6 @@ class ProductDetails extends Component {
                   col="#89898C"
                   text={`$${product.price} / lb `}
                 />
-               
               </View>
               <View style={{ marginTop: 22 }}>
                 <LatoText
@@ -280,34 +297,45 @@ class ProductDetails extends Component {
                 fontName="Lato-Regular"
                 fonSiz={17}
                 col="#5C5C5C"
-                text={
-                  product.productDescription
-                }
+                text={product.productDescription}
               />
             </View>
           </View>
-          <Expandable product={product}/>
+          <Expandable product={product} />
         </ScrollView>
         <View style={bottomTab.cartSheet}>
-          <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',width:'50%'}}>
-          <TouchableOpacity style={btnStyles.plusBtn} onPress={()=>this.handleChange(-1)}>
-                  <AntDesign color="#B50000" size={18} name="minus" />
-                </TouchableOpacity>
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={15}
-                  col="#5C5C5C"
-                  text={this.state.qt}
-                />
-                <TouchableOpacity style={btnStyles.plusBtn} onPress={()=>this.handleChange(1)}>
-                  <AntDesign color="#B50000" size={18} name="plus" />
-                </TouchableOpacity>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "50%",
+            }}
+          >
+            <TouchableOpacity
+              style={btnStyles.plusBtn}
+              onPress={() => this.handleChange(-1)}
+            >
+              <AntDesign color="#B50000" size={18} name="minus" />
+            </TouchableOpacity>
+            <LatoText
+              fontName="Lato-Regular"
+              fonSiz={15}
+              col="#5C5C5C"
+              text={this.state.qt}
+            />
+            <TouchableOpacity
+              style={btnStyles.plusBtn}
+              onPress={() => this.handleChange(1)}
+            >
+              <AntDesign color="#B50000" size={18} name="plus" />
+            </TouchableOpacity>
           </View>
           <TouchableOpacity
             onPress={() => {
               // var pCart=this.props.cart;
               // pCart.push({
-              //   product: product, 
+              //   product: product,
               //   quantity: this.state.qt
               // })
               // this.props.cartAsync(pCart)
@@ -319,17 +347,14 @@ class ProductDetails extends Component {
                   quantity: this.state.qt,
                 });
                 this.props.storeAsync({
-                    name: this.props.storeHeader.name,
-                    address: this.props.storeHeader.address,
-                    id: this.props.storeHeader.id,
-                    phone: this.props.storeHeader.phone,
-                  });
-                this.props.favStoreAsync(
-                  product.storeId
-                );
+                  name: this.props.storeHeader.name,
+                  address: this.props.storeHeader.address,
+                  id: this.props.storeHeader.id,
+                  phone: this.props.storeHeader.phone,
+                });
+                this.props.favStoreAsync(product.storeId);
                 this.props.cartAsync(pCart);
                 this.setState({ cart: true });
-
               } else {
                 if (this.props.store.id === product.storeId) {
                   var pCart = this.props.cart;
@@ -343,56 +368,49 @@ class ProductDetails extends Component {
                     id: this.props.storeHeader.id,
                     phone: this.props.storeHeader.phone,
                   });
-                  this.props.favStoreAsync(
-                    product.storeId
-                  );
+                  this.props.favStoreAsync(product.storeId);
                   this.props.cartAsync(pCart);
-                  this.setState({ cart: true });
+                  this.setState({ cart: true }, () => {
+                    Toast.show('Product added to cart');
+                  });
                 } else {
-                  this.setState(
-                    { temp: product.storeId },
-                    () => {
-                      Alert.alert(
-                        "Alert!",
-                        "If you add a product from a new store, you will lose your cart from the previous store",
-                        [
-                          {
-                            text: "Cancel",
-                            onPress: () => console.log("Cancel Pressed"),
-                            style: "cancel",
+                  this.setState({ temp: product.storeId }, () => {
+                    Alert.alert(
+                      "Alert!",
+                      "If you add a product from a new store, you will lose your cart from the previous store",
+                      [
+                        {
+                          text: "Cancel",
+                          onPress: () => console.log("Cancel Pressed"),
+                          style: "cancel",
+                        },
+                        {
+                          text: "OK",
+                          onPress: () => {
+                            var pCart = [];
+                            pCart.push({
+                              product: product,
+                              quantity: this.state.qt,
+                            });
+                            this.props.storeAsync({
+                              name: this.props.storeHeader.name,
+                              address: this.props.storeHeader.address,
+                              id: this.props.storeHeader.id,
+                              phone: this.props.storeHeader.phone,
+                            });
+                            this.props.favStoreAsync(product.storeId);
+                            this.props.cartAsync(pCart);
+                            this.setState({ cart: true });
                           },
-                          {
-                            text: "OK",
-                            onPress: () => {
-                              var pCart = [];
-                              pCart.push({
-                                product: product,
-                                quantity: this.state.qt,
-                              });
-                              this.props.storeAsync({
-                                name: this.props.storeHeader.name,
-                                address: this.props.storeHeader.address,
-                                id: this.props.storeHeader.id,
-                                phone: this.props.storeHeader.phone,
-                              });
-                              this.props.favStoreAsync(
-                                product.storeId
-                              );
-                              this.props.cartAsync(pCart);
-                              this.setState({ cart: true });
-
-                            
-                            },
-                          },
-                        ],
-                        { cancelable: true }
-                      );
-                    }
-                  );
+                        },
+                      ],
+                      { cancelable: true }
+                    );
+                  });
                 }
               }
             }}
-            style={[btnStyles.cartBtn,{width:'40%'}]}
+            style={[btnStyles.cartBtn, { width: "40%" }]}
           >
             <LatoText
               fontName="Lato-Regular"
@@ -411,14 +429,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   imgCon: {
     width: Dimensions.get("window").width,
-    height: 250
+    height: 250,
   },
   topRight: {
-    alignSelf: "flex-end"
+    alignSelf: "flex-end",
   },
   wrapTop: {
     alignSelf: "flex-end",
@@ -428,11 +446,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderTopLeftRadius: 15,
-    borderBottomLeftRadius: 15
+    borderBottomLeftRadius: 15,
   },
   bottomText: {
     height: 200,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   buybBtn: {
     alignSelf: "center",
@@ -443,36 +461,32 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
 
-    elevation: 5
-  }
+    elevation: 5,
+  },
 });
 
-const mapStateToProps = state => ({
-  cart: state.Cart.cartData, 
+const mapStateToProps = (state) => ({
+  cart: state.Cart.cartData,
   loading: state.Cart.cartLoading,
   error: state.Cart.cartError,
   user: state.user.user,
   store: state.Store.storeData,
   cartSize: state.CartSize.cartSizeData,
-  storeHeader: state.storeHeader.storeData1, 
-
+  storeHeader: state.storeHeader.storeData1,
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
-      {
-          cartAsync,
-          cartSizeAsync,
-          favStoreAsync,
-          storeAsync
-      },
-      dispatch
+    {
+      cartAsync,
+      cartSizeAsync,
+      favStoreAsync,
+      storeAsync,
+    },
+    dispatch
   );
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProductDetails);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductDetails);

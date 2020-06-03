@@ -209,6 +209,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Toast.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>UMBarCodeScannerInterface.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -305,6 +310,11 @@
 			<false/>
 		</dict>
 		<key>react-native-safe-area-context.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>react-native-simple-toast.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
