@@ -5,17 +5,20 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Text, View } from "react-native";
-import { CreateAccount, Search, Details, Search2, Profile } from "./src/Screens";
+import {
+  CreateAccount,
+  Search,
+  Details,
+  Search2,
+  Profile,
+} from "./src/Screens";
 import Home from "./src/screens/Home";
 import Login from "./src/screens/Login";
 import Map from "./src/screens/Map";
 import StackHeader from "./src/Helpers/StackHeader";
 import StoreHeader from "./src/Helpers/StoreHeader";
-import Settings from './src/screens/Settings'
-import {
-  Entypo,
-  MaterialCommunityIcons
-} from "@expo/vector-icons";
+import Settings from "./src/screens/Settings";
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import ProductDetails from "./src/screens/ProductDetails";
 import StoreDetails from "./src/screens/StoreDetails";
 import SingleStoreHeader from "./src/Helpers/SingleStoreHeader";
@@ -28,14 +31,14 @@ import QrCode from "./src/screens/QrCode";
 import StoreInfo from "./src/screens/StoreInfo";
 import Filters from "./src/screens/Filters";
 import SingleCateg from "./src/screens/SingleCateg";
-import CustomDrawerContent from './src/Helpers/CustomDrawerContent'
-import Favourites from './src/screens/Favourites'
-import StackGrayHeader from './src/Helpers/StackGrayHeader'
+import CustomDrawerContent from "./src/Helpers/CustomDrawerContent";
+import Favourites from "./src/screens/Favourites";
+import StackGrayHeader from "./src/Helpers/StackGrayHeader";
 import MyOrders from "./src/screens/MyOrders";
-import SignUp1 from "./src/screens/SignUp1"
-import ChoosePass from './src/screens/ChoosePass'
-import OrderDetails from './src/screens/OrderDetails'
-import AboutUs from './src/screens/AboutUs'
+import SignUp1 from "./src/screens/SignUp1";
+import ChoosePass from "./src/screens/ChoosePass";
+import OrderDetails from "./src/screens/OrderDetails";
+import AboutUs from "./src/screens/AboutUs";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
@@ -50,127 +53,137 @@ const AuthStackScreen = () => (
       component={CreateAccount}
       options={{ title: "Create Account" }}
     />
-    
   </AuthStack.Navigator>
 );
 const Tabs = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const FavouritesStack = createStackNavigator();
 const HomeStackScreen = (route) => (
-  <HomeStack.Navigator
-  headerMode="screen"
-  >
+  <HomeStack.Navigator headerMode="screen">
     <HomeStack.Screen
       name="Home"
       component={TabsScreen}
-      options={{ header: props => null}}
-
+      options={{ header: (props) => null }}
     />
     <HomeStack.Screen
       name="StoreDetails"
       component={StoreDetails}
-      options={{ header: props => <SingleStoreHeader {...props} />}}
+      options={{ header: (props) => <SingleStoreHeader {...props} /> }}
     />
     <HomeStack.Screen
       name="ProductDetails"
       component={ProductDetails}
       options={{
-        header: props => (
+        header: (props) => (
           <StackHeader cart={true} nameTitle="Product Details" {...props} />
         ),
-        tabBarOptions: false
+        tabBarOptions: false,
       }}
     />
     <HomeStack.Screen
       name="Cart"
       component={Cart}
       options={{
-        header: props => (
+        header: (props) => (
           <StackHeader cart={false} nameTitle="Cart" {...props} />
-        )
+        ),
       }}
     />
     <HomeStack.Screen
       name="Checkout1"
       component={Checkout1}
       options={{
-        header: props => (
+        header: (props) => (
           <StackHeader cart={false} nameTitle="PICK UP DETAILS" {...props} />
-        )
+        ),
       }}
     />
     <HomeStack.Screen
       name="OrderDetails"
       component={OrderDetails}
       options={{
-        header: props => (
+        header: (props) => (
           <StackHeader cart={false} nameTitle="ORDER DETAILS" {...props} />
-        )
+        ),
       }}
     />
-    
+
     <HomeStack.Screen
       name="QrCode"
       component={QrCode}
       options={{
-        header: props => (
+        header: (props) => (
           <StackHeader cart={false} nameTitle="ORDER PLACED" {...props} />
-        )
+        ),
       }}
     />
     <HomeStack.Screen
       name="StoreInfo"
       component={StoreInfo}
       options={{
-        header: props => (
+        header: (props) => (
           <StackHeader cart={false} nameTitle="STORE INFO" {...props} />
-        )
+        ),
       }}
     />
     <HomeStack.Screen
       name="Filters"
       component={Filters}
       options={{
-        header: props => (
+        header: (props) => (
           <StackHeader cart={false} nameTitle="Filters" {...props} />
-        )
+        ),
       }}
     />
     <HomeStack.Screen
       name="SingleCateg"
       component={SingleCateg}
-      
       options={{
-        header: props => (
+        header: (props) => (
           <SingleCategHeader cart={false} nameTitle="BEEF" {...props} />
-        )
+        ),
       }}
     />
-   
-    <HomeStack.Screen name="Profile" component={Settings}  options={{ header: props => <StackGrayHeader nameTitle="Settings" {...props} />, }}/>
 
+    <HomeStack.Screen
+      name="Profile"
+      component={Settings}
+      options={{
+        header: (props) => <StackGrayHeader nameTitle="Settings" {...props} />,
+      }}
+    />
   </HomeStack.Navigator>
 );
 
-
 const FavouritesStackScreen = () => (
   <FavouritesStack.Navigator initialRouteName="Favourites">
-    <FavouritesStack.Screen name="Favourites"   component={Favourites} 
-     options={{ header: props => <StackGrayHeader cart={true} nameTitle="Favourites" {...props} />, }}
+    <FavouritesStack.Screen
+      name="Favourites"
+      component={Favourites}
+      options={{
+        header: (props) => (
+          <StackGrayHeader cart={true} nameTitle="Favourites" {...props} />
+        ),
+      }}
     />
-    
   </FavouritesStack.Navigator>
 );
 const MyOrderStack = createStackNavigator();
 const MyOrderStackScreen = () => (
   <MyOrderStack.Navigator initialRouteName="MyOrders">
-    <MyOrderStack.Screen name="MyOrders" component={MyOrders}  options={{ header: props => <StackGrayHeader nameTitle="My Orders" {...props} />, }}/>
+    <MyOrderStack.Screen
+      name="MyOrders"
+      component={MyOrders}
+      options={{
+        header: (props) => <StackGrayHeader nameTitle="My Orders" {...props} />,
+      }}
+    />
   </MyOrderStack.Navigator>
 );
 
 const TabsScreen = () => (
   <Tabs.Navigator
-  headerMode={"none"}
+    headerMode={"none"}
     initialRouteName="Home"
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
@@ -202,97 +215,95 @@ const TabsScreen = () => (
         }
 
         // You can return any component that you like here!
-      }
+      },
     })}
     tabBarOptions={{
       activeTintColor: "#2E2E2E",
       inactiveTintColor: "#89898C",
     }}
-    
   >
     <Tabs.Screen name="Favourites" component={FavouritesStackScreen} />
     <Tabs.Screen name="Home" component={Home} />
-    <Tabs.Screen   options={{
-          tabBarLabel: 'My Orders',
-          
-        }} name="MyOrderStackScreen" component={MyOrderStackScreen} />
+    <Tabs.Screen
+      options={{
+        tabBarLabel: "My Orders",
+      }}
+      name="MyOrderStackScreen"
+      component={MyOrderStackScreen}
+    />
   </Tabs.Navigator>
 );
 const Drawer = createDrawerNavigator();
 const DrawerScreen = () => (
-  <Drawer.Navigator  drawerContentOptions={{
-    activeTintColor: '#e91e63',
-    itemStyle: {backgroundColor:'transparent' },
-    labelStyle:{color:'#FFFFFF'}
-  }}  drawerContent={props => <CustomDrawerContent {...props} />}
-  screenOptions={({ route }) => ({
-    drawerIcon: ({ focused, color, size }) => {
-      let iconName;
-      if (route.name === "About Us") {
-        return (
-          <MaterialCommunityIcons
-            name="information"
-            size={26}
-            color={focused ? "#2e2e2e" : "#89898c"}
-          />
-        );
-      } else if (route.name === "Favourites") {
-        return (
-          <Entypo
-            name="heart"
-            size={26}
-            color={focused ? "#2e2e2e" : "#89898c"}
-          />
-        );
-      }
-      else if (route.name === "Home") {
-        return (
-          <Entypo
-            name="home"
-            size={26}
-            color={focused ? "#2e2e2e" : "#89898c"}
-          />
-        );
-      } else if (route.name === "My Orders") {
-        return (
-          <MaterialCommunityIcons
-            name="clipboard-text"
-            size={26}
-            color={focused ? "#2e2e2e" : "#89898c"}
-          />
-        );
-      }
-      else if (route.name === "Rate Us") {
-        return (
-          <MaterialCommunityIcons
-            name="star"
-            size={26}
-            color={focused ? "#2e2e2e" : "#89898c"}
-          />
-        );
-      }
-      else if (route.name === "Share") {
-        return (
-          <MaterialCommunityIcons
-            name="share-variant"
-            size={26}
-            color={focused ? "#2e2e2e" : "#89898c"}
-          />
-        );
-      }
-      else if (route.name === "Share") {
-        return (
-          <Entypo
-            name="Home"
-            size={26}
-            color={focused ? "#2e2e2e" : "#89898c"}
-          />
-        );
-      }
-
-    }
-  })}
-  
+  <Drawer.Navigator
+    drawerContentOptions={{
+      activeTintColor: "#e91e63",
+      itemStyle: { backgroundColor: "transparent" },
+      labelStyle: { color: "#FFFFFF" },
+    }}
+    drawerContent={(props) => <CustomDrawerContent {...props} />}
+    screenOptions={({ route }) => ({
+      drawerIcon: ({ focused, color, size }) => {
+        let iconName;
+        if (route.name === "About Us") {
+          return (
+            <MaterialCommunityIcons
+              name="information"
+              size={26}
+              color={focused ? "#2e2e2e" : "#89898c"}
+            />
+          );
+        } else if (route.name === "Favourites") {
+          return (
+            <Entypo
+              name="heart"
+              size={26}
+              color={focused ? "#2e2e2e" : "#89898c"}
+            />
+          );
+        } else if (route.name === "Home") {
+          return (
+            <Entypo
+              name="home"
+              size={26}
+              color={focused ? "#2e2e2e" : "#89898c"}
+            />
+          );
+        } else if (route.name === "My Orders") {
+          return (
+            <MaterialCommunityIcons
+              name="clipboard-text"
+              size={26}
+              color={focused ? "#2e2e2e" : "#89898c"}
+            />
+          );
+        } else if (route.name === "Rate Us") {
+          return (
+            <MaterialCommunityIcons
+              name="star"
+              size={26}
+              color={focused ? "#2e2e2e" : "#89898c"}
+            />
+          );
+        } else if (route.name === "Share") {
+          return (
+            <MaterialCommunityIcons
+              name="share-variant"
+              size={26}
+              color={focused ? "#2e2e2e" : "#89898c"}
+            />
+          );
+        } else if (route.name === "Share") {
+          return (
+            <Entypo
+              name="Home"
+              size={26}
+              color={focused ? "#2e2e2e" : "#89898c"}
+            />
+          );
+        }
+      },
+    })}
   >
     <Drawer.Screen name="Home" component={HomeStackScreen} />
     <Drawer.Screen name="Favourites" component={FavouritesStackScreen} />
@@ -310,7 +321,7 @@ const RootStackScreen = ({ userToken }) => (
       name="Auth"
       component={AuthStackScreen}
       options={{
-        animationEnabled: false
+        animationEnabled: false,
       }}
     />
 
@@ -318,7 +329,7 @@ const RootStackScreen = ({ userToken }) => (
       name="App"
       component={DrawerScreen}
       options={{
-        animationEnabled: false
+        animationEnabled: false,
       }}
     />
   </RootStack.Navigator>
@@ -326,9 +337,9 @@ const RootStackScreen = ({ userToken }) => (
 export default () => {
   return (
     <StoreProvider store={store}>
-        <NavigationContainer>
-          <RootStackScreen />
-        </NavigationContainer>
+      <NavigationContainer>
+        <RootStackScreen />
+      </NavigationContainer>
     </StoreProvider>
   );
 };

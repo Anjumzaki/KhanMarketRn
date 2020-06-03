@@ -184,7 +184,7 @@ class MyOrders extends Component {
                   col="#5C5C5C"
                   text={"Past (" + past.length + ")"}
                 />
-                {this.state.activeCollapsed ? (
+                {this.state.pastCollapsed ? (
                   <TouchableOpacity
                     onPress={() =>
                       this.setState({
