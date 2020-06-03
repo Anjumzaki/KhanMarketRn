@@ -113,7 +113,6 @@ class CustomDrawerContent extends Component {
                 this.props.cartSizeAsync(0)
                 this.props.storeHeaderAsync('')
                 this.props.favStoreAsync('')
-                this.props.storeHeaderAsync('')
                 this.props.userAsync("");
                 this.props.navigation.navigate("Login");
               

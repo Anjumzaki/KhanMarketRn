@@ -35,7 +35,7 @@ import CheckBox from "react-native-check-box";
 const { width } = Dimensions.get("window");
 const { height } = 300;
 import { bindActionCreators } from "redux";
-import { cartAsync,userAsync } from "../store/actions";
+import { cartAsync,userAsync,cartSizeAsync,favStoreAsync,storeHeaderAsync,storeAsync } from "../store/actions";
 import { connect } from "react-redux";
 import axios from "axios";
 import timestamp from "time-stamp";
@@ -53,7 +53,9 @@ class Cart extends Component {
       times: 0,
       isChecked: false,
       orderDate: "",
-      orderTime: "1:00 PM - 2:00 PM",
+      orderTime: "",
+      postDate:'',
+      postTime: '',
       storeTimings: {},
       start: "",
       end: "",
@@ -191,6 +193,7 @@ class Cart extends Component {
                 timeArray: arr,
                 orderTime: arr[0],
                 tax: resp.data.tax,
+                isStoreClosed: false
               });
             }
            
@@ -233,7 +236,7 @@ class Cart extends Component {
   makeid(length) {
     var result = "";
     var characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      "0123456789";
     var charactersLength = characters.length;
     for (var i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -258,8 +261,8 @@ class Cart extends Component {
   //  ejIEyo
   render() {
     console.log("SD", this.state, this.props.user);
-    var codeId = this.makeid(6);
-
+    var codeId = this.makeid(3)+"-"+this.makeid(6);
+    console.log("CODE ID",codeId)
     //
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
@@ -1199,6 +1202,19 @@ class Cart extends Component {
             }
             onPress={() => {
               this.setState({ cart: true });
+
+              var pDate = new Date();
+              var dd = String(pDate.getDate()).padStart(2, '0');
+              var mm = String(pDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+              var yyyy = pDate.getFullYear();
+
+              pDate =  dd + '-' + mm + '-' + yyyy;
+
+              var currentdate = new Date(); 
+               var hr = currentdate.getHours() <10 ? "0"+ currentdate.getHours() : currentdate.getHours()  
+               var mi =  currentdate.getMinutes() <10 ? "0"+currentdate.getMinutes(): currentdate.getMinutes()
+               var sc = currentdate.getSeconds() <10 ? "0"+currentdate.getSeconds(): currentdate.getSeconds();
+                var pTime = hr+ ":"+mi+":"+ sc
               axios
                 .post("https://lit-peak-13067.herokuapp.com/add/order", {
                   storeId: sId,
@@ -1224,11 +1240,17 @@ class Cart extends Component {
                       ? todaysDate
                       : this.state.orderDate,
                   // orderTimeZone: "UST",
+                  postDate: pDate,
+                  postTime: pTime,
                   tax: (parseFloat(this.state.tax) / 100) * subTotal,
                   orderNumber: codeId,
                   isGuest: this.props.user.user.isGuest,
                 })
                 .then((resp) => {
+                  this.props.storeAsync('')
+                  this.props.cartSizeAsync(0)
+                  this.props.storeHeaderAsync('')
+                  this.props.favStoreAsync('')
                   this.props.navigation.navigate("QrCode", {
                     orderId: resp.data.order1._id,
                     codeId: codeId,
@@ -1374,7 +1396,11 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
     {
       cartAsync,
-      userAsync
+      userAsync,
+      storeAsync,
+      cartSizeAsync,
+      favStoreAsync,
+      storeHeaderAsync
     },
     dispatch
   );

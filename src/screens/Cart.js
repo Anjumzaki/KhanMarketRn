@@ -229,7 +229,13 @@ class Cart extends Component {
         {this.props.user.user.isGuest ? (
           <View style={bottomTab.cartSheet}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("Checkout1")}
+              onPress={() => {
+                if(this.props.cart.length === 0){
+                  alert("You cart is empty.")
+                }else{
+                  this.props.navigation.navigate("Checkout1")
+                }
+              }}
               style={[btnStyles.cartBtnOutline, { width: "55%" }]}
             >
               <LatoText
@@ -255,7 +261,12 @@ class Cart extends Component {
         ) : (
           <View style={bottomTab.cartSheet}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("Checkout1")}
+              onPress={() => {
+                if(this.props.cart.length === 0){
+                  alert("You cart is empty.")
+                }else{
+                  this.props.navigation.navigate("Checkout1")
+                }}}
               style={[btnStyles.cartBtn, { width: "100%" }]}
             >
               <LatoText

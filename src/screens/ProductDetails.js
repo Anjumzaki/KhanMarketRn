@@ -354,7 +354,7 @@ class ProductDetails extends Component {
                     () => {
                       Alert.alert(
                         "Alert!",
-                        "You are changing the store, so you will lost your cart items",
+                        "If you add a product from a new store, you will lose your cart from the previous store",
                         [
                           {
                             text: "Cancel",

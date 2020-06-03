@@ -299,6 +299,55 @@ class OrderDetails extends Component {
               ></LatoText>
             </View>
           </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              paddingTop: 30,
+              paddingBottom: 20,
+
+              alignItems: "center",
+            }}
+          >
+            <LatoText
+              fontName="Lato-Bold"
+              fonSiz={17}
+              col="#2E2E2E"
+              text="Order was placed at"
+            ></LatoText>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              paddingBottom: 20,
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col="#2E2E2E"
+                text={this.props.route.params.order.postDate ? this.dateConvert(this.props.route.params.order.postDate) : ""}
+              ></LatoText>
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col="#2E2E2E"
+                text={this.props.route.params.order.postTime ? "   -  " + this.props.route.params.order.postTime : ""}
+              ></LatoText>
+            </View>
+          </View>
+
           <View style={lines.simple} />
           <View style={{ marginHorizontal: 30, marginVertical: 10 }}>
             {this.props.route.params.order.isAccepted === false &&
