@@ -11,6 +11,7 @@ import {
   StatusBar
 } from "react-native";
 import { conStyles, headerStyles } from "../styles/base";
+import firebase from "firebase";
 
 import {
   Entypo,
@@ -34,8 +35,21 @@ class SingleStoreHeader extends React.Component {
     this.state = {
       abc:"",
       cartData:this.props.cartData.length,
-      inputText: ''
+      inputText: '',
+      image: ''
     };
+  }
+
+  componentWillMount(){
+    const ref = firebase
+    .storage()
+    .ref("/store_images/" + this.props.store.id + ".jpg");
+    ref
+    .getDownloadURL()
+    .then((url) => {
+      this.setState({ image: url });
+    })
+    .catch((err) => console.log(err));
   }
 
   render() {
@@ -67,7 +81,8 @@ class SingleStoreHeader extends React.Component {
             top: 0,
             left: 0
           }}
-          source={require("../../assets/bgheader.png")}
+          source={{uri: this.state.image}}
+          // source={require("../../assets/bgheader.png")}
           resizeMode="cover"
         />
         <View style={{ justifyContent: "space-between", flexDirection: "row",paddingTop:30 }}>

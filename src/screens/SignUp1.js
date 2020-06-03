@@ -513,11 +513,15 @@ export default class SignUp1 extends React.Component {
                     }}
                     onPress={async () => {
                       var num = Math.floor(100000 + Math.random() * 900000);
-                      await this.setState({ num: num.toString() });
+                      await thissetState({ num: num.toString() });
                       this.forceUpdate();
                       axios.get("https://lit-peak-13067.herokuapp.com/get/user/"+this.state.email.trim())
                       .then(resp => {
+                        axios.get("https://lit-peak-13067.herokuapp.com/get/user/number/"+mainNumber)
+                        .then(resp1 => {
+                        
                             if(resp.data === null){
+                              if(resp1.data === null){
                               var cd = "1"
                               if(this.state.selectedCountry == "PAK"){
                                   cd ="92"
@@ -545,8 +549,11 @@ export default class SignUp1 extends React.Component {
                             }else{
                               this.setState({errMessage: "Email already exist."})
                             }
+                          }else{
+                            this.setState({errMessage: "Phone Number already exist."})
+                          }
                       })
-                     
+                    })
                     }} 
                   >
                     <LatoText
