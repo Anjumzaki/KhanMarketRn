@@ -60,7 +60,9 @@ class CartCards extends React.Component {
     }
   }
 
+
   render() {
+    console.log("cart cards",this.props.cart)
     return (
       <View
         style={{
@@ -71,7 +73,25 @@ class CartCards extends React.Component {
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <TouchableOpacity style={{ padding: 10,paddingLeft:0 }}>
+          <TouchableOpacity style={{ padding: 10,paddingLeft:0 }} onPress ={() => {
+            var sp = this.props.product.product._id
+            var temp = this.props.cart
+            var remvIndx = 0
+            var newArr = []
+            for(var i=0; i<temp.length; i++){
+              if(temp[i].product._id === sp){
+                console.log("selcted",temp[i].product.productName)
+
+                if (i > -1) {
+                   temp.splice(i, 1);
+                }
+              }
+            }
+
+            this.props.cartAsync(temp)
+
+            console.log("newArr",temp)
+          }}>
             <Entypo name="circle-with-cross" size={24} color="#B50000" />
           </TouchableOpacity>
           <Image
