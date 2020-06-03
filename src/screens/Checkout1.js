@@ -802,11 +802,14 @@ class Cart extends Component {
                 
                 text={
                   this.state.orderDate
-                    ? days[this.state.date] +
-                      " " +
+                    ? 
+                    // days[this.state.date]
+                    //  +
+                    //   " " +
                       months[
                         parseInt(this.state.orderDate.substring(3, 5)) - 1
-                      ] +
+                      ] 
+                      +
                       " " +
                       this.state.orderDate.substring(0, 2) +
                       " " +
