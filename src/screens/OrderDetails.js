@@ -8,6 +8,7 @@ import {
   StyleSheet,
   LinearGradient,
   TouchableOpacity,
+  Alert
 } from "react-native";
 import Carousel from "react-native-looped-carousel";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -39,6 +40,7 @@ class OrderDetails extends Component {
       showNum: false,
       step: 0,
       image: "",
+      bd: false
     };
   }
 
@@ -114,6 +116,8 @@ class OrderDetails extends Component {
       var temp = this.props.cart[i].price;
       subTotal = subTotal + parseFloat(temp);
     }
+
+    
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
@@ -454,19 +458,42 @@ class OrderDetails extends Component {
               alignItems: "center",
               justifyContent: "center",
             }}
+            disabled={this.props.route.params.order.isRejected || this.state.bd}
             onPress={() => {
               if (this.props.route.params.order.isAccepted === false) {
-                axios
-                  .put(
-                    "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
-                      this.props.route.params.order._id
-                  )
-                  .then((resp) => alert("Order Cancelled."))
-                  .catch((err) => console.log(err));
+              
+                Alert.alert(
+                  "Alert!",
+                  "Are you sure you want to cancel the order?",
+                  [
+                    {
+                      text: "No",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    {
+                      text: "Yes",
+                      onPress: () => {
+                        axios
+                      .put(
+                        "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
+                          this.props.route.params.order._id
+                      )
+                      .then((resp) => {
+                        this.setState({bd: true})
+                        alert("Order Cancelled Successfully.")
+                      })
+                      .catch((err) => console.log(err));
+                      },
+                    },
+                  ],
+                  { cancelable: true }
+                );
+              
               } else {
                 alert("Order cannot be cancelled after preperation state.");
               }
-            }}
+            }} 
           >
             <LatoText
               fontName="Lato-Bold"
