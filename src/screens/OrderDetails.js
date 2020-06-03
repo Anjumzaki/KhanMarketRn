@@ -458,7 +458,7 @@ class OrderDetails extends Component {
               alignItems: "center",
               justifyContent: "center",
             }}
-            disabled={this.props.route.params.order.isRejected || this.state.bd}
+            disabled={this.props.route.params.order.isRejected || this.state.bd || this.props.route.params.order.isPicked}
             onPress={() => {
               if (this.props.route.params.order.isAccepted === false) {
               
