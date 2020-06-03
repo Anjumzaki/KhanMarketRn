@@ -8,10 +8,12 @@ import {
   StatusBar,
   Platform,
   ActivityIndicator,
+  BackHandler,
+  Alert,
 } from "react-native";
 import StoreCard from "../Components/StoreCard";
 import AsyncStorage from "@react-native-community/async-storage";
-
+import { CommonActions } from '@react-navigation/native';
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import axios from "axios";
 import fb from "../config/Fire";
@@ -46,7 +48,7 @@ class Home extends React.Component {
   componentDidMount() {
     Geolocation.getCurrentPosition(
       (info) => {
-        console.log("INFOOOOOOOOOOOOOOOO",info)
+        console.log("INFOOOOOOOOOOOOOOOO", info);
         axios
           .get(
             "https://lit-peak-13067.herokuapp.com/get/stores/" +
@@ -62,7 +64,7 @@ class Home extends React.Component {
           });
       },
       (error) => {
-        console.log("loc error0",error);
+        console.log("loc error0", error);
       },
       { enableHighAccuracy: false, timeout: 20000, maximumAge: 10000 }
     );
