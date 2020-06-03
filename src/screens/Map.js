@@ -97,6 +97,7 @@ class Map extends React.Component {
               }}
               title={"Google"}
               description={"description"}
+              draggable
             />
           </MapView>
 
@@ -210,3 +211,185 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   );
 
 export default connect(mapStateToProps, mapDispatchToProps)(Map);
+
+
+// import React, { Component } from 'react';
+
+// import MapView, { Marker } from "react-native-maps";
+// import {
+//   StyleSheet,
+//   Text,
+//   View,
+//   Dimensions,
+//   Alert,
+//   TouchableOpacity,
+//   ActivityIndicator,
+//   Button
+// } from "react-native";
+// import Geolocation from "@react-native-community/geolocation";
+// import { conStyles, textStyles, textIn, btnStyles } from "../styles/base";
+// import LatoText from "../Helpers/LatoText";
+// import { bindActionCreators } from "redux";
+// import { locationAsync } from "../store/actions";
+// import { connect } from "react-redux";
+// import {Entypo}  from '@expo/vector-icons'
+
+// import styles from "./styles";
+
+// import axios from "axios";
+// // Disable yellow box warning messages
+// console.disableYellowBox = true;
+
+// class Map extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       loading: true,
+//       region: {
+//         latitude: 10,
+//         longitude: 10,
+//         latitudeDelta: 0.001,
+//         longitudeDelta: 0.001
+//       },
+//       isMapReady: false,
+//       marginTop: 1,
+//       userLocation: "",
+//       regionChangeProgress: false
+//     };
+//   }
+
+//   componentWillMount() {
+//     Geolocation.getCurrentPosition(
+//       (position) => {
+//         const region = {
+//           latitude: position.coords.latitude,
+//           longitude: position.coords.longitude,
+//           latitudeDelta: 0.001,
+//           longitudeDelta: 0.001
+//         };
+//         this.setState({
+//           region: region,
+//           loading: false,
+//           error: null,
+//         });
+//       },
+//       (error) => {
+//         alert(error);
+//         this.setState({
+//           error: error.message,
+//           loading: false
+//         })
+//       },
+//       { enableHighAccuracy: false, timeout: 200000, maximumAge: 5000 },
+//     );
+//   }
+
+//   onMapReady = () => {
+//     this.setState({ isMapReady: true, marginTop: 0 });
+//   }
+
+//   // Fetch location details as a JOSN from google map API
+//     getLocationName = () => {
+//     fetch(
+//       "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+//         this.state.location.coords.latitude +
+//         "," +
+//         this.state.location.coords.longitude +
+//         "&key=AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI"
+//     )
+//       .then((response) => response.json())
+//       .then((responseJson) => {
+//         this.setState({ completeLoc: responseJson });
+//         this.props.locationAsync(
+//           JSON.stringify(responseJson.results[0].formatted_address)
+//         );
+//       })
+//       .catch((err) => console.log("err", err));
+//   };
+//   fetchAddress = () => {
+//     fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + this.state.region.latitude + "," + this.state.region.longitude + "&key=" + "AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI")
+//       .then((response) => response.json())
+//       .then((responseJson) => {
+//         const userLocation = responseJson.results[0].formatted_address;
+//         this.setState({
+//           userLocation: userLocation,
+//           regionChangeProgress: false
+//         });
+//       });
+//   }
+
+//   // Update state on region change
+//   onRegionChange = region => {
+//     this.setState({
+//       region,
+//       regionChangeProgress: true
+//     }, () => this.fetchAddress());
+//   }
+
+//   // Action to be taken after select location button click
+//   onLocationSelect = () => alert(this.state.userLocation);
+
+//   render() {
+//     if (this.state.loading) {
+//       return (
+//         <View style={styles.spinnerView}>
+//           <ActivityIndicator size="large" color="#0000ff" />
+//         </View>
+//       );
+//     } else {
+//       return (
+//         <View style={styles.container}>
+//           <View style={{ flex: 2 }}>
+//             {!!this.state.region.latitude && !!this.state.region.longitude &&
+//               <MapView
+//                 style={{ ...styles.map, marginTop: this.state.marginTop }}
+//                 initialRegion={this.state.region}
+//                 showsUserLocation={true}
+//                 onMapReady={this.onMapReady}
+//                 onRegionChangeComplete={this.onRegionChange}
+//               >
+//                 {/* <MapView.Marker
+//                   coordinate={{ "latitude": this.state.region.latitude, "longitude": this.state.region.longitude }}
+//                   title={"Your Location"}
+//                   draggable
+//                 /> */}
+//               </MapView>
+//             }
+
+//             <View style={styles.mapMarkerContainer}>
+//              <Entypo name="location-pin" color="red" size={50} />
+//             </View>
+//           </View>
+//           <View style={styles.deatilSection}>
+//             <Text style={{ fontSize: 16, fontWeight: "bold", fontFamily: "roboto", marginBottom: 20 }}>Move map for location</Text>
+//             <Text style={{ fontSize: 10, color: "#999" }}>LOCATION</Text>
+//             <Text numberOfLines={2} style={{ fontSize: 14, paddingVertical: 10, borderBottomColor: "silver", borderBottomWidth: 0.5 }}>
+//               {!this.state.regionChangeProgress ? this.state.userLocation : "Identifying Location..."}</Text>
+//             <View style={styles.btnContainer}>
+//               <Button
+//                 title="PICK THIS LOCATION"
+//                 disabled={this.state.regionChangeProgress}
+//                 onPress={this.onLocationSelect}
+//               >
+//               </Button>
+//             </View>
+//           </View>
+//         </View>
+//       );
+//     }
+//   }
+// }
+
+// const mapStateToProps = (state) => ({
+//   location: state.Location.locationData,
+//   user: state.user.user,
+// });
+// const mapDispatchToProps = (dispatch, ownProps) =>
+//   bindActionCreators(
+//     {
+//       locationAsync,
+//     },
+//     dispatch
+//   );
+
+// export default connect(mapStateToProps, mapDispatchToProps)(Map);
