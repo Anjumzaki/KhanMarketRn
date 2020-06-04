@@ -376,6 +376,7 @@ class Cart extends Component {
               ignoreCase={true}
               codeLength={6}
               inputPosition="center"
+              keyboardType={"number-pad"}
               size={wp(8)}
               onFulfill={(isValid) =>
                 isValid

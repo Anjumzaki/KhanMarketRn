@@ -298,6 +298,7 @@ export default class SignUp1 extends React.Component {
               ignoreCase={true}
               codeLength={6}
               inputPosition="center"
+              keyboardType={'number-pad'}
               size={wp(8)}
               onFulfill={(isValid) =>
                 isValid
