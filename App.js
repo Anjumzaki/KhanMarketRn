@@ -39,7 +39,7 @@ import SignUp1 from "./src/screens/SignUp1";
 import ChoosePass from "./src/screens/ChoosePass";
 import OrderDetails from "./src/screens/OrderDetails";
 import AboutUs from "./src/screens/AboutUs";
-
+import LastHeader from './src/Helpers/LastHeader'
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
   <AuthStack.Navigator initialRouteName={'Login'} headerMode="none">
@@ -113,7 +113,7 @@ const HomeStackScreen = (route) => (
       component={QrCode}
       options={{
         header: (props) => (
-          <StackHeader cart={false} nameTitle="ORDER PLACED" {...props} />
+          <LastHeader  cart={false} nameTitle="ORDER PLACED" {...props} />
         ),
       }}
     />

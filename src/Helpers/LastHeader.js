@@ -28,7 +28,7 @@ import { storeAsync, cartAsync } from "../store/actions";
 import { connect } from "react-redux";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 
-class StackHeader extends React.Component {
+class LastHeader extends React.Component {
   render() {
     return (
       <View
@@ -61,7 +61,7 @@ class StackHeader extends React.Component {
         <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
           <TouchableOpacity
             style={{ padding: 20 }}
-            onPress={() => this.props.navigation.goBack()}
+            onPress={() => this.props.navigation.navigate('Home')}
           >
             <MaterialIcons name="arrow-back" color="white" size={25} />
           </TouchableOpacity>
@@ -142,4 +142,4 @@ const mapDispatchToProps = (dispatch, ownProps) =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(StackHeader);
+export default connect(mapStateToProps, mapDispatchToProps)(LastHeader);

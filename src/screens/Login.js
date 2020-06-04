@@ -373,7 +373,7 @@ class Login extends React.Component {
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={17}
-                  col="green"
+                  col="red"
                   text={"Forgot Password?"}
                 />
               </TouchableOpacity>

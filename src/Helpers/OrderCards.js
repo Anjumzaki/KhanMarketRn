@@ -98,7 +98,7 @@ class OrderCards extends React.Component {
                   fontName="Lato-Regular"
                   fonSiz={17}
                   col="#2E2E2E"
-                  text={"Total: $"+parseFloat(this.props.order.totalAmount).toFixed(2)}
+                  text={"Total: $"+(parseFloat(this.props.order.totalAmount)+parseFloat(this.props.order.tax)).toFixed(2)}
                 />
               </View>
               <View style={{flexDirection:"row",justifyContent:'space-between'}}>

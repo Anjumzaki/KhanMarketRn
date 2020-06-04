@@ -484,17 +484,64 @@ class OrderDetails extends Component {
           >
             <LatoText
               fontName="Sarabun-Medium"
-              fonSiz={25}
+              fonSiz={18}
               col="#2E2E2E"
-              text={"Total Price"}
+              text={"Sub Total"}
             />
             <LatoText
               fontName="Sarabun-Medium"
-              fonSiz={25}
+              fonSiz={18}
               col="#2E2E2E"
               text={
                 "$" +
                 parseFloat(this.props.route.params.order.totalAmount).toFixed(2)
+              }
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              padding: 20,
+            }}
+          >
+            <LatoText
+              fontName="Sarabun-Medium"
+              fonSiz={18}
+              col="#2E2E2E"
+              text={"Tax"}
+            />
+            <LatoText
+              fontName="Sarabun-Medium"
+              fonSiz={18}
+              col="#2E2E2E"
+              text={
+                "$" +
+                parseFloat(this.props.route.params.order.tax).toFixed(2)
+              }
+            />
+          </View>
+          <View style={lines.simple} />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              padding: 20,
+            }}
+          >
+            <LatoText
+              fontName="Sarabun-Medium"
+              fonSiz={25}
+              col="#2E2E2E"
+              text={"Total"}
+            />
+            <LatoText
+              fontName="Sarabun-Medium"
+              fonSiz={18}
+              col="#2E2E2E"
+              text={
+                "$" +
+                (parseFloat(this.props.route.params.order.totalAmount) + parseFloat(this.props.route.params.order.tax)).toFixed(2) 
               }
             />
           </View>
