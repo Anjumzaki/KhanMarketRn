@@ -21,7 +21,7 @@ class CustomDrawerContent extends Component {
     super(props);
 
     this.state = {
-      image: "",
+      image: "", 
     };
   }
 
@@ -29,7 +29,7 @@ class CustomDrawerContent extends Component {
     if(this.props.user){
       const ref = firebase
       .storage()
-      .ref("store_images/" + this.props.user.user._id + ".jpg");
+      .ref("profile_images/" + this.props.user.user._id + ".jpg");
     ref
       .getDownloadURL()
       .then((url) => {
