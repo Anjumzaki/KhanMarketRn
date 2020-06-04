@@ -515,51 +515,60 @@ export default class SignUp1 extends React.Component {
                       borderRadius: 5,
                     }}
                     onPress={async () => {
-                      var num = Math.floor(100000 + Math.random() * 900000);
-                      await this.setState({ num: num.toString() });
-                      this.forceUpdate();
-                      axios.get("https://lit-peak-13067.herokuapp.com/get/user/"+this.state.email.trim())
-                      .then(resp => {
-                        axios.get("https://lit-peak-13067.herokuapp.com/get/user/number/"+mainNumber)
-                        .then(resp1 => {
-                          console.log("sddsdd", resp.data, resp1.data)
-                            if(resp.data === null){
-                              if(resp1.data === null){
-                              var cd = "1"
-                              if(this.state.selectedCountry == "PAK"){
-                                  cd ="92"
-                              }
-                              console.log("CDDDDDDDDD",cd)
-                              axios
-                              .get(
-                                "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
-                                  this.state.email.toLowerCase().trim() +
-                                  "/" +
-                                  num
-                              )
-                              .then((resp) => this.refs.modal3.open())
-                              .catch((err) => console.log(err));
-      
-                            axios
-                              .get(
-                                "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
-                                mainNumber +
-                                  "/" +
-                                  num
-                              )
-                              .then((resp) => this.refs.modal3.open())
-                              .catch((err) => console.log("num err",err));
-                            }else{
-                              this.setState({errMessage: "Phone Number already exist."})
-                            }
+                      if(this.state.email){
+                        if(this.state.mobile){
+                              var num = Math.floor(100000 + Math.random() * 900000);
+                              await this.setState({ num: num.toString() });
+                              this.forceUpdate();
+                              axios.get("https://lit-peak-13067.herokuapp.com/get/user/"+this.state.email.trim())
+                              .then(resp => {
+                                axios.get("https://lit-peak-13067.herokuapp.com/get/user/number/"+mainNumber)
+                                .then(resp1 => {
+                                  console.log("sddsdd", resp.data, resp1.data)
+                                    if(resp.data === null){
+                                      if(resp1.data === null){
+                                      var cd = "1"
+                                      if(this.state.selectedCountry == "PAK"){
+                                          cd ="92"
+                                      }
+                                      console.log("CDDDDDDDDD",cd)
+                                      axios
+                                      .get(
+                                        "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
+                                          this.state.email.toLowerCase().trim() +
+                                          "/" +
+                                          num
+                                      )
+                                      .then((resp) => this.refs.modal3.open())
+                                      .catch((err) => console.log(err));
+              
+                                    axios
+                                      .get(
+                                        "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
+                                        mainNumber +
+                                          "/" +
+                                          num
+                                      )
+                                      .then((resp) => this.refs.modal3.open())
+                                      .catch((err) => console.log("num err",err));
+                                    }else{
+                                      this.setState({errMessage: "Phone Number already exist."})
+                                    }
+                                  }else{
+                                    this.setState({errMessage: "Email already exist."})
+                                  }
+                              })
+                              .catch(err => console.log(err))
+                              .catch(err => console.log(err))
+                            })
                           }else{
-                            this.setState({errMessage: "Email already exist."})
+                            this.setState({errMessage: "Please Enter Phone Number."})
                           }
-                      })
-                      .catch(err => console.log(err))
-                      .catch(err => console.log(err))
-                    })
-                    }} 
+                        }else{
+                          this.setState({errMessage: "Please Enter Email."})
+                        }
+                            }} 
+                            
                   >
                     <LatoText
                       fontName="Lato-Regular"
