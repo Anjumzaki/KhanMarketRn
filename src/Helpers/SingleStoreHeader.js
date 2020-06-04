@@ -119,7 +119,7 @@ class SingleStoreHeader extends React.Component {
             </View>
           </TouchableOpacity>
         </View>
-        <View
+        <TouchableOpacity
           style={{
             flexDirection: "row",
             justifyContent: "center",
@@ -127,6 +127,9 @@ class SingleStoreHeader extends React.Component {
             position: "relative",
             bottom: 15
           }}
+          onPress={()=> this.props.navigation.navigate('StoreInfo',{
+            storeId: this.props.store.id
+          })}
         >
           <MaterialIcons name="location-on" size={16} color="white" />
           <LatoText
@@ -135,7 +138,7 @@ class SingleStoreHeader extends React.Component {
             col="white"
             text={this.props.store.address}
           />
-        </View>
+        </TouchableOpacity>
         <View style={{ flexDirection: "row" }}>
           <View style={styles.wrapperText}>
             <EvilIcons name="search" size={26} color="#89898c" />
