@@ -953,7 +953,7 @@ class Cart extends Component {
               fonSiz={17}
               col="#2E2E2E"
               text={
-                (this.props.user.user.mobile ? "+" : "") +
+                // (this.props.user.user.mobile ? "+" : "") +
                 (this.props.user.user.mobile
                   ? this.props.user.user.mobile
                   : this.state.mobile)
@@ -1247,10 +1247,10 @@ class Cart extends Component {
                   isGuest: this.props.user.user.isGuest,
                 })
                 .then((resp) => {
-                  this.props.storeAsync('')
-                  this.props.cartSizeAsync(0)
-                  this.props.storeHeaderAsync('')
-                  this.props.favStoreAsync('')
+                  // this.props.storeAsync('')
+                  // this.props.cartSizeAsync(0)
+                  // this.props.storeHeaderAsync('')
+                  // this.props.favStoreAsync('')
                   this.props.navigation.navigate("QrCode", {
                     orderId: resp.data.order1._id,
                     codeId: codeId,
