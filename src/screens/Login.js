@@ -373,7 +373,7 @@ class Login extends React.Component {
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={17}
-                  col="#B50000"
+                  col="green"
                   text={"Forgot Password?"}
                 />
               </TouchableOpacity>
@@ -394,7 +394,7 @@ class Login extends React.Component {
                   <LatoText
                     fontName="Lato-Regular"
                     fonSiz={17}
-                    col="#5C5C5C"
+                    col="red"
                     text={this.state.errMessage || ""}
                   />
                 </>
@@ -429,7 +429,7 @@ class Login extends React.Component {
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={17}
-                  col="#B50000"
+                  col="green"
                   text={" New memeber? Sign up "}
                 />
               </TouchableOpacity>
@@ -488,7 +488,7 @@ class Login extends React.Component {
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={17}
-                  col="#B50000"
+                  col="green"
                   text={"Skip this and continue as guest"}
                 />
               </TouchableOpacity>
