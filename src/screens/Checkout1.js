@@ -1258,7 +1258,11 @@ class Cart extends Component {
                   });
                 });
             }}
-            style={[btnStyles.cartBtn, { width: "100%" }]}
+            style={[
+              this.state.storeTimings.isClosed ||
+              !nameCheck ||
+              !this.state.numVerified ||
+              this.state.isStoreClosed ? btnStyles.cartBtn1: btnStyles.cartBtn, { width: "100%" }]}
           >
             <LatoText
               fontName="Lato-Regular"

@@ -94,6 +94,12 @@ const btnStyles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 5
   },
+  cartBtn1: {
+    backgroundColor: "#808080",
+    paddingVertical: 10,
+    alignItems: "center",
+    borderRadius: 5
+  },
   plusBtn: {
     paddingVertical: 10,
     paddingHorizontal: 20
