@@ -1081,7 +1081,7 @@ class Cart extends Component {
             </View>
 
             {this.state.isChecked && (
-              <View style={{ flex: 1, justifyContent: "space-evenly" }}>
+              <View style={{ flex: 1, justifyContent: "space-evenly",marginBottom:100 }}>
                 <View style={{ flexGrow: 1 }}>
                   <View
                     style={{

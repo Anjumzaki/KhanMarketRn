@@ -41,6 +41,7 @@ class Settings extends React.Component {
       image: "",
       old: "",
       newP: "",
+      isDisabled: false,
     };
   }
 
@@ -71,35 +72,41 @@ class Settings extends React.Component {
         temp.user.name = this.state.name;
 
         this.props.userAsync(temp);
-
       })
       .then(() => this.refs.modal3.close)
       .catch((err) => console.log(err));
   }
 
   editPass() {
-    console.log("In edit pass");
-    axios
-      .put(
-        "https://lit-peak-13067.herokuapp.com/api/users/reset/password/" +
-          this.state.old +
-          "/" +
-          this.state.newP +
-          "/" +
-          this.props.user.user.email
-      )
-      .then((resp) => {
-        console.log(resp);
-        if (resp.data.success == "true") {
-          alert("Password changed successfully ");
-          this.refs.modal3.close();
-        } else if (resp.data.success == "false") {
-          alert("Password Mismatch");
-        } else {
-          alert("Something went wrong");
-        }
-      })
-      .catch((err) => console.log(err));
+    if (this.state.old) {
+      if (this.state.newP) {
+        axios
+          .put(
+            "https://lit-peak-13067.herokuapp.com/api/users/reset/password/" +
+              this.state.old +
+              "/" +
+              this.state.newP +
+              "/" +
+              this.props.user.user.email
+          )
+          .then((resp) => {
+            console.log(resp);
+            if (resp.data.success == "true") {
+              alert("Password changed successfully ");
+              this.refs.modal3.close();
+            } else if (resp.data.success == "false") {
+              alert("Password Mismatch");
+            } else {
+              alert("Something went wrong");
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        alert("Please enter new password");
+      }
+    } else {
+      alert("Please enter old password");
+    }
   }
 
   uploadImage = async (uri) => {
@@ -120,7 +127,6 @@ class Settings extends React.Component {
           style={[styles.modal, styles.modal3]}
           position={"center"}
           ref={"modal3"}
-          isDisabled={this.state.isDisabled}
         >
           <View
             style={{
@@ -141,6 +147,8 @@ class Settings extends React.Component {
                   marginBottom: 20,
                 }}
                 onChangeText={(old) => this.setState({ old })}
+                autoCapitalize={false}
+                secureTextEntry={true}
               />
               <TextInput
                 placeholder={"New Password"}
@@ -151,12 +159,17 @@ class Settings extends React.Component {
                   borderRadius: 10,
                 }}
                 onChangeText={(newP) => this.setState({ newP })}
+                autoCapitalize={false}
+                secureTextEntry={true}
               />
             </View>
             <View
               style={{ flexDirection: "row", justifyContent: "space-evenly" }}
             >
-              <TouchableOpacity onPress={() => this.refs.modal3.close()}>
+              <TouchableOpacity
+                style={{ padding: 5 }}
+                onPress={() => this.refs.modal3.close()}
+              >
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={15}
@@ -169,6 +182,7 @@ class Settings extends React.Component {
                 onPress={() => {
                   this.editPass();
                 }}
+                style={{ padding: 5 }}
               >
                 <LatoText
                   fontName="Lato-Regular"
@@ -213,7 +227,6 @@ class Settings extends React.Component {
                   if (response.didCancel) {
                   } else if (response.error) {
                   } else if (response.customButton) {
-                   
                   } else {
                     const source = { uri: response.uri };
                     // this.saveImage(source);
@@ -385,73 +398,6 @@ class Settings extends React.Component {
               />
             </View>
           </View>
-          {/* <View style={[lines.simple, { marginVertical: 30 }]} /> */}
-          {/* <View style={{ marginTop: 0 }} /> */}
-          {/* <LatoText
-            fontName="Lato-Regular"
-            fonSiz={25}
-            col="#5C5C5C"
-            text="General"
-          /> */}
-          {/* <View style={{ marginTop: 20 }} />
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={18}
-              col="#5C5C5C"
-              text="Email notifications"
-            />
-            <Switch
-              trackColor={{ false: "#5C5C5C", true: "#2AA034" }}
-              thumbColor={this.state.isEnabled ? "white" : "white"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={() =>
-                this.setState({ isEnabled: !this.state.isEnabled })
-              }
-              value={this.state.isEnabled}
-            />
-          </View> */}
-          {/* <View style={{ marginTop: 20 }} /> */}
-          {/* <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={18}
-              col="#5C5C5C"
-              text="Sms notifications"
-            />
-            <Switch
-              trackColor={{ false: "#5C5C5C", true: "#2AA034" }}
-              thumbColor={this.state.isEnabled1 ? "white" : "white"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={() =>
-                this.setState({ isEnabled1: !this.state.isEnabled1 })
-              }
-              value={this.state.isEnabled1}
-            />
-          </View> */}
-          {/* <View style={[lines.simple, { marginVertical: 30 }]} />
-          <TouchableOpacity>
-            <LatoText
-              fontName="Lato-Bold"
-              fonSiz={15}
-              col="black"
-              text="Terms & conditions"
-            />
-          </TouchableOpacity> */}
         </ScrollView>
       </>
     );
