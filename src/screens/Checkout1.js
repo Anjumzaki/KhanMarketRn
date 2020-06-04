@@ -35,7 +35,14 @@ import CheckBox from "react-native-check-box";
 const { width } = Dimensions.get("window");
 const { height } = 300;
 import { bindActionCreators } from "redux";
-import { cartAsync,userAsync,cartSizeAsync,favStoreAsync,storeHeaderAsync,storeAsync } from "../store/actions";
+import {
+  cartAsync,
+  userAsync,
+  cartSizeAsync,
+  favStoreAsync,
+  storeHeaderAsync,
+  storeAsync,
+} from "../store/actions";
 import { connect } from "react-redux";
 import axios from "axios";
 import timestamp from "time-stamp";
@@ -54,8 +61,8 @@ class Cart extends Component {
       isChecked: false,
       orderDate: "",
       orderTime: "",
-      postDate:'',
-      postTime: '',
+      postDate: "",
+      postTime: "",
       storeTimings: {},
       start: "",
       end: "",
@@ -71,8 +78,8 @@ class Cart extends Component {
       codeMsg: false,
       on: "",
       isDisabled: false,
-      selectdDay: '',
-      isStoreClosed: false
+      selectdDay: "",
+      isStoreClosed: false,
     };
   }
 
@@ -98,92 +105,92 @@ class Cart extends Component {
         var ishalf = false;
         for (var i = 0; i < resp.data.storeTimings.length; i++) {
           //
-          
+
           if (resp.data.storeTimings[i].day.substring(0, 3) === day) {
             //
-            var temp ={}
-            if(resp.data.storeTimings[i].isClosed === true){
-                temp = {}
-            }else{
-            if (resp.data.storeTimings[i].openTime.includes("30")) {
-              ishalf = true;
-            }
-            var su = "";
-            var eu = "";
-            if (resp.data.storeTimings[i].openTime.includes("PM")) {
-              su = "PM";
+            var temp = {};
+            if (resp.data.storeTimings[i].isClosed === true) {
+              temp = {};
             } else {
-              su = "AM";
-            }
-            if (resp.data.storeTimings[i].ClosingTime.includes("PM")) {
-              eu = "PM";
-            } else {
-              eu = "AM";
-            }
-            //
-            var st = resp.data.storeTimings[i].openTime.substring(0, 2);
-            var et = resp.data.storeTimings[i].ClosingTime.substring(0, 2);
-            if (ishalf) {
-              st = parseInt(st) + 1;
-            }
-            var arr = [];
-            var unit = su;
-            for (var j = 0; j < 24; j++) {
-              if (parseInt(st) === parseInt(et) && unit === eu) {
-                break;
+              if (resp.data.storeTimings[i].openTime.includes("30")) {
+                ishalf = true;
               }
-              var temp1 = st + ":00 " + unit + " - ";
-              st = parseInt(parseInt(st) + 1);
+              var su = "";
+              var eu = "";
+              if (resp.data.storeTimings[i].openTime.includes("PM")) {
+                su = "PM";
+              } else {
+                su = "AM";
+              }
+              if (resp.data.storeTimings[i].ClosingTime.includes("PM")) {
+                eu = "PM";
+              } else {
+                eu = "AM";
+              }
+              //
+              var st = resp.data.storeTimings[i].openTime.substring(0, 2);
+              var et = resp.data.storeTimings[i].ClosingTime.substring(0, 2);
+              if (ishalf) {
+                st = parseInt(st) + 1;
+              }
+              var arr = [];
+              var unit = su;
+              for (var j = 0; j < 24; j++) {
+                if (parseInt(st) === parseInt(et) && unit === eu) {
+                  break;
+                }
+                var temp1 = st + ":00 " + unit + " - ";
+                st = parseInt(parseInt(st) + 1);
 
-              if (parseInt(st) > 11) {
-                if (unit === "PM") {
-                  unit = "AM";
-                } else {
-                  unit = "PM";
+                if (parseInt(st) > 11) {
+                  if (unit === "PM") {
+                    unit = "AM";
+                  } else {
+                    unit = "PM";
+                  }
+                }
+                if (parseInt(st) > 12) {
+                  st = 1;
+                }
+                // if(parseInt(st) === parseInt(et) && unit === eu) {
+                //   break
+                // }
+                var temp2 = parseInt(st) + ":00 " + unit;
+                // st=parseInt(parseInt(st)+1)
+
+                if (parseInt(st) > 11) {
+                  if (unit === "PM") {
+                    unit = "AM";
+                  } else {
+                    unit = "PM";
+                  }
+                }
+                if (parseInt(st) > 12) {
+                  st = 1;
+                }
+                var temp = temp1 + temp2;
+                arr.push(temp);
+
+                if (parseInt(st) === parseInt(et) && unit === eu) {
+                  break;
                 }
               }
-              if (parseInt(st) > 12) {
-                st = 1;
-              }
-              // if(parseInt(st) === parseInt(et) && unit === eu) {
-              //   break
-              // }
-              var temp2 = parseInt(st) + ":00 " + unit;
-              // st=parseInt(parseInt(st)+1)
-
-              if (parseInt(st) > 11) {
-                if (unit === "PM") {
-                  unit = "AM";
-                } else {
-                  unit = "PM";
-                }
-              }
-              if (parseInt(st) > 12) {
-                st = 1;
-              }
-              var temp = temp1 + temp2;
-              arr.push(temp);
-
-              if (parseInt(st) === parseInt(et) && unit === eu) {
-                break;
-              }
-            }
-            temp = resp.data.storeTimings[i]
+              temp = resp.data.storeTimings[i];
             }
 
-            if(resp.data.storeTimings[i].isClosed){
+            if (resp.data.storeTimings[i].isClosed) {
               this.setState({
                 storeTimings: "",
-                start: '',
-                end: '',
-                startUnit: '',
-                endUnit: '',
+                start: "",
+                end: "",
+                startUnit: "",
+                endUnit: "",
                 timeArray: ["Store Closed"],
-                orderTime: '',
+                orderTime: "",
                 tax: resp.data.tax,
-                isStoreClosed: true
+                isStoreClosed: true,
               });
-            }else{
+            } else {
               this.setState({
                 storeTimings: resp.data.storeTimings[i],
                 start: resp.data.storeTimings[i].openTime.substring(0, 2),
@@ -193,10 +200,9 @@ class Cart extends Component {
                 timeArray: arr,
                 orderTime: arr[0],
                 tax: resp.data.tax,
-                isStoreClosed: false
+                isStoreClosed: false,
               });
             }
-           
           }
         }
         //
@@ -235,8 +241,7 @@ class Cart extends Component {
 
   makeid(length) {
     var result = "";
-    var characters =
-      "0123456789";
+    var characters = "0123456789";
     var charactersLength = characters.length;
     for (var i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -261,8 +266,8 @@ class Cart extends Component {
   //  ejIEyo
   render() {
     console.log("SD", this.state, this.props.user);
-    var codeId = this.makeid(3)+"-"+this.makeid(6);
-    console.log("CODE ID",codeId)
+    var codeId = this.makeid(3) + "-" + this.makeid(6);
+    console.log("CODE ID", codeId);
     //
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
@@ -339,7 +344,7 @@ class Cart extends Component {
     ];
 
     return (
-      <View style={{ flex: 1, backgroundColor: "white" }}>
+      <>
         <Modal
           style={[styles.modal, styles.modal6]}
           position={"center"}
@@ -399,7 +404,7 @@ class Cart extends Component {
             />
           )}
           <View style={{ paddingBottom: 10 }} />
-          <TouchableOpacity onPress={() => this.refs.modal3.close()}>
+          <TouchableOpacity onPress={() => this.refs.modal6.close()}>
             <LatoText
               fontName="Lato-Regular"
               fonSiz={15}
@@ -439,7 +444,11 @@ class Cart extends Component {
                 <TouchableOpacity
                   onPress={() => {
                     this.getTimings(this.getDayName(index));
-                    this.setState({ date: item, orderDate: dates[item], selectdDay: this.getDayName(index) });
+                    this.setState({
+                      date: item,
+                      orderDate: dates[item],
+                      selectdDay: this.getDayName(index),
+                    });
                   }}
                   style={
                     this.state.date == item ? styles.dSelect : styles.dUnSelect
@@ -521,9 +530,10 @@ class Cart extends Component {
             </TouchableOpacity>
           </View>
         </Modal>
+        {/* Wip */}
         <Modal
-          style={[styles.modal, styles.modal3]}
-          position={"center"}
+          style={[styles.modal, styles.modal4]}
+          position={"top"}
           ref={"modal4"}
           isDisabled={this.state.isDisabled}
         >
@@ -538,9 +548,8 @@ class Cart extends Component {
               />
               <View
                 style={{
-                  width: "90%",
+                  width: "100%",
                   flex: 1,
-                  justifyContent: "space-evenly",
                 }}
               >
                 <View>
@@ -673,9 +682,9 @@ class Cart extends Component {
                     nameCheck = true;
                   }
 
-                  var em = this.props.user.user.email
-                  if(this.state.email){
-                    em=this.state.email
+                  var em = this.props.user.user.email;
+                  if (this.state.email) {
+                    em = this.state.email;
                   }
 
                   axios
@@ -685,27 +694,27 @@ class Cart extends Component {
                       {
                         name: this.state.name,
                         email: em,
-                        mobile: this.state.mobile,
+                        mobile: '+1' +  this.state.mobile,
                       }
                     )
                     .then((resp) => {
-                      var temp = this.props.user.user
-                      temp.name = this.state.name
-                        temp.email = em
-                    
-                      temp.mobile = this.state.mobile
+                      var temp = this.props.user.user;
+                      temp.name = this.state.name;
+                      temp.email = em;
+
+                      temp.mobile = '+1' + this.state.mobile;
 
                       var data = {
                         token: this.props.user.token,
-                        user: temp
-                      }
-
-                      this.props.userAsync(data)
+                        user: temp,
+                      };
+ 
+                      this.props.userAsync(data);
                       this.refs.modal4.close();
                     })
                     .catch((err) => console.log(err));
 
-                  // this.refs.modal4.close()
+                  this.refs.modal4.close()
                 }}
               >
                 <LatoText
@@ -713,191 +722,161 @@ class Cart extends Component {
                   fonSiz={15}
                   col="#B50000"
                   txtAlign={"center"}
-                  text={"Sav1e"}
+                  text={"Save"}
                 />
               </TouchableOpacity>
             </View>
           </View>
         </Modal>
-        <ScrollView style={{ backgroundColor: "white" }}>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingVertical: 30,
-              alignItems: "center",
-            }}
-          >
-            <LatoText
-              fontName="Lato-Bold"
-              fonSiz={20}
-              col="#2E2E2E"
-              text="Pickup From"
-            ></LatoText>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom: 0,
-              paddingTop: 0,
-              alignItems: "center",
-            }}
-          >
-            <Image
-              style={{ width: 44, height: 44, marginRight: 10 }}
-              source={require("../../assets/new.png")}
-            />
-            <View>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "white",
+            minHeight: Dimensions.get("window").height - 100,
+          }}
+        >
+          <ScrollView style={{ backgroundColor: "white" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingVertical: 30,
+                alignItems: "center",
+              }}
+            >
               <LatoText
                 fontName="Lato-Bold"
                 fonSiz={20}
                 col="#2E2E2E"
-                text={this.props.store.name}
-              />
+                text="Pickup From"
+              ></LatoText>
             </View>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingLeft: 70,
-              justifyContent: "space-between",
-            }}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={17}
-              col="#2E2E2E"
-              text={this.props.store.address}
-            />
-          </View>
-
-          <View style={lines.simple} />
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingTop: 30,
-              paddingBottom: 20,
-
-              alignItems: "center",
-            }}
-          >
-            <LatoText
-              fontName="Lato-Bold"
-              fonSiz={20}
-              col="#2E2E2E"
-              text="Order should be ready till"
-            ></LatoText>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom: 20,
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
             <View
               style={{
                 flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingBottom: 0,
+                paddingTop: 0,
+                alignItems: "center",
+              }}
+            >
+              <Image
+                style={{ width: 44, height: 44, marginRight: 10 }}
+                source={require("../../assets/new.png")}
+              />
+              <View>
+                <LatoText
+                  fontName="Lato-Bold"
+                  fonSiz={20}
+                  col="#2E2E2E"
+                  text={this.props.store.name}
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingLeft: 70,
+                justifyContent: "space-between",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={17}
+                col="#2E2E2E"
+                text={this.props.store.address}
+              />
+            </View>
+
+            <View style={lines.simple} />
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingTop: 30,
+                paddingBottom: 20,
 
                 alignItems: "center",
               }}
             >
               <LatoText
                 fontName="Lato-Bold"
-                fonSiz={18}
-                col={"#2E2E2E"}
-                txtAlign={"center"}
-                text={
-                  this.state.orderDate
-                    ? this.state.selectdDay
-                    : new Date().toDateString().substring(0, 3)
-                  
-                }
-              />
-              <Text>
-                  {' '}
-              </Text>
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={17}
-                col={"#2E2E2E"}
-                txtAlign={"center"}
-                
-                text={
-                  this.state.orderDate
-                    ? 
-                    // days[this.state.date]
-                    //  +
-                    //   " " +
-                      months[
-                        parseInt(this.state.orderDate.substring(3, 5)) - 1
-                      ] 
-                      +
-                      " " +
-                      this.state.orderDate.substring(0, 2) +
-                      " " +
-                      this.state.orderDate.substring(6, 10)
-                    : new Date().toDateString().substring(3, 15)
-                }
-               
-              />
-              
-              {this.state.isStoreClosed ? (
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={15}
-                  col={"#2E2E2E"}
-                  txtAlign={"center"}
-                  text={"    Store Closed"}
-                />
-              ) : (
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={15}
-                  col={"#2E2E2E"}
-                  txtAlign={"center"}
-                  text={"     " + this.state.orderTime}
-                />
-              )}
+                fonSiz={20}
+                col="#2E2E2E"
+                text="Order should be ready till"
+              ></LatoText>
             </View>
-            <TouchableOpacity
-              style={{ paddingHorizontal: 10 }}
-              onPress={() => this.refs.modal3.open()}
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingBottom: 20,
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
             >
-              <MaterialCommunityIcons
-                name="pencil"
-                size={20}
-                color={"#2E2E2E"}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={lines.simple} />
+              <View
+                style={{
+                  flexDirection: "row",
 
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingTop: 30,
-              paddingBottom: 20,
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <LatoText
-              fontName="Lato-Bold"
-              fonSiz={20}
-              col="#2E2E2E"
-              text="Contact Details"
-            />
-            {this.props.user.user.isGuest ? (
+                  alignItems: "center",
+                }}
+              >
+                <LatoText
+                  fontName="Lato-Bold"
+                  fonSiz={18}
+                  col={"#2E2E2E"}
+                  txtAlign={"center"}
+                  text={
+                    this.state.orderDate
+                      ? this.state.selectdDay
+                      : new Date().toDateString().substring(0, 3)
+                  }
+                />
+                <Text> </Text>
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col={"#2E2E2E"}
+                  txtAlign={"center"}
+                  text={
+                    this.state.orderDate
+                      ? // days[this.state.date]
+                        //  +
+                        //   " " +
+                        months[
+                          parseInt(this.state.orderDate.substring(3, 5)) - 1
+                        ] +
+                        " " +
+                        this.state.orderDate.substring(0, 2) +
+                        " " +
+                        this.state.orderDate.substring(6, 10)
+                      : new Date().toDateString().substring(3, 15)
+                  }
+                />
+
+                {this.state.isStoreClosed ? (
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={15}
+                    col={"#2E2E2E"}
+                    txtAlign={"center"}
+                    text={"    Store Closed"}
+                  />
+                ) : (
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={15}
+                    col={"#2E2E2E"}
+                    txtAlign={"center"}
+                    text={"     " + this.state.orderTime}
+                  />
+                )}
+              </View>
               <TouchableOpacity
                 style={{ paddingHorizontal: 10 }}
-                onPress={() => this.refs.modal4.open()}
+                onPress={() => this.refs.modal3.open()}
               >
                 <MaterialCommunityIcons
                   name="pencil"
@@ -905,184 +884,292 @@ class Cart extends Component {
                   color={"#2E2E2E"}
                 />
               </TouchableOpacity>
-            ) : null}
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom: 20,
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={17}
-              col="#2E2E2E"
-              text="Name"
-            />
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={17}
-              col="#2E2E2E"
-              text={
-                this.props.user.user.name
-                  ? this.props.user.user.name
-                  : this.state.name
-              }
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom: 20,
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={17}
-              col="#2E2E2E"
-              text="Phone Number"
-            />
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={17}
-              col="#2E2E2E"
-              text={
-                // (this.props.user.user.mobile ? "+" : "") +
-                (this.props.user.user.mobile
-                  ? this.props.user.user.mobile
-                  : this.state.mobile)
-              }
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom: 20,
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={17}
-              col="#2E2E2E"
-              text="Email (optional)"
-            />
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={17}
-              col="#2E2E2E"
-              text={
-                this.props.user.user.email
-                  ? this.props.user.user.email
-                  : this.state.email
-              }
-            />
-          </View>
-          <View style={{ alignItems: "flex-end", paddingHorizontal: 20 }}>
-            {this.state.numVerified ? (
+            </View>
+            <View style={lines.simple} />
+
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingTop: 30,
+                paddingBottom: 20,
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Bold"
+                fonSiz={20}
+                col="#2E2E2E"
+                text="Contact Details"
+              />
+              {this.props.user.user.isGuest ? (
+                <TouchableOpacity
+                  style={{ paddingHorizontal: 10 }}
+                  onPress={() => this.refs.modal4.open()}
+                >
+                  <MaterialCommunityIcons
+                    name="pencil"
+                    size={20}
+                    color={"#2E2E2E"}
+                  />
+                </TouchableOpacity>
+              ) : null}
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingBottom: 20,
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
               <LatoText
                 fontName="Lato-Regular"
                 fonSiz={17}
-                col="#2AA034"
-                text={"Verified"}
+                col="#2E2E2E"
+                text="Name"
               />
-            ) : (
-              <TouchableOpacity
-                onPress={async () => {
-                  // this.props.navigation.navigate("Checkout1")
-
-                  var num = Math.floor(100000 + Math.random() * 900000);
-                  await this.setState({ num: num.toString() });
-                  this.forceUpdate();
-                  var numV;
-                  if (this.props.user.user.mobile) {
-                    numV = this.props.user.user.mobile;
-                  } else {
-                    numV = this.state.mobile;
-                  }
-
-                  console.log("numv", numV);
-                  axios
-                    .get(
-                      "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
-                        "+" +
-                        numV +
-                        "/" +
-                        num
-                    )
-                    .then((resp) => {
-                      console.log(resp);
-                      this.refs.modal6.open();
-                    })
-                    .catch((err) => console.log("sdf", err));
-                }}
-                style={[btnStyles.cartBtnOutline, { width: "35%" }]}
-              >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={17}
+                col="#2E2E2E"
+                text={
+                  this.props.user.user.name
+                    ? this.props.user.user.name
+                    : this.state.name
+                }
+              />
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingBottom: 20,
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={17}
+                col="#2E2E2E"
+                text="Phone Number"
+              />
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={17}
+                col="#2E2E2E"
+                text={
+                  // (this.props.user.user.mobile ? "+" : "") +
+                  this.props.user.user.mobile
+                    ? this.props.user.user.mobile
+                    : this.state.mobile
+                }
+              />
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingBottom: 20,
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={17}
+                col="#2E2E2E"
+                text="Email (optional)"
+              />
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={17}
+                col="#2E2E2E"
+                text={
+                  this.props.user.user.email
+                    ? this.props.user.user.email
+                    : this.state.email
+                }
+              />
+            </View>
+            <View style={{ alignItems: "flex-end", paddingHorizontal: 20 }}>
+              {this.state.numVerified ? (
                 <LatoText
                   fontName="Lato-Regular"
-                  fonSiz={18}
-                  col="#2E2E2E"
-                  text="VERIFY"
-                ></LatoText>
-              </TouchableOpacity>
-            )}
-          </View>
-          <View style={lines.simple} />
-          <View
-            style={{
-              paddingHorizontal: 20,
-              paddingTop: 30,
-              paddingBottom: 20,
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={20}
-              col="#2E2E2E"
-              text="Will someone else be picking your order?"
-            />
-          </View>
-          <View
-            style={{
-              paddingHorizontal: 20,
-              paddingTop: 10,
-              paddingBottom: 20,
-            }}
-          >
-            <CheckBox
-              style={{ flex: 1 }}
-              onClick={() => {
-                this.setState({
-                  isChecked: !this.state.isChecked,
-                });
-              }}
-              isChecked={this.state.isChecked}
-              rightText={"Yes"}
-            />
-          </View>
+                  fonSiz={17}
+                  col="#2AA034"
+                  text={"Verified"}
+                />
+              ) : (
+                <TouchableOpacity
+                  onPress={async () => {
+                    // this.props.navigation.navigate("Checkout1")
 
-          {this.state.isChecked && (
-            <View style={{ flex: 1, justifyContent: "space-evenly" }}>
-              <View style={{ flexGrow: 1 }}>
-                <View
-                  style={{
-                    width: "100%",
-                    flex: 1,
-                    justifyContent: "space-evenly",
-                    paddingHorizontal: 20,
+                    var num = Math.floor(100000 + Math.random() * 900000);
+                    await this.setState({ num: num.toString() });
+                    this.forceUpdate();
+                    var numV;
+                    if (this.props.user.user.mobile) {
+                      numV =  this.props.user.user.mobile;
+                    } else {
+                      numV = '+1' + this.state.mobile;
+                    }
+                    alert(numV)
+                    console.log("numv", numV);
+                    axios
+                      .get(
+                        "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
+                          numV +
+                          "/" +
+                          num
+                      )
+                      .then((resp) => {
+                        console.log(resp);
+
+                        this.refs.modal6.open();
+                      })
+                      .catch((err) => console.log("sdf", err));
                   }}
+                  style={[btnStyles.cartBtnOutline, { width: "35%" }]}
                 >
-                  <View>
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={18}
+                    col="#2E2E2E"
+                    text="VERIFY"
+                  ></LatoText>
+                </TouchableOpacity>
+              )}
+            </View>
+            <View style={lines.simple} />
+            <View
+              style={{
+                paddingHorizontal: 20,
+                paddingTop: 30,
+                paddingBottom: 20,
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={20}
+                col="#2E2E2E"
+                text="Will someone else be picking your order?"
+              />
+            </View>
+            <View
+              style={{
+                paddingHorizontal: 20,
+                paddingTop: 10,
+                paddingBottom: 20,
+              }}
+            >
+              <CheckBox
+                style={{ flex: 1 }}
+                onClick={() => {
+                  this.setState({
+                    isChecked: !this.state.isChecked,
+                  });
+                }}
+                isChecked={this.state.isChecked}
+                rightText={"Yes"}
+              />
+            </View>
+
+            {this.state.isChecked && (
+              <View style={{ flex: 1, justifyContent: "space-evenly" }}>
+                <View style={{ flexGrow: 1 }}>
+                  <View
+                    style={{
+                      width: "100%",
+                      flex: 1,
+                      justifyContent: "space-evenly",
+                      paddingHorizontal: 20,
+                    }}
+                  >
+                    <View>
+                      <View
+                        style={[
+                          textIn.Flabel,
+                          { width: "100%", paddingTop: wp("5%") },
+                        ]}
+                      >
+                        <View>
+                          <LatoText
+                            fontName="Lato-Regular"
+                            fonSiz={17}
+                            col="#5C5C5C"
+                            text={"Enter Name"}
+                          />
+                        </View>
+                        <View>
+                          <TextInput
+                            style={[textIn.input, { width: "100%" }]}
+                            onChangeText={(name) =>
+                              this.setState({
+                                name,
+                              })
+                            }
+                            value={this.state.name}
+                          />
+                        </View>
+                      </View>
+                      <View>
+                        <View style={{ marginBottom: 5, marginTop: wp("6%") }}>
+                          <LatoText
+                            fontName="Lato-Regular"
+                            fonSiz={17}
+                            col="#5C5C5C"
+                            text={"Phone Number"}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            marginBottom: 10,
+                            flexDirection: "row",
+                            alignContent: "center",
+                            alignItems: "center",
+                            marginTop: 5,
+                          }}
+                        >
+                          <Image
+                            style={{ width: wp("8%") }}
+                            source={require("../../assets/america.png")}
+                          />
+                          <View
+                            style={{
+                              width: wp("8%"),
+                              justifyContent: "center",
+                              alignContent: "center",
+                              paddingLeft: 5,
+                            }}
+                          >
+                            <LatoText
+                              fontName="Lato-Regular"
+                              fonSiz={17}
+                              col="#5C5C5C"
+                              text={"+1"}
+                            />
+                          </View>
+                          <TextInput
+                            placeholder={"(555) 555-5678"}
+                            keyboardType={"numeric"}
+                            onChangeText={(mobile) =>
+                              this.setState({
+                                mobile,
+                              })
+                            }
+                            value={this.state.mobile}
+                            style={[textIn.input, { width: "81%" }]}
+                          />
+                        </View>
+                      </View>
+                    </View>
+
                     <View
                       style={[
                         textIn.Flabel,
@@ -1094,185 +1181,121 @@ class Cart extends Component {
                           fontName="Lato-Regular"
                           fonSiz={17}
                           col="#5C5C5C"
-                          text={"Enter Name"}
+                          text={"Enter Email (optional)"}
                         />
                       </View>
                       <View>
                         <TextInput
                           style={[textIn.input, { width: "100%" }]}
-                          onChangeText={(name) =>
+                          onChangeText={(email) =>
                             this.setState({
-                              name,
+                              email,
                             })
                           }
-                          value={this.state.name}
+                          value={this.state.email}
                         />
                       </View>
-                    </View>
-                    <View>
-                      <View style={{ marginBottom: 5, marginTop: wp("6%") }}>
-                        <LatoText
-                          fontName="Lato-Regular"
-                          fonSiz={17}
-                          col="#5C5C5C"
-                          text={"Phone Number"}
-                        />
-                      </View>
-                      <View
-                        style={{
-                          marginBottom: 10,
-                          flexDirection: "row",
-                          alignContent: "center",
-                          alignItems: "center",
-                          marginTop: 5,
-                        }}
-                      >
-                        <Image
-                          style={{ width: wp("8%") }}
-                          source={require("../../assets/america.png")}
-                        />
-                        <View
-                          style={{
-                            width: wp("8%"),
-                            justifyContent: "center",
-                            alignContent: "center",
-                            paddingLeft: 5,
-                          }}
-                        >
-                          <LatoText
-                            fontName="Lato-Regular"
-                            fonSiz={17}
-                            col="#5C5C5C"
-                            text={"+1"}
-                          />
-                        </View>
-                        <TextInput
-                          placeholder={"(555) 555-5678"}
-                          keyboardType={"numeric"}
-                          onChangeText={(mobile) =>
-                            this.setState({
-                              mobile,
-                            })
-                          }
-                          value={this.state.mobile}
-                          style={[textIn.input, { width: "81%" }]}
-                        />
-                      </View>
-                    </View>
-                  </View>
-
-                  <View
-                    style={[
-                      textIn.Flabel,
-                      { width: "100%", paddingTop: wp("5%") },
-                    ]}
-                  >
-                    <View>
-                      <LatoText
-                        fontName="Lato-Regular"
-                        fonSiz={17}
-                        col="#5C5C5C"
-                        text={"Enter Email (optional)"}
-                      />
-                    </View>
-                    <View>
-                      <TextInput
-                        style={[textIn.input, { width: "100%" }]}
-                        onChangeText={(email) =>
-                          this.setState({
-                            email,
-                          })
-                        }
-                        value={this.state.email}
-                      />
                     </View>
                   </View>
                 </View>
               </View>
-            </View>
-          )}
-        </ScrollView>
-        <View style={bottomTab.cartSheet}>
-          <TouchableOpacity
-            disabled={
-              this.state.storeTimings.isClosed ||
-              !nameCheck ||
-              !this.state.numVerified ||
-              this.state.isStoreClosed
-            }
-            onPress={() => {
-              this.setState({ cart: true });
+            )}
+          </ScrollView>
+          <View style={bottomTab.cartSheet}>
+            <TouchableOpacity
+              disabled={
+                this.state.storeTimings.isClosed ||
+                !nameCheck ||
+                !this.state.numVerified ||
+                this.state.isStoreClosed
+              }
+              onPress={() => {
+                this.setState({ cart: true });
 
-              var pDate = new Date();
-              var dd = String(pDate.getDate()).padStart(2, '0');
-              var mm = String(pDate.getMonth() + 1).padStart(2, '0'); //January is 0!
-              var yyyy = pDate.getFullYear();
+                var pDate = new Date();
+                var dd = String(pDate.getDate()).padStart(2, "0");
+                var mm = String(pDate.getMonth() + 1).padStart(2, "0"); //January is 0!
+                var yyyy = pDate.getFullYear();
 
-              pDate =  dd + '-' + mm + '-' + yyyy;
+                pDate = dd + "-" + mm + "-" + yyyy;
 
-              var currentdate = new Date(); 
-               var hr = currentdate.getHours() <10 ? "0"+ currentdate.getHours() : currentdate.getHours()  
-               var mi =  currentdate.getMinutes() <10 ? "0"+currentdate.getMinutes(): currentdate.getMinutes()
-               var sc = currentdate.getSeconds() <10 ? "0"+currentdate.getSeconds(): currentdate.getSeconds();
-                var pTime = hr+ ":"+mi+":"+ sc
-              axios
-                .post("https://lit-peak-13067.herokuapp.com/add/order", {
-                  storeId: sId,
-                  products: storeProducts,
-                  totalAmount: subTotal,
-                  storeName: this.props.store.name,
-                  storeAddress: this.props.store.address,
-                  storePhone: this.props.store.phone,
-                  userId: this.props.user.user._id,
-                  name: this.state.name
-                    ? this.state.name
-                    : this.props.user.user.name,
-                  phone: this.state.mobile
-                    ? this.state.mobile
-                    : this.props.user.user.mobile,
-                  email: this.state.email
-                    ? this.state.email
-                    : this.props.user.user.email,
-                  // address: "bac Street",
-                  orderTime: this.state.orderTime,
-                  orderDate:
-                    this.state.orderDate === ""
-                      ? todaysDate
-                      : this.state.orderDate,
-                  // orderTimeZone: "UST",
-                  postDate: pDate,
-                  postTime: pTime,
-                  tax: (parseFloat(this.state.tax) / 100) * subTotal,
-                  orderNumber: codeId,
-                  isGuest: this.props.user.user.isGuest,
-                })
-                .then((resp) => {
-                  // this.props.storeAsync('')
-                  // this.props.cartSizeAsync(0)
-                  // this.props.storeHeaderAsync('')
-                  // this.props.favStoreAsync('')
-                  this.props.navigation.navigate("QrCode", {
-                    orderId: resp.data.order1._id,
-                    codeId: codeId,
-                    order: resp.data.order1
+                var currentdate = new Date();
+                var hr =
+                  currentdate.getHours() < 10
+                    ? "0" + currentdate.getHours()
+                    : currentdate.getHours();
+                var mi =
+                  currentdate.getMinutes() < 10
+                    ? "0" + currentdate.getMinutes()
+                    : currentdate.getMinutes();
+                var sc =
+                  currentdate.getSeconds() < 10
+                    ? "0" + currentdate.getSeconds()
+                    : currentdate.getSeconds();
+                var pTime = hr + ":" + mi + ":" + sc;
+                axios
+                  .post("https://lit-peak-13067.herokuapp.com/add/order", {
+                    storeId: sId,
+                    products: storeProducts,
+                    totalAmount: subTotal,
+                    storeName: this.props.store.name,
+                    storeAddress: this.props.store.address,
+                    storePhone: this.props.store.phone,
+                    userId: this.props.user.user._id,
+                    name: this.state.name
+                      ? this.state.name
+                      : this.props.user.user.name,
+                    phone:  this.state.mobile
+                      ? "+1" + this.state.mobile
+                      : this.props.user.user.mobile,
+                    email: this.state.email
+                      ? this.state.email
+                      : this.props.user.user.email,
+                    // address: "bac Street",
+                    orderTime: this.state.orderTime,
+                    orderDate:
+                      this.state.orderDate === ""
+                        ? todaysDate
+                        : this.state.orderDate,
+                    // orderTimeZone: "UST",
+                    postDate: pDate,
+                    postTime: pTime,
+                    tax: (parseFloat(this.state.tax) / 100) * subTotal,
+                    orderNumber: codeId,
+                    isGuest: this.props.user.user.isGuest,
+                  })
+                  .then((resp) => {
+                    // this.props.storeAsync('')
+                    // this.props.cartSizeAsync(0)
+                    // this.props.storeHeaderAsync('')
+                    // this.props.favStoreAsync('')
+                    this.props.navigation.navigate("QrCode", {
+                      orderId: resp.data.order1._id,
+                      codeId: codeId,
+                      order: resp.data.order1,
+                    });
                   });
-                });
-            }}
-            style={[
-              this.state.storeTimings.isClosed ||
-              !nameCheck ||
-              !this.state.numVerified ||
-              this.state.isStoreClosed ? btnStyles.cartBtn1: btnStyles.cartBtn, { width: "100%" }]}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={15}
-              col="white"
-              text="CONFIRM"
-            ></LatoText>
-          </TouchableOpacity>
+              }}
+              style={[
+                this.state.storeTimings.isClosed ||
+                !nameCheck ||
+                !this.state.numVerified ||
+                this.state.isStoreClosed
+                  ? btnStyles.cartBtn1
+                  : btnStyles.cartBtn,
+                { width: "100%" },
+              ]}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col="white"
+                text="CONFIRM"
+              ></LatoText>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </>
     );
   }
 }
@@ -1337,7 +1360,9 @@ const styles = StyleSheet.create({
   },
 
   modal4: {
-    height: 300,
+    height: 370,
+    width: Dimensions.get("window").width - 50,
+    marginTop: 30,
   },
   modal6: {
     height: 230,
@@ -1404,7 +1429,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
       storeAsync,
       cartSizeAsync,
       favStoreAsync,
-      storeHeaderAsync
+      storeHeaderAsync,
     },
     dispatch
   );

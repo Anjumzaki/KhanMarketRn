@@ -1,4 +1,4 @@
-import { StyleSheet,Dimensions } from "react-native";
+import { StyleSheet,Dimensions,Platform } from "react-native";
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 const conStyles = StyleSheet.create({
@@ -133,7 +133,7 @@ const bottomTab = StyleSheet.create({
     },
     shadowOpacity: 0.58,
     shadowRadius: 16.0,
-    paddingBottom:30,
+    paddingBottom:Platform.OS === 'ios' ? 30 : 15,
     elevation: 24
   }
 });
