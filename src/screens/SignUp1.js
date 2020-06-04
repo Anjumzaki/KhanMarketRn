@@ -259,7 +259,7 @@ export default class SignUp1 extends React.Component {
             <LatoText
               fontName="Lato-Regular"
               fonSiz={15}
-              col="#B50000"
+              col="green"
               txtAlign={"center"}
               text={"close"}
             />
@@ -328,7 +328,7 @@ export default class SignUp1 extends React.Component {
             <LatoText
               fontName="Lato-Regular"
               fonSiz={15}
-              col="#B50000"
+              col="green"
               txtAlign={"center"}
               text={"Cancel"}
             />
@@ -628,7 +628,7 @@ export default class SignUp1 extends React.Component {
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={17}
-                  col="#5C5C5C"
+                  col="red"
                   text={this.state.errMessage}
                 />
               </>
@@ -643,7 +643,7 @@ export default class SignUp1 extends React.Component {
           >
             <TouchableOpacity
               disabled={!this.state.numVerified}
-              style={btnStyles.basic}
+              style={[btnStyles.basic,!this.state.numVerified ? {backgroundColor:'silver'}: null]}
               onPress={() => this.handleSignUp()}
             >
               {this.state.loading ? (
@@ -664,7 +664,7 @@ export default class SignUp1 extends React.Component {
               <LatoText
                 fontName="Lato-Regular"
                 fonSiz={17}
-                col="#B50000"
+                col="green"
                 text={"Already a member Sign In "}
               />
             </TouchableOpacity>
