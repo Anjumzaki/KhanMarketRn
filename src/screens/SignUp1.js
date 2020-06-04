@@ -61,7 +61,8 @@ export default class SignUp1 extends React.Component {
     };
   }
  isValidUSZip = (sZip) => {
-    return /^\d{5}(-\d{4})?$/.test(sZip);
+    // return /^\d{5}(-\d{4})?$/.test(sZip);
+    return /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(sZip)
  }
   async componentDidMount() {
     await Font.loadAsync({
@@ -98,6 +99,7 @@ export default class SignUp1 extends React.Component {
               if (this.state.mobile.trim()) {
                 if (this.state.zipCode.trim()) {
                   if( this.isValidUSZip(this.state.zipCode) ){
+                    this.setState({errMessage: "",loading: false})
                     this.props.navigation.navigate("ChoosePass", {
                       name: this.state.name,
                       email: this.state.email.toLowerCase().trim(),
