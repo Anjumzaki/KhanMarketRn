@@ -10,9 +10,9 @@ export default styles = StyleSheet.create({
     flex: 1
   },
   mapMarkerContainer: {
-    left: '47%',
+    left: '45%',
     position: 'absolute',
-    top: '42%'
+    top: '50%'
   },
   mapMarker: {
     fontSize: 40,
@@ -20,10 +20,9 @@ export default styles = StyleSheet.create({
   },
   deatilSection: {
     flex: 1,
-    backgroundColor: "#fff",
-    padding: 10,
+    padding: 20,
     display: "flex",
-    justifyContent: "flex-start"
+    justifyContent: "space-between",
   },
   spinnerView: {
     flex: 1,
@@ -31,9 +30,6 @@ export default styles = StyleSheet.create({
     alignItems: "center"
   },
   btnContainer: {
-    width: Dimensions.get("window").width - 20,
-    position: "absolute",
-    bottom: 100,
-    left: 10
+    alignItems:'center',
   }
 });
