@@ -1339,7 +1339,9 @@ class Cart extends Component {
                     })
                     .catch(err => console.log(err))
                   
-                  });}
+                  });}else{
+                    alert("Store is closed, please change date and time.")
+                  }
               }}
               style={[
                 this.state.storeTimings.isClosed ||
