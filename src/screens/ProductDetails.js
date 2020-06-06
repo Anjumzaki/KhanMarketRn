@@ -351,6 +351,8 @@ class ProductDetails extends Component {
                   address: this.props.storeHeader.address,
                   id: this.props.storeHeader.id,
                   phone: this.props.storeHeader.phone,
+                  sId: this.props.storeHeader.storeId
+
                 });
                 this.props.favStoreAsync(product.storeId);
                 this.props.cartAsync(pCart);
@@ -367,6 +369,8 @@ class ProductDetails extends Component {
                     address: this.props.storeHeader.address,
                     id: this.props.storeHeader.id,
                     phone: this.props.storeHeader.phone,
+                    sId: this.props.storeHeader.storeId
+
                   });
                   this.props.favStoreAsync(product.storeId);
                   this.props.cartAsync(pCart);
@@ -397,6 +401,8 @@ class ProductDetails extends Component {
                               address: this.props.storeHeader.address,
                               id: this.props.storeHeader.id,
                               phone: this.props.storeHeader.phone,
+                              sId: this.props.storeHeader.storeId
+
                             });
                             this.props.favStoreAsync(product.storeId);
                             this.props.cartAsync(pCart);

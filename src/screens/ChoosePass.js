@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   StatusBar,
   Dimensions,
+  Alert
 } from "react-native";
 import { BackStack } from "../Helpers/BackStack";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -183,7 +184,6 @@ class SignUp1 extends React.Component {
                     this.state.user
                   )
                   .then((resp) => {
-                    alert(JSON.stringify(resp))
                     this.props.userAsync(resp.data);
                     Alert.alert(
                       "Account Created",

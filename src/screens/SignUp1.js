@@ -591,11 +591,8 @@ export default class SignUp1 extends React.Component {
                                           "There is already an account assoicated with this phone number.",
                                       });
                                     }
-                                  } else {
-                                    this.setState({
-                                      errMessage:
-                                        "There is already an account assoicated with this email address  ,,.",
-                                    });
+                                  }else{
+                                    this.setState({errMessage: "There is already an account assoicated with this email address"})
                                   }
                                 })
                                 .catch((err) => console.log(err))

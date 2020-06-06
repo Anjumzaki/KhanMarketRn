@@ -242,6 +242,7 @@ class ProCards extends React.Component {
                         address: this.props.storeHeader.address,
                         id: this.props.storeHeader.id,
                         phone: this.props.storeHeader.phone,
+                        sId: this.props.storeHeader.storeId
                       });
                     this.props.favStoreAsync(
                       this.props.product.storeId
@@ -261,6 +262,8 @@ class ProCards extends React.Component {
                         address: this.props.storeHeader.address,
                         id: this.props.storeHeader.id,
                         phone: this.props.storeHeader.phone,
+                        sId: this.props.storeHeader.storeId
+
                       });
                       this.props.favStoreAsync(
                         this.props.product.storeId
@@ -293,6 +296,8 @@ class ProCards extends React.Component {
                                     address: this.props.storeHeader.address,
                                     id: this.props.storeHeader.id,
                                     phone: this.props.storeHeader.phone,
+                                    sId: this.props.storeHeader.storeId
+
                                   });
                                   this.props.favStoreAsync(
                                     this.props.product.storeId
