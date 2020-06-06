@@ -60,10 +60,10 @@ export default class SignUp1 extends React.Component {
       selectedCountry: "USA",
     };
   }
- isValidUSZip = (sZip) => {
+  isValidUSZip = (sZip) => {
     // return /^\d{5}(-\d{4})?$/.test(sZip);
-    return /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(sZip)
- }
+    return /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(sZip);
+  };
   async componentDidMount() {
     await Font.loadAsync({
       "Lato-Light": require("../../assets/fonts/Lato-Light.ttf"),
@@ -98,8 +98,8 @@ export default class SignUp1 extends React.Component {
             if (EmailValidator.validate(this.state.email.trim())) {
               if (this.state.mobile.trim()) {
                 if (this.state.zipCode.trim()) {
-                  if( this.isValidUSZip(this.state.zipCode) ){
-                    this.setState({errMessage: "",loading: false})
+                  if (this.isValidUSZip(this.state.zipCode)) {
+                    this.setState({ errMessage: "", loading: false });
                     this.props.navigation.navigate("ChoosePass", {
                       name: this.state.name,
                       email: this.state.email.toLowerCase().trim(),
@@ -112,16 +112,13 @@ export default class SignUp1 extends React.Component {
                       isGuest: false,
                       guestId: "",
                     });
-                  } 
-                  else {
+                  } else {
                     this.setState({
                       errMessage: "Please enter correct USA Zip code",
                       loading: false,
                     });
                   }
-                 
-                }
-                 else {
+                } else {
                   this.setState({
                     errMessage: "Please enter Zip code",
                     loading: false,
@@ -156,7 +153,9 @@ export default class SignUp1 extends React.Component {
   };
   render() {
     var mainNumber =
-      this.state.selectedCountry === "USA" ? "+1" + this.state.mobile: "+92" + this.state.mobile;
+      this.state.selectedCountry === "USA"
+        ? "+1" + this.state.mobile
+        : "+92" + this.state.mobile;
     console.log(mainNumber);
     const { icEye, isPassword } = this.state;
     return (
@@ -298,7 +297,7 @@ export default class SignUp1 extends React.Component {
               ignoreCase={true}
               codeLength={6}
               inputPosition="center"
-              keyboardType={'number-pad'}
+              keyboardType={"number-pad"}
               size={wp(8)}
               onFulfill={(isValid) =>
                 isValid
@@ -368,24 +367,46 @@ export default class SignUp1 extends React.Component {
               text={"SIGN UP"}
             />
             <View style={textIn.Flabel}>
-              <View>
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={17}
-                  col="#5C5C5C"
-                  text={"Name"}
-                />
-              </View>
-              <View>
-                <TextInput
-                  style={textIn.input}
-                  onChangeText={(name) =>
-                    this.setState({
-                      name,
-                    })
-                  }
-                  value={this.state.name}
-                />
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View style={{ width: "45%" }}>
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={17}
+                    col="#5C5C5C"
+                    text={"First Name"}
+                  />
+                  <TextInput
+                    style={[textIn.input]}
+                    onChangeText={(firstName) =>
+                      this.setState({
+                        firstName,
+                      })
+                    }
+                    value={this.state.firstName}
+                  />
+                </View>
+                <View style={{ width: "45%" }}>
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={17}
+                    col="#5C5C5C"
+                    text={"Last Name"}
+                  />
+                  <TextInput
+                    style={[textIn.input]}
+                    onChangeText={(lastName) =>
+                      this.setState({
+                        lastName,
+                      })
+                    }
+                    value={this.state.lastName}
+                  />
+                </View>
               </View>
             </View>
             <View>
@@ -402,12 +423,12 @@ export default class SignUp1 extends React.Component {
                   style={textIn.input}
                   onChangeText={(email) =>
                     this.setState({
-                      email:email,
+                      email: email,
                     })
                   }
                   value={this.state.email.trim()}
-                  autoCapitalize = 'none'
-                  keyboardType={'email-address'}
+                  autoCapitalize="none"
+                  keyboardType={"email-address"}
                 />
               </View>
             </View>
@@ -427,6 +448,7 @@ export default class SignUp1 extends React.Component {
                   flexDirection: "row",
                   alignContent: "center",
                   alignItems: "center",
+                  width: "100%",
                 }}
               >
                 {this.state.selectedCountry == "USA" ? (
@@ -437,7 +459,7 @@ export default class SignUp1 extends React.Component {
                     />
                     <View
                       style={{
-                        minWidth: wp("12%"),
+                        minWidth: "20%",
                         justifyContent: "center",
                         alignContent: "center",
                         paddingLeft: 5,
@@ -459,7 +481,7 @@ export default class SignUp1 extends React.Component {
                     />
                     <View
                       style={{
-                        minWidth: wp("12%"),
+                        minWidth: "20%",
                         justifyContent: "center",
                         alignContent: "center",
                         paddingLeft: 5,
@@ -489,7 +511,7 @@ export default class SignUp1 extends React.Component {
                         })
                   }
                   value={this.state.mobile}
-                  style={[textIn.input, { width: wp("64%") }]}
+                  style={[textIn.input, { width: "70%" }]}
                 />
               </TouchableOpacity>
               <View
@@ -515,60 +537,76 @@ export default class SignUp1 extends React.Component {
                       borderRadius: 5,
                     }}
                     onPress={async () => {
-                      if(this.state.email){
-                        if(this.state.mobile){
-                              var num = Math.floor(100000 + Math.random() * 900000);
-                              await this.setState({ num: num.toString() });
-                              this.forceUpdate();
-                              axios.get("https://lit-peak-13067.herokuapp.com/get/user/"+this.state.email.trim())
-                              .then(resp => {
-                                axios.get("https://lit-peak-13067.herokuapp.com/get/user/number/"+mainNumber)
-                                .then(resp1 => {
-                                  console.log("sddsdd", resp.data, resp1.data)
-                                    if(resp.data === null){
-                                      if(resp1.data === null){
-                                      var cd = "1"
-                                      if(this.state.selectedCountry == "PAK"){
-                                          cd ="92"
+                      if (this.state.email) {
+                        if (this.state.mobile) {
+                          var num = Math.floor(100000 + Math.random() * 900000);
+                          await this.setState({ num: num.toString() });
+                          this.forceUpdate();
+                          axios
+                            .get(
+                              "https://lit-peak-13067.herokuapp.com/get/user/" +
+                                this.state.email.trim()
+                            )
+                            .then((resp) => {
+                              axios
+                                .get(
+                                  "https://lit-peak-13067.herokuapp.com/get/user/number/" +
+                                    mainNumber
+                                )
+                                .then((resp1) => {
+                                  console.log("sddsdd", resp.data, resp1.data);
+                                  if (resp.data === null) {
+                                    if (resp1.data === null) {
+                                      var cd = "1";
+                                      if (this.state.selectedCountry == "PAK") {
+                                        cd = "92";
                                       }
-                                      console.log("CDDDDDDDDD",cd)
+                                      console.log("CDDDDDDDDD", cd);
                                       axios
-                                      .get(
-                                        "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
-                                          this.state.email.toLowerCase().trim() +
-                                          "/" +
-                                          num
-                                      )
-                                      .then((resp) => this.refs.modal3.open())
-                                      .catch((err) => console.log(err));
-              
-                                    axios
-                                      .get(
-                                        "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
-                                        mainNumber +
-                                          "/" +
-                                          num
-                                      )
-                                      .then((resp) => this.refs.modal3.open())
-                                      .catch((err) => console.log("num err",err));
-                                    }else{
-                                      this.setState({errMessage: "There is already an account assoicated with this phone number."})
+                                        .get(
+                                          "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
+                                            this.state.email
+                                              .toLowerCase()
+                                              .trim() +
+                                            "/" +
+                                            num
+                                        )
+                                        .then((resp) => this.refs.modal3.open())
+                                        .catch((err) => console.log(err));
+
+                                      axios
+                                        .get(
+                                          "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
+                                            mainNumber +
+                                            "/" +
+                                            num
+                                        )
+                                        .then((resp) => this.refs.modal3.open())
+                                        .catch((err) =>
+                                          console.log("num err", err)
+                                        );
+                                    } else {
+                                      this.setState({
+                                        errMessage:
+                                          "There is already an account assoicated with this phone number.",
+                                      });
                                     }
                                   }else{
                                     this.setState({errMessage: "There is already an account assoicated with this email address"})
                                   }
-                              })
-                              .catch(err => console.log(err))
-                              .catch(err => console.log(err))
-                            })
-                          }else{
-                            this.setState({errMessage: "Please Enter Phone Number."})
-                          }
-                        }else{
-                          this.setState({errMessage: "Please Enter Email."})
+                                })
+                                .catch((err) => console.log(err))
+                                .catch((err) => console.log(err));
+                            });
+                        } else {
+                          this.setState({
+                            errMessage: "Please Enter Phone Number.",
+                          });
                         }
-                            }} 
-                            
+                      } else {
+                        this.setState({ errMessage: "Please Enter Email." });
+                      }
+                    }}
                   >
                     <LatoText
                       fontName="Lato-Regular"
@@ -617,7 +655,7 @@ export default class SignUp1 extends React.Component {
                         zipCode,
                       })
                     }
-                    keyboardType={'number-pad'}
+                    keyboardType={"number-pad"}
                     value={this.state.zipCode}
                   />
                 </View>
@@ -655,7 +693,10 @@ export default class SignUp1 extends React.Component {
           >
             <TouchableOpacity
               disabled={!this.state.numVerified}
-              style={[btnStyles.basic,!this.state.numVerified ? {backgroundColor:'silver'}: null]}
+              style={[
+                btnStyles.basic,
+                !this.state.numVerified ? { backgroundColor: "silver" } : null,
+              ]}
               onPress={() => this.handleSignUp()}
             >
               {this.state.loading ? (
