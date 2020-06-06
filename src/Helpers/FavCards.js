@@ -319,7 +319,8 @@ class FavCards extends React.Component {
                               address: resp.data.storeAddress,
                               id: resp.data._id,
                               phone: resp.data.phoneNumber,
-                              sId: resp.data.storeId
+                              sId: resp.data.storeId,
+                              oId: resp.data.orderNum,
                             });
                           });
                       }
@@ -376,7 +377,9 @@ class FavCards extends React.Component {
                                           address: resp.data.storeAddress,
                                           id: resp.data._id,
                                           phone: resp.data.phoneNumber,
-                                          sId: resp.data.storeId
+                                          sId: resp.data.storeId,
+                                          oId: resp.data.orderNum
+
                                         });
                                         this.refs.modal3.close();
                                       });

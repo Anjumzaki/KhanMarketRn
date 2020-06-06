@@ -24,7 +24,10 @@ import {
 import LatoText from "./LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { bindActionCreators } from "redux";
-import { storeAsync, cartAsync } from "../store/actions";
+import {  cartAsync, cartSizeAsync,
+  favStoreAsync,
+  storeHeaderAsync,
+  storeAsync } from "../store/actions";
 import { connect } from "react-redux";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 
@@ -61,7 +64,12 @@ class LastHeader extends React.Component {
         <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
           <TouchableOpacity
             style={{ padding: 20 }}
-            onPress={() => this.props.navigation.navigate('Home')}
+            onPress={() => {
+              this.props.storeAsync('')
+              this.props.cartSizeAsync(0)
+              this.props.storeHeaderAsync('')
+              this.props.favStoreAsync('')
+              this.props.navigation.navigate('Home')}}
           >
             <MaterialIcons name="arrow-back" color="white" size={25} />
           </TouchableOpacity>
@@ -136,8 +144,11 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
     {
-      storeAsync,
       cartAsync,
+      cartSizeAsync,
+      favStoreAsync,
+      storeHeaderAsync,
+      storeAsync
     },
     dispatch
   );

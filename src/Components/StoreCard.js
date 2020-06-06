@@ -37,7 +37,8 @@ class StoreCard extends React.Component {
       .catch((err) => console.log(err));
   }
   render() {
-    const { name, distance, address, id, phone, sId } = this.props;
+    const { name, distance, address, id, phone, sId, oId } = this.props;
+    console.log(oId)
     return (
       <TouchableOpacity
         onPress={() => {
@@ -109,7 +110,8 @@ class StoreCard extends React.Component {
                 address: address,
                 id: id,
                 phone: phone,
-                sId: sId
+                sId: sId,
+                oId: oId
           })
           this.props.navigation.push("StoreDetails", {
             storeId: id,

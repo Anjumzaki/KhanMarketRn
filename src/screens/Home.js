@@ -160,7 +160,8 @@ class Home extends React.Component {
                     address={item.storeAddress}
                     id={item._id}
                     phone={item.phoneNumber}
-                    sId={item.sId}
+                    sId={item.storeId}
+                    oId={item.orderNum}
                   />
                 ))}
             </ScrollView>

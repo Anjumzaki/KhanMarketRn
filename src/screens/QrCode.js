@@ -20,7 +20,10 @@ import { Row } from "native-base";
 import CheckBox from "react-native-check-box";
 import InQrCode from './InQrCode'
 import { bindActionCreators } from "redux";
-import { cartAsync } from "../store/actions";
+import { cartAsync, cartSizeAsync,
+  favStoreAsync,
+  storeHeaderAsync,
+  storeAsync } from "../store/actions";
 import { connect } from "react-redux";
 import axios from 'axios'
 const { width } = Dimensions.get("window");
@@ -196,7 +199,12 @@ class QrCode extends Component {
         </ScrollView>
         <View style={bottomTab.cartSheet}>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Home')}
+            onPress={() => {
+              this.props.storeAsync('')
+              this.props.cartSizeAsync(0)
+              this.props.storeHeaderAsync('')
+              this.props.favStoreAsync('')
+              this.props.navigation.navigate('Home')}}
             style={[btnStyles.cartBtn, { width: "55%" }]}
           >
             <LatoText
@@ -207,7 +215,13 @@ class QrCode extends Component {
             ></LatoText>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('MyOrderStackScreen', { screen: 'MyOrders' })}
+            onPress={() => {
+              this.props.storeAsync('')
+              this.props.cartSizeAsync(0)
+              this.props.storeHeaderAsync('')
+              this.props.favStoreAsync('')
+              this.props.navigation.navigate('MyOrderStackScreen', { screen: 'MyOrders' })
+            }}
             style={[btnStyles.cartBtn, { width: "40%" }]}
           >
             <LatoText
@@ -277,7 +291,11 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
       {
-          cartAsync
+          cartAsync,
+          cartSizeAsync,
+          favStoreAsync,
+          storeHeaderAsync,
+          storeAsync
       },
       dispatch
   );

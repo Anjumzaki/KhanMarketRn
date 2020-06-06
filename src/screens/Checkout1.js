@@ -80,10 +80,26 @@ class Cart extends Component {
       isDisabled: false,
       selectdDay: "",
       isStoreClosed: false,
+      sId: "",
+      oId: ""
     };
   }
 
   componentDidMount() {
+    console.log("ORDERRRRRRRRRRRRRRR numer", this.props.store.sId, this.props.store.oId)
+
+    axios
+      .get(
+        "https://lit-peak-13067.herokuapp.com/get/store/" +
+          this.props.store.id
+      )
+      .then((resp) => {
+        this.setState({
+          sId: resp.data.storeId,
+          oId: resp.data.orderNum
+        });
+      });
+        
     var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
     var d = new Date();
@@ -241,16 +257,37 @@ class Cart extends Component {
 
   makeid(length) {
     var result = "";
-    var characters = "0123456789";
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    // var characters = "0123456789";
+    // var charactersLength = characters.length;
+    // for (var i = 0; i < length; i++) {
+    //   result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    // }
+    var fp = this.state.sId
+    if(parseInt(fp)< 10){
+      fp="00"+fp
+    }else if(parseInt(fp)< 100){
+      fp="0"+fp
+    }
+    var lp = this.state.oId
+
+    if(parseInt(lp)< 10){
+      lp="00000"+lp
+    }else if(parseInt(lp)< 100){
+      lp="0000"+lp
+    }else if(parseInt(lp)< 1000){
+      lp="000"+lp
+    }else if(parseInt(lp)< 10000){
+      lp="00"+lp
+    }else if(parseInt(lp)< 100000){
+      lp="0"+lp
     }
 
+    result=fp+"-"+lp
     axios
       .get("https://lit-peak-13067.herokuapp.com/get/order/bynumber/" + result)
       .then((resp) => {
         if (resp.data === null) {
+          // /edit/store/orderNum/
         } else {
           this.makeid(6);
         }
@@ -266,7 +303,7 @@ class Cart extends Component {
   //  ejIEyo
   render() {
     console.log("SD", this.state, this.props.user);
-    var codeId = this.makeid(3) + "-" + this.makeid(6);
+    var codeId = this.makeid(3);
     console.log("CODE ID", codeId);
     //
     if (this.props.cart.length > 0) {
@@ -1270,11 +1307,20 @@ class Cart extends Component {
                     // this.props.cartSizeAsync(0)
                     // this.props.storeHeaderAsync('')
                     // this.props.favStoreAsync('')
-                    this.props.navigation.navigate("QrCode", {
-                      orderId: resp.data.order1._id,
-                      codeId: codeId,
-                      order: resp.data.order1,
-                    });
+                    axios.put('https://lit-peak-13067.herokuapp.com/edit/store/orderNum/'+this.props.store.id+"/"+(parseInt(this.props.store.oId)+1))
+                    .then(resp1 => {
+                      // var temp = this.props.store
+                      // temp.oId = parseInt(this.props.store.oId)+1
+                      // this.props.storeAsync(temp)
+                      // this.props.storeHeaderAsync(temp)
+                      this.props.navigation.navigate("QrCode", {
+                        orderId: resp.data.order1._id,
+                        codeId: codeId,
+                        order: resp.data.order1,
+                      });
+                    })
+                    .catch(err => console.log(err))
+                  
                   });
               }}
               style={[
