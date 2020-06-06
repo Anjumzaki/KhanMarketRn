@@ -85,7 +85,7 @@ class OrderCards extends React.Component {
                     this.props.order.isAccepted === true && this.props.order.isPicked === true ? (
                       "Completed"
                     ): (
-                      "No Response"
+                      "in que"
                     )
                   ))
                 }

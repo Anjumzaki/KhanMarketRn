@@ -91,7 +91,7 @@ class OrderDetails extends Component {
       "Dec",
     ];
 
-    return "" + month_names[parseInt(date[1])] + " " + date[0] + "," + date[2];
+    return "" + month_names[parseInt(date[1]-1)] + " " + date[0] + "," + date[2];
   }
   makeCall = () => {
     let phoneNumber = "";
