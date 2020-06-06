@@ -46,50 +46,51 @@ class Home extends React.Component {
     } catch (e) {}
   };
   componentDidMount() {
-    Geolocation.getCurrentPosition(
-      (info) => {
-        console.log("INFOOOOOOOOOOOOOOOO", info);
+    // Geolocation.getCurrentPosition(
+    //   (info) => {
+    //     console.log("INFOOOOOOOOOOOOOOOO", info);
+      
         axios
           .get(
             "https://lit-peak-13067.herokuapp.com/get/stores/" +
-              info.coords.latitude +
+              this.props.userLocation.lat +
               "/" +
-              info.coords.longitude
+              this.props.userLocation.lng
           )
           .then((resp) => {
             this.setState({
               stores: resp.data,
-              location: info.coords,
+              // location: info.coords,
             });
           });
-      },
-      (error) => {
-        console.log("loc error0", error);
-      },
-      { enableHighAccuracy: false, timeout: 20000, maximumAge: 10000 }
-    );
+    //   },
+    //   (error) => {
+    //     console.log("loc error0", error);
+    //   },
+    //   { enableHighAccuracy: false, timeout: 20000, maximumAge: 10000 }
+    // );
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
-      Geolocation.getCurrentPosition(
-        (info) => {
+      // Geolocation.getCurrentPosition(
+      //   (info) => {
           axios
             .get(
               "https://lit-peak-13067.herokuapp.com/get/stores/" +
-                info.coords.latitude +
+                this.props.userLocation.lat +
                 "/" +
-                info.coords.longitude
+                this.props.userLocation.lng
             )
             .then((resp) => {
               this.setState({
                 stores: resp.data,
-                location: info.coords,
+                // location: info.coords,
               });
             });
-        },
-        (error) => {
-          console.log(error);
-        },
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
-      );
+      //   },
+      //   (error) => {
+      //     console.log(error);
+      //   },
+      //   { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
+      // );
     });
   }
   componentWillUnmount() {
@@ -150,8 +151,8 @@ class Home extends React.Component {
                     name={item.storeName}
                     distance={
                       this.getDistanceFromLatLonInKm(
-                        this.state.location.latitude,
-                        this.state.location.longitude,
+                        this.props.userLocation.lat,
+                        this.props.userLocation.lng,
                         item.lat,
                         item.lng
                       ).toFixed(2) + " mi"
@@ -184,6 +185,8 @@ const mapStateToProps = (state) => ({
   user: state.user.user,
   loading: state.user.userLoading,
   error: state.user.userError,
+  userLocation: state.Location.locationData,
+
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(

@@ -41,6 +41,22 @@ class CustomDrawerContent extends Component {
       .catch((err) => console.log(err));
     }
    
+    this._unsubscribe = this.props.navigation.addListener("focus", () => {
+      if(this.props.user){
+        const ref = firebase
+        .storage()
+        .ref("profile_images/" + this.props.user.user._id + ".jpg");
+      ref
+        .getDownloadURL()
+        .then((url) => {
+          this.setState({ image: url });
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .catch((err) => console.log(err));
+      } 
+    });
   }
 
   async removeItemValue(key) {

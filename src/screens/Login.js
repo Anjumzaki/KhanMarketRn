@@ -58,13 +58,24 @@ class Login extends React.Component {
     if (loc) {
       this.props.userAsync(JSON.parse(jsonValue));
       this.props.locationAsync(
-        loc[0].address1 +
-          // " " +
-          // loc[0].address2 +
-          " " +
-          loc[0].city +
-          " " +
-          loc[0].country
+        // loc[0].address1 +
+        //   // " " +
+        //   loc[0].address2 +
+        //   " " +
+        //   loc[0].city +
+        //   " " +
+        //   loc[0].country
+          {
+            location:loc[0].address1 +
+            " " +
+           loc[0].address2 + 
+            " " +
+           loc[0].city +
+            " " +
+           loc[0].country,
+            lat:loc[0].latitude,
+            lng:loc[0].longitude
+          }
       );
       this.setState({
         mainLoading:false
@@ -96,13 +107,17 @@ class Login extends React.Component {
       alert(error);
     }
     this.props.locationAsync(
-      loc[0].address1 +
-        // " " +
-        // loc[0].address2 +
+      {
+        location:loc[0].address1 +
         " " +
-        loc[0].city +
+       loc[0].address2 + 
         " " +
-        loc[0].country
+       loc[0].city +
+        " " +
+       loc[0].country,
+        lat:loc[0].latitude,
+        lng:loc[0].longitude
+      }
     );
     this.setState(
       {
@@ -454,14 +469,18 @@ class Login extends React.Component {
                           this.props.userAsync(resp.data);
                           // this.props.navigation.navigate("Map");
                           if (resp1.data.length > 0) {
-                            this.props.locationAsync(
-                              resp1.data[0].address1 +
-                                " " +
-                                resp1.data[0].address2 + 
-                                " " +
-                                resp1.data[0].city +
-                                " " +
-                                resp1.data[0].country
+                            this.props.locationAsync({
+                              location: resp1.data[0].address1 +
+                              " " +
+                              resp1.data[0].address2 + 
+                              " " +
+                              resp1.data[0].city +
+                              " " +
+                              resp1.data[0].country,
+                              lat: resp1.data[0].latitude,
+                              lng: resp1.data[0].longitude
+                            }
+                              
                             );
                             this.props.navigation.dispatch(
                               CommonActions.reset({

@@ -72,7 +72,7 @@ class StoreHeader extends React.Component {
               fontName="Lato-Light"
               fonSiz={17}
               col="white"
-              text={this.props.userLocation.substring(0, 42)}
+              text={this.props.userLocation.location.substring(0, 42)}
               textDec={"underline"}
             />
           </View>

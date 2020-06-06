@@ -318,7 +318,7 @@ class Map extends Component {
         this.setState({
           userLocation: userLocation,
           regionChangeProgress: false,
-          completeLoc: responseJson.results[0]
+          completeLoc: responseJson
         });
       });
   };
@@ -399,6 +399,7 @@ class Map extends Component {
                     ct = "",
                     cnt = "",
                     zipc = "";
+                    console.log(" ins state", this.state.completeLoc)
                   for (
                     var i = 0;
                     i <
@@ -445,29 +446,39 @@ class Map extends Component {
                     }
                   }
 
+                  this.props.locationAsync(
+                    {
+                      location:  ad1 + " "+temp +
+                      " " +
+                      ad2 + 
+                      " " +
+                      ct +
+                      " " +
+                      cnt,
+                      lat: this.state.region.latitude,
+                      lng: this.state.region.longitude
+                    }
+                   
+                  );
+
+
                   axios
-                    .post("https://lit-peak-13067.herokuapp.com/add/location", {
+                    .post("http://192.168.0.105:3000/add/location", {
                       refId: this.props.user.user._id,
                       type: "Customer",
-                      address1: ad1 + temp,
+                      address1: ad1 + " "+temp,
                       address2: ad2,
                       city: ct,
                       country: cnt,
                       zipCode: zipc,
+                      latitude: this.state.region.latitude,
+                      longitude: this.state.region.longitude
                     })
                     .then((resp1) => {
                       this.props.navigation.replace("App", {
                         location: this.state.location,
                       });
-                      this.props.locationAsync(
-                        resp1.data[0].address1 +
-                          " " +
-                          resp1.data[0].address2 + 
-                          " " +
-                          resp1.data[0].city +
-                          " " +
-                          resp1.data[0].country
-                      );
+                     
                     })
                     .catch((err) => console.log(err));
                 }}

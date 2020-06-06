@@ -552,10 +552,10 @@ export default class SignUp1 extends React.Component {
                                       .then((resp) => this.refs.modal3.open())
                                       .catch((err) => console.log("num err",err));
                                     }else{
-                                      this.setState({errMessage: "Phone Number already exist."})
+                                      this.setState({errMessage: "There is already an account assoicated with this phone number."})
                                     }
                                   }else{
-                                    this.setState({errMessage: "Email already exist."})
+                                    this.setState({errMessage: "There is already an account assoicated with this email address  ,,."})
                                   }
                               })
                               .catch(err => console.log(err))
