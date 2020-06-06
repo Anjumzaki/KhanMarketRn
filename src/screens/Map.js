@@ -463,7 +463,7 @@ class Map extends Component {
 
 
                   axios
-                    .post("http://192.168.0.105:3000/add/location", {
+                    .post("https://lit-peak-13067.herokuapp.com/add/location", {
                       refId: this.props.user.user._id,
                       type: "Customer",
                       address1: ad1 + " "+temp,
