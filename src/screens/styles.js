@@ -19,10 +19,11 @@ export default styles = StyleSheet.create({
     color: "red"
   },
   deatilSection: {
-    flex: 1,
+    position:'absolute',
+    bottom:0,
     padding: 20,
-    display: "flex",
     justifyContent: "space-between",
+    width:'100%'
   },
   spinnerView: {
     flex: 1,
@@ -31,5 +32,6 @@ export default styles = StyleSheet.create({
   },
   btnContainer: {
     alignItems:'center',
+    backgroundColor:'green'
   }
 });
