@@ -357,7 +357,7 @@ class Map extends Component {
       );
     } else {
       return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
           <StatusBar
             backgroundColor="transparent"
             translucent={true}
@@ -607,7 +607,7 @@ class Map extends Component {
               />
             </TouchableOpacity>
           </View>
-        </SafeAreaView>
+        </View>
       );
     }
   }

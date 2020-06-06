@@ -62,15 +62,6 @@ class FavCards extends React.Component {
       this.setState({ favourites: this.props.product.product.favourites });
     }
   }
-
-  // handleChange(num) {
-  //   var preNum = this.state.qt;
-  //   preNum = num + preNum;
-  //   if (preNum >= 1) {
-  //     this.setState({ qt: preNum });
-  //   }
-  // }
-
   handleChange(num) {
     var preNum = this.state.qt;
     preNum = num + preNum;
