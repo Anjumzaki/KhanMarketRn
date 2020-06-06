@@ -231,6 +231,7 @@ import { bindActionCreators } from "redux";
 import { locationAsync } from "../store/actions";
 import { connect } from "react-redux";
 import { Entypo } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { conStyles, textStyles, textIn, btnStyles } from "../styles/base";
 import styles from "./styles";
 import axios from "axios";
@@ -259,9 +260,7 @@ class Map extends Component {
       completeLoc: "",
     };
   }
-
-  componentWillMount() {
-    Geocoder.init("AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI");
+  getMyLocations = () => {
     Geolocation.getCurrentPosition(
       (position) => {
         const region = {
@@ -285,6 +284,10 @@ class Map extends Component {
       },
       { enableHighAccuracy: false, timeout: 200000, maximumAge: 5000 }
     );
+  };
+  componentWillMount() {
+    Geocoder.init("AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI");
+    this.getMyLocations();
   }
 
   onMapReady = () => {
@@ -412,19 +415,21 @@ class Map extends Component {
                 Geocoder.from(data.description)
                   .then((json) => {
                     var location = json.results[0].geometry.location;
-                   let region = {
+                    let region = {
                       latitude: location.lat,
                       longitude: location.lng,
                       latitudeDelta: 0.007,
                       longitudeDelta: 0.007,
-                    }
-                    this.setState({
-                      region,
-                      regionChangeProgress: true,
-                    }, () => this.fetchAddress())
+                    };
+                    this.setState(
+                      {
+                        region,
+                        regionChangeProgress: true,
+                      },
+                      () => this.fetchAddress()
+                    );
                   })
                   .catch((error) => console.warn(error));
-               
               }}
               query={{
                 key: "AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI",
@@ -449,6 +454,21 @@ class Map extends Component {
             </View>
           </View>
           <View style={styles.deatilSection}>
+            <View style={{ alignItems: "flex-end" }}>
+              <TouchableOpacity
+                onPress={() => this.getMyLocations()}
+                style={{
+                  padding: 10,
+                  backgroundColor: "white",
+                  marginBottom: 20,
+                  borderRadius: 100,
+                  borderColor: "black",
+                  borderWidth: 1,
+                }}
+              >
+                <MaterialIcons name="my-location" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
             <View
               style={{
                 alignItems: "center",
