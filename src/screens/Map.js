@@ -276,7 +276,7 @@ class Map extends Component {
         });
       },
       (error) => {
-        alert(error);
+        // alert(error);
         this.setState({
           error: error.message,
           loading: false,

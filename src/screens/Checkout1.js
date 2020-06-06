@@ -1055,7 +1055,7 @@ class Cart extends Component {
                     } else {
                       numV = '+1' + this.state.mobile;
                     }
-                    alert(numV)
+                    // alert(numV)
                     console.log("numv", numV);
                     axios
                       .get(
@@ -1271,6 +1271,24 @@ class Cart extends Component {
                     ? "0" + currentdate.getSeconds()
                     : currentdate.getSeconds();
                 var pTime = hr + ":" + mi + ":" + sc;
+                var dt = ""
+                this.state.orderDate === ""
+                        ? dt = todaysDate
+                        : dt = this.state.orderDate
+                var timeCheck = true
+                console.log(this.state.orderTime,dt, pTime,pDate)
+                if(dt === pDate){
+                  console.log("sdsd")
+                  var t1 = pTime.split(":");
+
+                  var t2 = this.state.orderTime.split(":");
+                  console.log(parseInt(t1[0]), parseInt(t2[0]))
+                  if(parseInt(t1[0]) >= parseInt(t2[0])){
+                    timeCheck =  false
+                  }
+
+                }
+                if(timeCheck){
                 axios
                   .post("https://lit-peak-13067.herokuapp.com/add/order", {
                     storeId: sId,
@@ -1321,7 +1339,7 @@ class Cart extends Component {
                     })
                     .catch(err => console.log(err))
                   
-                  });
+                  });}
               }}
               style={[
                 this.state.storeTimings.isClosed ||
