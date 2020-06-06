@@ -250,6 +250,7 @@ class Map extends Component {
       marginTop: 1,
       userLocation: "",
       regionChangeProgress: false,
+      completeLoc: ''
     };
   }
 
@@ -313,9 +314,11 @@ class Map extends Component {
       .then((response) => response.json())
       .then((responseJson) => {
         const userLocation = responseJson.results[0].formatted_address;
+        console.log("result",responseJson.results[0].address_components)
         this.setState({
           userLocation: userLocation,
           regionChangeProgress: false,
+          completeLoc: responseJson.results[0]
         });
       });
   };
@@ -335,6 +338,7 @@ class Map extends Component {
   onLocationSelect = () => alert(this.state.userLocation);
 
   render() {
+    console.log(this.state.completeLoc)
     if (this.state.loading) {
       return (
         <View style={styles.spinnerView}>
@@ -384,7 +388,7 @@ class Map extends Component {
                   axios
                     .delete(
                       "https://lit-peak-13067.herokuapp.com/delete/location/" +
-                        this.props.user.user._id
+                        this.props.user.user._id 
                     )
                     .then((resp) => console.log(resp))
                     .catch((err) => console.log(err));
@@ -455,6 +459,15 @@ class Map extends Component {
                       this.props.navigation.replace("App", {
                         location: this.state.location,
                       });
+                      this.props.locationAsync(
+                        resp1.data[0].address1 +
+                          " " +
+                          resp1.data[0].address2 + 
+                          " " +
+                          resp1.data[0].city +
+                          " " +
+                          resp1.data[0].country
+                      );
                     })
                     .catch((err) => console.log(err));
                 }}

@@ -456,8 +456,8 @@ class Login extends React.Component {
                           if (resp1.data.length > 0) {
                             this.props.locationAsync(
                               resp1.data[0].address1 +
-                                // " " +
-                                // resp1.data[0].address2 +
+                                " " +
+                                resp1.data[0].address2 + 
                                 " " +
                                 resp1.data[0].city +
                                 " " +
