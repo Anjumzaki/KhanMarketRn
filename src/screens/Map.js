@@ -475,7 +475,7 @@ class Map extends Component {
                       longitude: this.state.region.longitude
                     })
                     .then((resp1) => {
-                      this.props.navigation.replace("App", {
+                      this.props.navigation.push("App", {
                         location: this.state.location,
                       });
                      

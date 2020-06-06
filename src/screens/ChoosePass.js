@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   StatusBar,
   Dimensions,
+  Alert
 } from "react-native";
 import { BackStack } from "../Helpers/BackStack";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -183,8 +184,16 @@ class SignUp1 extends React.Component {
                     this.state.user
                   )
                   .then((resp) => {
-                    // this.props.userAsync(resp.data);
-                    this.props.navigation.navigate("Login");
+                    this.props.userAsync(resp.data);
+                    Alert.alert(
+                      "Account Created",
+                      "Please Login",
+                      [
+                        { text: "OK", onPress: () => this.props.navigation.navigate("Login") }
+                      ],
+                      { cancelable: false }
+                    );
+                    
                   })
                   .catch((err) =>
                     this.setState({ msg: "Email already exist!" })
