@@ -183,7 +183,7 @@ class SignUp1 extends React.Component {
                     this.state.user
                   )
                   .then((resp) => {
-                    this.props.userAsync(resp.data);
+                    // this.props.userAsync(resp.data);
                     this.props.navigation.navigate("Login");
                   })
                   .catch((err) =>
