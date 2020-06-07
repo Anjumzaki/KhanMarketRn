@@ -64,7 +64,7 @@ class Settings extends React.Component {
   editFirstName() {
     axios
       .put(
-        "http://192.168.0.105:3000/edit/user/name/" +
+        "https://lit-peak-13067.herokuapp.com/edit/user/name/" +
           this.props.user.user._id +
           "/" +
           this.state.firstName
@@ -82,7 +82,7 @@ class Settings extends React.Component {
   editlastName() {
     axios
       .put(
-        "http://192.168.0.105:3000/edit/user/lastName/" +
+        "https://lit-peak-13067.herokuapp.com/edit/user/lastName/" +
           this.props.user.user._id +
           "/" +
           this.state.lastName

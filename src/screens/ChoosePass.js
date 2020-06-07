@@ -181,7 +181,7 @@ class SignUp1 extends React.Component {
               onPress={() => {
                 axios
                   .post(
-                    "http://192.168.0.105:3000/api/users/signup",
+                    "https://lit-peak-13067.herokuapp.com/api/users/signup",
                     this.state.user
                   )
                   .then((resp) => {

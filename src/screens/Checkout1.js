@@ -83,6 +83,7 @@ class Cart extends Component {
       isStoreClosed: false,
       sId: "",
       oId: "",
+      isOut: false
     };
   }
 
@@ -308,7 +309,9 @@ class Cart extends Component {
     console.log("SD", this.state, this.props.user);
     var codeId = this.makeid(3);
     console.log("CODE ID", codeId);
-    //
+    //      
+      // console.log("SDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD", new Date("2020-04-30"))
+
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
     } else {
@@ -333,7 +336,8 @@ class Cart extends Component {
       month1 = "0" + month1;
     }
     //
-    var todaysDate = day + "-" + month1 + "-" + year;
+    var todaysDate = month1 + "-" + day + "-" + year;
+    console.log("sdddddddddddd",todaysDate)
     var dates = [];
 
     for (var i = -1; i < 12; i++) {
@@ -366,7 +370,36 @@ class Cart extends Component {
     var storeProducts = this.props.cart.filter((item, index) => {
       return item.product.storeId === this.props.store.id;
     });
+      console.log("storeProductsstoreProducts",storeProducts)
+      var isOut = false
+      var pname = ''
 
+    for (var i = 0; i < storeProducts.length; i++) {
+      if(storeProducts[i].product.isOutOfStock){
+        var currentDate= new Date()
+        var day = currentDate.getDate();
+          var month = currentDate.getMonth() + 1;
+          var year = currentDate.getFullYear();
+          if (day < 10) {
+            day = "0" + day;
+          }
+          if (month < 10) {
+            month = "0" + month;
+          }
+
+        var todaysDate1 =day + "-" + month + "-" + year;
+          console.log(todaysDate1 === storeProducts[i].product.outOfStockDate)
+          if(todaysDate1 === storeProducts[i].product.outOfStockDate){
+            pname= storeProducts[i].product.productName
+             isOut=true
+          }
+         }
+      var temp = storeProducts[i].price;
+      // var temp=0
+      subTotal = subTotal + parseFloat(temp);
+    }
+
+    console.log("iout ois out", isOut)
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const months = [
       "Jan",
@@ -382,7 +415,7 @@ class Cart extends Component {
       "Nov",
       "Dec",
     ];
-
+console.log("THIS.STATE",this.state)
     return (
       <>
         <Modal
@@ -484,7 +517,29 @@ class Cart extends Component {
               {dates.map((index, item) => (
                 <TouchableOpacity
                   onPress={() => {
+                    this.setState({pname: "", isOut: false})
                     this.getTimings(this.getDayName(index));
+                    console.log("sdsdadasd213",dates[item])
+                    for (var i = 0; i < storeProducts.length; i++) {
+                      if(storeProducts[i].product.isOutOfStock){
+                        var currentDate= new Date()
+                        var day = currentDate.getDate();
+                          var month = currentDate.getMonth() + 1;
+                          var year = currentDate.getFullYear();
+                          if (day < 10) {
+                            day = "0" + day;
+                          }
+                          if (month < 10) {
+                            month = "0" + month;
+                          }
+                
+                        var todaysDate1 =day + "-" + month + "-" + year;
+                          console.log("aaaaaaaaaaaaaaaa",dates[item] , storeProducts[i].product.outOfStockDate)
+                          if(dates[item]  === storeProducts[i].product.outOfStockDate){
+                                this.setState({isOut: true, pname: storeProducts[i].product.productName})
+                          }
+                         }
+                        }
                     this.setState({
                       date: item,
                       orderDate: dates[item],
@@ -747,7 +802,7 @@ class Cart extends Component {
 
                   axios
                     .put(
-                      "http://192.168.0.105:3000/api/users/guest/edit/" +
+                      "https://lit-peak-13067.herokuapp.com/api/users/guest/edit/" +
                         this.props.user.user._id,
                       {
                         firstName: this.state.firstName,
@@ -1274,6 +1329,8 @@ class Cart extends Component {
                 this.state.isStoreClosed
               }
               onPress={() => {
+                console.log("ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",isOut)
+                if(!isOut && !this.state.isOut){
                 this.setState({ cart: true });
 
                 var pDate = new Date();
@@ -1371,11 +1428,22 @@ class Cart extends Component {
                         .catch((err) => console.log(err));
                     });
                 } else {
-                  alert(
+                  
+                alert(
                     "Store is closed in this date and time, please change date and time."
                   );
                 }
-              }}
+              }else{
+                console.log("pnamepnamepnamepname",pname)
+                  var name = ""
+                if(pname){
+                  name = pname
+                }else{
+                  name=this.state.pname
+                }
+                alert("Sorry, "+name+" Item out of stock for the selected date, change pickup date or remove this product to procceed")
+              }
+            }}
               style={[
                 this.state.storeTimings.isClosed ||
                 !nameCheck ||
