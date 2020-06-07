@@ -791,7 +791,6 @@ class Cart extends Component {
           style={{
             flex: 1,
             backgroundColor: "white",
-            minHeight: Dimensions.get("window").height - 100,
           }}
         >
           <ScrollView style={{ backgroundColor: "white" }}>
