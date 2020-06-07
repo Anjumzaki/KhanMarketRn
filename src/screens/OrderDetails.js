@@ -9,7 +9,7 @@ import {
   LinearGradient,
   TouchableOpacity,
   Linking,
-  Alert
+  Alert,
 } from "react-native";
 import Carousel from "react-native-looped-carousel";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -41,7 +41,7 @@ class OrderDetails extends Component {
       showNum: false,
       step: 0,
       image: "",
-      bd: false
+      bd: false,
     };
   }
 
@@ -91,7 +91,9 @@ class OrderDetails extends Component {
       "Dec",
     ];
 
-    return "" + month_names[parseInt(date[1]-1)] + " " + date[0] + "," + date[2];
+    return (
+      "" + month_names[parseInt(date[1] - 1)] + " " + date[0] + "," + date[2]
+    );
   }
   makeCall = () => {
     let phoneNumber = "";
@@ -118,7 +120,6 @@ class OrderDetails extends Component {
       subTotal = subTotal + parseFloat(temp);
     }
 
-    
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
@@ -281,8 +282,8 @@ class OrderDetails extends Component {
             <View
               style={{
                 flexDirection: "row",
-
-                alignItems: "center",
+                justifyContent: "space-between",
+                width:'80%'
               }}
             >
               <LatoText
@@ -329,21 +330,29 @@ class OrderDetails extends Component {
             <View
               style={{
                 flexDirection: "row",
-
-                alignItems: "center",
+                justifyContent: "space-between",
+                width:'80%'
               }}
             >
               <LatoText
                 fontName="Lato-Regular"
                 fonSiz={15}
                 col="#2E2E2E"
-                text={this.props.route.params.order.postDate ? this.dateConvert(this.props.route.params.order.postDate) : ""}
+                text={
+                  this.props.route.params.order.postDate
+                    ? this.dateConvert(this.props.route.params.order.postDate)
+                    : ""
+                }
               ></LatoText>
               <LatoText
                 fontName="Lato-Regular"
                 fonSiz={15}
                 col="#2E2E2E"
-                text={this.props.route.params.order.postTime ? "   -  " + this.props.route.params.order.postTime : ""}
+                text={
+                  this.props.route.params.order.postTime
+                    ? "    " + this.props.route.params.order.postTime
+                    : ""
+                }
               ></LatoText>
             </View>
           </View>
@@ -461,9 +470,13 @@ class OrderDetails extends Component {
                     fontName="Lato-Regular"
                     fonSiz={15}
                     col="#2E2E2E"
-                    text={"$" + parseFloat(
-                      item.product.price - (item.product.price * item.product.discount) / 100
-                    ).toFixed(1)}
+                    text={
+                      "$" +
+                      parseFloat(
+                        item.product.price -
+                          (item.product.price * item.product.discount) / 100
+                      ).toFixed(1)
+                    }
                   />
                   <LatoText
                     fontName="Lato-Regular"
@@ -481,7 +494,8 @@ class OrderDetails extends Component {
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
-              padding: 20,
+              paddingHorizontal: 20,
+
             }}
           >
             <LatoText
@@ -504,7 +518,8 @@ class OrderDetails extends Component {
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
-              padding: 20,
+              paddingHorizontal: 20,
+              paddingVertical:10
             }}
           >
             <LatoText
@@ -518,8 +533,7 @@ class OrderDetails extends Component {
               fonSiz={18}
               col="#2E2E2E"
               text={
-                "$" +
-                parseFloat(this.props.route.params.order.tax).toFixed(2)
+                "$" + parseFloat(this.props.route.params.order.tax).toFixed(2)
               }
             />
           </View>
@@ -528,7 +542,7 @@ class OrderDetails extends Component {
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
-              padding: 20,
+              paddingHorizontal: 20,
             }}
           >
             <LatoText
@@ -543,7 +557,10 @@ class OrderDetails extends Component {
               col="#2E2E2E"
               text={
                 "$" +
-                (parseFloat(this.props.route.params.order.totalAmount) + parseFloat(this.props.route.params.order.tax)).toFixed(2) 
+                (
+                  parseFloat(this.props.route.params.order.totalAmount) +
+                  parseFloat(this.props.route.params.order.tax)
+                ).toFixed(2)
               }
             />
           </View>
@@ -557,10 +574,13 @@ class OrderDetails extends Component {
               alignItems: "center",
               justifyContent: "center",
             }}
-            disabled={this.props.route.params.order.isRejected || this.state.bd || this.props.route.params.order.isPicked}
+            disabled={
+              this.props.route.params.order.isRejected ||
+              this.state.bd ||
+              this.props.route.params.order.isPicked
+            }
             onPress={() => {
               if (this.props.route.params.order.isAccepted === false) {
-              
                 Alert.alert(
                   "Alert!",
                   "Are you sure you want to cancel the order?",
@@ -574,31 +594,36 @@ class OrderDetails extends Component {
                       text: "Yes",
                       onPress: () => {
                         axios
-                      .put(
-                        "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
-                          this.props.route.params.order._id
-                      )
-                      .then((resp) => {
-                        this.setState({bd: true})
-                        alert("Order Cancelled Successfully.")
-                        this.props.navigation.navigate('MyOrders')
-                      })
-                      .catch((err) => console.log(err));
+                          .put(
+                            "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
+                              this.props.route.params.order._id
+                          )
+                          .then((resp) => {
+                            this.setState({ bd: true });
+                            alert("Order Cancelled Successfully.");
+                            this.props.navigation.navigate("MyOrders");
+                          })
+                          .catch((err) => console.log(err));
                       },
                     },
                   ],
                   { cancelable: true }
                 );
-              
               } else {
                 alert("Order cannot be cancelled after preperation state.");
               }
-            }} 
+            }}
           >
             <LatoText
               fontName="Lato-Bold"
               fonSiz={17}
-              col={this.props.route.params.order.isRejected || this.state.bd || this.props.route.params.order.isPicked ? "#808080" : "#2E2E2E"}
+              col={
+                this.props.route.params.order.isRejected ||
+                this.state.bd ||
+                this.props.route.params.order.isPicked
+                  ? "#808080"
+                  : "#2E2E2E"
+              }
               text="Cancel Order"
             />
           </TouchableOpacity>
