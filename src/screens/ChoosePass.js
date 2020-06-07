@@ -67,6 +67,7 @@ class SignUp1 extends React.Component {
     });
   };
   render() {
+    console.log("stas",this.state)
     const { icEye, isPassword } = this.state;
     const styles = StyleSheet.create({
       logo: {
@@ -180,7 +181,7 @@ class SignUp1 extends React.Component {
               onPress={() => {
                 axios
                   .post(
-                    "https://lit-peak-13067.herokuapp.com/api/users/signup",
+                    "http://192.168.0.105:3000/api/users/signup",
                     this.state.user
                   )
                   .then((resp) => {

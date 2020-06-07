@@ -40,6 +40,8 @@ export default class SignUp1 extends React.Component {
       isPassword: true,
       fontLoaded: false,
       name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       mobile: "",
       zipCode: "",
@@ -93,7 +95,8 @@ export default class SignUp1 extends React.Component {
         loading: true,
       },
       () => {
-        if (this.state.name.trim()) {
+        if (this.state.firstName.trim()) {
+          if (this.state.lastName.trim()) {
           if (this.state.email.trim()) {
             if (EmailValidator.validate(this.state.email.trim())) {
               if (this.state.mobile.trim()) {
@@ -101,7 +104,8 @@ export default class SignUp1 extends React.Component {
                   if (this.isValidUSZip(this.state.zipCode)) {
                     this.setState({ errMessage: "", loading: false });
                     this.props.navigation.navigate("ChoosePass", {
-                      name: this.state.name,
+                      firstName: this.state.firstName,
+                      lastName: this.state.lastName,
                       email: this.state.email.toLowerCase().trim(),
                       mobile:
                         this.state.selectedCountry == "USA"
@@ -144,7 +148,13 @@ export default class SignUp1 extends React.Component {
           }
         } else {
           this.setState({
-            errMessage: "Please enter your name",
+            errMessage: "Please enter your last name",
+            loading: false,
+          });
+        }
+        } else {
+          this.setState({
+            errMessage: "Please enter your first name",
             loading: false,
           });
         }
