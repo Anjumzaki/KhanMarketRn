@@ -355,7 +355,7 @@ class Cart extends Component {
       nameCheck = true;
     }
 
-    if (this.state.name || this.props.user.user.name) {
+    if (this.state.name || this.props.user.user.firstName) {
       nameCheck = true;
     }
     //
@@ -974,8 +974,8 @@ class Cart extends Component {
                 fonSiz={17}
                 col="#2E2E2E"
                 text={
-                  this.props.user.user.name
-                    ? this.props.user.user.name
+                  this.props.user.user.firstName
+                    ? this.props.user.user.firstName
                     : this.state.name
                 }
               />
@@ -1300,7 +1300,7 @@ class Cart extends Component {
                     userId: this.props.user.user._id,
                     name: this.state.name
                       ? this.state.name
-                      : this.props.user.user.name,
+                      : this.props.user.user.firstName,
                     phone:  this.state.mobile
                       ? "+1" + this.state.mobile
                       : this.props.user.user.mobile,

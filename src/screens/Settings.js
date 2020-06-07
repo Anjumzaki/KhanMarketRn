@@ -36,8 +36,10 @@ class Settings extends React.Component {
       image: null,
       images: null,
       avatarSource: null,
-      editName: false,
-      name: this.props.user.user.name,
+      editName1: false,
+      editName2: false,
+      firstName: this.props.user.user.firstName, 
+      lastName: this.props.user.user.lastName, 
       image: "",
       old: "",
       newP: "",
@@ -59,17 +61,35 @@ class Settings extends React.Component {
       });
   }
 
-  editName() {
+  editFirstName() {
     axios
       .put(
-        "https://lit-peak-13067.herokuapp.com/edit/user/name/" +
+        "http://192.168.0.105:3000/edit/user/name/" +
           this.props.user.user._id +
           "/" +
-          this.state.name
+          this.state.firstName
       )
       .then((resp) => {
         var temp = this.props.user;
-        temp.user.name = this.state.name;
+        temp.user.firstName = this.state.firstName;
+
+        this.props.userAsync(temp);
+      })
+      .then(() => this.refs.modal3.close)
+      .catch((err) => console.log(err));
+  }
+
+  editlastName() {
+    axios
+      .put(
+        "http://192.168.0.105:3000/edit/user/lastName/" +
+          this.props.user.user._id +
+          "/" +
+          this.state.lastName
+      )
+      .then((resp) => {
+        var temp = this.props.user;
+        temp.user.lastName = this.state.lastName;
 
         this.props.userAsync(temp);
       })
@@ -264,13 +284,13 @@ class Settings extends React.Component {
                 fontName="Lato-Regular"
                 fonSiz={15}
                 col="#5C5C5C"
-                text="Name"
+                text="First Name"
               />
-              {this.state.editName ? (
+              {this.state.editName1 ? (
                 <TouchableOpacity
                   onPress={() => {
-                    this.setState({ editName: false });
-                    this.editName();
+                    this.setState({ editName1: false });
+                    this.editFirstName();
                   }}
                   style={{ paddingHorizontal: 20 }}
                 >
@@ -283,7 +303,7 @@ class Settings extends React.Component {
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
-                  onPress={() => this.setState({ editName: true })}
+                  onPress={() => this.setState({ editName1: true })}
                   style={{ paddingHorizontal: 20 }}
                 >
                   <LatoText
@@ -297,10 +317,10 @@ class Settings extends React.Component {
             </View>
             <View style={{ paddingTop: 15 }}>
               <TextInput
-                onChangeText={(name) => this.setState({ name })}
-                editable={this.state.editName}
+                onChangeText={(firstName) => this.setState({ firstName })}
+                editable={this.state.editName1}
                 style={
-                  this.state.editName
+                  this.state.editName1
                     ? {
                         borderColor: "#5C5C5C",
                         borderWidth: 1,
@@ -309,10 +329,76 @@ class Settings extends React.Component {
                       }
                     : { borderColor: "white", borderWidth: 1, borderRadius: 5 }
                 }
-                value={this.state.name}
+                value={this.state.firstName}
               />
             </View>
           </View>
+
+          <View style={{ marginTop: 30 }} />
+          <View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col="#5C5C5C"
+                text="Last Name"
+              />
+              {this.state.editName2 ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({ editName2: false });
+                    this.editlastName();
+                  }}
+                  style={{ paddingHorizontal: 20 }}
+                >
+                  <LatoText
+                    fontName="Lato-Bold"
+                    fonSiz={15}
+                    col="black"
+                    text="Save"
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => this.setState({ editName2: true })}
+                  style={{ paddingHorizontal: 20 }}
+                >
+                  <LatoText
+                    fontName="Lato-Bold"
+                    fonSiz={15}
+                    col="black"
+                    text="Change"
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+            <View style={{ paddingTop: 15 }}>
+              <TextInput
+                onChangeText={(lastName) => this.setState({ lastName })}
+                editable={this.state.editName2}
+                style={
+                  this.state.editName2
+                    ? {
+                        borderColor: "#5C5C5C",
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        padding: 10,
+                      }
+                    : { borderColor: "white", borderWidth: 1, borderRadius: 5 }
+                }
+                value={this.state.lastName}
+              />
+            </View>
+          </View>
+
+
           <View style={{ marginTop: 30 }}>
             <View
               style={{
