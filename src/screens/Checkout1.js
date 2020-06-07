@@ -995,8 +995,8 @@ class Cart extends Component {
                 col="#2E2E2E"
                 text={
                   this.props.user.user.firstName
-                    ? this.props.user.user.firstName
-                    : this.state.firstName
+                    ? this.props.user.user.firstName +" "+ this.props.user.user.lastName 
+                    : this.state.firstName +" "+ this.state.lastName 
                 }
               />
             </View>
@@ -1173,12 +1173,12 @@ class Cart extends Component {
                         <View>
                           <TextInput
                             style={[textIn.input, { width: "100%" }]}
-                            onChangeText={(name) =>
+                            onChangeText={(firstName) =>
                               this.setState({
-                                name,
+                                firstName,
                               })
                             }
-                            value={this.state.name}
+                            value={this.state.firstName}
                           />
                         </View>
                       </View>
@@ -1324,8 +1324,8 @@ class Cart extends Component {
                       storePhone: this.props.store.phone,
                       userId: this.props.user.user._id,
                       name: this.state.firstName
-                        ? this.state.firstName + this.state.lastName
-                        : this.props.user.user.firstName +  this.props.user.user.lastName,
+                        ? this.state.firstName +" "+ this.state.lastName
+                        : this.props.user.user.firstName +" "+  this.props.user.user.lastName,
                       phone: this.state.mobile
                         ? "+1" + this.state.mobile
                         : this.props.user.user.mobile,

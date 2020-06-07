@@ -82,10 +82,14 @@ class Cart extends Component {
     });
 
     var subTotal = 0;
-
+    console.log("sdbsd",storeProducts)
     for (var i = 0; i < storeProducts.length; i++) {
       // var temp = (this.props.cart[i].product.price - ((this.props.cart[i].product.price * this.props.cart[i].product.discount)/100) * this.props.cart[i].quantity)
-      var temp = this.props.cart[i].price;
+      if(storeProducts[i].product.isOutOfStock){
+        var td= new Date()
+        console.log("SDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",td, new Date("05-04-2020"))
+      }
+      var temp = storeProducts[i].price;
       // var temp=0
       subTotal = subTotal + parseFloat(temp);
     }
