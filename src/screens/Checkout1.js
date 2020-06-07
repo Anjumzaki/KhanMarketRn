@@ -69,7 +69,8 @@ class Cart extends Component {
       startUnit: "",
       endUnit: "",
       timeArray: [],
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       mobile: "",
       num: "",
@@ -88,8 +89,7 @@ class Cart extends Component {
   componentDidMount() {
     console.log(
       "ORDERRRRRRRRRRRRRRR numer",
-      this.props.store.sId,
-      this.props.store.oId
+      this.props.user.user
     );
 
     axios
@@ -358,7 +358,7 @@ class Cart extends Component {
       nameCheck = true;
     }
 
-    if (this.state.name || this.props.user.user.name) {
+    if (this.state.name || this.props.user.user.firstName) {
       nameCheck = true;
     }
     //
@@ -747,7 +747,7 @@ class Cart extends Component {
 
                   axios
                     .put(
-                      "https://lit-peak-13067.herokuapp.com/api/users/guest/edit/" +
+                      "http://192.168.0.105:3000/api/users/guest/edit/" +
                         this.props.user.user._id,
                       {
                         firstName: this.state.firstName,
@@ -994,9 +994,9 @@ class Cart extends Component {
                 fonSiz={17}
                 col="#2E2E2E"
                 text={
-                  this.props.user.user.name
-                    ? this.props.user.user.name
-                    : this.state.name
+                  this.props.user.user.firstName
+                    ? this.props.user.user.firstName
+                    : this.state.firstName
                 }
               />
             </View>
@@ -1323,9 +1323,9 @@ class Cart extends Component {
                       storeAddress: this.props.store.address,
                       storePhone: this.props.store.phone,
                       userId: this.props.user.user._id,
-                      name: this.state.name
-                        ? this.state.name
-                        : this.props.user.user.name,
+                      name: this.state.firstName
+                        ? this.state.firstName + this.state.lastName
+                        : this.props.user.user.firstName +  this.props.user.user.lastName,
                       phone: this.state.mobile
                         ? "+1" + this.state.mobile
                         : this.props.user.user.mobile,

@@ -107,7 +107,7 @@ class CustomDrawerContent extends Component {
               col="#FFFFFF"
               fontName={"Lato-Bold"}
               fontSiz={20}
-              text={this.props.user.user.name}
+              text={this.props.user.user.firstName}
             />
             {/* <View style={{ paddingTop: 2 }}>
               <LatoText
