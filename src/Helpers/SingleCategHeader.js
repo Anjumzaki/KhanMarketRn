@@ -8,7 +8,7 @@ import {
   Image,
   Dimensions,
   TextInput,
-  StatusBar
+  StatusBar,
 } from "react-native";
 import { conStyles, headerStyles } from "../styles/base";
 import firebase from "firebase";
@@ -20,26 +20,31 @@ import {
   EvilIcons,
   AntDesign,
   MaterialIcons,
-  MaterialCommunityIcons
+  MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import LatoText from "./LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { bindActionCreators } from "redux";
-import { storeAsync, cartAsync, cartSizeAsync, singleCatAsync,search1Async } from "../store/actions";
+import {
+  storeAsync,
+  cartAsync,
+  cartSizeAsync,
+  singleCatAsync,
+  search1Async,
+} from "../store/actions";
 import { connect } from "react-redux";
-import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 class SingleCategHeader extends React.Component {
   constructor(props) {
-    super(props); 
+    super(props);
 
     this.state = {
-      inputText: '',
-      image: ''
+      inputText: "",
+      image: "",
     };
   }
 
-  
   componentWillMount() {
     const ref = firebase
       .storage()
@@ -63,12 +68,12 @@ class SingleCategHeader extends React.Component {
           backgroundColor: "transparent",
           shadowOffset: {
             width: 0,
-            height: 0
+            height: 0,
           },
           shadowOpacity: 1,
           shadowRadius: 3.84,
           borderTopWidth: 0,
-          elevation: 5
+          elevation: 5,
         }}
       >
         <Image
@@ -78,12 +83,17 @@ class SingleCategHeader extends React.Component {
             position: "absolute",
             top: 0,
             left: 0,
-            backgroundColor: "rgba(0,0,0,0.7)"
-
+            backgroundColor: "rgba(0,0,0,0.7)",
           }}
           // source={require("../../assets/bgheader.png")}
           source={{ uri: this.state.image }}
           resizeMode="cover"
+        />
+        <View
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            backgroundColor: "rgba(0,0,0,0.5)",
+          }}
         />
         <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
           <TouchableOpacity
@@ -92,10 +102,13 @@ class SingleCategHeader extends React.Component {
           >
             <MaterialIcons name="arrow-back" color="white" size={25} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=> {
-            this.props.searchAsync('')
-            this.props.navigation.navigate('StoreInfo')
-            }} style={{ padding: 20 }}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.searchAsync("");
+              this.props.navigation.navigate("StoreInfo");
+            }}
+            style={{ padding: 20 }}
+          >
             <LatoText
               fontName="Lato-Regular"
               fonSiz={20}
@@ -108,7 +121,7 @@ class SingleCategHeader extends React.Component {
             style={{ padding: 20 }}
           >
             <View>
-              <View style={headerStyles.cartTxt}> 
+              <View style={headerStyles.cartTxt}>
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={7}
@@ -120,19 +133,31 @@ class SingleCategHeader extends React.Component {
             </View>
           </TouchableOpacity>
         </View>
-        <View style={{ flexDirection: "row" ,paddingHorizontal:10,justifyContent:'space-between',alignItems:'center',marginBottom:10,}}>
+        <View
+          style={{
+            flexDirection: "row",
+            paddingHorizontal: 10,
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 10,
+          }}
+        >
           <View style={styles.wrapperText}>
             <EvilIcons name="search" size={26} color="#89898c" />
-            <TextInput style={styles.textI} placeholder="Search..." onChangeText={(inputText) => {
-              this.setState({inputText})
-              this.props.search1Async(inputText)
-              }} />
+            <TextInput
+              style={styles.textI}
+              placeholder="Search..."
+              onChangeText={(inputText) => {
+                this.setState({ inputText });
+                this.props.search1Async(inputText);
+              }}
+            />
           </View>
-          <TouchableOpacity onPress={()=>this.props.navigation.navigate('Filters')}>
-          <Image source={require('../../assets/filters.png')} />
-
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("Filters")}
+          >
+            <Image source={require("../../assets/filters.png")} />
           </TouchableOpacity>
- 
         </View>
       </View>
     );
@@ -142,7 +167,7 @@ const styles = StyleSheet.create({
   textI: {
     width: "100%",
     paddingLeft: 5,
-    fontSize: 17
+    fontSize: 17,
   },
   wrapperText: {
     flexDirection: "row",
@@ -154,36 +179,31 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     marginLeft: 10,
     opacity: 0.9,
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
-const mapStateToProps = state => ({
-  store: state.Store.storeData, 
-  cartData: state.Cart.cartData, 
+const mapStateToProps = (state) => ({
+  store: state.Store.storeData,
+  cartData: state.Cart.cartData,
   cartSize: state.CartSize.cartSizeData,
   loading: state.Store.storeLoading,
   error: state.Store.storeError,
   name: state.SingleCatName.singleCatData,
-  cartLength:state.CartSize.cartSizeData,
+  cartLength: state.CartSize.cartSizeData,
   searchInput: state.Search.searchData,
   store1: state.storeHeader.storeData1,
-
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
-      {
-          storeAsync,
-          cartAsync,
-          cartSizeAsync,
-          singleCatAsync,
-          search1Async
-      },
-      dispatch
+    {
+      storeAsync,
+      cartAsync,
+      cartSizeAsync,
+      singleCatAsync,
+      search1Async,
+    },
+    dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SingleCategHeader);
-
+export default connect(mapStateToProps, mapDispatchToProps)(SingleCategHeader);

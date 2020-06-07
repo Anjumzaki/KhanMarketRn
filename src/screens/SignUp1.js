@@ -505,6 +505,7 @@ export default class SignUp1 extends React.Component {
                       />
                     </View>
                   </>
+                  
                 )}
 
                 <TextInput

@@ -482,19 +482,10 @@ class Login extends React.Component {
                             }
                               
                             );
-                            this.props.navigation.dispatch(
-                              CommonActions.reset({
-                                index: 0,
-                                routes: [{ name: "App" }],
-                              })
-                            );
+
+                          this.props.navigation.navigate('App')
                           } else {
-                            this.props.navigation.dispatch(
-                              CommonActions.reset({
-                                index: 0,
-                                routes: [{ name: "Map" }],
-                              })
-                            );
+                            this.props.navigation.navigate('Map')
                           }
                         })
                         .catch((err) => console.log(err));

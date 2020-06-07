@@ -45,19 +45,22 @@ class StackHeader extends React.Component {
           shadowRadius: 3.84,
           borderTopWidth: 0,
           elevation: 5,
+          backgroundColor:'#2E2E2E'
         }}
       >
-        <Image
-          style={{
-            height: 65 + getStatusBarHeight(),
-            width: Dimensions.get("window").width,
-            position: "absolute",
-            top: 0,
-            left: 0,
-          }}
-          source={require("../../assets/bgheader.png")}
-          resizeMode="cover"
-        />
+        {this.props.pic && (
+          <Image
+            style={{
+              height: 65 + getStatusBarHeight(),
+              width: Dimensions.get("window").width,
+              position: "absolute",
+              top: 0,
+              left: 0,
+            }}
+            source={require("../../assets/bgheader.png")}
+            resizeMode="cover"
+          />
+        )}
         <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
           <TouchableOpacity
             style={{ padding: 20 }}

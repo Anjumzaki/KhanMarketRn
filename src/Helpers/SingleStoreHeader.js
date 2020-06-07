@@ -81,6 +81,7 @@ class SingleStoreHeader extends React.Component {
             top: 0,
             left: 0,
             backgroundColor: "rgba(0,0,0,0.7)",
+            
           }}
           source={{ uri: this.state.image }}
           // source={require("../../assets/bgheader.png")}
