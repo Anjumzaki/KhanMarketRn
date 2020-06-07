@@ -1340,7 +1340,7 @@ class Cart extends Component {
                     .catch(err => console.log(err))
                   
                   });}else{
-                    alert("Store is closed, please change date and time.")
+                    alert("Store is closed in this date and time, please change date and time.")
                   }
               }}
               style={[

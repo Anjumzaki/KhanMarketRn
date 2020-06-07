@@ -120,7 +120,7 @@ class SingleStoreHeader extends React.Component {
               text={this.props.store.name.toUpperCase().substring(0, 18)}
             />
           </TouchableOpacity>
-          <TouchableOpacity
+          <TouchableOpacity 
             onPress={() => this.props.navigation.navigate("Cart")}
             style={{ padding: 20 }}
           >

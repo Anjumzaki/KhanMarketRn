@@ -11,6 +11,7 @@ import {
   StatusBar
 } from "react-native";
 import { conStyles, headerStyles } from "../styles/base";
+import firebase from "firebase";
 
 import {
   Entypo,
@@ -33,12 +34,23 @@ class SingleCategHeader extends React.Component {
     super(props); 
 
     this.state = {
-      inputText: ''
+      inputText: '',
+      image: ''
     };
   }
 
   
-
+  componentWillMount() {
+    const ref = firebase
+      .storage()
+      .ref("/store_images/" + this.props.store1.id + ".jpg");
+    ref
+      .getDownloadURL()
+      .then((url) => {
+        this.setState({ image: url });
+      })
+      .catch((err) => console.log(err));
+  }
   render() {
     return (
       <View
@@ -65,9 +77,12 @@ class SingleCategHeader extends React.Component {
             width: Dimensions.get("window").width,
             position: "absolute",
             top: 0,
-            left: 0
+            left: 0,
+            backgroundColor: "rgba(0,0,0,0.7)"
+
           }}
-          source={require("../../assets/bgheader.png")}
+          // source={require("../../assets/bgheader.png")}
+          source={{ uri: this.state.image }}
           resizeMode="cover"
         />
         <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
@@ -151,7 +166,8 @@ const mapStateToProps = state => ({
   error: state.Store.storeError,
   name: state.SingleCatName.singleCatData,
   cartLength:state.CartSize.cartSizeData,
-  searchInput: state.Search.searchData
+  searchInput: state.Search.searchData,
+  store1: state.storeHeader.storeData1,
 
 });
 const mapDispatchToProps = (dispatch, ownProps) =>

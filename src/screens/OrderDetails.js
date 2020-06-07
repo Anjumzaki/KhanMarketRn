@@ -461,7 +461,9 @@ class OrderDetails extends Component {
                     fontName="Lato-Regular"
                     fonSiz={15}
                     col="#2E2E2E"
-                    text={"$" + item.product.price}
+                    text={"$" + parseFloat(
+                      item.product.price - (item.product.price * item.product.discount) / 100
+                    ).toFixed(1)}
                   />
                   <LatoText
                     fontName="Lato-Regular"
