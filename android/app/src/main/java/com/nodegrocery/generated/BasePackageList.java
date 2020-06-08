@@ -1,4 +1,4 @@
-package com.khanmarket.generated;
+package com.nodegrocery.generated;
 
 import java.util.Arrays;
 import java.util.List;

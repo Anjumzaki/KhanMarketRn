@@ -41,5 +41,5 @@
     "entryPoint": "node_modules/expo/AppEntry.js"
   },
   "displayName": "Khan Market",
-  "name": "khanmarket"
+  "name": "NodeGrocery"
 }
