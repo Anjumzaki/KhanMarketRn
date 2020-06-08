@@ -119,7 +119,7 @@ class OrderDetails extends Component {
       var temp = this.props.cart[i].price;
       subTotal = subTotal + parseFloat(temp);
     }
-    console.log("this.props.route.params.order",this.props.route.params.order)
+    console.log("this.props.route.params.order", this.props.route.params.order);
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
@@ -283,7 +283,7 @@ class OrderDetails extends Component {
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                width:'80%'
+                width: "80%",
               }}
             >
               <LatoText
@@ -331,7 +331,7 @@ class OrderDetails extends Component {
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                width:'80%'
+                width: "80%",
               }}
             >
               <LatoText
@@ -475,23 +475,24 @@ class OrderDetails extends Component {
                       parseFloat(
                         item.product.price -
                           (item.product.price * item.product.discount) / 100
-                      ).toFixed(2)
+                      ).toFixed(2) +
+                      " x " +
+                      item.quantity
                     }
                   />
+
                   <LatoText
                     fontName="Lato-Regular"
                     fonSiz={15}
                     col="#2E2E2E"
-                    text={" x "+item.quantity+" = "}
-                  />
-                   <LatoText
-                    fontName="Lato-Regular"
-                    fonSiz={15}
-                    col="#2E2E2E"
-                    text={item.quantity*parseFloat(
-                      item.product.price -
-                        (item.product.price * item.product.discount) / 100
-                    ).toFixed(2)}
+                    text={
+                      "$" +
+                      item.quantity *
+                        parseFloat(
+                          item.product.price -
+                            (item.product.price * item.product.discount) / 100
+                        ).toFixed(2)
+                    }
                   />
                 </View>
               </View>
@@ -504,7 +505,6 @@ class OrderDetails extends Component {
               flexDirection: "row",
               justifyContent: "space-between",
               paddingHorizontal: 20,
-
             }}
           >
             <LatoText
@@ -528,7 +528,7 @@ class OrderDetails extends Component {
               flexDirection: "row",
               justifyContent: "space-between",
               paddingHorizontal: 20,
-              paddingVertical:10
+              paddingVertical: 10,
             }}
           >
             <LatoText
