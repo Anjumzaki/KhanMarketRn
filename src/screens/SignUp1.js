@@ -12,6 +12,7 @@ import {
   Dimensions,
   ActivityIndicator,
   // Modal
+  BackHandler
 } from "react-native";
 import { BackStack } from "../Helpers/BackStack";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -61,6 +62,7 @@ export default class SignUp1 extends React.Component {
       verifi: false,
       countryModal: false,
       selectedCountry: "USA",
+      numberModal:false
     };
   }
   isValidUSZip = (sZip) => {
@@ -76,8 +78,10 @@ export default class SignUp1 extends React.Component {
       "Sarabun-Medium": require("../../assets/fonts/Sarabun-Medium.ttf"),
       "Sarabun-Light": require("../../assets/fonts/Sarabun-Light.ttf"),
     });
-
     this.setState({ fontLoaded: true });
+  }
+  componentWillUnmount(){
+    BackHandler.removeEventListener()
   }
   getRef = (ref) => {
     if (this.props.getRef) this.props.getRef(ref);
@@ -163,6 +167,12 @@ export default class SignUp1 extends React.Component {
     );
   };
   render() {
+    if(this.state.numberModal)
+    {
+      alert(this.state.numberModal)
+
+    }
+
     var mainNumber =
       this.state.selectedCountry === "USA"
         ? "+1" + this.state.mobile
@@ -183,6 +193,8 @@ export default class SignUp1 extends React.Component {
           position={"center"}
           ref={"coModal"}
           isDisabled={this.state.countryModal}
+          backButtonClose={true}
+
         >
           <LatoText
             fontName="Lato-Regular"
@@ -284,6 +296,7 @@ export default class SignUp1 extends React.Component {
           isDisabled={this.state.isDisabled}
           backdropPressToClose={false}
           swipeToClose={false}
+          backButtonClose={true}
         >
           <LatoText
             fontName="Lato-Regular"
@@ -315,7 +328,7 @@ export default class SignUp1 extends React.Component {
               onFulfill={(isValid) =>
                 isValid
                   ? this.setState(
-                      { codeMsg: false, numVerified: true },
+                      { codeMsg: false, numVerified: true, numberModal:false },
                       this.refs.modal3.close()
                     )
                   : this.setState({ codeMsg: true })
@@ -585,7 +598,7 @@ export default class SignUp1 extends React.Component {
                                             "/" +
                                             num
                                         )
-                                        .then((resp) => this.refs.modal3.open())
+                                        .then((resp) => this.setState({numberModal:true},()=>this.refs.modal3.open()))
                                         .catch((err) => console.log(err));
 
                                       axios
