@@ -235,7 +235,7 @@ class Cart extends Component {
             <TouchableOpacity
               onPress={() => {
                 if(this.props.cart.length === 0){
-                  alert("You cart is empty.")
+                  alert("Sorry, cart is empty.")
                 }else{
                   this.props.navigation.navigate("Checkout1")
                 }
