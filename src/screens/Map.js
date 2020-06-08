@@ -224,6 +224,7 @@ import {
   Button,
   StatusBar,
   Platform,
+  AsyncStorage
 } from "react-native";
 import Geolocation from "@react-native-community/geolocation";
 import LatoText from "../Helpers/LatoText";
@@ -260,6 +261,96 @@ class Map extends Component {
       completeLoc: "",
     };
   }
+  handleMapApp = async () => {
+    axios
+      .delete(
+        "https://lit-peak-13067.herokuapp.com/delete/location/" +
+          this.props.user.user._id
+      )
+      .then((resp) => console.log(resp))
+      .catch((err) => console.log(err));
+
+    var ad1 = "",
+      temp = "",
+      ad2 = "",
+      ct = "",
+      cnt = "",
+      zipc = "";
+    console.log(" ins state", this.state.completeLoc);
+    for (
+      var i = 0;
+      i < this.state.completeLoc.results[0].address_components.length;
+      i++
+    ) {
+      if (
+        this.state.completeLoc.results[0].address_components[i].types[0] ===
+        "street_number"
+      ) {
+        ad1 = this.state.completeLoc.results[0].address_components[i].long_name;
+      } else if (
+        this.state.completeLoc.results[0].address_components[i].types[0] ===
+        "route"
+      ) {
+        temp = this.state.completeLoc.results[0].address_components[i]
+          .long_name;
+      } else if (
+        this.state.completeLoc.results[0].address_components[i].types[0] ===
+        "locality"
+      ) {
+        ad2 = this.state.completeLoc.results[0].address_components[i].long_name;
+      } else if (
+        this.state.completeLoc.results[0].address_components[i].types[0] ===
+        "administrative_area_level_1"
+      ) {
+        ct = this.state.completeLoc.results[0].address_components[i].long_name;
+      } else if (
+        this.state.completeLoc.results[0].address_components[i].types[0] ===
+        "country"
+      ) {
+        cnt = this.state.completeLoc.results[0].address_components[i].long_name;
+      } else if (
+        this.state.completeLoc.results[0].address_components[i].types[0] ===
+        "postal_code"
+      ) {
+        zipc = this.state.completeLoc.results[0].address_components[i]
+          .long_name;
+      }
+    }
+
+    this.props.locationAsync({
+      location: ad1 + " " + temp + " " + ad2 + " " + ct + " " + cnt,
+      lat: this.state.region.latitude,
+      lng: this.state.region.longitude,
+    });
+    var loc = { refId: this.props.user.user._id,
+      type: "Customer",
+      address1: ad1 + " " + temp,
+      address2: ad2,
+      city: ct,
+      country: cnt,
+      zipCode: zipc,
+      latitude: this.state.region.latitude,
+      longitude: this.state.region.longitude}
+     await AsyncStorage.setItem("userLocation",JSON.stringify(loc));
+    axios
+      .post("https://lit-peak-13067.herokuapp.com/add/location", {
+        refId: this.props.user.user._id,
+        type: "Customer",
+        address1: ad1 + " " + temp,
+        address2: ad2,
+        city: ct,
+        country: cnt,
+        zipCode: zipc,
+        latitude: this.state.region.latitude,
+        longitude: this.state.region.longitude,
+      })
+      .then((resp1) => {
+        this.props.navigation.navigate("App", {
+          location: this.state.location,
+        });
+      })
+      .catch((err) => console.log(err));
+  };
   getMyLocations = () => {
     Geolocation.getCurrentPosition(
       (position) => {
@@ -500,97 +591,7 @@ class Map extends Component {
             </View>
 
             <TouchableOpacity
-              onPress={() => {
-                axios
-                  .delete(
-                    "https://lit-peak-13067.herokuapp.com/delete/location/" +
-                      this.props.user.user._id
-                  )
-                  .then((resp) => console.log(resp))
-                  .catch((err) => console.log(err));
-
-                var ad1 = "",
-                  temp = "",
-                  ad2 = "",
-                  ct = "",
-                  cnt = "",
-                  zipc = "";
-                console.log(" ins state", this.state.completeLoc);
-                for (
-                  var i = 0;
-                  i <
-                  this.state.completeLoc.results[0].address_components.length;
-                  i++
-                ) {
-                  if (
-                    this.state.completeLoc.results[0].address_components[i]
-                      .types[0] === "street_number"
-                  ) {
-                    ad1 = this.state.completeLoc.results[0].address_components[
-                      i
-                    ].long_name;
-                  } else if (
-                    this.state.completeLoc.results[0].address_components[i]
-                      .types[0] === "route"
-                  ) {
-                    temp = this.state.completeLoc.results[0].address_components[
-                      i
-                    ].long_name;
-                  } else if (
-                    this.state.completeLoc.results[0].address_components[i]
-                      .types[0] === "locality"
-                  ) {
-                    ad2 = this.state.completeLoc.results[0].address_components[
-                      i
-                    ].long_name;
-                  } else if (
-                    this.state.completeLoc.results[0].address_components[i]
-                      .types[0] === "administrative_area_level_1"
-                  ) {
-                    ct = this.state.completeLoc.results[0].address_components[i]
-                      .long_name;
-                  } else if (
-                    this.state.completeLoc.results[0].address_components[i]
-                      .types[0] === "country"
-                  ) {
-                    cnt = this.state.completeLoc.results[0].address_components[
-                      i
-                    ].long_name;
-                  } else if (
-                    this.state.completeLoc.results[0].address_components[i]
-                      .types[0] === "postal_code"
-                  ) {
-                    zipc = this.state.completeLoc.results[0].address_components[
-                      i
-                    ].long_name;
-                  }
-                }
-
-                this.props.locationAsync({
-                  location: ad1 + " " + temp + " " + ad2 + " " + ct + " " + cnt,
-                  lat: this.state.region.latitude,
-                  lng: this.state.region.longitude,
-                });
-
-                axios
-                  .post("https://lit-peak-13067.herokuapp.com/add/location", {
-                    refId: this.props.user.user._id,
-                    type: "Customer",
-                    address1: ad1 + " " + temp,
-                    address2: ad2,
-                    city: ct,
-                    country: cnt,
-                    zipCode: zipc,
-                    latitude: this.state.region.latitude,
-                    longitude: this.state.region.longitude,
-                  })
-                  .then((resp1) => {
-                    this.props.navigation.push("App", {
-                      location: this.state.location,
-                    });
-                  })
-                  .catch((err) => console.log(err));
-              }}
+              onPress={this.handleMapApp}
               // onPress={() => this.props.navigation.push("App")}
               style={[
                 btnStyles.basic,
