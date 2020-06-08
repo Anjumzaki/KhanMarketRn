@@ -424,6 +424,8 @@ console.log("THIS.STATE",this.state)
           position={"center"}
           ref={"modal6"}
           isDisabled={this.state.isDisabled}
+          backdropPressToClose={false}
+          swipeToClose={false}
         >
           <LatoText
             fontName="Lato-Regular"
@@ -495,6 +497,8 @@ console.log("THIS.STATE",this.state)
           position={"center"}
           ref={"modal3"}
           isDisabled={this.state.isDisabled}
+          backdropPressToClose={false}
+          swipeToClose={false}
         >
           <LatoText
             fontName="Lato-Regular"
@@ -635,6 +639,8 @@ console.log("THIS.STATE",this.state)
           position={"top"}
           ref={"modal4"}
           isDisabled={this.state.isDisabled}
+          backdropPressToClose={false}
+          swipeToClose={false}
         >
           <View style={{ flex: 1, justifyContent: "space-evenly" }}>
             <View style={{ flexGrow: 1 }}>

@@ -11,6 +11,7 @@ import {
   StatusBar,
   Dimensions,
   ActivityIndicator,
+  // Modal
 } from "react-native";
 import { BackStack } from "../Helpers/BackStack";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -281,6 +282,8 @@ export default class SignUp1 extends React.Component {
           position={"center"}
           ref={"modal3"}
           isDisabled={this.state.isDisabled}
+          backdropPressToClose={false}
+          swipeToClose={false}
         >
           <LatoText
             fontName="Lato-Regular"
