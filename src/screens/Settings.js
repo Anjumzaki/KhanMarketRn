@@ -133,7 +133,7 @@ class Settings extends React.Component {
                 {
                   spinner: false,
                 },
-                () => alert("Password Mismatch")
+                () => alert("Incorrect Old Password")
               );
             } else {
               this.setState(
