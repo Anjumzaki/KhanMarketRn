@@ -38,27 +38,27 @@
 		</dict>
 	</dict>
 	<key>NSCalendarsUsageDescription</key>
-	<string>Allow khanmarket to access your calendar</string>
+	<string>Allow Node Grocery to access your calendar</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow khanmarket to use the camera</string>
+	<string>Allow Node Grocery to use the camera</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Allow khanmarket experiences to access your contacts</string>
+	<string>Allow Node Grocery experiences to access your contacts</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Allow khanmarket to use your location</string>
+	<string>Allow Node Grocery to use your location</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Allow khanmarket to use your location</string>
+	<string>Allow Node Grocery to use your location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow khanmarket to use your location</string>
+	<string>Allow Node Grocery to use your location</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Allow khanmarket to access your microphone</string>
+	<string>Allow Node Grocery to access your microphone</string>
 	<key>NSMotionUsageDescription</key>
-	<string>Allow khanmarket to access your device's accelerometer</string>
+	<string>Allow Node Grocery to access your device's accelerometer</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Give khanmarket periences permission to save photos</string>
+	<string>Give Node Grocery periences permission to save photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Give khanmarket periences permission to access your photos</string>
+	<string>Give Node Grocery periences permission to access your photos</string>
 	<key>NSRemindersUsageDescription</key>
-	<string>Allow khanmarket to access your reminders</string>
+	<string>Allow Node Grocery to access your reminders</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
