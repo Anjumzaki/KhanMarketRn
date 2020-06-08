@@ -67,9 +67,10 @@ class Settings extends React.Component {
 
   async editlastName() {
     var myUser = await AsyncStorage.getItem("user");
+
     myUser = JSON.parse(myUser)
-    myUser.firstName = this.state.firstName
-    myUser.lastName = this.state.lastName
+    myUser.user.firstName = this.state.firstName
+    myUser.user.lastName = this.state.lastName
     await AsyncStorage.setItem('user',JSON.stringify(myUser))
     axios
       .put(
@@ -247,9 +248,7 @@ class Settings extends React.Component {
                 col="#5C5C5C"
                 text="First Name"
               />
-              {this.state.spinner ? (
-                <ActivityIndicator color="black" size="small" />
-              ) : this.state.editName1 ? (
+              {this.state.editName1 ? (
                 <TouchableOpacity
                   onPress={() => {
                     this.setState({ editName1: false, editName2: false });
@@ -400,7 +399,9 @@ class Settings extends React.Component {
                 text="Password"
               />
 
-              {this.state.editPassing ? (
+              {this.state.spinner ? (
+                <ActivityIndicator color="black" size="small" />
+              ) : this.state.editPassing ? (
                 <TouchableOpacity
                   onPress={() => {
                     this.setState({ spinner: true }, this.editPass());
