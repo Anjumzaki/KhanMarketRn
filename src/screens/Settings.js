@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Dimensions,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import LatoText from "../Helpers/LatoText";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
@@ -19,6 +20,7 @@ import { bindActionCreators } from "redux";
 import { cartAsync, userAsync } from "../store/actions";
 import { connect } from "react-redux";
 import firebase from "firebase";
+import Spinner from "react-native-loading-spinner-overlay";
 import axios from "axios";
 const options = {
   title: "Select Avatar",
@@ -38,12 +40,13 @@ class Settings extends React.Component {
       avatarSource: null,
       editName1: false,
       editName2: false,
-      firstName: this.props.user.user.firstName, 
-      lastName: this.props.user.user.lastName, 
+      firstName: this.props.user.user.firstName,
+      lastName: this.props.user.user.lastName,
       image: "",
       old: "",
       newP: "",
       isDisabled: false,
+      spinner: false,
     };
   }
 
@@ -59,24 +62,6 @@ class Settings extends React.Component {
       .catch((err) => {
         console.log(err);
       });
-  }
-
-  editFirstName() {
-    axios
-      .put(
-        "https://lit-peak-13067.herokuapp.com/edit/user/name/" +
-          this.props.user.user._id +
-          "/" +
-          this.state.firstName
-      )
-      .then((resp) => {
-        var temp = this.props.user;
-        temp.user.firstName = this.state.firstName;
-
-        this.props.userAsync(temp);
-      })
-      .then(() => this.refs.modal3.close)
-      .catch((err) => console.log(err));
   }
 
   editlastName() {
@@ -97,6 +82,25 @@ class Settings extends React.Component {
       .catch((err) => console.log(err));
   }
 
+  editFirstName() {
+    axios
+      .put(
+        "https://lit-peak-13067.herokuapp.com/edit/user/name/" +
+          this.props.user.user._id +
+          "/" +
+          this.state.firstName
+      )
+      .then((resp) => {
+        var temp = this.props.user;
+        temp.user.firstName = this.state.firstName;
+
+        this.props.userAsync(temp);
+      })
+      .then(() => this.refs.modal3.close)
+      .catch((err) => console.log(err));
+    this.editlastName();
+  }
+
   editPass() {
     if (this.state.old) {
       if (this.state.newP) {
@@ -112,20 +116,45 @@ class Settings extends React.Component {
           .then((resp) => {
             console.log(resp);
             if (resp.data.success == "true") {
-              alert("Password changed successfully ");
-              this.refs.modal3.close();
+              this.setState(
+                {
+                  editPassing: false,
+                  spinner: false,
+                },
+                () => alert("Password changed successfully ")
+              );
             } else if (resp.data.success == "false") {
-              alert("Password Mismatch");
+              this.setState(
+                {
+                  spinner: false,
+                },
+                () => alert("Password Mismatch")
+              );
             } else {
-              alert("Something went wrong");
+              this.setState(
+                {
+                  spinner: false,
+                },
+                () => alert("Something went wrong")
+              );
             }
           })
           .catch((err) => console.log(err));
       } else {
-        alert("Please enter new password");
+        this.setState(
+          {
+            spinner: false,
+          },
+          () => alert("Please enter new password")
+        );
       }
     } else {
-      alert("Please enter old password");
+      this.setState(
+        {
+          spinner: false,
+        },
+        () => alert("Please enter old password")
+      );
     }
   }
 
@@ -143,78 +172,6 @@ class Settings extends React.Component {
     let { image } = this.state;
     return (
       <>
-        <Modal
-          style={[styles.modal, styles.modal3]}
-          position={"center"}
-          ref={"modal3"}
-        >
-          <View
-            style={{
-              flex: 1,
-              padding: 15,
-              width: "100%",
-              justifyContent: "space-between",
-            }}
-          >
-            <View>
-              <TextInput
-                placeholder={"Old Password"}
-                style={{
-                  borderColor: "#5c5c5c",
-                  borderWidth: 1,
-                  padding: 10,
-                  borderRadius: 10,
-                  marginBottom: 20,
-                }}
-                onChangeText={(old) => this.setState({ old })}
-                autoCapitalize={false}
-                secureTextEntry={true}
-              />
-              <TextInput
-                placeholder={"New Password"}
-                style={{
-                  borderColor: "#5c5c5c",
-                  borderWidth: 1,
-                  padding: 10,
-                  borderRadius: 10,
-                }}
-                onChangeText={(newP) => this.setState({ newP })}
-                autoCapitalize={false}
-                secureTextEntry={true}
-              />
-            </View>
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-evenly" }}
-            >
-              <TouchableOpacity
-                style={{ padding: 5 }}
-                onPress={() => this.refs.modal3.close()}
-              >
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={15}
-                  col="#B50000"
-                  txtAlign={"center"}
-                  text={"Cancel"}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  this.editPass();
-                }}
-                style={{ padding: 5 }}
-              >
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={15}
-                  col="#B50000"
-                  txtAlign={"center"}
-                  text={"Save"}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
         <ScrollView
           contentContainerStyle={{ padding: 20, backgroundColor: "white" }}
         >
@@ -286,10 +243,12 @@ class Settings extends React.Component {
                 col="#5C5C5C"
                 text="First Name"
               />
-              {this.state.editName1 ? (
+              {this.state.spinner ? (
+                <ActivityIndicator color="black" size="small" />
+              ) : this.state.editName1 ? (
                 <TouchableOpacity
                   onPress={() => {
-                    this.setState({ editName1: false });
+                    this.setState({ editName1: false, editName2: false });
                     this.editFirstName();
                   }}
                   style={{ paddingHorizontal: 20 }}
@@ -303,7 +262,9 @@ class Settings extends React.Component {
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
-                  onPress={() => this.setState({ editName1: true })}
+                  onPress={() =>
+                    this.setState({ editName1: true, editName2: true })
+                  }
                   style={{ paddingHorizontal: 20 }}
                 >
                   <LatoText
@@ -350,34 +311,6 @@ class Settings extends React.Component {
                 col="#5C5C5C"
                 text="Last Name"
               />
-              {this.state.editName2 ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({ editName2: false });
-                    this.editlastName();
-                  }}
-                  style={{ paddingHorizontal: 20 }}
-                >
-                  <LatoText
-                    fontName="Lato-Bold"
-                    fonSiz={15}
-                    col="black"
-                    text="Save"
-                  />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  onPress={() => this.setState({ editName2: true })}
-                  style={{ paddingHorizontal: 20 }}
-                >
-                  <LatoText
-                    fontName="Lato-Bold"
-                    fonSiz={15}
-                    col="black"
-                    text="Change"
-                  />
-                </TouchableOpacity>
-              )}
             </View>
             <View style={{ paddingTop: 15 }}>
               <TextInput
@@ -397,7 +330,6 @@ class Settings extends React.Component {
               />
             </View>
           </View>
-
 
           <View style={{ marginTop: 30 }}>
             <View
@@ -463,25 +395,72 @@ class Settings extends React.Component {
                 col="#5C5C5C"
                 text="Password"
               />
-              <TouchableOpacity
-                onPress={() => this.refs.modal3.open()}
-                style={{ paddingHorizontal: 20 }}
-              >
-                <LatoText
-                  fontName="Lato-Bold"
-                  fonSiz={15}
-                  col="black"
-                  text="Change"
-                />
-              </TouchableOpacity>
+
+              {this.state.editPassing ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({ spinner: true }, this.editPass());
+                  }}
+                  style={{ paddingHorizontal: 20 }}
+                >
+                  <LatoText
+                    fontName="Lato-Bold"
+                    fonSiz={15}
+                    col="black"
+                    text="Save"
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => this.setState({ editPassing: true })}
+                  style={{ paddingHorizontal: 20 }}
+                >
+                  <LatoText
+                    fontName="Lato-Bold"
+                    fonSiz={15}
+                    col="black"
+                    text="Change"
+                  />
+                </TouchableOpacity>
+              )}
             </View>
-            <View style={{ paddingTop: 15 }}>
-              <TextInput
-                editable={false}
-                secureTextEntry={true}
-                style={{ fontSize: 17 }}
-                value={"Bernard Murphy"}
-              />
+            <View style={{ paddingTop: 15,paddingBottom:20 }}>
+              {this.state.editPassing ? (
+                <View>
+                  <TextInput
+                    placeholder={"Old Password"}
+                    style={{
+                      borderColor: "#5c5c5c",
+                      borderWidth: 1,
+                      padding: 10,
+                      borderRadius: 10,
+                      marginBottom: 20,
+                    }}
+                    onChangeText={(old) => this.setState({ old })}
+                    autoCapitalize={false}
+                    secureTextEntry={true}
+                  />
+                  <TextInput
+                    placeholder={"New Password"}
+                    style={{
+                      borderColor: "#5c5c5c",
+                      borderWidth: 1,
+                      padding: 10,
+                      borderRadius: 10,
+                    }}
+                    onChangeText={(newP) => this.setState({ newP })}
+                    autoCapitalize={false}
+                    secureTextEntry={true}
+                  />
+                </View>
+              ) : (
+                <TextInput
+                  editable={false}
+                  secureTextEntry={true}
+                  style={{ fontSize: 17 }}
+                  value={"Bernard Murphy"}
+                />
+              )}
             </View>
           </View>
         </ScrollView>
