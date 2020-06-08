@@ -40,6 +40,7 @@ import ChoosePass from "./src/screens/ChoosePass";
 import OrderDetails from "./src/screens/OrderDetails";
 import AboutUs from "./src/screens/AboutUs";
 import LastHeader from "./src/Helpers/LastHeader";
+import Map1 from './src/screens/Map1'
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
   <AuthStack.Navigator initialRouteName={"Login"} headerMode="none">
@@ -66,9 +67,9 @@ const HomeStackScreen = (route) => (
       options={{ header: (props) => null }}
     />
     <HomeStack.Screen
-      name="Map"
+      name="Map1"
       options={{ header: (props) => null }}
-      component={Map}
+      component={Map1}
     />
 
     <HomeStack.Screen

@@ -243,7 +243,7 @@ import Geocoder from "react-native-geocoding";
 // Disable yellow box warning messages
 console.disableYellowBox = true;
 
-class Map extends Component {
+class Map1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -345,7 +345,7 @@ class Map extends Component {
         longitude: this.state.region.longitude,
       })
       .then((resp1) => {
-        this.props.navigation.navigate("App");
+        this.props.navigation.navigate("Home");
       })
       .catch((err) => console.log(err));
   };
@@ -624,4 +624,4 @@ const mapDispatchToProps = (dispatch, ownProps) =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Map);
+export default connect(mapStateToProps, mapDispatchToProps)(Map1);
