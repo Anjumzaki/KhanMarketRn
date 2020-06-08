@@ -247,12 +247,12 @@ class FavCards extends React.Component {
                 col="#2E2E2E"
                 text={this.props.product.storeName}
               />
-              <LatoText
+              {/* <LatoText
                 fontName="Lato-Regular"
                 fonSiz={15}
                 col="#B50000"
                 text={"3 miles away"}
-              />
+              /> */}
             </View>
 
             <View style={{ marginTop: 10 }}>
