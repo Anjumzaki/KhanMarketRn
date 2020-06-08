@@ -273,7 +273,7 @@ class ProductDetails extends Component {
                   col="#5C5C5C"
                   text={` $  ${parseFloat(
                     product.price - (product.price * product.discount) / 100
-                  ).toFixed(1)} / lb `}
+                  ).toFixed(2)} / lb `}
                 />
                 <LatoText
                   fontName="Lato-Regular"

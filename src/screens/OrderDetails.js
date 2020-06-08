@@ -119,7 +119,7 @@ class OrderDetails extends Component {
       var temp = this.props.cart[i].price;
       subTotal = subTotal + parseFloat(temp);
     }
-
+    console.log("this.props.route.params.order",this.props.route.params.order)
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
@@ -475,14 +475,23 @@ class OrderDetails extends Component {
                       parseFloat(
                         item.product.price -
                           (item.product.price * item.product.discount) / 100
-                      ).toFixed(1)
+                      ).toFixed(2)
                     }
                   />
                   <LatoText
                     fontName="Lato-Regular"
                     fonSiz={15}
                     col="#2E2E2E"
-                    text={item.quantity}
+                    text={" x "+item.quantity+" = "}
+                  />
+                   <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={15}
+                    col="#2E2E2E"
+                    text={item.quantity*parseFloat(
+                      item.product.price -
+                        (item.product.price * item.product.discount) / 100
+                    ).toFixed(2)}
                   />
                 </View>
               </View>

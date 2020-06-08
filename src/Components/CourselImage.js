@@ -19,7 +19,8 @@ class CourseImage extends React.Component {
       .ref("/product_images/"+this.props.id+"_"+this.props.index+".jpg");
     ref.getDownloadURL().then(url => {
       this.setState({ image: url });
-    }).catch(err=>console.log(err));
+    })
+    // .catch(err=>console.log(err));
 }
 
 

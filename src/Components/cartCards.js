@@ -40,7 +40,7 @@ class CartCards extends React.Component {
 
       await this.setState({ cart: this.props.cart });
       var temp = this.state.cart[this.props.index];
-      temp.price = this.props.product.price.toFixed(3);
+      temp.price = this.props.product.price.toFixed(2);
       this.state.cart[this.props.index] = temp;
       this.props.cartAsync(this.state.cart);
     } else {
@@ -54,7 +54,7 @@ class CartCards extends React.Component {
             this.props.product.product.discount) /
             100) *
         parseInt(this.state.qt)
-      ).toFixed(3);
+      ).toFixed(2);
       this.state.cart[this.props.index] = temp;
       this.props.cartAsync(this.state.cart);
     }
@@ -134,7 +134,7 @@ class CartCards extends React.Component {
                         this.props.product.product.discount) /
                         100) *
                     parseInt(this.state.qt - 1)
-                  ).toFixed(3);
+                  ).toFixed(2);
                   temp.quantity = parseInt(this.state.qt - 1);
                   this.state.cart[this.props.index] = temp;
                   this.props.cartAsync(this.state.cart);

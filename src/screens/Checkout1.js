@@ -83,7 +83,8 @@ class Cart extends Component {
       isStoreClosed: false,
       sId: "",
       oId: "",
-      isOut: false
+      isOut: false,
+      clickCheck: true
     };
   }
 
@@ -374,6 +375,7 @@ class Cart extends Component {
       var isOut = false
       var pname = ''
 
+      if(this.state.clickCheck){
     for (var i = 0; i < storeProducts.length; i++) {
       if(storeProducts[i].product.isOutOfStock){
         var currentDate= new Date()
@@ -396,9 +398,8 @@ class Cart extends Component {
          }
       var temp = storeProducts[i].price;
       // var temp=0
-      subTotal = subTotal + parseFloat(temp);
     }
-
+  }
     console.log("iout ois out", isOut)
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const months = [
@@ -517,7 +518,9 @@ console.log("THIS.STATE",this.state)
               {dates.map((index, item) => (
                 <TouchableOpacity
                   onPress={() => {
-                    this.setState({pname: "", isOut: false})
+                    this.setState({pname: "", isOut: false, clickCheck: false})
+                    isOut=false
+                    pname= ""
                     this.getTimings(this.getDayName(index));
                     console.log("sdsdadasd213",dates[item])
                     for (var i = 0; i < storeProducts.length; i++) {
