@@ -66,6 +66,12 @@ const HomeStackScreen = (route) => (
       options={{ header: (props) => null }}
     />
     <HomeStack.Screen
+      name="Map"
+      options={{ header: (props) => null }}
+      component={Map}
+    />
+
+    <HomeStack.Screen
       name="StoreDetails"
       component={StoreDetails}
       options={{ header: (props) => <SingleStoreHeader {...props} /> }}
