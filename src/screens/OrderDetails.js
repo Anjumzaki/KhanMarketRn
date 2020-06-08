@@ -574,68 +574,76 @@ class OrderDetails extends Component {
             />
           </View>
           <View style={lines.simple} />
-          <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom: 20,
-              paddingTop: 10,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            disabled={
-              this.props.route.params.order.isRejected ||
+          { this.props.route.params.order.isRejected &&
               this.state.bd ||
-              this.props.route.params.order.isPicked
-            }
-            onPress={() => {
-              if (this.props.route.params.order.isAccepted === false) {
-                Alert.alert(
-                  "Alert!",
-                  "Are you sure you want to cancel the order?",
-                  [
-                    {
-                      text: "No",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel",
-                    },
-                    {
-                      text: "Yes",
-                      onPress: () => {
-                        axios
-                          .put(
-                            "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
-                              this.props.route.params.order._id
-                          )
-                          .then((resp) => {
-                            this.setState({ bd: true });
-                            alert("Order Cancelled Successfully.");
-                            this.props.navigation.navigate("MyOrders");
-                          })
-                          .catch((err) => console.log(err));
-                      },
-                    },
-                  ],
-                  { cancelable: true }
-                );
-              } else {
-                alert("Order cannot be cancelled after preperation state.");
-              }
-            }}
-          >
-            <LatoText
-              fontName="Lato-Bold"
-              fonSiz={17}
-              col={
-                this.props.route.params.order.isRejected ||
-                this.state.bd ||
-                this.props.route.params.order.isPicked
-                  ? "#808080"
-                  : "#2E2E2E"
-              }
-              text="Cancel Order"
-            />
-          </TouchableOpacity>
+            this.props.route.params.order.isPicked ? (
+                  null
+               
+              ): (
+                <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  paddingHorizontal: 20,
+                  paddingBottom: 20,
+                  paddingTop: 10,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                disabled={
+                  this.props.route.params.order.isRejected ||
+                  this.state.bd ||
+                  this.props.route.params.order.isPicked
+                }
+                onPress={() => {
+                  if (this.props.route.params.order.isAccepted === false) {
+                    Alert.alert(
+                      "Alert!",
+                      "Are you sure you want to cancel the order?",
+                      [
+                        {
+                          text: "No",
+                          onPress: () => console.log("Cancel Pressed"),
+                          style: "cancel",
+                        },
+                        {
+                          text: "Yes",
+                          onPress: () => {
+                            axios
+                              .put(
+                                "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
+                                  this.props.route.params.order._id
+                              )
+                              .then((resp) => {
+                                this.setState({ bd: true });
+                                alert("Order Cancelled Successfully.");
+                                this.props.navigation.navigate("MyOrders");
+                              })
+                              .catch((err) => console.log(err));
+                          },
+                        },
+                      ],
+                      { cancelable: true }
+                    );
+                  } else {
+                    alert("Order cannot be cancelled after preperation state.");
+                  }
+                }}
+              >
+                <LatoText
+                  fontName="Lato-Bold"
+                  fonSiz={17}
+                  col={
+                    this.props.route.params.order.isRejected ||
+                    this.state.bd ||
+                    this.props.route.params.order.isPicked
+                      ? "#808080"
+                      : "#2E2E2E"
+                  }
+                  text="Cancel Order"
+                />
+              </TouchableOpacity>
+              )}
+
           <View
             style={{
               flexDirection: "row",
