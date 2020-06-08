@@ -27,7 +27,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 import QRCode from "react-native-qrcode-generator";
 import firebase from "firebase";
-
+import { AntDesign } from "@expo/vector-icons";
 import timestamp from "time-stamp";
 import { disableExpoCliLogging } from "expo/build/logs/Logs";
 
@@ -92,7 +92,7 @@ class OrderDetails extends Component {
     ];
 
     return (
-      "" + month_names[parseInt(date[1] - 1)] + " " + date[0] + "," + date[2]
+      "" + month_names[parseInt(date[1] - 1)] + " " + date[0] + ", " + date[2]
     );
   }
   makeCall = () => {
@@ -283,21 +283,40 @@ class OrderDetails extends Component {
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                width: "80%",
+                width: "100%",
+                alignItems: "center",
               }}
             >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={17}
-                col="#2E2E2E"
-                text={this.dateConvert(this.props.route.params.order.orderDate)}
-              ></LatoText>
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={17}
-                col="#2E2E2E"
-                text={"  " + this.props.route.params.order.orderTime}
-              ></LatoText>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <AntDesign
+                  style={{ paddingRight: 10 }}
+                  name="calendar"
+                  size={15}
+                  color="black"
+                />
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col="#2E2E2E"
+                  text={this.dateConvert(
+                    this.props.route.params.order.orderDate
+                  )}
+                ></LatoText>
+              </View>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <AntDesign
+                  style={{ paddingRight: 10 }}
+                  name="clockcircleo"
+                  size={15}
+                  color="black"
+                />
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col="#2E2E2E"
+                  text={this.props.route.params.order.orderTime}
+                ></LatoText>
+              </View>
             </View>
           </View>
 
@@ -331,29 +350,45 @@ class OrderDetails extends Component {
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                width: "80%",
+                width: "100%",
               }}
             >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={15}
-                col="#2E2E2E"
-                text={
-                  this.props.route.params.order.postDate
-                    ? this.dateConvert(this.props.route.params.order.postDate)
-                    : ""
-                }
-              ></LatoText>
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={15}
-                col="#2E2E2E"
-                text={
-                  this.props.route.params.order.postTime
-                    ? "    " + this.props.route.params.order.postTime
-                    : ""
-                }
-              ></LatoText>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <AntDesign
+                  style={{ paddingRight: 10 }}
+                  name="calendar"
+                  size={15}
+                  color="black"
+                />
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={15}
+                  col="#2E2E2E"
+                  text={
+                    this.props.route.params.order.postDate
+                      ? this.dateConvert(this.props.route.params.order.postDate)
+                      : ""
+                  }
+                ></LatoText>
+              </View>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <AntDesign
+                  style={{ paddingRight: 10 }}
+                  name="clockcircleo"
+                  size={15}
+                  color="black"
+                />
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={15}
+                  col="#2E2E2E"
+                  text={
+                    this.props.route.params.order.postTime
+                      ? "    " + this.props.route.params.order.postTime
+                      : ""
+                  }
+                ></LatoText>
+              </View>
             </View>
           </View>
 
@@ -574,75 +609,71 @@ class OrderDetails extends Component {
             />
           </View>
           <View style={lines.simple} />
-          { this.props.route.params.order.isRejected &&
-              this.state.bd ||
-            this.props.route.params.order.isPicked ? (
-                  null
-               
-              ): (
-                <TouchableOpacity
-                style={{
-                  flexDirection: "row",
-                  paddingHorizontal: 20,
-                  paddingBottom: 20,
-                  paddingTop: 10,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                disabled={
+          {(this.props.route.params.order.isRejected && this.state.bd) ||
+          this.props.route.params.order.isPicked ? null : (
+            <TouchableOpacity
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingBottom: 20,
+                paddingTop: 10,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              disabled={
+                this.props.route.params.order.isRejected ||
+                this.state.bd ||
+                this.props.route.params.order.isPicked
+              }
+              onPress={() => {
+                if (this.props.route.params.order.isAccepted === false) {
+                  Alert.alert(
+                    "Alert!",
+                    "Are you sure you want to cancel the order?",
+                    [
+                      {
+                        text: "No",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel",
+                      },
+                      {
+                        text: "Yes",
+                        onPress: () => {
+                          axios
+                            .put(
+                              "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
+                                this.props.route.params.order._id
+                            )
+                            .then((resp) => {
+                              this.setState({ bd: true });
+                              alert("Order Cancelled Successfully.");
+                              this.props.navigation.navigate("MyOrders");
+                            })
+                            .catch((err) => console.log(err));
+                        },
+                      },
+                    ],
+                    { cancelable: true }
+                  );
+                } else {
+                  alert("Order cannot be cancelled after preperation state.");
+                }
+              }}
+            >
+              <LatoText
+                fontName="Lato-Bold"
+                fonSiz={17}
+                col={
                   this.props.route.params.order.isRejected ||
                   this.state.bd ||
                   this.props.route.params.order.isPicked
+                    ? "#808080"
+                    : "#2E2E2E"
                 }
-                onPress={() => {
-                  if (this.props.route.params.order.isAccepted === false) {
-                    Alert.alert(
-                      "Alert!",
-                      "Are you sure you want to cancel the order?",
-                      [
-                        {
-                          text: "No",
-                          onPress: () => console.log("Cancel Pressed"),
-                          style: "cancel",
-                        },
-                        {
-                          text: "Yes",
-                          onPress: () => {
-                            axios
-                              .put(
-                                "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
-                                  this.props.route.params.order._id
-                              )
-                              .then((resp) => {
-                                this.setState({ bd: true });
-                                alert("Order Cancelled Successfully.");
-                                this.props.navigation.navigate("MyOrders");
-                              })
-                              .catch((err) => console.log(err));
-                          },
-                        },
-                      ],
-                      { cancelable: true }
-                    );
-                  } else {
-                    alert("Order cannot be cancelled after preperation state.");
-                  }
-                }}
-              >
-                <LatoText
-                  fontName="Lato-Bold"
-                  fonSiz={17}
-                  col={
-                    this.props.route.params.order.isRejected ||
-                    this.state.bd ||
-                    this.props.route.params.order.isPicked
-                      ? "#808080"
-                      : "#2E2E2E"
-                  }
-                  text="Cancel Order"
-                />
-              </TouchableOpacity>
-              )}
+                text="Cancel Order"
+              />
+            </TouchableOpacity>
+          )}
 
           <View
             style={{

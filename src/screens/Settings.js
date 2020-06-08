@@ -22,6 +22,7 @@ import { connect } from "react-redux";
 import firebase from "firebase";
 import Spinner from "react-native-loading-spinner-overlay";
 import axios from "axios";
+import AsyncStorage from "@react-native-community/async-storage";
 const options = {
   title: "Select Avatar",
   storageOptions: {
@@ -64,7 +65,12 @@ class Settings extends React.Component {
       });
   }
 
-  editlastName() {
+  async editlastName() {
+    var myUser = await AsyncStorage.getItem("user");
+    myUser = JSON.parse(myUser)
+    myUser.firstName = this.state.firstName
+    myUser.lastName = this.state.lastName
+    await AsyncStorage.setItem('user',JSON.stringify(myUser))
     axios
       .put(
         "https://lit-peak-13067.herokuapp.com/edit/user/lastName/" +
@@ -78,7 +84,6 @@ class Settings extends React.Component {
 
         this.props.userAsync(temp);
       })
-      .then(() => this.refs.modal3.close)
       .catch((err) => console.log(err));
   }
 
@@ -96,7 +101,6 @@ class Settings extends React.Component {
 
         this.props.userAsync(temp);
       })
-      .then(() => this.refs.modal3.close)
       .catch((err) => console.log(err));
     this.editlastName();
   }
@@ -424,7 +428,7 @@ class Settings extends React.Component {
                 </TouchableOpacity>
               )}
             </View>
-            <View style={{ paddingTop: 15,paddingBottom:20 }}>
+            <View style={{ paddingTop: 15, paddingBottom: 20 }}>
               {this.state.editPassing ? (
                 <View>
                   <TextInput
