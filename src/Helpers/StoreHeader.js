@@ -64,7 +64,7 @@ class StoreHeader extends React.Component {
             justifyContent: "center",
             paddingBottom: 20,
           }}
-          onPress={() => this.props.navigation.push("Map1")}
+          onPress={() => this.props.navigation.navigate("Map")}
         >
           <EvilIcons name="location" size={26} color={"white"} />
           <View>

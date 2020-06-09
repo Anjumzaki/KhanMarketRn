@@ -632,13 +632,7 @@ class OrderDetails extends Component {
                   alignItems: "center",
                   justifyContent: "center",
                 }}
-                disabled={
-                  this.props.route.params.order.isRejected ||
-                  this.state.bd ||
-                  this.props.route.params.order.isPicked
-                    ? "#808080"
-                    : "#2E2E2E"
-                }
+
                 onPress={() => {
                   if (this.props.route.params.order.isAccepted === false) {
                     Alert.alert(
@@ -678,13 +672,11 @@ class OrderDetails extends Component {
                   fontName="Lato-Bold"
                   fonSiz={17}
                   col={
-                    this.props.route.params.order.isRejected ||
-                    this.state.bd ||
-                    this.props.route.params.order.isPicked
-                      ? "#808080"
-                      : "#2E2E2E"
+          
+                     
+                       "#2E2E2E"
                   }
-                  text="Cancel Orde.r"
+                  text="Cancel Order"
                 />
               </TouchableOpacity>
               )}
