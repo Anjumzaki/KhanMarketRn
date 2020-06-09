@@ -1410,7 +1410,7 @@ console.log("THIS.STATE",this.state)
                       postTime: pTime,
                       tax: (parseFloat(this.state.tax) / 100) * subTotal,
                       orderNumber: codeId,
-                      isGuest: this.props.user.user.isGuest,
+                      isGuest: this.props.user.user.isGuest
                     })
                     .then((resp) => {
                       // this.props.storeAsync('')
