@@ -24,14 +24,37 @@ import {
 import LatoText from "./LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { bindActionCreators } from "redux";
-import {  cartAsync, cartSizeAsync,
+import firebase from "firebase";
+
+import {
+  cartAsync,
+  cartSizeAsync,
   favStoreAsync,
   storeHeaderAsync,
-  storeAsync } from "../store/actions";
+  storeAsync,
+} from "../store/actions";
 import { connect } from "react-redux";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 
 class LastHeader extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      image: "",
+    };
+  }
+  componentWillMount() {
+    const ref = firebase
+      .storage()
+      .ref("/store_images/" + this.props.store.id + ".jpg");
+    ref
+      .getDownloadURL()
+      .then((url) => {
+        this.setState({ image: url });
+      })
+      .catch((err) => console.log(err));
+  }
+
   render() {
     return (
       <View
@@ -57,19 +80,33 @@ class LastHeader extends React.Component {
             position: "absolute",
             top: 0,
             left: 0,
+            backgroundColor: "rgba(0,0,0,0.7)",
           }}
-          source={require("../../assets/bgheader.png")}
+          
+          source={
+            this.props.store.id
+              ? { uri: this.state.image }
+              : require("../../assets/bgheader.png")
+          }
           resizeMode="cover"
         />
+        <View
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            backgroundColor: "rgba(0,0,0,0.5)",
+          }}
+        />
+        
         <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
           <TouchableOpacity
             style={{ padding: 20 }}
             onPress={() => {
-              this.props.storeAsync('')
-              this.props.cartSizeAsync(0)
-              this.props.storeHeaderAsync('')
-              this.props.favStoreAsync('')
-              this.props.navigation.navigate('Home')}}
+              this.props.storeAsync("");
+              this.props.cartSizeAsync(0);
+              this.props.storeHeaderAsync("");
+              this.props.favStoreAsync("");
+              this.props.navigation.navigate("Home");
+            }}
           >
             <MaterialIcons name="arrow-back" color="white" size={25} />
           </TouchableOpacity>
@@ -148,7 +185,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
       cartSizeAsync,
       favStoreAsync,
       storeHeaderAsync,
-      storeAsync
+      storeAsync,
     },
     dispatch
   );
