@@ -70,7 +70,9 @@ class Login extends React.Component {
       await axios.get('https://lit-peak-13067.herokuapp.com/get/location/'+jsonValue)
       .then(async resp1 => {
         console.log("res[p1",resp1.data)
-        
+        if(resp1.data.length === 0){
+          this.props.navigation.navigate("Map")
+        }
         await this.props.locationAsync({
         location: resp1.data[0].address1 +
         " " +
@@ -84,6 +86,7 @@ class Login extends React.Component {
       })})
       .catch(err => console.log("err2",err))
       
+
     if (jsonValue) {
       this.setState({
         mainLoading:false
