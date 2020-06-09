@@ -9,6 +9,7 @@ import {
   LinearGradient,
   TouchableOpacity,
   TextInput,
+  AsyncStorage
 } from "react-native";
 import {
   widthPercentageToDP as wp,
@@ -799,7 +800,7 @@ console.log("THIS.STATE",this.state)
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => {
+                onPress={async () => {
                   if (this.state.firstName && this.state.lastName) {
                     nameCheck = true;
                   }
@@ -820,7 +821,7 @@ console.log("THIS.STATE",this.state)
                         mobile: "+1" + this.state.mobile,
                       }
                     )
-                    .then((resp) => {
+                    .then(async (resp) => {
                       var temp = this.props.user.user;
                       temp.name = this.state.name;
                       temp.email = em;
@@ -833,6 +834,14 @@ console.log("THIS.STATE",this.state)
                       };
 
                       this.props.userAsync(data);
+                      var myUser = await AsyncStorage.getItem("user");
+
+                      myUser = JSON.parse(myUser)
+                      myUser.user.firstName = this.state.firstName
+                      myUser.user.lastName = this.state.lastName
+                      myUser.user.mobile = "+1" + this.state.mobile
+                      await AsyncStorage.setItem('user',JSON.stringify(myUser))
+
                       this.refs.modal4.close();
                     })
                     .catch((err) => console.log(err));
