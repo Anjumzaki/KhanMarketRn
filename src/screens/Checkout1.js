@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  Keyboard,
 } from "react-native";
 import {
   widthPercentageToDP as wp,
@@ -72,16 +73,42 @@ class Cart extends Component {
       oId: "",
       isOut: false,
       clickCheck: true,
+      keyboardOn: false,
     };
+   this. _keyboardDidShow = this._keyboardDidShow.bind(this)
+   this. _keyboardDidHide = this._keyboardDidHide.bind(this)
+
+  }
+  componentWillMount() {}
+
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
   }
 
-  
+  _keyboardDidShow() {
+    this.setState({ keyboardOn: true });
+  }
 
+  _keyboardDidHide() {
+    this.setState({ keyboardOn: false });
+  }
   componentDidMount() {
     console.log("ORDERRRRRRRRRRRRRRR numer", this.props.user.user);
-
-    this.setState({firstName: this.props.user.user, lastName: this.props.user.user.lastName,
-    email: this.props.user.user.email, mobile: this.props.user.user.mobile})
+    this.keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      this._keyboardDidShow
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      this._keyboardDidHide
+    );
+    this.setState({
+      firstName: this.props.user.user,
+      lastName: this.props.user.user.lastName,
+      email: this.props.user.user.email,
+      mobile: this.props.user.user.mobile,
+    });
     axios
       .get(
         "https://lit-peak-13067.herokuapp.com/get/store/" + this.props.store.id
@@ -1167,20 +1194,15 @@ class Cart extends Component {
                       })
                       .catch((err) => console.log("sdf", err));
 
-                      axios
-                        .get(
-                          "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
-                            emailV
-                              .toLowerCase()
-                              .trim() +
-                            "/" +
-                            num
-                        )
-                        .then((resp) =>
-                            this.refs.modal6.open()
-                        )
-                        .catch((err) => console.log(err));
-
+                    axios
+                      .get(
+                        "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
+                          emailV.toLowerCase().trim() +
+                          "/" +
+                          num
+                      )
+                      .then((resp) => this.refs.modal6.open())
+                      .catch((err) => console.log(err));
                   }}
                   style={[btnStyles.cartBtnOutline, { width: "35%" }]}
                 >
@@ -1356,57 +1378,126 @@ class Cart extends Component {
               </View>
             )}
           </ScrollView>
-          <View style={bottomTab.cartSheet}>
-            <TouchableOpacity
-              disabled={
-                this.state.storeTimings.isClosed ||
-                !nameCheck ||
-                !this.state.numVerified ||
-                this.state.isStoreClosed
-              }
-              onPress={() => {
-                console.log(
-                  "ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                  isOut
-                );
-                if (!isOut && !this.state.isOut) {
-                  this.setState({ cart: true });
+          {!this.state.keyboardOn && (
+            <View style={bottomTab.cartSheet}>
+              <TouchableOpacity
+                disabled={
+                  this.state.storeTimings.isClosed ||
+                  !nameCheck ||
+                  !this.state.numVerified ||
+                  this.state.isStoreClosed
+                }
+                onPress={() => {
+                  console.log(
+                    "ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    isOut
+                  );
+                  if (!isOut && !this.state.isOut) {
+                    this.setState({ cart: true });
 
-                  var pDate = new Date();
-                  var dd = String(pDate.getDate()).padStart(2, "0");
-                  var mm = String(pDate.getMonth() + 1).padStart(2, "0"); //January is 0!
-                  var yyyy = pDate.getFullYear();
+                    var pDate = new Date();
+                    var dd = String(pDate.getDate()).padStart(2, "0");
+                    var mm = String(pDate.getMonth() + 1).padStart(2, "0"); //January is 0!
+                    var yyyy = pDate.getFullYear();
 
-                  pDate = dd + "-" + mm + "-" + yyyy;
+                    pDate = dd + "-" + mm + "-" + yyyy;
 
-                  var currentdate = new Date();
-                  var hr =
-                    currentdate.getHours() < 10
-                      ? "0" + currentdate.getHours()
-                      : currentdate.getHours();
-                  var mi =
-                    currentdate.getMinutes() < 10
-                      ? "0" + currentdate.getMinutes()
-                      : currentdate.getMinutes();
-                  var sc =
-                    currentdate.getSeconds() < 10
-                      ? "0" + currentdate.getSeconds()
-                      : currentdate.getSeconds();
-                  var pTime = hr + ":" + mi + ":" + sc;
-                  var dt = "";
-                  this.state.orderDate === ""
-                    ? (dt = todaysDate)
-                    : (dt = this.state.orderDate);
-                  var timeCheck = true;
-                  console.log(this.state.orderTime, dt, pTime, pDate);
-                  if (dt === pDate) {
-                    console.log("sdsd");
-                    var t1 = pTime.split(":");
+                    var currentdate = new Date();
+                    var hr =
+                      currentdate.getHours() < 10
+                        ? "0" + currentdate.getHours()
+                        : currentdate.getHours();
+                    var mi =
+                      currentdate.getMinutes() < 10
+                        ? "0" + currentdate.getMinutes()
+                        : currentdate.getMinutes();
+                    var sc =
+                      currentdate.getSeconds() < 10
+                        ? "0" + currentdate.getSeconds()
+                        : currentdate.getSeconds();
+                    var pTime = hr + ":" + mi + ":" + sc;
+                    var dt = "";
+                    this.state.orderDate === ""
+                      ? (dt = todaysDate)
+                      : (dt = this.state.orderDate);
+                    var timeCheck = true;
+                    console.log(this.state.orderTime, dt, pTime, pDate);
+                    if (dt === pDate) {
+                      console.log("sdsd");
+                      var t1 = pTime.split(":");
 
-                    var t2 = this.state.orderTime.split(":");
-                    console.log(parseInt(t1[0]), parseInt(t2[0]));
-                    if (parseInt(t1[0]) >= parseInt(t2[0])) {
-                      timeCheck = false;
+                      var t2 = this.state.orderTime.split(":");
+                      console.log(parseInt(t1[0]), parseInt(t2[0]));
+                      if (parseInt(t1[0]) >= parseInt(t2[0])) {
+                        timeCheck = false;
+                      }
+                    }
+                    if (timeCheck) {
+                      axios
+                        .post(
+                          "https://lit-peak-13067.herokuapp.com/add/order",
+                          {
+                            storeId: sId,
+                            products: storeProducts,
+                            totalAmount: subTotal,
+                            storeName: this.props.store.name,
+                            storeAddress: this.props.store.address,
+                            storePhone: this.props.store.phone,
+                            userId: this.props.user.user._id,
+                            name: this.state.firstName
+                              ? this.state.firstName + " " + this.state.lastName
+                              : this.props.user.user.firstName +
+                                " " +
+                                this.props.user.user.lastName,
+                            phone: this.state.mobile
+                              ? "+1" + this.state.mobile
+                              : this.props.user.user.mobile,
+                            email: this.state.email
+                              ? this.state.email
+                              : this.props.user.user.email,
+                            // address: "bac Street",
+                            orderTime: this.state.orderTime,
+                            orderDate:
+                              this.state.orderDate === ""
+                                ? todaysDate
+                                : this.state.orderDate,
+                            // orderTimeZone: "UST",
+                            postDate: pDate,
+                            postTime: pTime,
+                            tax: (parseFloat(this.state.tax) / 100) * subTotal,
+                            orderNumber: codeId,
+                            isGuest: this.props.user.user.isGuest,
+                          }
+                        )
+                        .then((resp) => {
+                          // this.props.storeAsync('')
+                          // this.props.cartSizeAsync(0)
+                          // this.props.storeHeaderAsync('')
+                          // this.props.favStoreAsync('')
+                          axios
+                            .put(
+                              "https://lit-peak-13067.herokuapp.com/edit/store/orderNum/" +
+                                this.props.store.id +
+                                "/" +
+                                (parseInt(this.props.store.oId) + 1)
+                            )
+                            .then((resp1) => {
+                              // var temp = this.props.store
+                              // temp.oId = parseInt(this.props.store.oId)+1
+                              // this.props.storeAsync(temp)
+                              // this.props.storeHeaderAsync(temp)
+                              this.props.navigation.navigate("QrCode", {
+                                orderId: resp.data.order1._id,
+                                codeId: codeId,
+                                order: resp.data.order1,
+                              });
+                            })
+                            .catch((err) => console.log(err));
+                        });
+                    } else {
+                      alert(
+                        "Store is closed in this date and time, please change date and time."
+                      );
                     }
                   }
                   if (timeCheck) {
@@ -1444,10 +1535,6 @@ class Cart extends Component {
                         isGuest: this.props.user.user.isGuest,
                       })
                       .then((resp) => {
-                        // this.props.storeAsync('')
-                        // this.props.cartSizeAsync(0)
-                        // this.props.storeHeaderAsync('')
-                        // this.props.favStoreAsync('')
                         axios
                           .put(
                             "https://lit-peak-13067.herokuapp.com/edit/store/orderNum/" +
@@ -1456,10 +1543,6 @@ class Cart extends Component {
                               (parseInt(this.props.store.oId) + 1)
                           )
                           .then((resp1) => {
-                            // var temp = this.props.store
-                            // temp.oId = parseInt(this.props.store.oId)+1
-                            // this.props.storeAsync(temp)
-                            // this.props.storeHeaderAsync(temp)
                             this.props.navigation.navigate("QrCode", {
                               orderId: resp.data.order1._id,
                               codeId: codeId,
@@ -1469,101 +1552,39 @@ class Cart extends Component {
                           .catch((err) => console.log(err));
                       });
                   } else {
+                    console.log("pnamepnamepnamepname", pname);
+                    var name = "";
+                    if (pname) {
+                      name = pname;
+                    } else {
+                      name = this.state.pname;
+                    }
                     alert(
-                      "Store is closed in this date and time, please change date and time."
+                      "Sorry, " +
+                        name +
+                        " Item out of stock for the selected date, change pickup date or remove this product to procceed"
                     );
                   }
-                }
-                if (timeCheck) {
-                  axios
-                    .post("https://lit-peak-13067.herokuapp.com/add/order", {
-                      storeId: sId,
-                      products: storeProducts,
-                      totalAmount: subTotal,
-                      storeName: this.props.store.name,
-                      storeAddress: this.props.store.address,
-                      storePhone: this.props.store.phone,
-                      userId: this.props.user.user._id,
-                      name: this.state.firstName
-                        ? this.state.firstName +" "+ this.state.lastName
-                        : this.props.user.user.firstName +" "+  this.props.user.user.lastName,
-                      phone: this.state.mobile
-                        ? "+1" + this.state.mobile
-                        : this.props.user.user.mobile,
-                      email: this.state.email
-                        ? this.state.email
-                        : this.props.user.user.email,
-                      // address: "bac Street",
-                      orderTime: this.state.orderTime,
-                      orderDate:
-                        this.state.orderDate === ""
-                          ? todaysDate
-                          : this.state.orderDate,
-                      // orderTimeZone: "UST",
-                      postDate: pDate,
-                      postTime: pTime,
-                      tax: (parseFloat(this.state.tax) / 100) * subTotal,
-                      orderNumber: codeId,
-                      isGuest: this.props.user.user.isGuest
-                    })
-                    .then((resp) => {
-                      // this.props.storeAsync('')
-                      // this.props.cartSizeAsync(0)
-                      // this.props.storeHeaderAsync('')
-                      // this.props.favStoreAsync('')
-                      axios
-                        .put(
-                          "https://lit-peak-13067.herokuapp.com/edit/store/orderNum/" +
-                            this.props.store.id +
-                            "/" +
-                            (parseInt(this.props.store.oId) + 1)
-                        )
-                        .then((resp1) => {
-                          // var temp = this.props.store
-                          // temp.oId = parseInt(this.props.store.oId)+1
-                          // this.props.storeAsync(temp)
-                          // this.props.storeHeaderAsync(temp)
-                          this.props.navigation.navigate("QrCode", {
-                            orderId: resp.data.order1._id,
-                            codeId: codeId,
-                            order: resp.data.order1,
-                          });
-                        })
-                        .catch((err) => console.log(err));
-                    });
-                } else {
-                  console.log("pnamepnamepnamepname", pname);
-                  var name = "";
-                  if (pname) {
-                    name = pname;
-                  } else {
-                    name = this.state.pname;
-                  }
-                  alert(
-                    "Sorry, " +
-                      name +
-                      " Item out of stock for the selected date, change pickup date or remove this product to procceed"
-                  );
-                }
-              }}
-              style={[
-                this.state.storeTimings.isClosed ||
-                !nameCheck ||
-                !this.state.numVerified ||
-                this.state.isStoreClosed
-                  ? btnStyles.cartBtn1
-                  : btnStyles.cartBtn,
-                { width: "100%" },
-              ]}
-            >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={15}
-                col="white"
-                text="CONFIRM"
-              ></LatoText>
-            </TouchableOpacity>
-          </View>
+                }}
+                style={[
+                  this.state.storeTimings.isClosed ||
+                  !nameCheck ||
+                  !this.state.numVerified ||
+                  this.state.isStoreClosed
+                    ? btnStyles.cartBtn1
+                    : btnStyles.cartBtn,
+                  { width: "100%" },
+                ]}
+              >
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={15}
+                  col="white"
+                  text="CONFIRM"
+                ></LatoText>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </>
     );
