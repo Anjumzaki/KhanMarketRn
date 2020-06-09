@@ -90,7 +90,7 @@ class Login extends React.Component {
         lng: resp1.data[0].longitude
       })})
       .catch(err => console.log("err2",err))
-      
+
       this.setState({
         mainLoading:false
       },()=> this.props.navigation.navigate("App"))
@@ -475,7 +475,9 @@ class Login extends React.Component {
                         guestId: getUniqueId(),
                       }
                     )
-                    .then((resp) => {
+                    .then(async (resp) => {
+                      await AsyncStorage.setItem("user", JSON.stringify(resp.data.user._id));
+
                       axios
                         .get(
                           "https://lit-peak-13067.herokuapp.com/get/location/" +

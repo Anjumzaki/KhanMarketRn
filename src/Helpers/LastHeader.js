@@ -100,12 +100,19 @@ class LastHeader extends React.Component {
         <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
           <TouchableOpacity
             style={{ padding: 20 }}
-            onPress={() => {
-              this.props.storeAsync("");
-              this.props.cartSizeAsync(0);
-              this.props.storeHeaderAsync("");
-              this.props.favStoreAsync("");
-              this.props.navigation.navigate("Home");
+            onPress={() => { 
+              if(this.props.nameTitle === "ORDER PLACED"){
+                this.props.storeAsync("");
+                this.props.cartSizeAsync(0);
+                this.props.storeHeaderAsync("");
+                this.props.favStoreAsync("");
+              }
+              if(this.props.nameTitle === "PICK UP DETAILS"){
+                this.props.navigation.navigate("Cart");
+              }else{
+                this.props.navigation.navigate("Home");
+              }
+
             }}
           >
             <MaterialIcons name="arrow-back" color="white" size={25} />

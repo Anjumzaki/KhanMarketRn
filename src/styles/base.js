@@ -115,6 +115,18 @@ const btnStyles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#2E2E2E"
+  },
+  cartBtnOutline1: {
+    backgroundColor: "white",
+    borderRadius: 5,
+    color: "white",
+    textAlign: "center",
+    justifyContent: "center",
+    alignContent: "center",
+    paddingVertical: 11,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#808080"
   }
 });
 const bottomTab = StyleSheet.create({
