@@ -833,13 +833,6 @@ console.log("THIS.STATE",this.state)
                       };
 
                       this.props.userAsync(data);
-                      // var myUser = await AsyncStorage.getItem("user");
-
-                      // myUser = JSON.parse(myUser)
-                      // myUser.user.firstName = this.state.firstName
-                      // myUser.user.lastName = this.state.lastName
-                      // myUser.user.mobile = "+1" + this.state.mobile
-                      // await AsyncStorage.setItem('user',JSON.stringify(myUser))
 
                       this.refs.modal4.close();
                     })

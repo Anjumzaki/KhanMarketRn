@@ -60,6 +60,11 @@ class Login extends React.Component {
     // const loc1 = await AsyncStorage.getItem("userLocation");
     // const loc = JSON.parse(loc1);
       // /get/user/byId/
+     
+      
+
+    if (jsonValue) {
+
       await axios.get('https://lit-peak-13067.herokuapp.com/get/user/byId/'+jsonValue)
       .then(async resp => {
         console.log("res[p",resp.data)
@@ -86,8 +91,6 @@ class Login extends React.Component {
       })})
       .catch(err => console.log("err2",err))
       
-
-    if (jsonValue) {
       this.setState({
         mainLoading:false
       },()=> this.props.navigation.navigate("App"))
