@@ -167,11 +167,11 @@ export default class SignUp1 extends React.Component {
     );
   };
   render() {
-    if(this.state.numberModal)
-    {
-      alert(this.state.numberModal)
+    // if(this.state.numberModal)
+    // {
+    //   alert(this.state.numberModal)
 
-    }
+    // }
 
     var mainNumber =
       this.state.selectedCountry === "USA"

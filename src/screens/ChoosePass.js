@@ -178,7 +178,7 @@ class SignUp1 extends React.Component {
           >
             <TouchableOpacity
               style={btnStyles.basic}
-              onPress={() => {
+              onPress={() => { 
                 axios
                   .post(
                     "https://lit-peak-13067.herokuapp.com/api/users/signup",
