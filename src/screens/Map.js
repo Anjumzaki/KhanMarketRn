@@ -322,16 +322,16 @@ class Map extends Component {
       lat: this.state.region.latitude,
       lng: this.state.region.longitude,
     });
-    var loc = { refId: this.props.user.user._id,
-      type: "Customer",
-      address1: ad1 + " " + temp,
-      address2: ad2,
-      city: ct,
-      country: cnt,
-      zipCode: zipc,
-      latitude: this.state.region.latitude,
-      longitude: this.state.region.longitude}
-     await AsyncStorage.setItem("userLocation",JSON.stringify(loc));
+    // var loc = { refId: this.props.user.user._id,
+    //   type: "Customer",
+    //   address1: ad1 + " " + temp,
+    //   address2: ad2,
+    //   city: ct,
+    //   country: cnt,
+    //   zipCode: zipc,
+    //   latitude: this.state.region.latitude,
+    //   longitude: this.state.region.longitude}
+    //  await AsyncStorage.setItem("userLocation",JSON.stringify(loc));
     axios
       .post("https://lit-peak-13067.herokuapp.com/add/location", {
         refId: this.props.user.user._id,

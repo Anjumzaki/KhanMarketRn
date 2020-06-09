@@ -66,11 +66,6 @@ const HomeStackScreen = (route) => (
       component={TabsScreen}
       options={{ header: (props) => null }}
     />
-    <HomeStack.Screen
-      name="Map1"
-      options={{ header: (props) => null }}
-      component={Map1}
-    />
 
     <HomeStack.Screen
       name="StoreDetails"
