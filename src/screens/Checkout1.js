@@ -1424,9 +1424,12 @@ console.log("THIS.STATE",this.state)
                       storeAddress: this.props.store.address,
                       storePhone: this.props.store.phone,
                       userId: this.props.user.user._id,
-                      name: this.state.firstName +" "+ this.state.lastName,
-                      phone: "+1"+this.state.mobile,
-                      email: this.state.email,
+                      name: this.state.isChecked && this.state.someoneElseName && this.state.someoneElsePhone ?
+                      this.state.someoneElseName :  this.state.firstName +" "+ this.state.lastName,
+                      phone: this.state.isChecked && this.state.someoneElseName && this.state.someoneElsePhone ?
+                      "+1"+this.state.someoneElsePhone : "+1"+this.state.mobile,
+                      email: this.state.isChecked && this.state.someoneElseName && this.state.someoneElsePhone ?
+                      this.state.someoneElseEmail : this.state.email,
                       // address: "bac Street",
                       orderTime: this.state.orderTime,
                       orderDate:
