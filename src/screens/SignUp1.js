@@ -556,78 +556,94 @@ export default class SignUp1 extends React.Component {
                       borderRadius: 5,
                     }}
                     onPress={async () => {
-                      if (this.state.email) {
-                        if (this.state.mobile) {
-                          var num = Math.floor(100000 + Math.random() * 900000);
-                          await this.setState({ num: num.toString() });
-                          this.forceUpdate();
-                          axios
-                            .get(
-                              "https://lit-peak-13067.herokuapp.com/get/user/" +
-                                this.state.email.trim()
-                            )
-                            .then((resp) => {
-                              axios
-                                .get(
-                                  "https://lit-peak-13067.herokuapp.com/get/user/number/" +
-                                    mainNumber
-                                )
-                                .then((resp1) => {
-                                  console.log("sddsdd", resp.data, resp1.data);
-                                  if (resp.data === null) {
-                                    if (resp1.data === null) {
-                                      var cd = "1";
-                                      if (this.state.selectedCountry == "PAK") {
-                                        cd = "92";
-                                      }
-                                      console.log("CDDDDDDDDD", cd);
-                                      axios
-                                        .get(
-                                          "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
-                                            this.state.email
-                                              .toLowerCase()
-                                              .trim() +
-                                            "/" +
-                                            num
-                                        )
-                                        .then((resp) =>
-                                          this.setState(
-                                            { numberModal: true },
-                                            () => this.refs.modal3.open()
+                      if (this.state.email.trim()) {
+                        if (EmailValidator.validate(this.state.email.trim())) {
+                          if (this.state.mobile.trim()) {
+                            var num = Math.floor(
+                              100000 + Math.random() * 900000
+                            );
+                            await this.setState({ num: num.toString() });
+                            this.forceUpdate();
+                            axios
+                              .get(
+                                "https://lit-peak-13067.herokuapp.com/get/user/" +
+                                  this.state.email.trim()
+                              )
+                              .then((resp) => {
+                                axios
+                                  .get(
+                                    "https://lit-peak-13067.herokuapp.com/get/user/number/" +
+                                      mainNumber
+                                  )
+                                  .then((resp1) => {
+                                    console.log(
+                                      "sddsdd",
+                                      resp.data,
+                                      resp1.data
+                                    );
+                                    if (resp.data === null) {
+                                      if (resp1.data === null) {
+                                        var cd = "1";
+                                        if (
+                                          this.state.selectedCountry == "PAK"
+                                        ) {
+                                          cd = "92";
+                                        }
+                                        console.log("CDDDDDDDDD", cd);
+                                        axios
+                                          .get(
+                                            "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
+                                              this.state.email
+                                                .toLowerCase()
+                                                .trim() +
+                                              "/" +
+                                              num
                                           )
-                                        )
-                                        .catch((err) => console.log(err));
+                                          .then((resp) =>
+                                            this.setState(
+                                              { numberModal: true },
+                                              () => this.refs.modal3.open()
+                                            )
+                                          )
+                                          .catch((err) => console.log(err));
 
-                                      axios
-                                        .get(
-                                          "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
-                                            mainNumber +
-                                            "/" +
-                                            num
-                                        )
-                                        .then((resp) => this.refs.modal3.open())
-                                        .catch((err) =>
-                                          console.log("num err", err)
-                                        );
+                                        axios
+                                          .get(
+                                            "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
+                                              mainNumber +
+                                              "/" +
+                                              num
+                                          )
+                                          .then((resp) =>
+                                            this.refs.modal3.open()
+                                          )
+                                          .catch((err) =>
+                                            console.log("num err", err)
+                                          );
+                                      } else {
+                                        this.setState({
+                                          errMessage:
+                                            "There is already an account assoicated with this phone number.",
+                                        });
+                                      }
                                     } else {
                                       this.setState({
                                         errMessage:
-                                          "There is already an account assoicated with this phone number.",
+                                          "There is already an account assoicated with this email address",
                                       });
                                     }
-                                  } else {
-                                    this.setState({
-                                      errMessage:
-                                        "There is already an account assoicated with this email address",
-                                    });
-                                  }
-                                })
-                                .catch((err) => console.log(err))
-                                .catch((err) => console.log(err));
+                                  })
+                                  .catch((err) => console.log(err))
+                                  .catch((err) => console.log(err));
+                              });
+                          } else {
+                            this.setState({
+                              errMessage: "Please Enter Phone Number.",
                             });
+                          }
                         } else {
                           this.setState({
-                            errMessage: "Please Enter Phone Number.",
+                            errMessage: "Please Enter Correct Email",
                           });
                         }
                       } else {
@@ -694,6 +710,8 @@ export default class SignUp1 extends React.Component {
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
+              paddingHorizontal: 40,
+              width: "100%",
             }}
           >
             {this.state.errMessage !== "" && (
@@ -714,7 +732,6 @@ export default class SignUp1 extends React.Component {
           <View
             style={{
               justifyContent: "space-evenly",
-
               paddingHorizontal: wp("10%"),
             }}
           >
