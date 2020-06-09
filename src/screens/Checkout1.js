@@ -88,12 +88,16 @@ class Cart extends Component {
     };
   }
 
+  
+
   componentDidMount() {
     console.log(
       "ORDERRRRRRRRRRRRRRR numer",
       this.props.user.user
     );
 
+    this.setState({firstName: this.props.user.user, lastName: this.props.user.user.lastName,
+    email: this.props.user.user.email, mobile: this.props.user.user.mobile})
     axios
       .get(
         "https://lit-peak-13067.herokuapp.com/get/store/" + this.props.store.id
@@ -1140,6 +1144,13 @@ console.log("THIS.STATE",this.state)
                     } else {
                       numV = "+1" + this.state.mobile;
                     }
+                    var emailV;
+                    if (this.props.user.user.email) {
+                      emailV = this.props.user.user.email;
+                    } else {
+                      emailV = this.state.email;
+                    }
+
                     // alert(numV)
                     console.log("numv", numV);
                     axios
@@ -1155,6 +1166,21 @@ console.log("THIS.STATE",this.state)
                         this.refs.modal6.open();
                       })
                       .catch((err) => console.log("sdf", err));
+
+                      axios
+                        .get(
+                          "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
+                            emailV
+                              .toLowerCase()
+                              .trim() +
+                            "/" +
+                            num
+                        )
+                        .then((resp) =>
+                            this.refs.modal6.open()
+                        )
+                        .catch((err) => console.log(err));
+
                   }}
                   style={[btnStyles.cartBtnOutline, { width: "35%" }]}
                 >
