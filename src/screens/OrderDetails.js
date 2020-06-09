@@ -120,6 +120,14 @@ class OrderDetails extends Component {
       subTotal = subTotal + parseFloat(temp);
     }
     console.log("this.props.route.params.order", this.props.route.params.order);
+    console.log(this.props.route.params.order.isRejected ||
+      this.state.bd ||
+      this.props.route.params.order.isPicked)
+      console.log(
+        this.props.route.params.order.isRejected ,
+                    this.state.bd ,
+                    this.props.route.params.order.isPicked
+      )
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
@@ -676,7 +684,7 @@ class OrderDetails extends Component {
                       ? "#808080"
                       : "#2E2E2E"
                   }
-                  text="Cancel Order"
+                  text="Cancel Orde.r"
                 />
               </TouchableOpacity>
               )}
