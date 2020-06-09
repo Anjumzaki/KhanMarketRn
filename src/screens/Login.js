@@ -54,45 +54,51 @@ class Login extends React.Component {
   async componentDidMount() {
     // const jsonValue1 = "";
     const jsonValue1 = await AsyncStorage.getItem("user");
-    var jsonValue = JSON.parse(jsonValue1)
+    var jsonValue = JSON.parse(jsonValue1);
     // alert(jsonValue)
-    console.log("jsonValuejsonValuejsonValuejsonValuejsonValue",jsonValue)
+    console.log("jsonValuejsonValuejsonValuejsonValuejsonValue", jsonValue);
     // const loc1 = await AsyncStorage.getItem("userLocation");
     // const loc = JSON.parse(loc1);
-      // /get/user/byId/
-      await axios.get('https://lit-peak-13067.herokuapp.com/get/user/byId/'+jsonValue)
-      .then(async resp => {
-        console.log("res[p",resp.data)
-        await this.props.userAsync({user: resp.data})
+    // /get/user/byId/
+    await axios
+      .get("https://lit-peak-13067.herokuapp.com/get/user/byId/" + jsonValue)
+      .then(async (resp) => {
+        console.log("res[p", resp.data);
+        await this.props.userAsync({ user: resp.data });
       })
-      .catch(err => console.log("err1",err))
+      .catch((err) => console.log("err1", err));
 
-      await axios.get('https://lit-peak-13067.herokuapp.com/get/location/'+jsonValue)
-      .then(async resp1 => {
-        console.log("res[p1",resp1.data)
-        
+    await axios
+      .get("https://lit-peak-13067.herokuapp.com/get/location/" + jsonValue)
+      .then(async (resp1) => {
+        console.log("res[p1", resp1.data);
+
         await this.props.locationAsync({
-        location: resp1.data[0].address1 +
-        " " +
-        resp1.data[0].address2 + 
-        " " +
-        resp1.data[0].city +
-        " " +
-        resp1.data[0].country,
-        lat: resp1.data[0].latitude,
-        lng: resp1.data[0].longitude
-      })})
-      .catch(err => console.log("err2",err))
-      
-    if (jsonValue) {
-      this.setState({
-        mainLoading:false
-      },()=> this.props.navigation.navigate("App"))
-    }
-    else{
-      this.setState({
-        mainLoading:false
+          location:
+            resp1.data[0].address1 +
+            " " +
+            resp1.data[0].address2 +
+            " " +
+            resp1.data[0].city +
+            " " +
+            resp1.data[0].country,
+          lat: resp1.data[0].latitude,
+          lng: resp1.data[0].longitude,
+        });
       })
+      .catch((err) => console.log("err2", err));
+
+    if (jsonValue) {
+      this.setState(
+        {
+          mainLoading: false,
+        },
+        () => this.props.navigation.navigate("App")
+      );
+    } else {
+      this.setState({
+        mainLoading: false,
+      });
     }
   }
   getRef = (ref) => {
@@ -111,23 +117,21 @@ class Login extends React.Component {
       await AsyncStorage.setItem("user", JSON.stringify(value.user._id));
       // await AsyncStorage.setItem("user", JSON.stringify(value));
       // await AsyncStorage.setItem("userLocation", JSON.stringify(loc));
-
     } catch (e) {
       alert(error);
     }
-    this.props.locationAsync(
-      {
-        location:loc[0].address1 +
+    this.props.locationAsync({
+      location:
+        loc[0].address1 +
         " " +
-       loc[0].address2 + 
+        loc[0].address2 +
         " " +
-       loc[0].city +
+        loc[0].city +
         " " +
-       loc[0].country,
-        lat:loc[0].latitude,
-        lng:loc[0].longitude
-      }
-    );
+        loc[0].country,
+      lat: loc[0].latitude,
+      lng: loc[0].longitude,
+    });
     this.setState(
       {
         icEye: "visibility-off",
@@ -480,22 +484,21 @@ class Login extends React.Component {
                           // this.props.navigation.navigate("Map");
                           if (resp1.data.length > 0) {
                             this.props.locationAsync({
-                              location: resp1.data[0].address1 +
-                              " " +
-                              resp1.data[0].address2 + 
-                              " " +
-                              resp1.data[0].city +
-                              " " +
-                              resp1.data[0].country,
+                              location:
+                                resp1.data[0].address1 +
+                                " " +
+                                resp1.data[0].address2 +
+                                " " +
+                                resp1.data[0].city +
+                                " " +
+                                resp1.data[0].country,
                               lat: resp1.data[0].latitude,
-                              lng: resp1.data[0].longitude
-                            }
-                              
-                            );
+                              lng: resp1.data[0].longitude,
+                            });
 
-                          this.props.navigation.navigate('App')
+                            this.props.navigation.navigate("App");
                           } else {
-                            this.props.navigation.navigate('Map')
+                            this.props.navigation.navigate("Map");
                           }
                         })
                         .catch((err) => console.log(err));

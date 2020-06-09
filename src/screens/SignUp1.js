@@ -12,7 +12,7 @@ import {
   Dimensions,
   ActivityIndicator,
   // Modal
-  BackHandler
+  BackHandler,
 } from "react-native";
 import { BackStack } from "../Helpers/BackStack";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -62,7 +62,7 @@ export default class SignUp1 extends React.Component {
       verifi: false,
       countryModal: false,
       selectedCountry: "USA",
-      numberModal:false
+      numberModal: false,
     };
   }
   isValidUSZip = (sZip) => {
@@ -80,8 +80,8 @@ export default class SignUp1 extends React.Component {
     });
     this.setState({ fontLoaded: true });
   }
-  componentWillUnmount(){
-    BackHandler.removeEventListener()
+  componentWillUnmount() {
+    BackHandler.removeEventListener();
   }
   getRef = (ref) => {
     if (this.props.getRef) this.props.getRef(ref);
@@ -102,61 +102,61 @@ export default class SignUp1 extends React.Component {
       () => {
         if (this.state.firstName.trim()) {
           if (this.state.lastName.trim()) {
-          if (this.state.email.trim()) {
-            if (EmailValidator.validate(this.state.email.trim())) {
-              if (this.state.mobile.trim()) {
-                if (this.state.zipCode.trim()) {
-                  if (this.isValidUSZip(this.state.zipCode)) {
-                    this.setState({ errMessage: "", loading: false });
-                    this.props.navigation.navigate("ChoosePass", {
-                      firstName: this.state.firstName,
-                      lastName: this.state.lastName,
-                      email: this.state.email.toLowerCase().trim(),
-                      mobile:
-                        this.state.selectedCountry == "USA"
-                          ? "+1" + this.state.mobile
-                          : "+92" + this.state.mobile,
-                      zipCode: this.state.zipCode,
-                      password: this.state.password,
-                      isGuest: false,
-                      guestId: "",
-                    });
+            if (this.state.email.trim()) {
+              if (EmailValidator.validate(this.state.email.trim())) {
+                if (this.state.mobile.trim()) {
+                  if (this.state.zipCode.trim()) {
+                    if (this.isValidUSZip(this.state.zipCode)) {
+                      this.setState({ errMessage: "", loading: false });
+                      this.props.navigation.navigate("ChoosePass", {
+                        firstName: this.state.firstName,
+                        lastName: this.state.lastName,
+                        email: this.state.email.toLowerCase().trim(),
+                        mobile:
+                          this.state.selectedCountry == "USA"
+                            ? "+1" + this.state.mobile
+                            : "+92" + this.state.mobile,
+                        zipCode: this.state.zipCode,
+                        password: this.state.password,
+                        isGuest: false,
+                        guestId: "",
+                      });
+                    } else {
+                      this.setState({
+                        errMessage: "Please enter correct USA Zip code",
+                        loading: false,
+                      });
+                    }
                   } else {
                     this.setState({
-                      errMessage: "Please enter correct USA Zip code",
+                      errMessage: "Please enter Zip code",
                       loading: false,
                     });
                   }
                 } else {
                   this.setState({
-                    errMessage: "Please enter Zip code",
+                    errMessage: "Please enter mobile number",
                     loading: false,
                   });
                 }
               } else {
                 this.setState({
-                  errMessage: "Please enter mobile number",
+                  errMessage: "Please enter correct email",
                   loading: false,
                 });
               }
             } else {
               this.setState({
-                errMessage: "Please enter correct email",
+                errMessage: "Please enter your email",
                 loading: false,
               });
             }
           } else {
             this.setState({
-              errMessage: "Please enter your email",
+              errMessage: "Please enter your last name",
               loading: false,
             });
           }
-        } else {
-          this.setState({
-            errMessage: "Please enter your last name",
-            loading: false,
-          });
-        }
         } else {
           this.setState({
             errMessage: "Please enter your first name",
@@ -167,12 +167,6 @@ export default class SignUp1 extends React.Component {
     );
   };
   render() {
-    // if(this.state.numberModal)
-    // {
-    //   alert(this.state.numberModal)
-
-    // }
-
     var mainNumber =
       this.state.selectedCountry === "USA"
         ? "+1" + this.state.mobile
@@ -194,7 +188,6 @@ export default class SignUp1 extends React.Component {
           ref={"coModal"}
           isDisabled={this.state.countryModal}
           backButtonClose={true}
-
         >
           <LatoText
             fontName="Lato-Regular"
@@ -328,7 +321,7 @@ export default class SignUp1 extends React.Component {
               onFulfill={(isValid) =>
                 isValid
                   ? this.setState(
-                      { codeMsg: false, numVerified: true, numberModal:false },
+                      { codeMsg: false, numVerified: true, numberModal: false },
                       this.refs.modal3.close()
                     )
                   : this.setState({ codeMsg: true })
@@ -521,7 +514,6 @@ export default class SignUp1 extends React.Component {
                       />
                     </View>
                   </>
-                  
                 )}
 
                 <TextInput
@@ -598,7 +590,12 @@ export default class SignUp1 extends React.Component {
                                             "/" +
                                             num
                                         )
-                                        .then((resp) => this.setState({numberModal:true},()=>this.refs.modal3.open()))
+                                        .then((resp) =>
+                                          this.setState(
+                                            { numberModal: true },
+                                            () => this.refs.modal3.open()
+                                          )
+                                        )
                                         .catch((err) => console.log(err));
 
                                       axios
@@ -618,8 +615,11 @@ export default class SignUp1 extends React.Component {
                                           "There is already an account assoicated with this phone number.",
                                       });
                                     }
-                                  }else{
-                                    this.setState({errMessage: "There is already an account assoicated with this email address"})
+                                  } else {
+                                    this.setState({
+                                      errMessage:
+                                        "There is already an account assoicated with this email address",
+                                    });
                                   }
                                 })
                                 .catch((err) => console.log(err))
