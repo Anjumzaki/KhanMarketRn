@@ -47,7 +47,7 @@ class Home extends React.Component {
   };
   backAction = () => {
     if (this.props.route.name == "Home") {
-      Alert.alert("Hold on!", "Are you sure you want to go?", [
+      Alert.alert("Hold on!", "Are you sure you want to exit?", [
         {
           text: "Cancel",
           onPress: () => null,

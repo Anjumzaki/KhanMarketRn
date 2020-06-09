@@ -75,9 +75,13 @@ class Cart extends Component {
     };
   }
 
+  
+
   componentDidMount() {
     console.log("ORDERRRRRRRRRRRRRRR numer", this.props.user.user);
 
+    this.setState({firstName: this.props.user.user, lastName: this.props.user.user.lastName,
+    email: this.props.user.user.email, mobile: this.props.user.user.mobile})
     axios
       .get(
         "https://lit-peak-13067.herokuapp.com/get/store/" + this.props.store.id
@@ -1140,6 +1144,13 @@ class Cart extends Component {
                     } else {
                       numV = "+1" + this.state.mobile;
                     }
+                    var emailV;
+                    if (this.props.user.user.email) {
+                      emailV = this.props.user.user.email;
+                    } else {
+                      emailV = this.state.email;
+                    }
+
                     // alert(numV)
                     console.log("numv", numV);
                     axios
@@ -1155,6 +1166,21 @@ class Cart extends Component {
                         this.refs.modal6.open();
                       })
                       .catch((err) => console.log("sdf", err));
+
+                      axios
+                        .get(
+                          "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
+                            emailV
+                              .toLowerCase()
+                              .trim() +
+                            "/" +
+                            num
+                        )
+                        .then((resp) =>
+                            this.refs.modal6.open()
+                        )
+                        .catch((err) => console.log(err));
+
                   }}
                   style={[btnStyles.cartBtnOutline, { width: "35%" }]}
                 >
@@ -1447,6 +1473,64 @@ class Cart extends Component {
                       "Store is closed in this date and time, please change date and time."
                     );
                   }
+                }
+                if (timeCheck) {
+                  axios
+                    .post("https://lit-peak-13067.herokuapp.com/add/order", {
+                      storeId: sId,
+                      products: storeProducts,
+                      totalAmount: subTotal,
+                      storeName: this.props.store.name,
+                      storeAddress: this.props.store.address,
+                      storePhone: this.props.store.phone,
+                      userId: this.props.user.user._id,
+                      name: this.state.firstName
+                        ? this.state.firstName +" "+ this.state.lastName
+                        : this.props.user.user.firstName +" "+  this.props.user.user.lastName,
+                      phone: this.state.mobile
+                        ? "+1" + this.state.mobile
+                        : this.props.user.user.mobile,
+                      email: this.state.email
+                        ? this.state.email
+                        : this.props.user.user.email,
+                      // address: "bac Street",
+                      orderTime: this.state.orderTime,
+                      orderDate:
+                        this.state.orderDate === ""
+                          ? todaysDate
+                          : this.state.orderDate,
+                      // orderTimeZone: "UST",
+                      postDate: pDate,
+                      postTime: pTime,
+                      tax: (parseFloat(this.state.tax) / 100) * subTotal,
+                      orderNumber: codeId,
+                      isGuest: this.props.user.user.isGuest
+                    })
+                    .then((resp) => {
+                      // this.props.storeAsync('')
+                      // this.props.cartSizeAsync(0)
+                      // this.props.storeHeaderAsync('')
+                      // this.props.favStoreAsync('')
+                      axios
+                        .put(
+                          "https://lit-peak-13067.herokuapp.com/edit/store/orderNum/" +
+                            this.props.store.id +
+                            "/" +
+                            (parseInt(this.props.store.oId) + 1)
+                        )
+                        .then((resp1) => {
+                          // var temp = this.props.store
+                          // temp.oId = parseInt(this.props.store.oId)+1
+                          // this.props.storeAsync(temp)
+                          // this.props.storeHeaderAsync(temp)
+                          this.props.navigation.navigate("QrCode", {
+                            orderId: resp.data.order1._id,
+                            codeId: codeId,
+                            order: resp.data.order1,
+                          });
+                        })
+                        .catch((err) => console.log(err));
+                    });
                 } else {
                   console.log("pnamepnamepnamepname", pname);
                   var name = "";
