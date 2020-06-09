@@ -8,6 +8,7 @@ import {
   StyleSheet,
   LinearGradient,
   TouchableOpacity,
+  Keyboard,
   TextInput,
 } from "react-native";
 import {
@@ -88,19 +89,33 @@ class Cart extends Component {
       someoneElseName: "",
       someoneElseEmail: "",
       someoneElsePhone: "",
+      
+      keyState: false,
     };
+    this._keyboardDidShow = this._keyboardDidShow.bind(this);
+    this._keyboardDidHide = this._keyboardDidHide.bind(this);
   }
 
-  
-
   componentDidMount() {
-    console.log(
-      "ORDERRRRRRRRRRRRRRR numer",
-      this.props.user.user
+    console.log("ORDERRRRRRRRRRRRRRR numer", this.props.user.user);
+    this.keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      this._keyboardDidShow
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      this._keyboardDidHide
     );
 
-    this.setState({firstName: this.props.user.user.firstName, lastName: this.props.user.user.lastName,
-    email: this.props.user.user.email, mobile: this.props.user.user.mobile.substring(2,this.props.user.user.mobile.length)})
+    this.setState({
+      firstName: this.props.user.user.firstName,
+      lastName: this.props.user.user.lastName,
+      email: this.props.user.user.email,
+      mobile: this.props.user.user.mobile.substring(
+        2,
+        this.props.user.user.mobile.length
+      ),
+    });
     axios
       .get(
         "https://lit-peak-13067.herokuapp.com/get/store/" + this.props.store.id
@@ -122,7 +137,22 @@ class Cart extends Component {
       this.setState({ numVerified: true });
     }
   }
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
 
+  _keyboardDidShow() {
+    this.setState({
+      keyState: true,
+    });
+  }
+
+  _keyboardDidHide() {
+    this.setState({
+      keyState: false,
+    });
+  }
   getTimings(day) {
     axios
       .get(
@@ -317,8 +347,8 @@ class Cart extends Component {
     console.log("SD", this.state, this.props.user);
     var codeId = this.makeid(3);
     console.log("CODE ID", codeId);
-    //      
-      // console.log("SDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD", new Date("2020-04-30"))
+    //
+    // console.log("SDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD", new Date("2020-04-30"))
 
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
@@ -345,7 +375,7 @@ class Cart extends Component {
     }
     //
     var todaysDate = month1 + "-" + day + "-" + year;
-    console.log("sdddddddddddd",todaysDate)
+    console.log("sdddddddddddd", todaysDate);
     var dates = [];
 
     for (var i = -1; i < 12; i++) {
@@ -378,15 +408,15 @@ class Cart extends Component {
     var storeProducts = this.props.cart.filter((item, index) => {
       return item.product.storeId === this.props.store.id;
     });
-      console.log("storeProductsstoreProducts",storeProducts)
-      var isOut = false
-      var pname = ''
+    console.log("storeProductsstoreProducts", storeProducts);
+    var isOut = false;
+    var pname = "";
 
-      if(this.state.clickCheck){
-    for (var i = 0; i < storeProducts.length; i++) {
-      if(storeProducts[i].product.isOutOfStock){
-        var currentDate= new Date()
-        var day = currentDate.getDate();
+    if (this.state.clickCheck) {
+      for (var i = 0; i < storeProducts.length; i++) {
+        if (storeProducts[i].product.isOutOfStock) {
+          var currentDate = new Date();
+          var day = currentDate.getDate();
           var month = currentDate.getMonth() + 1;
           var year = currentDate.getFullYear();
           if (day < 10) {
@@ -396,18 +426,18 @@ class Cart extends Component {
             month = "0" + month;
           }
 
-        var todaysDate1 =day + "-" + month + "-" + year;
-          console.log(todaysDate1 === storeProducts[i].product.outOfStockDate)
-          if(todaysDate1 === storeProducts[i].product.outOfStockDate){
-            pname= storeProducts[i].product.productName
-             isOut=true
+          var todaysDate1 = day + "-" + month + "-" + year;
+          console.log(todaysDate1 === storeProducts[i].product.outOfStockDate);
+          if (todaysDate1 === storeProducts[i].product.outOfStockDate) {
+            pname = storeProducts[i].product.productName;
+            isOut = true;
           }
-         }
-      var temp = storeProducts[i].price;
-      // var temp=0
+        }
+        var temp = storeProducts[i].price;
+        // var temp=0
+      }
     }
-  }
-    console.log("iout ois out", isOut)
+    console.log("iout ois out", isOut);
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const months = [
       "Jan",
@@ -423,7 +453,7 @@ class Cart extends Component {
       "Nov",
       "Dec",
     ];
-console.log("THIS.STATE",this.state)
+    console.log("THIS.STATE", this.state);
     return (
       <>
         <Modal
@@ -529,31 +559,45 @@ console.log("THIS.STATE",this.state)
               {dates.map((index, item) => (
                 <TouchableOpacity
                   onPress={() => {
-                    this.setState({pname: "", isOut: false, clickCheck: false})
-                    isOut=false
-                    pname= ""
+                    this.setState({
+                      pname: "",
+                      isOut: false,
+                      clickCheck: false,
+                    });
+                    isOut = false;
+                    pname = "";
                     this.getTimings(this.getDayName(index));
-                    console.log("sdsdadasd213",dates[item])
+                    console.log("sdsdadasd213", dates[item]);
                     for (var i = 0; i < storeProducts.length; i++) {
-                      if(storeProducts[i].product.isOutOfStock){
-                        var currentDate= new Date()
+                      if (storeProducts[i].product.isOutOfStock) {
+                        var currentDate = new Date();
                         var day = currentDate.getDate();
-                          var month = currentDate.getMonth() + 1;
-                          var year = currentDate.getFullYear();
-                          if (day < 10) {
-                            day = "0" + day;
-                          }
-                          if (month < 10) {
-                            month = "0" + month;
-                          }
-                
-                        var todaysDate1 =day + "-" + month + "-" + year;
-                          console.log("aaaaaaaaaaaaaaaa",dates[item] , storeProducts[i].product.outOfStockDate)
-                          if(dates[item]  === storeProducts[i].product.outOfStockDate){
-                                this.setState({isOut: true, pname: storeProducts[i].product.productName})
-                          }
-                         }
+                        var month = currentDate.getMonth() + 1;
+                        var year = currentDate.getFullYear();
+                        if (day < 10) {
+                          day = "0" + day;
                         }
+                        if (month < 10) {
+                          month = "0" + month;
+                        }
+
+                        var todaysDate1 = day + "-" + month + "-" + year;
+                        console.log(
+                          "aaaaaaaaaaaaaaaa",
+                          dates[item],
+                          storeProducts[i].product.outOfStockDate
+                        );
+                        if (
+                          dates[item] ===
+                          storeProducts[i].product.outOfStockDate
+                        ) {
+                          this.setState({
+                            isOut: true,
+                            pname: storeProducts[i].product.productName,
+                          });
+                        }
+                      }
+                    }
                     this.setState({
                       date: item,
                       orderDate: dates[item],
@@ -812,7 +856,7 @@ console.log("THIS.STATE",this.state)
                   }
 
                   var mob = false;
-                  if (this.state.mobile.substring(0,2) === "+1") {
+                  if (this.state.mobile.substring(0, 2) === "+1") {
                     mob = true;
                   }
 
@@ -824,7 +868,9 @@ console.log("THIS.STATE",this.state)
                         firstName: this.state.firstName,
                         lastName: this.state.lastName,
                         email: this.state.email,
-                        mobile: this.state.mobile ? "+1" + this.state.mobile : this.state.mobile,
+                        mobile: this.state.mobile
+                          ? "+1" + this.state.mobile
+                          : this.state.mobile,
                         // mobile: mob ?  (this.state.mobile) : ("+1" + this.state.mobile),
                       }
                     )
@@ -1069,9 +1115,9 @@ console.log("THIS.STATE",this.state)
                 col="#2E2E2E"
                 text={
                   // this.props.user.user.firstName
-                  //   ? this.props.user.user.firstName +" "+ this.props.user.user.lastName 
-                  //   : 
-                    this.state.firstName +" "+ this.state.lastName 
+                  //   ? this.props.user.user.firstName +" "+ this.props.user.user.lastName
+                  //   :
+                  this.state.firstName + " " + this.state.lastName
                 }
               />
             </View>
@@ -1098,8 +1144,10 @@ console.log("THIS.STATE",this.state)
                   // (this.props.user.user.mobile ? "+" : "") +
                   // this.props.user.user.mobile
                   //   ? this.props.user.user.mobile
-                  //   : 
-                  this.state.mobile ? ("+1"+this.state.mobile) : this.state.mobile
+                  //   :
+                  this.state.mobile
+                    ? "+1" + this.state.mobile
+                    : this.state.mobile
                 }
               />
             </View>
@@ -1139,7 +1187,7 @@ console.log("THIS.STATE",this.state)
                 />
               ) : (
                 <TouchableOpacity
-                disabled={!this.state.mobile}
+                  disabled={!this.state.mobile}
                   onPress={async () => {
                     // this.props.navigation.navigate("Checkout1")
 
@@ -1159,12 +1207,12 @@ console.log("THIS.STATE",this.state)
                     //   emailV = this.state.email;
                     // }
 
-
                     // console.log("numv", numV);
                     axios
                       .get(
                         "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
-                          "+1"+this.state.mobile +
+                          "+1" +
+                          this.state.mobile +
                           "/" +
                           num
                       )
@@ -1175,22 +1223,26 @@ console.log("THIS.STATE",this.state)
                       })
                       .catch((err) => console.log("sdf", err));
 
-                      // axios
-                      //   .get(
-                      //     "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
-                      //       this.state.email
-                      //         .toLowerCase()
-                      //         .trim() +
-                      //       "/" +
-                      //       num
-                      //   )
-                      //   .then((resp) =>
-                      //       this.refs.modal6.open()
-                      //   )
-                      //   .catch((err) => console.log(err));
-
+                    // axios
+                    //   .get(
+                    //     "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
+                    //       this.state.email
+                    //         .toLowerCase()
+                    //         .trim() +
+                    //       "/" +
+                    //       num
+                    //   )
+                    //   .then((resp) =>
+                    //       this.refs.modal6.open()
+                    //   )
+                    //   .catch((err) => console.log(err));
                   }}
-                  style={[!this.state.mobile ? btnStyles.cartBtnOutline1 : btnStyles.cartBtnOutline , { width: "35%" }]}
+                  style={[
+                    !this.state.mobile
+                      ? btnStyles.cartBtnOutline1
+                      : btnStyles.cartBtnOutline,
+                    { width: "35%" },
+                  ]}
                 >
                   <LatoText
                     fontName="Lato-Regular"
@@ -1364,142 +1416,154 @@ console.log("THIS.STATE",this.state)
               </View>
             )}
           </ScrollView>
-          <View style={bottomTab.cartSheet}>
-            <TouchableOpacity
-              disabled={
-                this.state.storeTimings.isClosed ||
-                !nameCheck ||
-                !this.state.numVerified ||
-                this.state.isStoreClosed
-              }
-              onPress={() => {
-                console.log("ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",isOut)
-                if(!isOut && !this.state.isOut){
-                this.setState({ cart: true });
-
-                var pDate = new Date();
-                var dd = String(pDate.getDate()).padStart(2, "0");
-                var mm = String(pDate.getMonth() + 1).padStart(2, "0"); //January is 0!
-                var yyyy = pDate.getFullYear();
-
-                pDate = dd + "-" + mm + "-" + yyyy;
-
-                var currentdate = new Date();
-                var hr =
-                  currentdate.getHours() < 10
-                    ? "0" + currentdate.getHours()
-                    : currentdate.getHours();
-                var mi =
-                  currentdate.getMinutes() < 10
-                    ? "0" + currentdate.getMinutes()
-                    : currentdate.getMinutes();
-                var sc =
-                  currentdate.getSeconds() < 10
-                    ? "0" + currentdate.getSeconds()
-                    : currentdate.getSeconds();
-                var pTime = hr + ":" + mi + ":" + sc;
-                var dt = "";
-                this.state.orderDate === ""
-                  ? (dt = todaysDate)
-                  : (dt = this.state.orderDate);
-                var timeCheck = true;
-                console.log(this.state.orderTime, dt, pTime, pDate);
-                if (dt === pDate) {
-                  console.log("sdsd");
-                  var t1 = pTime.split(":");
-
-                  var t2 = this.state.orderTime.split(":");
-                  console.log(parseInt(t1[0]), parseInt(t2[0]));
-                  if (parseInt(t1[0]) >= parseInt(t2[0])) {
-                    timeCheck = false;
-                  }
+          {!this.state.keyState && (
+            <View style={bottomTab.cartSheet}>
+              <TouchableOpacity
+                disabled={
+                  this.state.storeTimings.isClosed ||
+                  !nameCheck ||
+                  !this.state.numVerified ||
+                  this.state.isStoreClosed
                 }
-                if (timeCheck) {
-                  axios
-                    .post("https://lit-peak-13067.herokuapp.com/add/order", {
-                      storeId: sId,
-                      products: storeProducts,
-                      totalAmount: subTotal,
-                      storeName: this.props.store.name,
-                      storeAddress: this.props.store.address,
-                      storePhone: this.props.store.phone,
-                      userId: this.props.user.user._id,
-                      name: this.state.firstName +" "+ this.state.lastName,
-                      phone: "+1"+this.state.mobile,
-                      email: this.state.email,
-                      // address: "bac Street",
-                      orderTime: this.state.orderTime,
-                      orderDate:
-                        this.state.orderDate === ""
-                          ? todaysDate
-                          : this.state.orderDate,
-                      // orderTimeZone: "UST",
-                      postDate: pDate,
-                      postTime: pTime,
-                      tax: (parseFloat(this.state.tax) / 100) * subTotal,
-                      orderNumber: codeId,
-                      isGuest: this.props.user.user.isGuest
-                    })
-                    .then((resp) => {
-                      // this.props.storeAsync('')
-                      // this.props.cartSizeAsync(0)
-                      // this.props.storeHeaderAsync('')
-                      // this.props.favStoreAsync('')
-                      axios
-                        .put(
-                          "https://lit-peak-13067.herokuapp.com/edit/store/orderNum/" +
-                            this.props.store.id +
-                            "/" +
-                            (parseInt(this.props.store.oId) + 1)
-                        )
-                        .then((resp1) => {
-                          // var temp = this.props.store
-                          // temp.oId = parseInt(this.props.store.oId)+1
-                          // this.props.storeAsync(temp)
-                          // this.props.storeHeaderAsync(temp)
-                          this.props.navigation.navigate("QrCode", {
-                            orderId: resp.data.order1._id,
-                            codeId: codeId,
-                            order: resp.data.order1,
-                          });
-                        })
-                        .catch((err) => console.log(err));
-                    });
-                } else {
-                  
-                alert(
-                    "Store is closed in this date and time, please change date and time."
+                onPress={() => {
+                  console.log(
+                    "ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    isOut
                   );
-                }
-              }else{
-                console.log("pnamepnamepnamepname",pname)
-                  var name = ""
-                if(pname){
-                  name = pname
-                }else{
-                  name=this.state.pname
-                }
-                alert("Sorry, "+name+" Item out of stock for the selected date, change pickup date or remove this product to procceed")
-              }
-            }}
-              style={[
-                this.state.storeTimings.isClosed ||
-                !nameCheck ||
-                !this.state.numVerified ||
-                this.state.isStoreClosed
-                  ? btnStyles.cartBtn1
-                  : btnStyles.cartBtn,
-                { width: "100%" },
-              ]}
-            >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={15}
-                col="white"
-                text="CONFIRM"
-              ></LatoText>
-            </TouchableOpacity>
-          </View>
+                  if (!isOut && !this.state.isOut) {
+                    this.setState({ cart: true });
+
+                    var pDate = new Date();
+                    var dd = String(pDate.getDate()).padStart(2, "0");
+                    var mm = String(pDate.getMonth() + 1).padStart(2, "0"); //January is 0!
+                    var yyyy = pDate.getFullYear();
+
+                    pDate = dd + "-" + mm + "-" + yyyy;
+
+                    var currentdate = new Date();
+                    var hr =
+                      currentdate.getHours() < 10
+                        ? "0" + currentdate.getHours()
+                        : currentdate.getHours();
+                    var mi =
+                      currentdate.getMinutes() < 10
+                        ? "0" + currentdate.getMinutes()
+                        : currentdate.getMinutes();
+                    var sc =
+                      currentdate.getSeconds() < 10
+                        ? "0" + currentdate.getSeconds()
+                        : currentdate.getSeconds();
+                    var pTime = hr + ":" + mi + ":" + sc;
+                    var dt = "";
+                    this.state.orderDate === ""
+                      ? (dt = todaysDate)
+                      : (dt = this.state.orderDate);
+                    var timeCheck = true;
+                    console.log(this.state.orderTime, dt, pTime, pDate);
+                    if (dt === pDate) {
+                      console.log("sdsd");
+                      var t1 = pTime.split(":");
+
+                      var t2 = this.state.orderTime.split(":");
+                      console.log(parseInt(t1[0]), parseInt(t2[0]));
+                      if (parseInt(t1[0]) >= parseInt(t2[0])) {
+                        timeCheck = false;
+                      }
+                    }
+                    if (timeCheck) {
+                      axios
+                        .post(
+                          "https://lit-peak-13067.herokuapp.com/add/order",
+                          {
+                            storeId: sId,
+                            products: storeProducts,
+                            totalAmount: subTotal,
+                            storeName: this.props.store.name,
+                            storeAddress: this.props.store.address,
+                            storePhone: this.props.store.phone,
+                            userId: this.props.user.user._id,
+                            name:
+                              this.state.firstName + " " + this.state.lastName,
+                            phone: "+1" + this.state.mobile,
+                            email: this.state.email,
+                            // address: "bac Street",
+                            orderTime: this.state.orderTime,
+                            orderDate:
+                              this.state.orderDate === ""
+                                ? todaysDate
+                                : this.state.orderDate,
+                            // orderTimeZone: "UST",
+                            postDate: pDate,
+                            postTime: pTime,
+                            tax: (parseFloat(this.state.tax) / 100) * subTotal,
+                            orderNumber: codeId,
+                            isGuest: this.props.user.user.isGuest,
+                          }
+                        )
+                        .then((resp) => {
+                          // this.props.storeAsync('')
+                          // this.props.cartSizeAsync(0)
+                          // this.props.storeHeaderAsync('')
+                          // this.props.favStoreAsync('')
+                          axios
+                            .put(
+                              "https://lit-peak-13067.herokuapp.com/edit/store/orderNum/" +
+                                this.props.store.id +
+                                "/" +
+                                (parseInt(this.props.store.oId) + 1)
+                            )
+                            .then((resp1) => {
+                              // var temp = this.props.store
+                              // temp.oId = parseInt(this.props.store.oId)+1
+                              // this.props.storeAsync(temp)
+                              // this.props.storeHeaderAsync(temp)
+                              this.props.navigation.navigate("QrCode", {
+                                orderId: resp.data.order1._id,
+                                codeId: codeId,
+                                order: resp.data.order1,
+                              });
+                            })
+                            .catch((err) => console.log(err));
+                        });
+                    } else {
+                      alert(
+                        "Store is closed in this date and time, please change date and time."
+                      );
+                    }
+                  } else {
+                    console.log("pnamepnamepnamepname", pname);
+                    var name = "";
+                    if (pname) {
+                      name = pname;
+                    } else {
+                      name = this.state.pname;
+                    }
+                    alert(
+                      "Sorry, " +
+                        name +
+                        " Item out of stock for the selected date, change pickup date or remove this product to procceed"
+                    );
+                  }
+                }}
+                style={[
+                  this.state.storeTimings.isClosed ||
+                  !nameCheck ||
+                  !this.state.numVerified ||
+                  this.state.isStoreClosed
+                    ? btnStyles.cartBtn1
+                    : btnStyles.cartBtn,
+                  { width: "100%" },
+                ]}
+              >
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={15}
+                  col="white"
+                  text="CONFIRM"
+                ></LatoText>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </>
     );
