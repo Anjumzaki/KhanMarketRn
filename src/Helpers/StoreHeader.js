@@ -1,16 +1,7 @@
 import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, StyleSheet, Button, Image, StatusBar } from "react-native";
-import { conStyles, headerStyles } from "../styles/base";
-import {
-  Entypo,
-  Feather,
-  FontAwesome,
-  EvilIcons,
-  AntDesign,
-  MaterialIcons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { View, Image, StatusBar } from "react-native";
+import { headerStyles } from "../styles/base";
+import { EvilIcons, MaterialIcons } from "@expo/vector-icons";
 import LatoText from "./LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { bindActionCreators } from "redux";
