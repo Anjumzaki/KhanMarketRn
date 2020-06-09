@@ -66,12 +66,12 @@ class Settings extends React.Component {
   }
 
   async editlastName() {
-    var myUser = await AsyncStorage.getItem("user");
+    // var myUser = await AsyncStorage.getItem("user");
 
-    myUser = JSON.parse(myUser)
-    myUser.user.firstName = this.state.firstName
-    myUser.user.lastName = this.state.lastName
-    await AsyncStorage.setItem('user',JSON.stringify(myUser))
+    // myUser = JSON.parse(myUser)
+    // myUser.user.firstName = this.state.firstName
+    // myUser.user.lastName = this.state.lastName
+    // await AsyncStorage.setItem('user',JSON.stringify(myUser))
     axios
       .put(
         "https://lit-peak-13067.herokuapp.com/edit/user/lastName/" +
