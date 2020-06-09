@@ -91,7 +91,7 @@ const HomeStackScreen = (route) => (
       component={Cart}
       options={{
         header: (props) => (
-          <StackHeader cart={false} nameTitle="Cart" {...props} />
+          <LastHeader cart={false} nameTitle="CART" {...props} />
         ),
       }}
     />
@@ -100,7 +100,7 @@ const HomeStackScreen = (route) => (
       component={Checkout1}
       options={{
         header: (props) => (
-          <StackHeader cart={false} nameTitle="PICK UP DETAILS" {...props} />
+          <LastHeader cart={false} nameTitle="PICK UP DETAILS" {...props} />
         ),
       }}
     />
