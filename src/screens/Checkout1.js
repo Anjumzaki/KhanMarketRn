@@ -132,6 +132,10 @@ class Cart extends Component {
 
     if (!this.props.user.user.isGuest) {
       this.setState({ numVerified: true });
+    }else{
+      if(this.props.user.user.isGuestVerified){
+        this.setState({ numVerified: true });
+      }
     }
   }
   componentWillUnmount() {
@@ -488,14 +492,32 @@ class Cart extends Component {
               inputPosition="center"
               keyboardType={"number-pad"}
               size={wp(8)}
-              onFulfill={(isValid) =>
-                isValid
-                  ? this.setState(
-                      { codeMsg: false, numVerified: true },
-                      this.refs.modal6.close()
-                    )
-                  : this.setState({ codeMsg: true })
-              }
+              onFulfill={(isValid) =>{
+                if(isValid){
+                  axios.put('https://lit-peak-13067.herokuapp.com/api/users/guest/edit/verified/' +
+                    this.props.user.user._id, {
+                      isGuestVerified: true
+                    })
+                    .then(resp => {
+                      var temp = this.props.user.user;
+                      temp.isGuestVerified = true;
+
+                      var data = {
+                        token: this.props.user.token,
+                        user: temp,
+                      };
+
+                      this.props.userAsync(data);
+                      this.setState(
+                        { codeMsg: false, numVerified: true },
+                        this.refs.modal6.close()
+                      )
+                    })
+                  .catch(err => console.log(err))
+                }else{
+                  this.setState({ codeMsg: true })
+                }
+              }}
               containerStyle={{ marginTop: 30 }}
               codeInputStyle={{
                 borderWidth: 1.5,
@@ -1220,19 +1242,6 @@ class Cart extends Component {
                       })
                       .catch((err) => console.log("sdf", err));
 
-                    // axios
-                    //   .get(
-                    //     "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
-                    //       this.state.email
-                    //         .toLowerCase()
-                    //         .trim() +
-                    //       "/" +
-                    //       num
-                    //   )
-                    //   .then((resp) =>
-                    //       this.refs.modal6.open()
-                    //   )
-                    //   .catch((err) => console.log(err));
                   }}
                   style={[
                     !this.state.mobile

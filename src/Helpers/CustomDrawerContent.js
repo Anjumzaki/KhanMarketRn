@@ -12,7 +12,7 @@ import { cartAsync, userAsync,cartSizeAsync,favStoreAsync,storeHeaderAsync,store
 import { connect } from "react-redux";
 import firebase from "firebase";
 import AsyncStorage from "@react-native-community/async-storage";
-
+import UserDefault from '../../assets/icon-user-default.png'
 
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 // function CustomDrawerContent(props)
@@ -94,20 +94,27 @@ class CustomDrawerContent extends Component {
           // disabled={isUser}
         >
           <View>
-            {this.state.image != "" && (
+            {this.state.image ? (
               <Image
                 style={{ width: 60, height: 60, borderRadius: 100 }}
                 source={{ uri: this.state.image }}
               />
+            ): (
+              <Image
+                style={{ width: 60, height: 60, borderRadius: 100 }}
+                source={UserDefault}
+              />
             )}
           </View>
-
+          
           <View style={{ paddingLeft: 10 }}>
             <LatoText
               col="#FFFFFF"
               fontName={"Lato-Bold"}
               fontSiz={20}
-              text={this.props.user.user.firstName+"   "+this.props.user.user.lastName}
+              text={this.props.user.user.firstName && this.props.user.user.lastName ? (
+                this.props.user.user.firstName.length+this.props.user.user.lastName.length < 18 ? this.props.user.user.firstName.toUpperCase()+"   "+this.props.user.user.lastName.toUpperCase() :  this.props.user.user.lastName.toUpperCase()
+              ): null}
             />
             {/* <View style={{ paddingTop: 2 }}>
               <LatoText

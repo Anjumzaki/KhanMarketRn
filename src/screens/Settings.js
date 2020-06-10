@@ -23,6 +23,8 @@ import firebase from "firebase";
 import Spinner from "react-native-loading-spinner-overlay";
 import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
+import UserDefault from '../../assets/icon-user-default.png'
+
 const options = {
   title: "Select Avatar",
   storageOptions: {
@@ -195,14 +197,25 @@ class Settings extends React.Component {
               justifyContent: "space-between",
             }}
           >
-            <Image
+            {/* <Image
               style={{ width: 80, height: 80, borderRadius: 80 }}
               source={
                 this.state.avatarSource
                   ? { uri: this.state.avatarSource.uri }
                   : this.state.image && { uri: this.state.image }
               }
-            />
+            /> */}
+             {this.state.image ? (
+              <Image
+                style={{ width: 60, height: 60, borderRadius: 100 }}
+                source={{ uri: this.state.image }}
+              />
+            ): (
+              <Image
+                style={{ width: 60, height: 60, borderRadius: 100 }}
+                source={UserDefault}
+              />
+            )}
             <TouchableOpacity
               onPress={() =>
                 ImagePicker.showImagePicker(options, (response) => {
