@@ -108,13 +108,10 @@ class Cart extends Component {
     );
 
     this.setState({
-      firstName: this.props.user.user.firstName,
-      lastName: this.props.user.user.lastName,
-      email: this.props.user.user.email,
-      mobile: this.props.user.user.mobile.substring(
-        2,
-        this.props.user.user.mobile.length
-      ),
+      firstName: this.props.user.user.firstName ? this.props.user.user.firstName : "",
+      lastName: this.props.user.user.lastName ? this.props.user.user.lastName : "",
+      email: this.props.user.user.email ? this.props.user.user.email: "",
+      mobile: this.props.user.user.mobile ? this.props.user.user.mobile.substring(2,this.props.user.user.mobile.length) : "",
     });
     axios
       .get(
