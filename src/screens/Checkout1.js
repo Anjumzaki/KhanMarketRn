@@ -1247,7 +1247,9 @@ class Cart extends Component {
                   <LatoText
                     fontName="Lato-Regular"
                     fonSiz={18}
-                    col="#2E2E2E"
+                    col={ !this.state.mobile
+                      ? "silver"
+                      : "#2E2E2E"}
                     text="VERIFY"
                   ></LatoText>
                 </TouchableOpacity>
@@ -1482,12 +1484,10 @@ class Cart extends Component {
                             storeAddress: this.props.store.address,
                             storePhone: this.props.store.phone,
                             userId: this.props.user.user._id,
-                            name: this.state.isChecked && this.state.someoneElseName && this.state.someoneElsePhone ?
-                            this.state.someoneElseName :  this.state.firstName +" "+ this.state.lastName,
-                            phone: this.state.isChecked && this.state.someoneElseName && this.state.someoneElsePhone ?
-                            "+1"+this.state.someoneElsePhone : "+1"+this.state.mobile,
-                            email: this.state.isChecked && this.state.someoneElseName && this.state.someoneElsePhone ?
-                            this.state.someoneElseEmail : this.state.email,
+                            name:
+                              this.state.firstName + " " + this.state.lastName,
+                            phone: "+1" + this.state.mobile,
+                            email: this.state.email,
                             // address: "bac Street",
                             orderTime: this.state.orderTime,
                             orderDate:

@@ -61,10 +61,6 @@ class Home extends React.Component {
     }
   };
   componentDidMount() {
-    // Geolocation.getCurrentPosition(
-    //   (info) => {
-    //     console.log("INFOOOOOOOOOOOOOOOO", info);
-
     axios
       .get(
         "https://lit-peak-13067.herokuapp.com/get/stores/" +
@@ -75,22 +71,20 @@ class Home extends React.Component {
       .then((resp) => {
         this.setState({
           stores: resp.data,
-          // location: info.coords,
         });
       });
-    //   },
-    //   (error) => {
-    //     console.log("loc error0", error);
-    //   },
-    //   { enableHighAccuracy: false, timeout: 20000, maximumAge: 10000 }
-    // );
     this.backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       this.backAction
     );
+    this._unsubscribe = this.props.navigation.addListener("blur", () => {
+      this.backHandler.remove();
+    });
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
-      // Geolocation.getCurrentPosition(
-      //   (info) => {
+      this.backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        this.backAction
+      );
       axios
         .get(
           "https://lit-peak-13067.herokuapp.com/get/stores/" +
@@ -101,18 +95,8 @@ class Home extends React.Component {
         .then((resp) => {
           this.setState({
             stores: resp.data,
-            // location: info.coords,
           });
         });
-      //   },
-      //   (error) => {
-      //     console.log(error);
-      //   },
-      //   { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 }
-      // );
-    });
-    this._unsubscribe = this.props.navigation.addListener("blur", () => {
-      this.backHandler.remove();
     });
   }
   componentWillUnmount() {

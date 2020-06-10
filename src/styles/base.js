@@ -126,7 +126,7 @@ const btnStyles = StyleSheet.create({
     paddingVertical: 11,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#808080"
+    borderColor: "silver"
   }
 });
 const bottomTab = StyleSheet.create({
