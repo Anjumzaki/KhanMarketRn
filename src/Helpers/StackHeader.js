@@ -27,8 +27,27 @@ import { bindActionCreators } from "redux";
 import { storeAsync, cartAsync } from "../store/actions";
 import { connect } from "react-redux";
 import { getStatusBarHeight } from "react-native-status-bar-height";
+import firebase from "firebase";
 
 class StackHeader extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      image:''
+    }
+  }
+  componentWillMount() {
+    const ref = firebase
+      .storage()
+      .ref("/store_images/" + this.props.store.id + ".jpg");
+    ref
+      .getDownloadURL()
+      .then((url) => {
+        this.setState({ image: url });
+      })
+      .catch((err) => console.log(err));
+  }
+
   render() {
     return (
       <View
@@ -45,22 +64,31 @@ class StackHeader extends React.Component {
           shadowRadius: 3.84,
           borderTopWidth: 0,
           elevation: 5,
-          backgroundColor:'#2E2E2E'
+          backgroundColor: "#2E2E2E",
         }}
       >
-        {this.props.pic && (
-          <Image
-            style={{
-              height: 65 + getStatusBarHeight(),
-              width: Dimensions.get("window").width,
-              position: "absolute",
-              top: 0,
-              left: 0,
-            }}
-            source={require("../../assets/bgheader.png")}
-            resizeMode="cover"
-          />
-        )}
+        <Image
+          style={{
+            height: 65 + getStatusBarHeight(),
+            width: Dimensions.get("window").width,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            backgroundColor: "rgba(0,0,0,0.7)",
+          }}
+          source={
+            this.props.store.id && this.props.pic
+              ? { uri: this.state.image }
+              : require("../../assets/bgheader.png")
+          }
+          resizeMode="cover"
+        />
+        <View
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            backgroundColor: "rgba(0,0,0,0.5)",
+          }}
+        />
         <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
           <TouchableOpacity
             style={{ padding: 20 }}

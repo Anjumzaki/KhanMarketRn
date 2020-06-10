@@ -92,7 +92,7 @@ const HomeStackScreen = (route) => (
       options={{
         header: (props) => (
           <StackHeader
-          pic={false}
+          pic={true}
           cart={false}
           nameTitle="CART"
           {...props}
@@ -106,7 +106,7 @@ const HomeStackScreen = (route) => (
       options={{
         header: (props) => (
           <StackHeader
-          pic={false}
+          pic={true}
           cart={false}
           nameTitle="CART"
           {...props}
