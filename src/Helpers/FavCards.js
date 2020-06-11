@@ -82,7 +82,7 @@ class FavCards extends React.Component {
   render() {
     var cSize = 0;
     for (var i = 0; i < this.props.cart.length; i++) {
-      cSize = cSize + parseInt(this.props.cart[i].quantity);
+      cSize = cSize + parseFloat(this.props.cart[i].quantity);
     }
 
     this.props.cartSizeAsync(cSize);
@@ -196,8 +196,8 @@ class FavCards extends React.Component {
                 col="#2E2E2E"
                 text={
                   "$" +
-                  (parseInt(this.props.product.product.price) -
-                    (parseInt(this.props.product.product.price) * parseInt(this.props.product.product.discount)) /
+                  (parseFloat(this.props.product.product.price) -
+                    (parseFloat(this.props.product.product.price) * parseFloat(this.props.product.product.discount)) /
                       100) +
                   " / lb"
                 }
@@ -212,10 +212,10 @@ class FavCards extends React.Component {
                   col="#2E2E2E"
                   text={
                     "$" +
-                    (parseInt(this.props.product.product.price) -
-                      (parseInt(this.props.product.product.price) *
-                        parseInt(this.props.product.product.discount)) /
-                        100) +
+                    (parseFloat(this.props.product.product.price) -
+                      (parseFloat(this.props.product.product.price) *
+                        parseFloat(this.props.product.product.discount)) /
+                        100).toFixed(2) +
                     " / lb"
                   }
                 ></LatoText>

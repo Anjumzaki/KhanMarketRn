@@ -251,7 +251,7 @@ class Cart extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("Login")}
+              onPress={() => this.props.navigation.navigate("SignUp1")}
               style={[btnStyles.cartBtn, { width: "40%" }]}
             >
               <LatoText

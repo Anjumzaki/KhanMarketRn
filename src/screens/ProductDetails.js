@@ -40,6 +40,7 @@ class ProductDetails extends Component {
       heart: false,
       qt: 1,
       favourites: [],
+      buttonDisable: false
     };
   }
 
@@ -332,6 +333,7 @@ class ProductDetails extends Component {
             </TouchableOpacity>
           </View>
           <TouchableOpacity
+          disabled={this.state.buttonDisable}
             onPress={() => {
               // var pCart=this.props.cart;
               // pCart.push({
@@ -357,7 +359,7 @@ class ProductDetails extends Component {
                 });
                 this.props.favStoreAsync(product.storeId);
                 this.props.cartAsync(pCart);
-                this.setState({ cart: true });
+                this.setState({ cart: true, buttonDisable: true });
               } else {
                 if (this.props.store.id === product.storeId) {
                   var pCart = this.props.cart;
@@ -376,7 +378,7 @@ class ProductDetails extends Component {
                   });
                   this.props.favStoreAsync(product.storeId);
                   this.props.cartAsync(pCart);
-                  this.setState({ cart: true }, () => {
+                  this.setState({ cart: true, buttonDisable: true }, () => {
                     Toast.show('Product added to cart');
                   });
                 } else {
@@ -409,7 +411,7 @@ class ProductDetails extends Component {
                             });
                             this.props.favStoreAsync(product.storeId);
                             this.props.cartAsync(pCart);
-                            this.setState({ cart: true });
+                            this.setState({ cart: true, buttonDisable: true });
                           },
                         },
                       ],
@@ -419,7 +421,8 @@ class ProductDetails extends Component {
                 }
               }
             }}
-            style={[btnStyles.cartBtn, { width: "40%" }]}
+            style={[this.state.buttonDisable ? btnStyles.cartBtn1 : btnStyles.cartBtn, { width: "40%" }]}
+            
           >
             <LatoText
               fontName="Lato-Regular"

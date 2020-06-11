@@ -12,7 +12,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import LatoText from "../Helpers/LatoText";
 import { btnStyles } from "../styles/base";
 import { bindActionCreators } from "redux";
-import { cartAsync } from "../store/actions";
+import { cartAsync,cartSizeAsync } from "../store/actions";
 import { connect } from "react-redux";
 import { Entypo } from "@expo/vector-icons";
 
@@ -63,6 +63,17 @@ class CartCards extends React.Component {
 
   render() {
     console.log("cart cards",this.props.cart)
+    var cSize=0
+    if(this.props.cart.length > 0){
+      for(var i=0; i<this.props.cart.length; i++){
+        cSize=cSize + parseInt(this.props.cart[i].quantity)
+    }
+    }else{
+        cSize =0
+    }
+    
+
+    this.props.cartSizeAsync(cSize)
     return (
       <View
         style={{
@@ -242,6 +253,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
     {
       cartAsync,
+      cartSizeAsync
     },
     dispatch
   );
