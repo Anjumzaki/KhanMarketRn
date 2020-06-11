@@ -71,14 +71,19 @@ class Login extends React.Component {
         await this.props.userAsync({user: resp.data})
       })
       .catch(err => console.log("err1",err))
-
+      var flag= false
       await axios.get('https://lit-peak-13067.herokuapp.com/get/location/'+jsonValue)
       .then(async resp1 => {
         console.log("res[p1",resp1.data)
         if(resp1.data.length === 0){
+          console.log("iffffffffffffffffff")
+
           this.props.navigation.navigate("Map")
-        }
-        await this.props.locationAsync({
+        }else{
+          console.log("elseeeeeeeeeeeeeeeeeeeeee")
+           flag= true
+
+         this.props.locationAsync({
         location: resp1.data[0].address1 +
         " " +
         resp1.data[0].address2 + 
@@ -88,12 +93,14 @@ class Login extends React.Component {
         resp1.data[0].country,
         lat: resp1.data[0].latitude,
         lng: resp1.data[0].longitude
-      })})
+      })}})
       .catch(err => console.log("err2",err))
-
-      this.setState({
+      // alert("blew")
+      if(flag){
+           this.setState({
         mainLoading:false
       },()=> this.props.navigation.navigate("App"))
+      }
     }
     else{
       this.setState({
