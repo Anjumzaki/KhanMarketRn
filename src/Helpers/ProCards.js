@@ -95,7 +95,7 @@ class ProCards extends React.Component {
                     axios.post('https://lit-peak-13067.herokuapp.com/add/favourite',{
                         userId: this.props.user.user._id,
                         product: this.props.product,
-                        storeName: this.props.store.name
+                        storeName: this.props.storeHeader.name
                     })
                     .then(resp => console.log(resp))
                     .catch(err => console.log(err))

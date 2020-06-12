@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import firebase from "firebase";
 import {
@@ -15,8 +15,8 @@ import { bindActionCreators } from "redux";
 import { cartAsync, cartSizeAsync } from "../store/actions";
 import { connect } from "react-redux";
 import { Entypo } from "@expo/vector-icons";
-
-class CartCards extends React.Component {
+import CartCardImage from'./CartCardImage'
+class CartCards extends PureComponent {
   state = {
     heart: false,
     image: "",
@@ -25,28 +25,28 @@ class CartCards extends React.Component {
   };
 
   async componentWillMount() {
-    const ref = firebase
-      .storage()
-      .ref("/product_images/" + this.props.id + "_1.jpg");
-    ref
-      .getDownloadURL()
-      .then((url) => {
-        this.setState({ image: url });
-      })
-      .catch((err) => console.log(err));
+    this.setState({image: ""})
+    // const ref = firebase
+    //   .storage()
+    //   .ref("/product_images/" + this.props.id + "_1.jpg");
+    // ref
+    //   .getDownloadURL()
+    //   .then((url) => {
+    //     this.setState({ image: url, qt: this.props.product.quantity, cart: this.props.cart });
+    //   })
+    //   .catch((err) => console.log(err));
 
-    if (this.props.isFeatured) {
-      this.setState({ qt: this.props.product.quantity });
+    // if (this.props.isFeatured) {
+    //   this.setState({ qt: this.props.product.quantity });
 
-      await this.setState({ cart: this.props.cart });
-      var temp = this.state.cart[this.props.index];
-      temp.price = this.props.product.price.toFixed(2);
-      this.state.cart[this.props.index] = temp;
-      this.props.cartAsync(this.state.cart);
-    } else {
-      this.setState({ qt: this.props.product.quantity });
+    //   await this.setState({ cart: this.props.cart });
+    //   var temp = this.state.cart[this.props.index];
+    //   temp.price = this.props.product.price.toFixed(2);
+    //   this.state.cart[this.props.index] = temp;
+    //   this.props.cartAsync(this.state.cart);
+    // } else {
 
-      await this.setState({ cart: this.props.cart });
+      await this.setState({ cart: this.props.cart, qt: this.props.product.quantity });
       var temp = this.state.cart[this.props.index];
       temp.price = (
         (this.props.product.product.price -
@@ -57,18 +57,19 @@ class CartCards extends React.Component {
       ).toFixed(2);
       this.state.cart[this.props.index] = temp;
       this.props.cartAsync(this.state.cart);
-    }
+    // }
   }
 
   render() {
-    console.log("cart cards", this.props.cart);
-    var cSize = 0;
-    if (this.props.cart.length > 0) {
-      for (var i = 0; i < this.props.cart.length; i++) {
-        cSize = cSize + parseInt(this.props.cart[i].quantity);
-      }
-    } else {
-      cSize = 0;
+    console.log("cart cards",this.props.cart)
+    console.log("image URLL",this.state.image, this.props.index)
+    var cSize=0
+    if(this.props.cart.length > 0){
+      for(var i=0; i<this.props.cart.length; i++){
+        cSize=cSize + parseInt(this.props.cart[i].quantity)
+    }
+    }else{
+        cSize =0
     }
 
     this.props.cartSizeAsync(cSize);
@@ -82,16 +83,15 @@ class CartCards extends React.Component {
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <TouchableOpacity
-            style={{ padding: 10, paddingLeft: 0 }}
-            onPress={() => {
-              var sp = this.props.product.product._id;
-              var temp = this.props.cart;
-              var remvIndx = 0;
-              var newArr = [];
-              for (var i = 0; i < temp.length; i++) {
-                if (temp[i].product._id === sp) {
-                  console.log("selcted", temp[i].product.productName);
+          <TouchableOpacity style={{ padding: 10,paddingLeft:0 }} onPress ={() => {
+            // alert("sds")
+            var sp = this.props.product.product._id
+            var temp = this.props.cart
+            var remvIndx = 0
+            var newArr = []
+            for(var i=0; i<temp.length; i++){
+              if(temp[i].product._id === sp){
+                console.log("selcted",temp[i].product.productName)
 
                   if (i > -1) {
                     temp.splice(i, 1);
@@ -106,7 +106,7 @@ class CartCards extends React.Component {
           >
             <Entypo name="circle-with-cross" size={24} color="#B50000" />
           </TouchableOpacity>
-          <Image
+          {/* <Image
             style={{
               width: 53,
               height: 61,
@@ -114,7 +114,8 @@ class CartCards extends React.Component {
               borderRadius: 10,
             }}
             source={{ uri: this.state.image }}
-          />
+          /> */}
+          <CartCardImage id={this.props.id}/>
           <LatoText
             fontName="Lato-Regular"
             fonSiz={15}

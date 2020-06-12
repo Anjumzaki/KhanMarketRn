@@ -67,6 +67,8 @@ class Favourites extends Component {
   }
 
   render() {
+
+    console.log(this.state.favourites," favaspdaskk")
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>

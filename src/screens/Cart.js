@@ -7,15 +7,12 @@ import {
   Image,
   StyleSheet,
   LinearGradient,
+  VirtualizedList,
   TouchableOpacity,
 } from "react-native";
-import Carousel from "react-native-looped-carousel";
-import { AntDesign } from "@expo/vector-icons";
 import LatoText from "../Helpers/LatoText";
 import { ScrollView } from "react-native-gesture-handler";
-import Expandable from "../Helpers/Expandable";
 import { btnStyles, bottomTab, lines } from "../styles/base";
-import { Row } from "native-base";
 const { width } = Dimensions.get("window");
 const { height } = 300;
 import { bindActionCreators } from "redux";
@@ -24,6 +21,40 @@ import { connect } from "react-redux";
 import CartCard from "../Components/cartCards.js";
 import axios from "axios";
 import firebase from "firebase";
+
+
+// const DATA = this.props.cart;
+
+const getItem = (data, index) => {
+  return {
+    // id: Math.random().toString(12).substring(0),
+    // title: `Item ${index+1}`
+    product: item,
+      index: index,
+      isFeatured: item.isFeatured,
+      id: item.product._id
+  }
+}
+
+const getItemCount = (data) => {
+  return data.length;
+}
+
+const Item = ({ item,index })=> {
+  return (
+    // <View style={styles.item}>
+    //   <Text style={styles.title}>{title}</Text>
+    // </View>
+     <CartCard
+      product={item}
+      index={index}
+      isFeatured={item.isFeatured}
+      id={item.product._id}
+   />
+  );
+}
+
+
 
 class Cart extends Component {
   constructor(props) {
@@ -64,10 +95,10 @@ class Cart extends Component {
     }
   }
 
-  _onLayoutDidChange = (e) => {
-    const layout = e.nativeEvent.layout;
-    this.setState({ size: { width: layout.width, height: layout.height } });
-  };
+  // _onLayoutDidChange = (e) => {
+  //   const layout = e.nativeEvent.layout;
+  //   this.setState({ size: { width: layout.width, height: layout.height } });
+  // };
 
   handleChange(num) {
     var preNum = this.state.qt;
@@ -85,23 +116,20 @@ class Cart extends Component {
     );
   };
   render() {
-    var storeProducts = this.props.cart.filter((item, index) => {
-      return item.product.storeId === this.props.store.id;
-    });
-
+    // var storeProducts = this.props.cart.filter((item, index) => {
+    //   return item.product.storeId === this.props.store.id;
+    // });
+    console.log("CART PROPS NEW RENDER", this.props.cart.length)
+    var myCart=this.props.cart.length
     var subTotal = 0;
-    console.log("sdbsd", storeProducts);
-    for (var i = 0; i < storeProducts.length; i++) {
+    // console.log("sdbsd",storeProducts)
+    for (var i = 0; i < this.props.cart.length; i++) {
       // var temp = (this.props.cart[i].product.price - ((this.props.cart[i].product.price * this.props.cart[i].product.discount)/100) * this.props.cart[i].quantity)
-      if (storeProducts[i].product.isOutOfStock) {
-        var td = new Date();
-        console.log(
-          "SDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
-          td,
-          new Date("05-04-2020")
-        );
-      }
-      var temp = storeProducts[i].price;
+      // if(storeProducts[i].product.isOutOfStock){
+      //   var td= new Date()
+      //   console.log("SDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",td, new Date("05-04-2020"))
+      // }
+      var temp = this.props.cart[i].price;
       // var temp=0
       subTotal = subTotal + parseFloat(temp);
     }
@@ -147,26 +175,56 @@ class Cart extends Component {
           )}
 
           <View style={lines.simple} />
-          {this.state.imagesLoading
-            ? storeProducts.map((item, index) => (
-                <CartCard
-                  product={item}
-                  index={index}
-                  isFeatured={item.isFeatured}
-                  id={item.product._id}
-                  renderMet={this.renderMet}
-                />
-              ))
-            : storeProducts.map((item, index) => (
-                <CartCard
-                  product={item}
-                  index={index}
-                  isFeatured={item.isFeatured}
-                  id={item.product._id}
-                  renderMet={this.renderMet}
-                />
-              ))}
 
+          {/* <VirtualizedList
+              data={this.props.cart}
+              initialNumToRender={4}
+              renderItem={({ item,index }) => 
+                  <CartCard
+                  product={item}
+                  index={index}
+                  id={item.product._id}
+                />}
+              keyExtractor={item => item.key}
+              getItemCount={getItemCount}
+              getItem={getItem}
+            />
+  */}
+{/* 
+      <VirtualizedList
+        data={this.props.cart}
+        initialNumToRender={4}
+        renderItem={({ item,index }) => <Item item={item} index={index} />}
+        keyExtractor={item => item.key}
+        getItemCount={getItemCount}
+        getItem={getItem}
+      /> */}
+
+        <VirtualizedList
+            data={this.props.cart}
+            getItem={(data, index) => data[index]}
+            getItemCount={data => data.length}
+            renderItem={({ item,index }) => (
+              <CartCard
+              product={item}
+              index={index}
+              isFeatured={item.isFeatured}
+              id={item.product._id}
+            />
+            )}
+        />
+ 
+
+
+
+          {/* {this.props.cart.map((item, index) => (
+            <CartCard
+              product={item}
+              index={index}
+              isFeatured={item.isFeatured}
+              id={item.product._id}
+            />
+          ))} */}
           <View
             style={{
               flexDirection: "row",
