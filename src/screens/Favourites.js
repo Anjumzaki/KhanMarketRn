@@ -9,7 +9,7 @@ import {
   LinearGradient,
   TouchableOpacity,
   ActivityIndicator,
-  Alert
+  Alert,
 } from "react-native";
 import Carousel from "react-native-looped-carousel";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -52,23 +52,30 @@ class Favourites extends Component {
       })
       .catch((err) => console.log(err));
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
-      axios
-        .get(
-          "https://lit-peak-13067.herokuapp.com/get/all/favourites/" +
-            this.props.user.user._id
-        )
-        .then((resp) => this.setState({ favourites: resp.data }))
-        .catch((err) => console.log(err));
+      this.setState(
+        {
+          favourites: [],
+          loading: true,
+        },
+        () =>
+          axios
+            .get(
+              "https://lit-peak-13067.herokuapp.com/get/all/favourites/" +
+                this.props.user.user._id
+            )
+            .then((resp) =>
+              this.setState({ favourites: resp.data, loading: false })
+            )
+            .catch((err) => console.log(err))
+      );
     });
   }
-
   componentWillUnmount() {
     this._unsubscribe();
   }
 
   render() {
-
-    console.log(this.state.favourites," favaspdaskk")
+    console.log(this.state.favourites, " favaspdaskk");
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>

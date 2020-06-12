@@ -3,20 +3,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { Text, View } from "react-native";
 import {
   CreateAccount,
-  Search,
-  Details,
-  Search2,
-  Profile,
 } from "./src/Screens";
 import Home from "./src/screens/Home";
 import Login from "./src/screens/Login";
 import Map from "./src/screens/Map";
 import StackHeader from "./src/Helpers/StackHeader";
-import StoreHeader from "./src/Helpers/StoreHeader";
 import Settings from "./src/screens/Settings";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import ProductDetails from "./src/screens/ProductDetails";
@@ -108,7 +101,7 @@ const HomeStackScreen = (route) => (
           <StackHeader
           pic={true}
           cart={false}
-          nameTitle="CART"
+          nameTitle="PICK UP DETAILS"
           {...props}
         />
         ),
