@@ -51,14 +51,14 @@ class FavCards extends React.Component {
     if (this.props.product.product.favourites === undefined) {
       this.setState({ favourites: [] });
     } else {
-      for (var i = 0; i < this.props.product.product.favourites.length; i++) {
-        if (
-          this.props.product.product.favourites[i].userId ===
-          this.props.user.user._id
-        ) {
-          this.setState({ heart: true });
-        }
-      }
+      // for (var i = 0; i < this.props.product.product.favourites.length; i++) {
+      //   if (
+      //     this.props.product.product.favourites[i].userId ===
+      //     this.props.user.user._id
+      //   ) {
+      //     this.setState({ heart: true });
+      //   }
+      // }
       this.setState({ favourites: this.props.product.product.favourites });
     }
   }
