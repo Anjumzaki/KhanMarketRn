@@ -118,7 +118,7 @@ class Cart extends Component {
         this.setState(
           {
             cartData: temp,
-            imageL: false,
+            imageL: false, 
           },
           () => this.props.cartAsync(temp)
         );
@@ -202,7 +202,7 @@ class Cart extends Component {
                   isFeatured={item.isFeatured}
                   id={item.product._id}
                   handleRe={this.handleRemove}
-                />
+                /> 
               )}
             />
           )}

@@ -377,7 +377,7 @@ class Cart extends Component {
       month1 = "0" + month1;
     }
     //
-    var todaysDate = month1 + "-" + day + "-" + year;
+    var todaysDate = day + "-" + month1 + "-" + year;
     console.log("sdddddddddddd", todaysDate);
     var dates = [];
 
@@ -1519,7 +1519,7 @@ class Cart extends Component {
                         timeCheck = false;
                       }
                     }
-                    if (timeCheck) {
+                    // if (timeCheck) {
                       axios
                         .post(
                           "https://lit-peak-13067.herokuapp.com/add/order",
@@ -1533,6 +1533,8 @@ class Cart extends Component {
                             userId: this.props.user.user._id,
                             name:
                               this.state.firstName + " " + this.state.lastName,
+                            firstName: this.state.firstName,
+                            lastName: this.state.lastName,
                             phone: "+1" + this.state.mobile,
                             email: this.state.email,
                             // address: "bac Street",
@@ -1547,6 +1549,11 @@ class Cart extends Component {
                             tax: (parseFloat(this.state.tax) / 100) * subTotal,
                             orderNumber: codeId,
                             isGuest: this.props.user.user.isGuest,
+                            isSomeOneElse: this.state.isChecked,
+                            someoneElseFirstName: this.state.someoneElseFirstName,
+                            someoneElseLastName: this.state.someoneElseLastName,
+                            someoneElseEmail: this.state.someoneElseEmail,
+                            someoneElseMobile: this.state.someoneElsePhone
                           }
                         )
                         .then((resp) => {
@@ -1574,11 +1581,11 @@ class Cart extends Component {
                             })
                             .catch((err) => console.log(err));
                         });
-                    } else {
-                      alert(
-                        "Store is closed in this date and time, please change date and time."
-                      );
-                    }
+                    // } else {
+                    //   alert(
+                    //     "Store is closed in this date and time, please change date and time."
+                    //   );
+                    // }
                   } else {
                     console.log("pnamepnamepnamepname", pname);
                     var name = "";

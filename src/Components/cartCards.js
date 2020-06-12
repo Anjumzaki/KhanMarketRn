@@ -41,8 +41,8 @@ class CartCards extends PureComponent {
   }
 
   render() {
-    console.log("cart cards",this.props.cart)
-    console.log("image URLL",this.state.image, this.props.index)
+    // console.log("cart cards",this.props.cart)
+    // console.log("image URLL",this.state.image, this.props.index)
     var cSize=0
     if(this.props.cart.length > 0){
       for(var i=0; i<this.props.cart.length; i++){
@@ -65,6 +65,9 @@ class CartCards extends PureComponent {
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TouchableOpacity style={{ padding: 10,paddingLeft:0 }} onPress ={() => {
             this.props.handleRe(this.props.id)
+            if(this.props.cart.length === 1){
+              this.props.cartSizeAsync(0);
+            }
             }}
           >
             <Entypo name="circle-with-cross" size={24} color="#B50000" />
