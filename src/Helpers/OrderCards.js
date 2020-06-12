@@ -21,35 +21,44 @@ class OrderCards extends React.Component {
   }
   render() {
     return (
-      <TouchableOpacity
-        onLongPress={() =>
-          this.props.navigation.navigate("OrderDetails", {
-            order: this.props.order,
-          })
-        }
+      <View
+        // onPress={() =>
+        //   this.props.navigation.navigate("OrderDetails", {
+        //     order: this.props.order,
+        //   })
+        // }
         style={styles.procards}
       >
-        <View style={styles.wrapCards}>
-          <View style={styles.underCard}>
+        <View
+          style={{
+            flexDirection: "row",
+            width: "100%",
+            flex: 1,
+          }}
+        >
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate("OrderDetails", {
+                order: this.props.order,
+              })
+            }
+            style={{
+              flex: 1,
+              justifyContent: "space-between",
+              paddingVertical: 10,
+            }}
+          >
+            <LatoText
+              fontName="Lato-Regular"
+              fonSiz={20}
+              col="#5C5C5C"
+              text={this.props.order.storeName}
+            />
             <View
               style={{
                 flexDirection: "row",
-                alignItems: "center",
                 justifyContent: "space-between",
-              }}
-            >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={20}
-                col="#5C5C5C"
-                text={this.props.order.storeName}
-              />
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                paddingTop: 5,
-                justifyContent: "space-between",
+                width: "80%",
               }}
             >
               <LatoText
@@ -90,92 +99,98 @@ class OrderCards extends React.Component {
                 />
               )}
             </View>
-            <View>
-              <View style={{ marginBottom: 10 }}>
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={17}
-                  col="#2E2E2E"
-                  text={
-                    "Total: $" +
-                    (
-                      parseFloat(this.props.order.totalAmount) +
-                      parseFloat(this.props.order.tax)
-                    ).toFixed(2)
-                  }
-                />
-              </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={15}
-                  col="#5C5C5C"
-                  text={
-                    this.props.order.orderDate +
-                    "       " +
-                    this.props.order.orderTime
-                  }
-                />
-                {this.props.type === "active" ? (
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (this.props.order.isAccepted === false) {
-                        Alert.alert(
-                          "Alert!",
-                          "Are you sure you want to cancel the order?",
-                          [
-                            {
-                              text: "No",
-                              onPress: () => console.log("Cancel Pressed"),
-                              style: "cancel",
-                            },
-                            {
-                              text: "Yes",
-                              onPress: () => {
-                                axios
-                                  .put(
-                                    "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
-                                      this.props.order._id
-                                  )
-                                  .then((resp) => {
-                                    // this.setState({bd: true})
-                                    alert("Order Cancelled Successfully.");
-                                    this.props.navigation.navigate(
-                                      "Home"
-                                    );
-                                  })
-                                  .catch((err) => console.log(err));
-                              },
-                            },
-                          ],
-                          { cancelable: true }
-                        );
-                      } else {
-                        alert(
-                          "Order cannot be cancelled after preperation state."
-                        );
-                      }
-                    }}
-                  >
-                    <LatoText
-                      fontName="Lato-Regular"
-                      fonSiz={15}
-                      col="#B50000"
-                      text={"Cancel Order"}
-                      onPress={() => console.log("ksjd")}
-                    />
-                  </TouchableOpacity>
-                ) : null}
-              </View>
-            </View>
-          </View>
+            <LatoText
+              fontName="Lato-Regular"
+              fonSiz={17}
+              col="#2E2E2E"
+              text={
+                "Total: $" +
+                (
+                  parseFloat(this.props.order.totalAmount) +
+                  parseFloat(this.props.order.tax)
+                ).toFixed(2)
+              }
+            />
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate("OrderDetails", {
+                order: this.props.order,
+              })
+            }
+            style={{ paddingVertical: 10 }}
+          >
+            <LatoText
+              fontName="Lato-Regular"
+              fonSiz={15}
+              col="#5C5C5C"
+              text={
+                this.props.order.orderDate +
+                "       " +
+                this.props.order.orderTime
+              }
+            />
+          </TouchableOpacity>
+          {this.props.type === "active" ? (
+            <TouchableOpacity
+              style={{ padding: 10 }}
+              onPress={() => {
+                if (this.props.order.isAccepted === false) {
+                  Alert.alert(
+                    "Alert!",
+                    "Are you sure you want to cancel the order?",
+                    [
+                      {
+                        text: "No",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel",
+                      },
+                      {
+                        text: "Yes",
+                        onPress: () => {
+                          axios
+                            .put(
+                              "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
+                                this.props.order._id
+                            )
+                            .then((resp) => {
+                              // this.setState({bd: true})
+                              alert("Order Cancelled Successfully.");
+                              this.props.navigation.navigate("Home");
+                            })
+                            .catch((err) => console.log(err));
+                        },
+                      },
+                    ],
+                    { cancelable: true }
+                  );
+                } else {
+                  alert("Order cannot be cancelled after preperation state.");
+                }
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col="#B50000"
+                text={"Cancel Order"}
+              />
+            </TouchableOpacity>
+          ) : null}
+        </View>
+
+        <View>
+          <View style={{ marginBottom: 10 }}></View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          ></View>
+        </View>
+      </View>
     );
   }
 }
@@ -203,19 +218,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "white",
     marginVertical: 10,
-  },
-
-  underCard: {
-    flex: 1,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-    height: Dimensions.get("window").width / 2.5,
-    justifyContent: "space-between",
-    padding: 10,
-  },
-  wrapCards: {
-    width: Dimensions.get("window").width - 20,
-    height: Dimensions.get("window").width / 2.5,
-    flexDirection: "row",
+    paddingHorizontal: 10,
   },
 });

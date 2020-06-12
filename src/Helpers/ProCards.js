@@ -81,17 +81,11 @@ class ProCards extends React.Component {
     this.props.cartSizeAsync(cSize);
     return (
       <View style={styles.procards}>
-        <TouchableOpacity
-          onLongPress={() =>
-            this.props.navigation.navigate("ProductDetails", {
-              product: this.props.product,
-            })
-          }
+        <ImageBackground
+          style={styles.proCardsImage}
+          source={{ uri: this.state.image }}
         >
-          <ImageBackground
-            style={styles.proCardsImage}
-            source={{ uri: this.state.image }}
-          >
+          <View>
             <TouchableOpacity
               onPress={async () => {
                 if (this.state.heart === false) {
@@ -161,8 +155,33 @@ class ProCards extends React.Component {
                 <AntDesign color="#B50000" size={18} name="hearto" />
               )}
             </TouchableOpacity>
-          </ImageBackground>
-        </TouchableOpacity>
+            <View style={{ flex: 1 }}>
+              <TouchableOpacity
+                style={{ height: "100%" }}
+                onPress={() =>
+                  this.props.navigation.navigate("ProductDetails", {
+                    product: this.props.product,
+                  })
+                }
+              >
+                <Text> </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{ flex: 1 }}>
+            <TouchableOpacity
+              style={{ height: "100%" }}
+              onPress={() =>
+                this.props.navigation.navigate("ProductDetails", {
+                  product: this.props.product,
+                })
+              }
+            >
+              <Text> </Text>
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
+
         <View style={styles.underCard}>
           <TouchableOpacity
             onPress={() =>
@@ -378,6 +397,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
     overflow: "hidden",
+    flexDirection: "row",
   },
   underCard: {
     backgroundColor: "white",
