@@ -429,8 +429,8 @@ class Cart extends Component {
             month = "0" + month;
           }
 
-          var todaysDate1 = day + "-" + month + "-" + year;
-          console.log(todaysDate1 === storeProducts[i].product.outOfStockDate);
+          var todaysDate1 = year + "-" + month + "-" + day;
+          console.log(todaysDate1 , storeProducts[i].product.outOfStockDate,"SDDDDDDDDDDDDDDDDDSSDS564564");
           if (todaysDate1 === storeProducts[i].product.outOfStockDate) {
             pname = storeProducts[i].product.productName;
             isOut = true;
@@ -1597,7 +1597,7 @@ class Cart extends Component {
                     alert(
                       "Sorry, " +
                         name +
-                        " Item out of stock for the selected date, change pickup date or remove this product to procceed"
+                        " Item is out of stock for the selected date, change pickup date or remove this product to procceed"
                     );
                   }
                 }}
