@@ -12,7 +12,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import LatoText from "../Helpers/LatoText";
 import { btnStyles } from "../styles/base";
 import { bindActionCreators } from "redux";
-import { cartAsync,cartSizeAsync } from "../store/actions";
+import { cartAsync, cartSizeAsync } from "../store/actions";
 import { connect } from "react-redux";
 import { Entypo } from "@expo/vector-icons";
 import CartCardImage from'./CartCardImage'
@@ -60,7 +60,6 @@ class CartCards extends PureComponent {
     // }
   }
 
-
   render() {
     console.log("cart cards",this.props.cart)
     console.log("image URLL",this.state.image, this.props.index)
@@ -72,9 +71,8 @@ class CartCards extends PureComponent {
     }else{
         cSize =0
     }
-    
 
-    this.props.cartSizeAsync(cSize)
+    this.props.cartSizeAsync(cSize);
     return (
       <View
         style={{
@@ -95,16 +93,17 @@ class CartCards extends PureComponent {
               if(temp[i].product._id === sp){
                 console.log("selcted",temp[i].product.productName)
 
-                if (i > -1) {
-                   temp.splice(i, 1);
+                  if (i > -1) {
+                    temp.splice(i, 1);
+                  }
                 }
               }
-            }
 
-            this.props.cartAsync(temp)
+              this.props.cartAsync(temp);
 
-            console.log("newArr",temp)
-          }}>
+              console.log("newArr", temp);
+            }}
+          >
             <Entypo name="circle-with-cross" size={24} color="#B50000" />
           </TouchableOpacity>
           {/* <Image
@@ -256,7 +255,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
     {
       cartAsync,
-      cartSizeAsync
+      cartSizeAsync,
     },
     dispatch
   );

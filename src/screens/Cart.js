@@ -66,6 +66,7 @@ class Cart extends Component {
       image: "",
       tax: "",
       isStore: true,
+      imagesLoading: false,
     };
   }
 
@@ -106,7 +107,14 @@ class Cart extends Component {
       this.setState({ qt: preNum });
     }
   }
-
+  renderMet = () => {
+    this.setState(
+      {
+        imagesLoading: !this.state.imagesLoading,
+      },
+      alert(this.imagesLoading)
+    );
+  };
   render() {
     // var storeProducts = this.props.cart.filter((item, index) => {
     //   return item.product.storeId === this.props.store.id;
@@ -308,10 +316,10 @@ class Cart extends Component {
           <View style={bottomTab.cartSheet}>
             <TouchableOpacity
               onPress={() => {
-                if(this.props.cart.length === 0){
-                  alert("Sorry, cart is empty.")
-                }else{
-                  this.props.navigation.navigate("Checkout1")
+                if (this.props.cart.length === 0) {
+                  alert("Sorry, cart is empty.");
+                } else {
+                  this.props.navigation.navigate("Checkout1");
                 }
               }}
               style={[btnStyles.cartBtnOutline, { width: "55%" }]}
@@ -340,11 +348,12 @@ class Cart extends Component {
           <View style={bottomTab.cartSheet}>
             <TouchableOpacity
               onPress={() => {
-                if(this.props.cart.length === 0){
-                  alert("You cart is empty.")
-                }else{
-                  this.props.navigation.navigate("Checkout1")
-                }}}
+                if (this.props.cart.length === 0) {
+                  alert("You cart is empty.");
+                } else {
+                  this.props.navigation.navigate("Checkout1");
+                }
+              }}
               style={[btnStyles.cartBtn, { width: "100%" }]}
             >
               <LatoText
