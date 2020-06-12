@@ -89,7 +89,7 @@ class FavCards extends React.Component {
       <View style={styles.procards}>
         <View style={styles.wrapCards}>
           <TouchableOpacity
-            onPress={() =>
+            onLongPress={() =>
               this.props.navigation.navigate("ProductDetails", {
                 product: this.props.product.product,
               })
