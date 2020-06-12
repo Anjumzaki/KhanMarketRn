@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
   ImageBackground,
   Dimensions,
   Button,
@@ -179,30 +178,6 @@ class FavCards extends React.Component {
                 )}
               </TouchableOpacity>
             </View>
-            {/* <View style={{ flex: 1, flexDirection: "row", paddingTop: 5 }}>
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={13}
-                col="#89898C"
-                lineThrough="line-through"
-                text={"$" + this.props.product.product.price + " / lb"}
-              ></LatoText>
-              <Text> 
-
-              </Text>
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={13}
-                col="#2E2E2E"
-                text={
-                  "$" +
-                  (parseFloat(this.props.product.product.price) -
-                    (parseFloat(this.props.product.product.price) * parseFloat(this.props.product.product.discount)) /
-                      100) +
-                  " / lb"
-                }
-              ></LatoText>
-            </View> */}
 
             <View style={{ flex: 1, flexDirection: "row", paddingTop: 5 }}>
               <View style={{ marginRight: 5 }}>

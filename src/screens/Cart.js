@@ -9,6 +9,7 @@ import {
   LinearGradient,
   VirtualizedList,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import LatoText from "../Helpers/LatoText";
 import { ScrollView } from "react-native-gesture-handler";
@@ -18,10 +19,11 @@ const { height } = 300;
 import { bindActionCreators } from "redux";
 import { cartAsync } from "../store/actions";
 import { connect } from "react-redux";
+import CartCardImage from "../Components/CartCardImage.js";
 import CartCard from "../Components/cartCards.js";
+
 import axios from "axios";
 import firebase from "firebase";
-
 
 // const DATA = this.props.cart;
 
@@ -30,31 +32,29 @@ const getItem = (data, index) => {
     // id: Math.random().toString(12).substring(0),
     // title: `Item ${index+1}`
     product: item,
-      index: index,
-      isFeatured: item.isFeatured,
-      id: item.product._id
-  }
-}
+    index: index,
+    isFeatured: item.isFeatured,
+    id: item.product._id,
+  };
+};
 
 const getItemCount = (data) => {
   return data.length;
-}
+};
 
-const Item = ({ item,index })=> {
+const Item = ({ item, index }) => {
   return (
     // <View style={styles.item}>
     //   <Text style={styles.title}>{title}</Text>
     // </View>
-     <CartCard
+    <CartCard
       product={item}
       index={index}
       isFeatured={item.isFeatured}
       id={item.product._id}
-   />
+    />
   );
-}
-
-
+};
 
 class Cart extends Component {
   constructor(props) {
@@ -67,6 +67,8 @@ class Cart extends Component {
       tax: "",
       isStore: true,
       imagesLoading: false,
+      cartItem: [],
+      imageL:false
     };
   }
 
@@ -93,13 +95,36 @@ class Cart extends Component {
     } else {
       this.setState({ isStore: false });
     }
+    this.setState({
+      cartItem: this.props.cart,
+    });
   }
-
-  // _onLayoutDidChange = (e) => {
-  //   const layout = e.nativeEvent.layout;
-  //   this.setState({ size: { width: layout.width, height: layout.height } });
-  // };
-
+  handleRemove = (id) => {
+    this.setState(
+      {
+        imageL: true,
+      },
+      () => {
+        var sp = id;
+        var temp = this.props.cart;
+        for (var i = 0; i < temp.length; i++) {
+          if (temp[i].product._id === sp) {
+            console.log("selcted", temp[i].product.productName);
+            if (i > -1) {
+              temp.splice(i, 1);
+            }
+          }
+        }
+        this.setState(
+          {
+            cartData: temp,
+            imageL: false,
+          },
+          () => this.props.cartAsync(temp)
+        );
+      }
+    );
+  };
   handleChange(num) {
     var preNum = this.state.qt;
     preNum = num + preNum;
@@ -116,21 +141,11 @@ class Cart extends Component {
     );
   };
   render() {
-    // var storeProducts = this.props.cart.filter((item, index) => {
-    //   return item.product.storeId === this.props.store.id;
-    // });
-    console.log("CART PROPS NEW RENDER", this.props.cart.length)
-    var myCart=this.props.cart.length
+    console.log("CART PROPS NEW RENDER", this.props.cart.length);
+    var myCart = this.props.cart.length;
     var subTotal = 0;
-    // console.log("sdbsd",storeProducts)
     for (var i = 0; i < this.props.cart.length; i++) {
-      // var temp = (this.props.cart[i].product.price - ((this.props.cart[i].product.price * this.props.cart[i].product.discount)/100) * this.props.cart[i].quantity)
-      // if(storeProducts[i].product.isOutOfStock){
-      //   var td= new Date()
-      //   console.log("SDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",td, new Date("05-04-2020"))
-      // }
       var temp = this.props.cart[i].price;
-      // var temp=0
       subTotal = subTotal + parseFloat(temp);
     }
     return (
@@ -175,55 +190,38 @@ class Cart extends Component {
           )}
 
           <View style={lines.simple} />
-
-          {/* <VirtualizedList
+          {!this.state.imageL && (
+            <VirtualizedList
               data={this.props.cart}
-              initialNumToRender={4}
-              renderItem={({ item,index }) => 
-                  <CartCard
+              getItem={(data, index) => data[index]}
+              getItemCount={(data) => data.length}
+              renderItem={({ item, index }) => (
+                <CartCard
                   product={item}
                   index={index}
+                  isFeatured={item.isFeatured}
                   id={item.product._id}
-                />}
-              keyExtractor={item => item.key}
-              getItemCount={getItemCount}
-              getItem={getItem}
+                  handleRe={this.handleRemove}
+                />
+              )}
             />
-  */}
-{/* 
-      <VirtualizedList
-        data={this.props.cart}
-        initialNumToRender={4}
-        renderItem={({ item,index }) => <Item item={item} index={index} />}
-        keyExtractor={item => item.key}
-        getItemCount={getItemCount}
-        getItem={getItem}
-      /> */}
+          )}
 
-        <VirtualizedList
-            data={this.props.cart}
-            getItem={(data, index) => data[index]}
-            getItemCount={data => data.length}
-            renderItem={({ item,index }) => (
-              <CartCard
-              product={item}
-              index={index}
-              isFeatured={item.isFeatured}
-              id={item.product._id}
-            />
-            )}
-        />
- 
+          {/* {this.state.cartItem.map((item, index) => (
+            <View>
+              {this.state.imageL ? (
+                <ActivityIndicator name="black" />
+              ) : (
+                <CartCardImage id={item.product._id} />
+              )}
 
-
-
-          {/* {this.props.cart.map((item, index) => (
-            <CartCard
-              product={item}
-              index={index}
-              isFeatured={item.isFeatured}
-              id={item.product._id}
-            />
+              <Text>{item.product.productName}</Text>
+              <TouchableOpacity
+                onPress={() => this.handleRemove(item.product._id)}
+              >
+                <Text>Remove</Text>
+              </TouchableOpacity>
+            </View>
           ))} */}
           <View
             style={{
