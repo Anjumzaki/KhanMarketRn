@@ -44,21 +44,29 @@ class MyOrders extends Component {
 
   componentDidMount() {
     axios
-        .get(
-          "https://lit-peak-13067.herokuapp.com/get/my/orders/" +
-            this.props.user.user._id
-        )
-        .then((resp) => this.setState({ myOrders: resp.data, loading: false }))
-        .catch((err) => console.log(err));
-        
+      .get(
+        "https://lit-peak-13067.herokuapp.com/get/my/orders/" +
+          this.props.user.user._id
+      )
+      .then((resp) => this.setState({ myOrders: resp.data, loading: false }))
+      .catch((err) => console.log(err));
+
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
-      axios
-        .get(
-          "https://lit-peak-13067.herokuapp.com/get/my/orders/" +
-            this.props.user.user._id
-        )
-        .then((resp) => this.setState({ myOrders: resp.data, loading: false }))
-        .catch((err) => console.log(err));
+      this.setState(
+        {
+          loading: true,
+        },
+        () =>
+          axios
+            .get(
+              "https://lit-peak-13067.herokuapp.com/get/my/orders/" +
+                this.props.user.user._id
+            )
+            .then((resp) =>
+              this.setState({ myOrders: resp.data, loading: false })
+            )
+            .catch((err) => console.log(err))
+      );
     });
   }
   componentWillUnmount() {
@@ -150,7 +158,6 @@ class MyOrders extends Component {
                       key={ind}
                       order={item}
                       type="active"
-
                     />
                   ))}
               </Collapsible>

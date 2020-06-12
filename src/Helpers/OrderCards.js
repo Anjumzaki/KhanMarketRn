@@ -1,19 +1,10 @@
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import firebase from "firebase";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  ImageBackground,
-  Dimensions,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, View, Dimensions, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import LatoText from "./LatoText";
-import { btnStyles } from "../styles/base";
-
+import axios from "axios";
 class OrderCards extends React.Component {
   state = {
     heart: true,
@@ -30,9 +21,14 @@ class OrderCards extends React.Component {
   }
   render() {
     return (
-      <TouchableOpacity onPress={()=>this.props.navigation.navigate('OrderDetails',{
-        order:this.props.order
-      })} style={styles.procards}>
+      <TouchableOpacity
+        onLongPress={() =>
+          this.props.navigation.navigate("OrderDetails", {
+            order: this.props.order,
+          })
+        }
+        style={styles.procards}
+      >
         <View style={styles.wrapCards}>
           <View style={styles.underCard}>
             <View
@@ -60,36 +56,38 @@ class OrderCards extends React.Component {
                 fontName="Lato-Regular"
                 fonSiz={17}
                 col="#5C5C5C"
-                text={"Order # "+this.props.order.orderNumber ? (this.props.order.orderNumber).toUpperCase() : null}
+                text={
+                  "Order # " + this.props.order.orderNumber
+                    ? this.props.order.orderNumber.toUpperCase()
+                    : null
+                }
                 // text={"Order # "+ this.props.order.orderNumber !== undefined ? this.props.order.orderNumber.toUpperCase() : null}
               />
               {this.props.order.isRejected === true ? (
-
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={15}
-                col="#808080"
-                text={
-                    "Cancelled" 
-                }
-              />) : (
                 <LatoText
-                fontName="Lato-Regular"
-                fonSiz={15}
-                col="#2AA034"
-                text={
-                  this.props.order.isAccepted === true && this.props.order.isInPreparation === true ? (
-                    "Being Prepared"
-                  ) : (this.props.order.isAccepted === true && this.props.order.isReady === true ? (
-                    "Ready"): (
-                    this.props.order.isAccepted === true && this.props.order.isPicked === true ? (
-                      "Completed"
-                    ): (
-                      "in queue"
-                    )
-                  ))
-                }
-              />
+                  fontName="Lato-Regular"
+                  fonSiz={15}
+                  col="#808080"
+                  text={"Cancelled"}
+                />
+              ) : (
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={15}
+                  col="#2AA034"
+                  text={
+                    this.props.order.isAccepted === true &&
+                    this.props.order.isInPreparation === true
+                      ? "Being Prepared"
+                      : this.props.order.isAccepted === true &&
+                        this.props.order.isReady === true
+                      ? "Ready"
+                      : this.props.order.isAccepted === true &&
+                        this.props.order.isPicked === true
+                      ? "Completed"
+                      : "in queue"
+                  }
+                />
               )}
             </View>
             <View>
@@ -98,27 +96,81 @@ class OrderCards extends React.Component {
                   fontName="Lato-Regular"
                   fonSiz={17}
                   col="#2E2E2E"
-                  text={"Total: $"+(parseFloat(this.props.order.totalAmount)+parseFloat(this.props.order.tax)).toFixed(2)}
+                  text={
+                    "Total: $" +
+                    (
+                      parseFloat(this.props.order.totalAmount) +
+                      parseFloat(this.props.order.tax)
+                    ).toFixed(2)
+                  }
                 />
               </View>
-              <View style={{flexDirection:"row",justifyContent:'space-between'}}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={15}
                   col="#5C5C5C"
-                  text={this.props.order.orderDate + "       "+ this.props.order.orderTime}
+                  text={
+                    this.props.order.orderDate +
+                    "       " +
+                    this.props.order.orderTime
+                  }
                 />
                 {this.props.type === "active" ? (
-                  <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={15}
-                  col="#B50000"
-                  text={"Cancel Order"}
-                  onPress={() => console.log("ksjd")}
-                />
-                ): null}
-                
-                
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (this.props.order.isAccepted === false) {
+                        Alert.alert(
+                          "Alert!",
+                          "Are you sure you want to cancel the order?",
+                          [
+                            {
+                              text: "No",
+                              onPress: () => console.log("Cancel Pressed"),
+                              style: "cancel",
+                            },
+                            {
+                              text: "Yes",
+                              onPress: () => {
+                                axios
+                                  .put(
+                                    "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
+                                      this.props.order._id
+                                  )
+                                  .then((resp) => {
+                                    // this.setState({bd: true})
+                                    alert("Order Cancelled Successfully.");
+                                    this.props.navigation.navigate(
+                                      "Home"
+                                    );
+                                  })
+                                  .catch((err) => console.log(err));
+                              },
+                            },
+                          ],
+                          { cancelable: true }
+                        );
+                      } else {
+                        alert(
+                          "Order cannot be cancelled after preperation state."
+                        );
+                      }
+                    }}
+                  >
+                    <LatoText
+                      fontName="Lato-Regular"
+                      fonSiz={15}
+                      col="#B50000"
+                      text={"Cancel Order"}
+                      onPress={() => console.log("ksjd")}
+                    />
+                  </TouchableOpacity>
+                ) : null}
               </View>
             </View>
           </View>

@@ -89,7 +89,7 @@ class Favourites extends Component {
             }}
           >
             {this.state.favourites.length > 0 ? (
-              this.state.favourites.map((item, ind) => (
+              this.state.favourites.slice(0).reverse().map((item, ind) => (
                 <FavCards
                   navigation={this.props.navigation}
                   key={1}
