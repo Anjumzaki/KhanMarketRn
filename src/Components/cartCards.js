@@ -12,7 +12,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import LatoText from "../Helpers/LatoText";
 import { btnStyles } from "../styles/base";
 import { bindActionCreators } from "redux";
-import { cartAsync,cartSizeAsync } from "../store/actions";
+import { cartAsync, cartSizeAsync } from "../store/actions";
 import { connect } from "react-redux";
 import { Entypo } from "@expo/vector-icons";
 
@@ -60,20 +60,18 @@ class CartCards extends React.Component {
     }
   }
 
-
   render() {
-    console.log("cart cards",this.props.cart)
-    var cSize=0
-    if(this.props.cart.length > 0){
-      for(var i=0; i<this.props.cart.length; i++){
-        cSize=cSize + parseInt(this.props.cart[i].quantity)
+    console.log("cart cards", this.props.cart);
+    var cSize = 0;
+    if (this.props.cart.length > 0) {
+      for (var i = 0; i < this.props.cart.length; i++) {
+        cSize = cSize + parseInt(this.props.cart[i].quantity);
+      }
+    } else {
+      cSize = 0;
     }
-    }else{
-        cSize =0
-    }
-    
 
-    this.props.cartSizeAsync(cSize)
+    this.props.cartSizeAsync(cSize);
     return (
       <View
         style={{
@@ -84,25 +82,28 @@ class CartCards extends React.Component {
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <TouchableOpacity style={{ padding: 10,paddingLeft:0 }} onPress ={() => {
-            var sp = this.props.product.product._id
-            var temp = this.props.cart
-            var remvIndx = 0
-            var newArr = []
-            for(var i=0; i<temp.length; i++){
-              if(temp[i].product._id === sp){
-                console.log("selcted",temp[i].product.productName)
+          <TouchableOpacity
+            style={{ padding: 10, paddingLeft: 0 }}
+            onPress={() => {
+              var sp = this.props.product.product._id;
+              var temp = this.props.cart;
+              var remvIndx = 0;
+              var newArr = [];
+              for (var i = 0; i < temp.length; i++) {
+                if (temp[i].product._id === sp) {
+                  console.log("selcted", temp[i].product.productName);
 
-                if (i > -1) {
-                   temp.splice(i, 1);
+                  if (i > -1) {
+                    temp.splice(i, 1);
+                  }
                 }
               }
-            }
 
-            this.props.cartAsync(temp)
+              this.props.cartAsync(temp);
 
-            console.log("newArr",temp)
-          }}>
+              console.log("newArr", temp);
+            }}
+          >
             <Entypo name="circle-with-cross" size={24} color="#B50000" />
           </TouchableOpacity>
           <Image
@@ -253,7 +254,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
     {
       cartAsync,
-      cartSizeAsync
+      cartSizeAsync,
     },
     dispatch
   );

@@ -224,7 +224,7 @@ import {
   Button,
   StatusBar,
   Platform,
-  AsyncStorage
+  AsyncStorage,
 } from "react-native";
 import Geolocation from "@react-native-community/geolocation";
 import LatoText from "../Helpers/LatoText";
@@ -249,8 +249,8 @@ class Map extends Component {
     this.state = {
       loading: true,
       region: {
-        latitude: 10,
-        longitude: 10,
+        latitude: 40.0583,
+        longitude: 74.4057,
         latitudeDelta: 0.001,
         longitudeDelta: 0.001,
       },

@@ -35,6 +35,7 @@ class Cart extends Component {
       image: "",
       tax: "",
       isStore: true,
+      imagesLoading: false,
     };
   }
 
@@ -75,19 +76,30 @@ class Cart extends Component {
       this.setState({ qt: preNum });
     }
   }
-
+  renderMet = () => {
+    this.setState(
+      {
+        imagesLoading: !this.state.imagesLoading,
+      },
+      alert(this.imagesLoading)
+    );
+  };
   render() {
     var storeProducts = this.props.cart.filter((item, index) => {
       return item.product.storeId === this.props.store.id;
     });
 
     var subTotal = 0;
-    console.log("sdbsd",storeProducts)
+    console.log("sdbsd", storeProducts);
     for (var i = 0; i < storeProducts.length; i++) {
       // var temp = (this.props.cart[i].product.price - ((this.props.cart[i].product.price * this.props.cart[i].product.discount)/100) * this.props.cart[i].quantity)
-      if(storeProducts[i].product.isOutOfStock){
-        var td= new Date()
-        console.log("SDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",td, new Date("05-04-2020"))
+      if (storeProducts[i].product.isOutOfStock) {
+        var td = new Date();
+        console.log(
+          "SDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+          td,
+          new Date("05-04-2020")
+        );
       }
       var temp = storeProducts[i].price;
       // var temp=0
@@ -135,14 +147,26 @@ class Cart extends Component {
           )}
 
           <View style={lines.simple} />
-          {storeProducts.map((item, index) => (
-            <CartCard
-              product={item}
-              index={index}
-              isFeatured={item.isFeatured}
-              id={item.product._id}
-            />
-          ))}
+          {this.state.imagesLoading
+            ? storeProducts.map((item, index) => (
+                <CartCard
+                  product={item}
+                  index={index}
+                  isFeatured={item.isFeatured}
+                  id={item.product._id}
+                  renderMet={this.renderMet}
+                />
+              ))
+            : storeProducts.map((item, index) => (
+                <CartCard
+                  product={item}
+                  index={index}
+                  isFeatured={item.isFeatured}
+                  id={item.product._id}
+                  renderMet={this.renderMet}
+                />
+              ))}
+
           <View
             style={{
               flexDirection: "row",
@@ -234,10 +258,10 @@ class Cart extends Component {
           <View style={bottomTab.cartSheet}>
             <TouchableOpacity
               onPress={() => {
-                if(this.props.cart.length === 0){
-                  alert("Sorry, cart is empty.")
-                }else{
-                  this.props.navigation.navigate("Checkout1")
+                if (this.props.cart.length === 0) {
+                  alert("Sorry, cart is empty.");
+                } else {
+                  this.props.navigation.navigate("Checkout1");
                 }
               }}
               style={[btnStyles.cartBtnOutline, { width: "55%" }]}
@@ -266,11 +290,12 @@ class Cart extends Component {
           <View style={bottomTab.cartSheet}>
             <TouchableOpacity
               onPress={() => {
-                if(this.props.cart.length === 0){
-                  alert("You cart is empty.")
-                }else{
-                  this.props.navigation.navigate("Checkout1")
-                }}}
+                if (this.props.cart.length === 0) {
+                  alert("You cart is empty.");
+                } else {
+                  this.props.navigation.navigate("Checkout1");
+                }
+              }}
               style={[btnStyles.cartBtn, { width: "100%" }]}
             >
               <LatoText

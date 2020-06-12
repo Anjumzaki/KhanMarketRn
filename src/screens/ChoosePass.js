@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   StatusBar,
   Dimensions,
-  Alert
+  Alert,
 } from "react-native";
 import { BackStack } from "../Helpers/BackStack";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -38,8 +38,11 @@ class SignUp1 extends React.Component {
     this.state = {
       icEye: "visibility-off",
       isPassword: true,
+      icEye1: "visibility-off",
+      isPassword1: true,
       fontLoaded: false,
       user: {},
+      errMessage:''
     };
   }
   async componentDidMount() {
@@ -66,9 +69,64 @@ class SignUp1 extends React.Component {
       isPassword: !isPassword,
     });
   };
+  changePwdType1 = () => {
+    const { isPassword1 } = this.state;
+    // set new state value
+    this.setState({
+      icEye1: isPassword1 ? "visibility" : "visibility-off",
+      isPassword1: !isPassword1,
+    });
+  };
+  handleSignUp = () => {
+    if(this.state.password){
+      if(this.state.password.length > 5 ){
+        if(this.state.password == this.state.coPassword){
+          axios
+          .post(
+            "https://lit-peak-13067.herokuapp.com/api/users/signup",
+            this.state.user
+          )
+          .then((resp) => {
+            this.props.userAsync(resp.data);
+            Alert.alert(
+              "Account Created",
+              "Please Login",
+              [
+                {
+                  text: "OK",
+                  onPress: () =>
+                    this.props.navigation.navigate("Login"),
+                },
+              ],
+              { cancelable: false }
+            );
+          })
+          .catch((err) =>
+            this.setState({ msg: err.message })
+          );
+        }
+        else{
+          this.setState({
+            errMessage:"Password and confirm password does not matches"
+          })
+        }
+      }
+      else{
+        this.setState({
+          errMessage:"Password must contain minimum 6 characters"
+        })
+      }
+    }
+    else{
+      this.setState({
+        errMessage:"Please enter password"
+      })
+    }
+    
+  }
   render() {
-    console.log("stas",this.state)
-    const { icEye, isPassword } = this.state;
+    console.log("stas", this.state);
+    const { icEye, isPassword, icEye1, isPassword1 } = this.state;
     const styles = StyleSheet.create({
       logo: {
         width: wp("30%"),
@@ -116,7 +174,7 @@ class SignUp1 extends React.Component {
               col="#000000"
               text={"SIGN UP"}
             />
-            <View style={{ paddingTop: 40 }}>
+            <View style={{ paddingTop: 30 }}>
               <View style={textIn.label}>
                 <LatoText
                   fontName="Lato-Regular"
@@ -135,7 +193,7 @@ class SignUp1 extends React.Component {
                     });
                     this.state.user.password = password;
                   }}
-                  autoCapitalize = 'none'
+                  autoCapitalize="none"
                   value={this.state.password}
                 />
                 <Icon
@@ -144,6 +202,43 @@ class SignUp1 extends React.Component {
                   size={20}
                   color={"#000000"}
                   onPress={this.changePwdType}
+                />
+              </View>
+              <TouchableOpacity
+                style={{
+                  justifyContent: "flex-end",
+                  alignItems: "flex-end",
+                  marginTop: 10,
+                }}
+              ></TouchableOpacity>
+            </View>
+            <View style={{ paddingTop: 10 }}>
+              <View style={textIn.label}>
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col="#5C5C5C"
+                  text={"Confirm Password"}
+                />
+              </View>
+              <View>
+                <TextInput
+                  style={textIn.input}
+                  secureTextEntry={isPassword1}
+                  onChangeText={(coPassword) => {
+                    this.setState({
+                      coPassword,
+                    });
+                  }}
+                  autoCapitalize="none"
+                  value={this.state.coPassword}
+                />
+                <Icon
+                  style={styles.icon}
+                  name={icEye1}
+                  size={20}
+                  color={"#000000"}
+                  onPress={this.changePwdType1}
                 />
               </View>
               <TouchableOpacity
@@ -171,6 +266,28 @@ class SignUp1 extends React.Component {
             </Text>
           </View>
           <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {this.state.errMessage != '' && (
+                <>
+                  <Image
+                    style={{ marginRight: 10 }}
+                    source={require("../../assets/Vector.png")}
+                  />
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={17}
+                    col="red"
+                    text={this.state.errMessage || ""}
+                  />
+                </>
+              )}
+            </View>
+          <View
             style={{
               justifyContent: "space-evenly",
               paddingHorizontal: wp("10%"),
@@ -178,28 +295,7 @@ class SignUp1 extends React.Component {
           >
             <TouchableOpacity
               style={btnStyles.basic}
-              onPress={() => { 
-                axios
-                  .post(
-                    "https://lit-peak-13067.herokuapp.com/api/users/signup",
-                    this.state.user
-                  )
-                  .then((resp) => {
-                    this.props.userAsync(resp.data);
-                    Alert.alert(
-                      "Account Created",
-                      "Please Login",
-                      [
-                        { text: "OK", onPress: () => this.props.navigation.navigate("Login") }
-                      ],
-                      { cancelable: false }
-                    );
-                    
-                  })
-                  .catch((err) =>
-                    this.setState({ msg: "Email already exist!" })
-                  );
-              }}
+              onPress={() => this.handleSignUp()}
             >
               <LatoText
                 fontName="Lato-Regular"
