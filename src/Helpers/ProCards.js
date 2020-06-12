@@ -82,7 +82,7 @@ class ProCards extends React.Component {
     return (
       <View style={styles.procards}>
         <TouchableOpacity
-          onPress={() =>
+          onLongPress={() =>
             this.props.navigation.navigate("ProductDetails", {
               product: this.props.product,
             })
