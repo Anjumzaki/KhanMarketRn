@@ -85,6 +85,19 @@ class ProCards extends React.Component {
           style={styles.proCardsImage}
           source={{ uri: this.state.image }}
         >
+          
+          <View style={{ flex: 1 }}>
+            <TouchableOpacity
+              style={{ height: "100%" }}
+              onPress={() =>
+                this.props.navigation.navigate("ProductDetails", {
+                  product: this.props.product,
+                })
+              }
+            >
+              <Text> </Text>
+            </TouchableOpacity>
+          </View>
           <View>
             <TouchableOpacity
               onPress={async () => {
@@ -167,18 +180,6 @@ class ProCards extends React.Component {
                 <Text> </Text>
               </TouchableOpacity>
             </View>
-          </View>
-          <View style={{ flex: 1 }}>
-            <TouchableOpacity
-              style={{ height: "100%" }}
-              onPress={() =>
-                this.props.navigation.navigate("ProductDetails", {
-                  product: this.props.product,
-                })
-              }
-            >
-              <Text> </Text>
-            </TouchableOpacity>
           </View>
         </ImageBackground>
 
