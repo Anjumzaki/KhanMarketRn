@@ -86,10 +86,11 @@ class Cart extends Component {
       oId: "",
       isOut: false,
       clickCheck: true,
-      someoneElseName: "",
+      someoneElseFirstName: "",
+      someoneElseLastName: "",
       someoneElseEmail: "",
       someoneElsePhone: "",
-      
+      previousMobileNumber: "",
       keyState: false,
     };
     this._keyboardDidShow = this._keyboardDidShow.bind(this);
@@ -112,6 +113,7 @@ class Cart extends Component {
       lastName: this.props.user.user.lastName ? this.props.user.user.lastName : "",
       email: this.props.user.user.email ? this.props.user.user.email: "",
       mobile: this.props.user.user.mobile ? this.props.user.user.mobile.substring(2,this.props.user.user.mobile.length) : "",
+      previousMobileNumber: this.props.user.user.mobile ? this.props.user.user.mobile.substring(2,this.props.user.user.mobile.length): ""
     });
     axios
       .get(
@@ -509,7 +511,7 @@ class Cart extends Component {
 
                       this.props.userAsync(data);
                       this.setState(
-                        { codeMsg: false, numVerified: true },
+                        { codeMsg: false, numVerified: true, previousMobileNumber: this.state.mobile },
                         this.refs.modal6.close()
                       )
                     })
@@ -811,11 +813,16 @@ class Cart extends Component {
                       <TextInput
                         placeholder={"(555) 555-5678"}
                         keyboardType={"numeric"}
-                        onChangeText={(mobile) =>
+                        onChangeText={(mobile) =>{
+                          if(this.state.previousMobileNumber  !== mobile){
+                              this.setState({numVerified: false})
+                          }else{
+                            this.setState({numVerified: true})
+                          }
                           this.setState({
                             mobile,
                           })
-                        }
+                        }}
                         value={this.state.mobile}
                         style={[textIn.input, { width: "77.5%" }]}
                       />
@@ -878,7 +885,14 @@ class Cart extends Component {
                   if (this.state.mobile.substring(0, 2) === "+1") {
                     mob = true;
                   }
-
+                  var verifyCheck=true
+                  console.log(this.state.previousMobileNumber  , this.state.mobile)
+                  if(this.state.previousMobileNumber  !== this.state.mobile){
+                      verifyCheck = false
+                  }else{
+                      verifyCheck = true
+                  }
+                  console.log("SDDDDDDDDDDDDDDDDDDDDDDDDDDs33",verifyCheck)
                   axios
                     .put(
                       "https://lit-peak-13067.herokuapp.com/api/users/guest/edit/" +
@@ -890,6 +904,7 @@ class Cart extends Component {
                         mobile: this.state.mobile
                           ? "+1" + this.state.mobile
                           : this.state.mobile,
+                          isGuestVerified: verifyCheck
                         // mobile: mob ?  (this.state.mobile) : ("+1" + this.state.mobile),
                       }
                     )
@@ -1326,18 +1341,44 @@ class Cart extends Component {
                             fontName="Lato-Regular"
                             fonSiz={17}
                             col="#5C5C5C"
-                            text={"Enter Name"}
+                            text={"Enter First Name"}
                           />
                         </View>
                         <View>
                           <TextInput
                             style={[textIn.input, { width: "100%" }]}
-                            onChangeText={(someoneElseName) =>
+                            onChangeText={(someoneElseFirstName) =>
                               this.setState({
-                                someoneElseName,
+                                someoneElseFirstName,
                               })
                             }
-                            value={this.state.someoneElseName}
+                            value={this.state.someoneElseFirstName}
+                          />
+                        </View>
+                      </View>
+                      <View
+                        style={[
+                          textIn.Flabel,
+                          { width: "100%", paddingTop: wp("5%") },
+                        ]}
+                      >
+                        <View>
+                          <LatoText
+                            fontName="Lato-Regular"
+                            fonSiz={17}
+                            col="#5C5C5C"
+                            text={"Enter Last Name"}
+                          />
+                        </View>
+                        <View>
+                          <TextInput
+                            style={[textIn.input, { width: "100%" }]}
+                            onChangeText={(someoneElseLastName) =>
+                              this.setState({
+                                someoneElseLastName,
+                              })
+                            }
+                            value={this.state.someoneElseLastName}
                           />
                         </View>
                       </View>
