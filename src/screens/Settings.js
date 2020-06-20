@@ -23,7 +23,7 @@ import firebase from "firebase";
 import Spinner from "react-native-loading-spinner-overlay";
 import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
-import UserDefault from '../../assets/icon-user-default.png'
+import UserDefault from "../../assets/icon-user-default.png";
 
 const options = {
   title: "Select Avatar",
@@ -205,12 +205,12 @@ class Settings extends React.Component {
                   : this.state.image && { uri: this.state.image }
               }
             /> */}
-             {this.state.image ? (
+            {this.state.image ? (
               <Image
                 style={{ width: 60, height: 60, borderRadius: 100 }}
                 source={{ uri: this.state.image }}
               />
-            ): (
+            ) : (
               <Image
                 style={{ width: 60, height: 60, borderRadius: 100 }}
                 source={UserDefault}
@@ -303,8 +303,14 @@ class Settings extends React.Component {
                         borderWidth: 1,
                         borderRadius: 5,
                         padding: 10,
+                        color: "#000000",
                       }
-                    : { borderColor: "white", borderWidth: 1, borderRadius: 5 }
+                    : {
+                        borderColor: "white",
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        color: "#000000",
+                      }
                 }
                 value={this.state.firstName}
               />
@@ -339,8 +345,14 @@ class Settings extends React.Component {
                         borderWidth: 1,
                         borderRadius: 5,
                         padding: 10,
+                        color: "#000000",
                       }
-                    : { borderColor: "white", borderWidth: 1, borderRadius: 5 }
+                    : {
+                        borderColor: "white",
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        color: "#000000",
+                      }
                 }
                 value={this.state.lastName}
               />
@@ -366,7 +378,7 @@ class Settings extends React.Component {
             <View style={{ paddingTop: 15 }}>
               <TextInput
                 editable={false}
-                style={{ fontSize: 17 }}
+                style={{ fontSize: 17, color: "#000000" }}
                 value={this.props.user.user.mobile}
               />
             </View>
@@ -390,7 +402,7 @@ class Settings extends React.Component {
             <View style={{ paddingTop: 15 }}>
               <TextInput
                 editable={false}
-                style={{ fontSize: 17 }}
+                style={{ fontSize: 17, color: "#000000" }}
                 value={this.props.user.user.email}
               />
             </View>
@@ -453,9 +465,10 @@ class Settings extends React.Component {
                       padding: 10,
                       borderRadius: 10,
                       marginBottom: 20,
+                      color: "#000000",
                     }}
                     onChangeText={(old) => this.setState({ old })}
-                    autoCapitalize={false}
+                    autoCapitalize={"none"}
                     secureTextEntry={true}
                   />
                   <TextInput
@@ -465,17 +478,19 @@ class Settings extends React.Component {
                       borderWidth: 1,
                       padding: 10,
                       borderRadius: 10,
+                      color: "#000000",
                     }}
                     onChangeText={(newP) => this.setState({ newP })}
-                    autoCapitalize={false}
+                    autoCapitalize={"none"}
                     secureTextEntry={true}
                   />
                 </View>
               ) : (
                 <TextInput
                   editable={false}
+                  autoCapitalize={"none"}
                   secureTextEntry={true}
-                  style={{ fontSize: 17 }}
+                  style={{ fontSize: 17, color: "#000000" }}
                   value={"Bernard Murphy"}
                 />
               )}
