@@ -109,11 +109,25 @@ class Cart extends Component {
     );
 
     this.setState({
-      firstName: this.props.user.user.firstName ? this.props.user.user.firstName : "",
-      lastName: this.props.user.user.lastName ? this.props.user.user.lastName : "",
-      email: this.props.user.user.email ? this.props.user.user.email: "",
-      mobile: this.props.user.user.mobile ? this.props.user.user.mobile.substring(2,this.props.user.user.mobile.length) : "",
-      previousMobileNumber: this.props.user.user.mobile ? this.props.user.user.mobile.substring(2,this.props.user.user.mobile.length): ""
+      firstName: this.props.user.user.firstName
+        ? this.props.user.user.firstName
+        : "",
+      lastName: this.props.user.user.lastName
+        ? this.props.user.user.lastName
+        : "",
+      email: this.props.user.user.email ? this.props.user.user.email : "",
+      mobile: this.props.user.user.mobile
+        ? this.props.user.user.mobile.substring(
+            2,
+            this.props.user.user.mobile.length
+          )
+        : "",
+      previousMobileNumber: this.props.user.user.mobile
+        ? this.props.user.user.mobile.substring(
+            2,
+            this.props.user.user.mobile.length
+          )
+        : "",
     });
     axios
       .get(
@@ -134,8 +148,8 @@ class Cart extends Component {
 
     if (!this.props.user.user.isGuest) {
       this.setState({ numVerified: true });
-    }else{
-      if(this.props.user.user.isGuestVerified){
+    } else {
+      if (this.props.user.user.isGuestVerified) {
         this.setState({ numVerified: true });
       }
     }
@@ -347,9 +361,7 @@ class Cart extends Component {
   }
   //  ejIEyo
   render() {
-    console.log("SD", this.state, this.props.user);
     var codeId = this.makeid(3);
-    console.log("CODE ID", codeId);
     //
     // console.log("SDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD", new Date("2020-04-30"))
 
@@ -378,7 +390,6 @@ class Cart extends Component {
     }
     //
     var todaysDate = day + "-" + month1 + "-" + year;
-    console.log("sdddddddddddd", todaysDate);
     var dates = [];
 
     for (var i = -1; i < 12; i++) {
@@ -411,7 +422,6 @@ class Cart extends Component {
     var storeProducts = this.props.cart.filter((item, index) => {
       return item.product.storeId === this.props.store.id;
     });
-    console.log("storeProductsstoreProducts", storeProducts);
     var isOut = false;
     var pname = "";
 
@@ -430,17 +440,15 @@ class Cart extends Component {
           }
 
           var todaysDate1 = year + "-" + month + "-" + day;
-          console.log(todaysDate1 , storeProducts[i].product.outOfStockDate,"SDDDDDDDDDDDDDDDDDSSDS564564");
+
           if (todaysDate1 === storeProducts[i].product.outOfStockDate) {
             pname = storeProducts[i].product.productName;
             isOut = true;
           }
         }
         var temp = storeProducts[i].price;
-        // var temp=0
       }
     }
-    console.log("iout ois out", isOut);
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const months = [
       "Jan",
@@ -494,13 +502,17 @@ class Cart extends Component {
               inputPosition="center"
               keyboardType={"number-pad"}
               size={wp(8)}
-              onFulfill={(isValid) =>{
-                if(isValid){
-                  axios.put('https://lit-peak-13067.herokuapp.com/api/users/guest/edit/verified/' +
-                    this.props.user.user._id, {
-                      isGuestVerified: true
-                    })
-                    .then(resp => {
+              onFulfill={(isValid) => {
+                if (isValid) {
+                  axios
+                    .put(
+                      "https://lit-peak-13067.herokuapp.com/api/users/guest/edit/verified/" +
+                        this.props.user.user._id,
+                      {
+                        isGuestVerified: true,
+                      }
+                    )
+                    .then((resp) => {
                       var temp = this.props.user.user;
                       temp.isGuestVerified = true;
 
@@ -511,13 +523,17 @@ class Cart extends Component {
 
                       this.props.userAsync(data);
                       this.setState(
-                        { codeMsg: false, numVerified: true, previousMobileNumber: this.state.mobile },
+                        {
+                          codeMsg: false,
+                          numVerified: true,
+                          previousMobileNumber: this.state.mobile,
+                        },
                         this.refs.modal6.close()
-                      )
+                      );
                     })
-                  .catch(err => console.log(err))
-                }else{
-                  this.setState({ codeMsg: true })
+                    .catch((err) => console.log(err));
+                } else {
+                  this.setState({ codeMsg: true });
                 }
               }}
               containerStyle={{ marginTop: 30 }}
@@ -813,15 +829,15 @@ class Cart extends Component {
                       <TextInput
                         placeholder={"(555) 555-5678"}
                         keyboardType={"numeric"}
-                        onChangeText={(mobile) =>{
-                          if(this.state.previousMobileNumber  !== mobile){
-                              this.setState({numVerified: false})
-                          }else{
-                            this.setState({numVerified: true})
+                        onChangeText={(mobile) => {
+                          if (this.state.previousMobileNumber !== mobile) {
+                            this.setState({ numVerified: false });
+                          } else {
+                            this.setState({ numVerified: true });
                           }
                           this.setState({
                             mobile,
-                          })
+                          });
                         }}
                         value={this.state.mobile}
                         style={[textIn.input, { width: "77.5%" }]}
@@ -885,14 +901,17 @@ class Cart extends Component {
                   if (this.state.mobile.substring(0, 2) === "+1") {
                     mob = true;
                   }
-                  var verifyCheck=true
-                  console.log(this.state.previousMobileNumber  , this.state.mobile)
-                  if(this.state.previousMobileNumber  !== this.state.mobile){
-                      verifyCheck = false
-                  }else{
-                      verifyCheck = true
+                  var verifyCheck = true;
+                  console.log(
+                    this.state.previousMobileNumber,
+                    this.state.mobile
+                  );
+                  if (this.state.previousMobileNumber !== this.state.mobile) {
+                    verifyCheck = false;
+                  } else {
+                    verifyCheck = true;
                   }
-                  console.log("SDDDDDDDDDDDDDDDDDDDDDDDDDDs33",verifyCheck)
+                  console.log("SDDDDDDDDDDDDDDDDDDDDDDDDDDs33", verifyCheck);
                   axios
                     .put(
                       "https://lit-peak-13067.herokuapp.com/api/users/guest/edit/" +
@@ -904,7 +923,7 @@ class Cart extends Component {
                         mobile: this.state.mobile
                           ? "+1" + this.state.mobile
                           : this.state.mobile,
-                          isGuestVerified: verifyCheck
+                        isGuestVerified: verifyCheck,
                         // mobile: mob ?  (this.state.mobile) : ("+1" + this.state.mobile),
                       }
                     )
@@ -1256,7 +1275,6 @@ class Cart extends Component {
                         this.refs.modal6.open();
                       })
                       .catch((err) => console.log("sdf", err));
-
                   }}
                   style={[
                     !this.state.mobile
@@ -1268,9 +1286,7 @@ class Cart extends Component {
                   <LatoText
                     fontName="Lato-Regular"
                     fonSiz={18}
-                    col={ !this.state.mobile
-                      ? "silver"
-                      : "#2E2E2E"}
+                    col={!this.state.mobile ? "silver" : "#2E2E2E"}
                     text="VERIFY"
                   ></LatoText>
                 </TouchableOpacity>
@@ -1520,67 +1536,63 @@ class Cart extends Component {
                       }
                     }
                     // if (timeCheck) {
-                      axios
-                        .post(
-                          "https://lit-peak-13067.herokuapp.com/add/order",
-                          {
-                            storeId: sId,
-                            products: storeProducts,
-                            totalAmount: subTotal,
-                            storeName: this.props.store.name,
-                            storeAddress: this.props.store.address,
-                            storePhone: this.props.store.phone,
-                            userId: this.props.user.user._id,
-                            name:
-                              this.state.firstName + " " + this.state.lastName,
-                            firstName: this.state.firstName,
-                            lastName: this.state.lastName,
-                            phone: "+1" + this.state.mobile,
-                            email: this.state.email,
-                            // address: "bac Street",
-                            orderTime: this.state.orderTime,
-                            orderDate:
-                              this.state.orderDate === ""
-                                ? todaysDate
-                                : this.state.orderDate,
-                            // orderTimeZone: "UST",
-                            postDate: pDate,
-                            postTime: pTime,
-                            tax: (parseFloat(this.state.tax) / 100) * subTotal,
-                            orderNumber: codeId,
-                            isGuest: this.props.user.user.isGuest,
-                            isSomeOneElse: this.state.isChecked,
-                            someoneElseFirstName: this.state.someoneElseFirstName,
-                            someoneElseLastName: this.state.someoneElseLastName,
-                            someoneElseEmail: this.state.someoneElseEmail,
-                            someoneElseMobile: this.state.someoneElsePhone
-                          }
-                        )
-                        .then((resp) => {
-                          // this.props.storeAsync('')
-                          // this.props.cartSizeAsync(0)
-                          // this.props.storeHeaderAsync('')
-                          // this.props.favStoreAsync('')
-                          axios
-                            .put(
-                              "https://lit-peak-13067.herokuapp.com/edit/store/orderNum/" +
-                                this.props.store.id +
-                                "/" +
-                                (parseInt(this.props.store.oId) + 1)
-                            )
-                            .then((resp1) => {
-                              // var temp = this.props.store
-                              // temp.oId = parseInt(this.props.store.oId)+1
-                              // this.props.storeAsync(temp)
-                              // this.props.storeHeaderAsync(temp)
-                              this.props.navigation.navigate("QrCode", {
-                                orderId: resp.data.order1._id,
-                                codeId: codeId,
-                                order: resp.data.order1,
-                              });
-                            })
-                            .catch((err) => console.log(err));
-                        });
+                    axios
+                      .post("https://lit-peak-13067.herokuapp.com/add/order", {
+                        storeId: sId,
+                        products: storeProducts,
+                        totalAmount: subTotal,
+                        storeName: this.props.store.name,
+                        storeAddress: this.props.store.address,
+                        storePhone: this.props.store.phone,
+                        userId: this.props.user.user._id,
+                        name: this.state.firstName + " " + this.state.lastName,
+                        firstName: this.state.firstName,
+                        lastName: this.state.lastName,
+                        phone: "+1" + this.state.mobile,
+                        email: this.state.email,
+                        // address: "bac Street",
+                        orderTime: this.state.orderTime,
+                        orderDate:
+                          this.state.orderDate === ""
+                            ? todaysDate
+                            : this.state.orderDate,
+                        // orderTimeZone: "UST",
+                        postDate: pDate,
+                        postTime: pTime,
+                        tax: (parseFloat(this.state.tax) / 100) * subTotal,
+                        orderNumber: codeId,
+                        isGuest: this.props.user.user.isGuest,
+                        isSomeOneElse: this.state.isChecked,
+                        someoneElseFirstName: this.state.someoneElseFirstName,
+                        someoneElseLastName: this.state.someoneElseLastName,
+                        someoneElseEmail: this.state.someoneElseEmail,
+                        someoneElseMobile: this.state.someoneElsePhone,
+                      })
+                      .then((resp) => {
+                        // this.props.storeAsync('')
+                        // this.props.cartSizeAsync(0)
+                        // this.props.storeHeaderAsync('')
+                        // this.props.favStoreAsync('')
+                        axios
+                          .put(
+                            "https://lit-peak-13067.herokuapp.com/edit/store/orderNum/" +
+                              this.props.store.id +
+                              "/" +
+                              (parseInt(this.props.store.oId) + 1)
+                          )
+                          .then((resp1) => {
+                            // var temp = this.props.store
+                            // temp.oId = parseInt(this.props.store.oId)+1
+                            // this.props.storeAsync(temp)
+                            // this.props.storeHeaderAsync(temp)
+                            this.props.navigation.navigate("QrCode", {
+                              orderId: resp.data.order1._id,
+                              codeId: codeId,
+                              order: resp.data.order1,
+                            });
+                          })
+                          .catch((err) => console.log(err));
+                      });
                     // } else {
                     //   alert(
                     //     "Store is closed in this date and time, please change date and time."
