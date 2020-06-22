@@ -168,6 +168,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingLeft: 5,
     fontSize: 17,
+    color:'#000000'
   },
   wrapperText: {
     flexDirection: "row",

@@ -74,7 +74,8 @@ const textIn = StyleSheet.create({
     borderBottomWidth: 1,
     paddingTop: 5,
     fontSize: 17,
-    paddingBottom:5
+    paddingBottom:5,
+    color:'#000000'
   }
 });
 const btnStyles = StyleSheet.create({

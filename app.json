@@ -24,7 +24,7 @@
       "**/*"
     ],
     "android": {
-      "package": "com.sposieapps.AssurePay",
+      "package": "org.reactjs.native.example.Node---the-local-grocery-picku",
       "versionCode": 1,
       "permissions": [
         "CAMERA",
@@ -35,7 +35,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier":"org.reactjs.native.example.Node---the-local-grocery-pickup",
+      "bundleIdentifier": "org.reactjs.native.example.Node---the-local-grocery-pickup",
       "buildNumber": "1"
     },
     "entryPoint": "node_modules/expo/AppEntry.js"

@@ -601,7 +601,10 @@ export default class SignUp1 extends React.Component {
                                           )
                                           .then((resp) =>
                                             this.setState(
-                                              { numberModal: true,errMessage:'' },
+                                              {
+                                                numberModal: true,
+                                                errMessage: "",
+                                              },
                                               () => this.refs.modal3.open()
                                             )
                                           )
