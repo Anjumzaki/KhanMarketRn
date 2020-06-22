@@ -340,7 +340,7 @@ class OrderDetails extends Component {
           >
             <LatoText
               fontName="Lato-Bold"
-              fonSiz={17}
+              fonSiz={20}
               col="#2E2E2E"
               text="Order was placed at"
             ></LatoText>

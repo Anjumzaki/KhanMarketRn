@@ -37,6 +37,7 @@ class FavCards extends React.Component {
 
   componentDidMount() {
     const ref = firebase
+
       .storage()
       .ref("/product_images/" + this.props.product.product._id + "_1.jpg");
     ref
@@ -46,18 +47,9 @@ class FavCards extends React.Component {
       })
       .catch((err) => console.log(err));
 
-    // console.log("FAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",this.props.product._id,this.props.product.product.favourites)
     if (this.props.product.product.favourites === undefined) {
       this.setState({ favourites: [] });
     } else {
-      // for (var i = 0; i < this.props.product.product.favourites.length; i++) {
-      //   if (
-      //     this.props.product.product.favourites[i].userId ===
-      //     this.props.user.user._id
-      //   ) {
-      //     this.setState({ heart: true });
-      //   }
-      // }
       this.setState({ favourites: this.props.product.product.favourites });
     }
   }
@@ -187,10 +179,12 @@ class FavCards extends React.Component {
                   col="#2E2E2E"
                   text={
                     "$" +
-                    (parseFloat(this.props.product.product.price) -
+                    (
+                      parseFloat(this.props.product.product.price) -
                       (parseFloat(this.props.product.product.price) *
                         parseFloat(this.props.product.product.discount)) /
-                        100).toFixed(2) +
+                        100
+                    ).toFixed(2) +
                     " / lb"
                   }
                 ></LatoText>
@@ -222,14 +216,7 @@ class FavCards extends React.Component {
                 col="#2E2E2E"
                 text={this.props.product.storeName}
               />
-              {/* <LatoText
-                fontName="Lato-Regular"
-                fonSiz={15}
-                col="#B50000"
-                text={"3 miles away"}
-              /> */}
             </View>
-
             <View style={{ marginTop: 10 }}>
               {this.state.cart ? (
                 <View
@@ -344,8 +331,7 @@ class FavCards extends React.Component {
                                           id: resp.data._id,
                                           phone: resp.data.phoneNumber,
                                           sId: resp.data.storeId,
-                                          oId: resp.data.orderNum
-
+                                          oId: resp.data.orderNum,
                                         });
                                         this.refs.modal3.close();
                                       });
@@ -380,7 +366,8 @@ class FavCards extends React.Component {
           isDisabled={this.state.isDisabled}
         >
           <Text>
-            If you add a product from a new store, you will lose your cart from the previous store
+            If you add a product from a new store, you will lose your cart from
+            the previous store
           </Text>
           <View>
             <Button

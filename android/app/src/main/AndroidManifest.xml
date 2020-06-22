@@ -34,11 +34,7 @@
       android:launchMode="singleTask"
       android:theme="@style/AppTheme">
 
-        <activity
-    android:name=".MainActivity"
-    android:label="OneSignal Example"
-    android:launchMode="singleTask"> <!-- Add this attribute to your main activity -->
-  </activity>
+
        <meta-data
      android:name="com.google.android.geo.API_KEY"
      android:value="AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI"/>
