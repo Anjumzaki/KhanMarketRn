@@ -48,7 +48,14 @@ class Favourites extends Component {
           this.props.user.user._id
       )
       .then((resp) => {
-        this.setState({ favourites: resp.data, loading: false });
+        var items = resp.data;
+        for (var i = 0; i < items.length; i++) {
+          items[i].carted = false;
+        }
+        this.setState({
+          favourites:items,
+          loading: false,
+        });
       })
       .catch((err) => console.log(err));
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
@@ -63,9 +70,16 @@ class Favourites extends Component {
               "https://lit-peak-13067.herokuapp.com/get/all/favourites/" +
                 this.props.user.user._id
             )
-            .then((resp) =>
-              this.setState({ favourites: resp.data, loading: false })
-            )
+            .then((resp) => {
+              var items = resp.data;
+              for (var i = 0; i < items.length; i++) {
+                items[i].carted = false;
+              }
+              this.setState({
+                favourites:items,
+                loading: false,
+              });
+            })
             .catch((err) => console.log(err))
       );
     });
@@ -78,7 +92,7 @@ class Favourites extends Component {
     console.log(this.state.favourites, " favaspdaskk");
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
-        <ScrollView style={{ backgroundColor: "white" }}>
+        <ScrollView style={{ backgroundColor: "white", paddingTop: 20 }}>
           <View
             style={{
               marginVertical: 10,
@@ -89,13 +103,16 @@ class Favourites extends Component {
             }}
           >
             {this.state.favourites.length > 0 ? (
-              this.state.favourites.slice(0).reverse().map((item, ind) => (
-                <FavCards
-                  navigation={this.props.navigation}
-                  key={1}
-                  product={item}
-                />
-              ))
+              this.state.favourites
+                .slice(0)
+                .reverse()
+                .map((item, ind) => (
+                  <FavCards
+                    navigation={this.props.navigation}
+                    key={1}
+                    product={item}
+                  />
+                ))
             ) : this.state.loading ? (
               <ActivityIndicator
                 style={{ marginTop: 100 }}

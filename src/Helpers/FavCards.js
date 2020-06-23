@@ -77,7 +77,7 @@ class FavCards extends React.Component {
     }
 
     this.props.cartSizeAsync(cSize);
-
+    alert(JSON.stringify(this.props.product));
     return (
       <View style={styles.procards}>
         <View style={styles.wrapCards}>
@@ -218,7 +218,7 @@ class FavCards extends React.Component {
               />
             </View>
             <View style={{ marginTop: 10 }}>
-              {this.props.product.carted ? (
+              {this.state.cart ? (
                 <View
                   style={{
                     flexDirection: "row",
