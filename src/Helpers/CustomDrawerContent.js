@@ -8,11 +8,18 @@ import { View, Image, Text } from "react-native";
 import LatoText from "../Helpers/LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { bindActionCreators } from "redux";
-import { cartAsync, userAsync,cartSizeAsync,favStoreAsync,storeHeaderAsync,storeAsync } from "../store/actions";
+import {
+  cartAsync,
+  userAsync,
+  cartSizeAsync,
+  favStoreAsync,
+  storeHeaderAsync,
+  storeAsync,
+} from "../store/actions";
 import { connect } from "react-redux";
 import firebase from "firebase";
 import AsyncStorage from "@react-native-community/async-storage";
-import UserDefault from '../../assets/icon-user-default.png'
+import UserDefault from "../../assets/icon-user-default.png";
 
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 // function CustomDrawerContent(props)
@@ -21,29 +28,13 @@ class CustomDrawerContent extends Component {
     super(props);
 
     this.state = {
-      image: "", 
+      image: "",
     };
   }
 
   componentDidMount() {
-    if(this.props.user){
+    if (this.props.user) {
       const ref = firebase
-      .storage()
-      .ref("profile_images/" + this.props.user.user._id + ".jpg");
-    ref
-      .getDownloadURL()
-      .then((url) => {
-        this.setState({ image: url });
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .catch((err) => console.log(err));
-    }
-   
-    this._unsubscribe = this.props.navigation.addListener("focus", () => {
-      if(this.props.user){
-        const ref = firebase
         .storage()
         .ref("profile_images/" + this.props.user.user._id + ".jpg");
       ref
@@ -55,7 +46,23 @@ class CustomDrawerContent extends Component {
           console.log(err);
         })
         .catch((err) => console.log(err));
-      } 
+    }
+
+    this._unsubscribe = this.props.navigation.addListener("focus", () => {
+      if (this.props.user) {
+        const ref = firebase
+          .storage()
+          .ref("profile_images/" + this.props.user.user._id + ".jpg");
+        ref
+          .getDownloadURL()
+          .then((url) => {
+            this.setState({ image: url });
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .catch((err) => console.log(err));
+      }
     });
   }
 
@@ -68,10 +75,12 @@ class CustomDrawerContent extends Component {
     }
   }
   render() {
-    var isUser = true
-    if(this.props.user.user.isGuest){
-      isUser = false
-    }
+    var isUser = true;
+    console.log(this.props.user);
+    // alert( JSON.stringify(this.props.user) )
+    // if(this.props.user.user.isGuest){
+    //   isUser = false
+    // }
     return (
       <DrawerContentScrollView
         style={{ backgroundColor: "#5C5C5C" }}
@@ -79,10 +88,8 @@ class CustomDrawerContent extends Component {
       >
         <TouchableOpacity
           onPress={
-            isUser ? (
-              () => this.props.navigation.navigate("Profile")
-            ) : null
-            }
+            isUser ? () => this.props.navigation.navigate("Profile") : null
+          }
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -99,22 +106,30 @@ class CustomDrawerContent extends Component {
                 style={{ width: 60, height: 60, borderRadius: 100 }}
                 source={{ uri: this.state.image }}
               />
-            ): (
+            ) : (
               <Image
                 style={{ width: 60, height: 60, borderRadius: 100 }}
                 source={UserDefault}
               />
             )}
           </View>
-          
+
           <View style={{ paddingLeft: 10 }}>
             <LatoText
               col="#FFFFFF"
               fontName={"Lato-Bold"}
               fontSiz={20}
-              text={this.props.user.user.firstName && this.props.user.user.lastName ? (
-                this.props.user.user.firstName.length+this.props.user.user.lastName.length < 18 ? this.props.user.user.firstName.toUpperCase()+"   "+this.props.user.user.lastName.toUpperCase() :  this.props.user.user.lastName.toUpperCase()
-              ): null}
+              text={
+                this.props.user.user.firstName && this.props.user.user.lastName
+                  ? this.props.user.user.firstName.length +
+                      this.props.user.user.lastName.length <
+                    18
+                    ? this.props.user.user.firstName.toUpperCase() +
+                      "   " +
+                      this.props.user.user.lastName.toUpperCase()
+                    : this.props.user.user.lastName.toUpperCase()
+                  : null
+              }
             />
             {/* <View style={{ paddingTop: 2 }}>
               <LatoText
@@ -129,16 +144,15 @@ class CustomDrawerContent extends Component {
         <DrawerItemList {...this.props} />
         <TouchableOpacity
           onPress={() => {
-            AsyncStorage.removeItem('user')
-            AsyncStorage.removeItem('userLocation')
-                this.props.cartAsync([])
-                this.props.storeAsync('')
-                this.props.cartSizeAsync(0)
-                this.props.storeHeaderAsync('')
-                this.props.favStoreAsync('')
-                this.props.userAsync("");
-                this.props.navigation.navigate("Login");
-              
+            AsyncStorage.removeItem("user");
+            AsyncStorage.removeItem("userLocation");
+            this.props.cartAsync([]);
+            this.props.storeAsync("");
+            this.props.cartSizeAsync(0);
+            this.props.storeHeaderAsync("");
+            this.props.favStoreAsync("");
+            this.props.userAsync("");
+            this.props.navigation.navigate("Login");
           }}
           style={{
             paddingHorizontal: 20,
@@ -173,7 +187,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
       storeAsync,
       cartSizeAsync,
       favStoreAsync,
-      storeHeaderAsync
+      storeHeaderAsync,
     },
     dispatch
   );

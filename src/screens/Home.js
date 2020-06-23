@@ -42,7 +42,7 @@ class Home extends React.Component {
   getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("user");
-      jsonValue != null ? alert(jsonValue) : null;
+      // jsonValue != null ? alert(jsonValue) : null;
     } catch (e) {}
   };
   backAction = () => {

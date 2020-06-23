@@ -55,7 +55,6 @@ class Login extends React.Component {
     // const jsonValue1 = "";
     const jsonValue1 = await AsyncStorage.getItem("user");
     var jsonValue = JSON.parse(jsonValue1)
-    // alert(jsonValue)
     console.log("jsonValuejsonValuejsonValuejsonValuejsonValue",jsonValue)
     // const loc1 = await AsyncStorage.getItem("userLocation");
     // const loc = JSON.parse(loc1);
@@ -189,7 +188,6 @@ class Login extends React.Component {
                   password: this.state.password,
                 })
                 .then((resp) => {
-                  // alert(JSON.stringify(resp));
                   if (resp.data === "Incorrect password.") {
                     // this.props.userAsync(resp.data);
                     this.setState({
