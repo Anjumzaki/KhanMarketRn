@@ -92,6 +92,7 @@ class Cart extends Component {
       someoneElsePhone: "",
       previousMobileNumber: "",
       keyState: false,
+      minTime: "30"
     };
     this._keyboardDidShow = this._keyboardDidShow.bind(this);
     this._keyboardDidHide = this._keyboardDidHide.bind(this);
@@ -202,7 +203,24 @@ class Cart extends Component {
               } else {
                 eu = "AM";
               }
-              //
+              //need to put logic here :)
+              
+              var currentdate = new Date();
+              var hr =
+                currentdate.getHours() < 10
+                  ? "0" + currentdate.getHours()
+                  : currentdate.getHours();
+              var mi =
+                currentdate.getMinutes() < 10
+                  ? "0" + currentdate.getMinutes()
+                  : currentdate.getMinutes();
+              var sc =
+                currentdate.getSeconds() < 10
+                  ? "0" + currentdate.getSeconds()
+                  : currentdate.getSeconds();
+              var pTime = hr + ":" + mi + ":" + sc;
+              console.log("current timeeeeeee",pTime)
+
               var st = resp.data.storeTimings[i].openTime.substring(0, 2);
               var et = resp.data.storeTimings[i].ClosingTime.substring(0, 2);
               if (ishalf) {
@@ -282,7 +300,7 @@ class Cart extends Component {
         }
         //
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log("e2",err));
   }
 
   _onLayoutDidChange = (e) => {
@@ -351,7 +369,7 @@ class Cart extends Component {
           this.makeid(6);
         }
       })
-      .then((err) => console.log(err));
+      .then((err) => console.log("e3",err));
 
     if (result) {
       return result;
@@ -531,7 +549,7 @@ class Cart extends Component {
                         this.refs.modal6.close()
                       );
                     })
-                    .catch((err) => console.log(err));
+                    .catch((err) => console.log("e4",err));
                 } else {
                   this.setState({ codeMsg: true });
                 }
@@ -673,15 +691,23 @@ class Cart extends Component {
           >
             {this.state.timeArray.map((index, item) => (
               <TouchableOpacity
-                onPress={() => this.setState({ times: item, orderTime: index })}
+                disabled ={index === "Store Closed"}
+                onPress={() => {
+                  console.log("selected timingssss",index)
+              
+                  this.setState({ times: item, orderTime: index })
+                
+                }}
                 style={
+                  index !== "Store Closed" ? (
                   this.state.times == item ? styles.tSelect : styles.tUnSelect
+                  ) : (styles.ctSelect)
                 }
               >
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={15}
-                  col={this.state.times == item ? "white" : "#5C5C5C"}
+                  col={index !== "Store Closed" ? (this.state.times == item ? "white" : "#5C5C5C"): ("black")}
                   txtAlign={"center"}
                   text={index}
                 />
@@ -902,10 +928,10 @@ class Cart extends Component {
                     mob = true;
                   }
                   var verifyCheck = true;
-                  console.log(
-                    this.state.previousMobileNumber,
-                    this.state.mobile
-                  );
+                  // console.log(
+                  //   this.state.previousMobileNumber,
+                  //   this.state.mobile
+                  // );
                   if (this.state.previousMobileNumber !== this.state.mobile) {
                     verifyCheck = false;
                   } else {
@@ -944,7 +970,7 @@ class Cart extends Component {
 
                       this.refs.modal4.close();
                     })
-                    .catch((err) => console.log(err));
+                    .catch((err) => console.log("ee",err));
 
                   this.refs.modal4.close();
                 }}
@@ -1270,7 +1296,7 @@ class Cart extends Component {
                           num
                       )
                       .then((resp) => {
-                        console.log(resp);
+                        // console.log(resp);
 
                         this.refs.modal6.open();
                       })
@@ -1524,13 +1550,13 @@ class Cart extends Component {
                       ? (dt = todaysDate)
                       : (dt = this.state.orderDate);
                     var timeCheck = true;
-                    console.log(this.state.orderTime, dt, pTime, pDate);
+                    // console.log(this.state.orderTime, dt, pTime, pDate);
                     if (dt === pDate) {
                       console.log("sdsd");
                       var t1 = pTime.split(":");
 
                       var t2 = this.state.orderTime.split(":");
-                      console.log(parseInt(t1[0]), parseInt(t2[0]));
+                      // console.log(parseInt(t1[0]), parseInt(t2[0]));
                       if (parseInt(t1[0]) >= parseInt(t2[0])) {
                         timeCheck = false;
                       }
@@ -1569,10 +1595,6 @@ class Cart extends Component {
                         someoneElseMobile: this.state.someoneElsePhone,
                       })
                       .then((resp) => {
-                        // this.props.storeAsync('')
-                        // this.props.cartSizeAsync(0)
-                        // this.props.storeHeaderAsync('')
-                        // this.props.favStoreAsync('')
                         axios
                           .put(
                             "https://lit-peak-13067.herokuapp.com/edit/store/orderNum/" +
@@ -1591,7 +1613,7 @@ class Cart extends Component {
                               order: resp.data.order1,
                             });
                           })
-                          .catch((err) => console.log(err));
+                          .catch((err) => console.log("e1",err));
                       });
                     // } else {
                     //   alert(
@@ -1750,6 +1772,18 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     justifyContent: "center",
   },
+  ctSelect: {
+    width: Dimensions.get("window").width / 2,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#000",
+    backgroundColor: "silver",
+    color: "#000",
+    flexDirection: "row",
+    marginVertical: 5,
+    paddingVertical: 8,
+    justifyContent: "center",
+  }
 });
 
 const mapStateToProps = (state) => ({
