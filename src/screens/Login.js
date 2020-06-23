@@ -70,6 +70,7 @@ class Login extends React.Component {
         await this.props.userAsync({user: resp.data})
       })
       .catch(err => console.log("err1",err))
+      
       var flag= false
       await axios.get('https://lit-peak-13067.herokuapp.com/get/location/'+jsonValue)
       .then(async resp1 => {
