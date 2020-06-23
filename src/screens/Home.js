@@ -159,22 +159,23 @@ class Home extends React.Component {
                 this.state.stores.map((item, ind) => (
                   <StoreCard
                     key={ind}
-                    key={item._id}
+                    key={item.store._id}
                     navigation={this.props.navigation}
-                    name={item.storeName}
+                    name={item.store.storeName}
                     distance={
-                      this.getDistanceFromLatLonInKm(
-                        this.props.userLocation.lat,
-                        this.props.userLocation.lng,
-                        item.lat,
-                        item.lng
-                      ).toFixed(2) + " mi"
+                      item.dist+ " mi"
+                      // this.getDistanceFromLatLonInKm(
+                      //   this.props.userLocation.lat,
+                      //   this.props.userLocation.lng,
+                      //   item.store.lat,
+                      //   item.store.lng
+                      // ).toFixed(2) + " mi"
                     }
-                    address={item.storeAddress}
-                    id={item._id}
-                    phone={item.phoneNumber}
-                    sId={item.storeId}
-                    oId={item.orderNum}
+                    address={item.store.storeAddress}
+                    id={item.store._id}
+                    phone={item.store.phoneNumber}
+                    sId={item.store.storeId}
+                    oId={item.store.orderNum}
                   />
                 ))}
             </ScrollView>
