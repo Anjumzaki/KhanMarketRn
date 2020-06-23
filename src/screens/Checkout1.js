@@ -220,6 +220,7 @@ class Cart extends Component {
                   : currentdate.getSeconds();
               var pTime = hr + ":" + mi + ":" + sc;
               console.log("current timeeeeeee",pTime)
+              console.log("STOREEEE TIMINGS",this.state.storeTimings[i])
 
               var st = resp.data.storeTimings[i].openTime.substring(0, 2);
               var et = resp.data.storeTimings[i].ClosingTime.substring(0, 2);
@@ -369,7 +370,7 @@ class Cart extends Component {
           this.makeid(6);
         }
       })
-      .then((err) => console.log("e3",err));
+      .catch((err) => console.log("e333",err));
 
     if (result) {
       return result;
