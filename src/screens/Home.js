@@ -163,7 +163,7 @@ class Home extends React.Component {
                     navigation={this.props.navigation}
                     name={item.store.storeName}
                     distance={
-                      item.dist+ " mi"
+                      item.dist + " mi"
                       // this.getDistanceFromLatLonInKm(
                       //   this.props.userLocation.lat,
                       //   this.props.userLocation.lng,

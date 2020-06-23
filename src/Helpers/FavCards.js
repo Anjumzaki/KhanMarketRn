@@ -218,7 +218,7 @@ class FavCards extends React.Component {
               />
             </View>
             <View style={{ marginTop: 10 }}>
-              {this.state.cart ? (
+              {this.props.product.carted ? (
                 <View
                   style={{
                     flexDirection: "row",

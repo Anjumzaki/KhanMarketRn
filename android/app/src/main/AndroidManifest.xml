@@ -33,8 +33,6 @@
       android:allowBackup="false"
       android:launchMode="singleTask"
       android:theme="@style/AppTheme"
-        android:hardwareAccelerated="false"
-       android:largeHeap="true"
       >
 
 
