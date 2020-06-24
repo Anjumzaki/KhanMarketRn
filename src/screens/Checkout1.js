@@ -23,6 +23,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LatoText from "../Helpers/LatoText";
 import { ScrollView } from "react-native-gesture-handler";
 import Expandable from "../Helpers/Expandable";
+import * as EmailValidator from "email-validator";
+
 import {
   btnStyles,
   bottomTab,
@@ -92,7 +94,7 @@ class Cart extends Component {
       someoneElsePhone: "",
       previousMobileNumber: "",
       keyState: false,
-      minTime: "30"
+      minTime: "30",
     };
     this._keyboardDidShow = this._keyboardDidShow.bind(this);
     this._keyboardDidHide = this._keyboardDidHide.bind(this);
@@ -204,7 +206,7 @@ class Cart extends Component {
                 eu = "AM";
               }
               //need to put logic here :)
-              
+
               var currentdate = new Date();
               var hr =
                 currentdate.getHours() < 10
@@ -219,7 +221,7 @@ class Cart extends Component {
                   ? "0" + currentdate.getSeconds()
                   : currentdate.getSeconds();
               var pTime = hr + ":" + mi + ":" + sc;
-              console.log("current timeeeeeee",pTime)
+              console.log("current timeeeeeee", pTime);
 
               var st = resp.data.storeTimings[i].openTime.substring(0, 2);
               var et = resp.data.storeTimings[i].ClosingTime.substring(0, 2);
@@ -300,7 +302,7 @@ class Cart extends Component {
         }
         //
       })
-      .catch((err) => console.log("e2",err));
+      .catch((err) => console.log("e2", err));
   }
 
   _onLayoutDidChange = (e) => {
@@ -369,7 +371,7 @@ class Cart extends Component {
           this.makeid(6);
         }
       })
-      .then((err) => console.log("e3",err));
+      .then((err) => console.log("e3", err));
 
     if (result) {
       return result;
@@ -377,11 +379,119 @@ class Cart extends Component {
 
     // ;
   }
+  handleConfirm = () =>{
+
+    console.log(
+      "ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      isOut
+    );
+    if (!isOut && !this.state.isOut) {
+      this.setState({ cart: true });
+
+      var pDate = new Date();
+      var dd = String(pDate.getDate()).padStart(2, "0");
+      var mm = String(pDate.getMonth() + 1).padStart(2, "0"); //January is 0!
+      var yyyy = pDate.getFullYear();
+
+      pDate = dd + "-" + mm + "-" + yyyy;
+
+      var currentdate = new Date();
+      var hr =
+        currentdate.getHours() < 10
+          ? "0" + currentdate.getHours()
+          : currentdate.getHours();
+      var mi =
+        currentdate.getMinutes() < 10
+          ? "0" + currentdate.getMinutes()
+          : currentdate.getMinutes();
+      var sc =
+        currentdate.getSeconds() < 10
+          ? "0" + currentdate.getSeconds()
+          : currentdate.getSeconds();
+      var pTime = hr + ":" + mi + ":" + sc;
+      var dt = "";
+      this.state.orderDate === ""
+        ? (dt = todaysDate)
+        : (dt = this.state.orderDate);
+      var timeCheck = true;
+      // console.log(this.state.orderTime, dt, pTime, pDate);
+      if (dt === pDate) {
+        console.log("sdsd");
+        var t1 = pTime.split(":");
+
+        var t2 = this.state.orderTime.split(":");
+        // console.log(parseInt(t1[0]), parseInt(t2[0]));
+        if (parseInt(t1[0]) >= parseInt(t2[0])) {
+          timeCheck = false;
+        }
+      }
+      // if (timeCheck) {
+      axios
+        .post("https://lit-peak-13067.herokuapp.com/add/order", {
+          storeId: sId,
+          products: storeProducts,
+          totalAmount: subTotal,
+          storeName: this.props.store.name,
+          storeAddress: this.props.store.address,
+          storePhone: this.props.store.phone,
+          userId: this.props.user.user._id,
+          name: this.state.firstName + " " + this.state.lastName,
+          firstName: this.state.firstName,
+          lastName: this.state.lastName,
+          phone: "+1" + this.state.mobile,
+          email: this.state.email,
+          orderTime: this.state.orderTime,
+          orderDate:
+            this.state.orderDate === ""
+              ? todaysDate
+              : this.state.orderDate,
+          postDate: pDate,
+          postTime: pTime,
+          tax: (parseFloat(this.state.tax) / 100) * subTotal,
+          orderNumber: codeId,
+          isGuest: this.props.user.user.isGuest,
+          isSomeOneElse: this.state.isChecked,
+          someoneElseFirstName: this.state.someoneElseFirstName,
+          someoneElseLastName: this.state.someoneElseLastName,
+          someoneElseEmail: this.state.someoneElseEmail,
+          someoneElseMobile: this.state.someoneElsePhone,
+        })
+        .then((resp) => {
+          axios
+            .put(
+              "https://lit-peak-13067.herokuapp.com/edit/store/orderNum/" +
+                this.props.store.id +
+                "/" +
+                (parseInt(this.props.store.oId) + 1)
+            )
+            .then((resp1) => {
+             
+              this.props.navigation.navigate("QrCode", {
+                orderId: resp.data.order1._id,
+                codeId: codeId,
+                order: resp.data.order1,
+              });
+            })
+            .catch((err) => console.log("e1",err));
+        });
+    } else {
+      console.log("pnamepnamepnamepname", pname);
+      var name = "";
+      if (pname) {
+        name = pname;
+      } else {
+        name = this.state.pname;
+      }
+      alert(
+        "Sorry, " +
+          name +
+          " Item is out of stock for the selected date, change pickup date or remove this product to procceed"
+      );
+    }
+  }
   //  ejIEyo
   render() {
     var codeId = this.makeid(3);
-    //
-    // console.log("SDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD", new Date("2020-04-30"))
 
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
@@ -549,7 +659,7 @@ class Cart extends Component {
                         this.refs.modal6.close()
                       );
                     })
-                    .catch((err) => console.log("e4",err));
+                    .catch((err) => console.log("e4", err));
                 } else {
                   this.setState({ codeMsg: true });
                 }
@@ -691,23 +801,30 @@ class Cart extends Component {
           >
             {this.state.timeArray.map((index, item) => (
               <TouchableOpacity
-                disabled ={index === "Store Closed"}
+                disabled={index === "Store Closed"}
                 onPress={() => {
-                  console.log("selected timingssss",index)
-              
-                  this.setState({ times: item, orderTime: index })
-                
+                  console.log("selected timingssss", index);
+
+                  this.setState({ times: item, orderTime: index });
                 }}
                 style={
-                  index !== "Store Closed" ? (
-                  this.state.times == item ? styles.tSelect : styles.tUnSelect
-                  ) : (styles.ctSelect)
+                  index !== "Store Closed"
+                    ? this.state.times == item
+                      ? styles.tSelect
+                      : styles.tUnSelect
+                    : styles.ctSelect
                 }
               >
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={15}
-                  col={index !== "Store Closed" ? (this.state.times == item ? "white" : "#5C5C5C"): ("black")}
+                  col={
+                    index !== "Store Closed"
+                      ? this.state.times == item
+                        ? "white"
+                        : "#5C5C5C"
+                      : "black"
+                  }
                   txtAlign={"center"}
                   text={index}
                 />
@@ -970,7 +1087,7 @@ class Cart extends Component {
 
                       this.refs.modal4.close();
                     })
-                    .catch((err) => console.log("ee",err));
+                    .catch((err) => console.log("ee", err));
 
                   this.refs.modal4.close();
                 }}
@@ -1516,125 +1633,7 @@ class Cart extends Component {
                   !this.state.numVerified ||
                   this.state.isStoreClosed
                 }
-                onPress={() => {
-                  console.log(
-                    "ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                    isOut
-                  );
-                  if (!isOut && !this.state.isOut) {
-                    this.setState({ cart: true });
-
-                    var pDate = new Date();
-                    var dd = String(pDate.getDate()).padStart(2, "0");
-                    var mm = String(pDate.getMonth() + 1).padStart(2, "0"); //January is 0!
-                    var yyyy = pDate.getFullYear();
-
-                    pDate = dd + "-" + mm + "-" + yyyy;
-
-                    var currentdate = new Date();
-                    var hr =
-                      currentdate.getHours() < 10
-                        ? "0" + currentdate.getHours()
-                        : currentdate.getHours();
-                    var mi =
-                      currentdate.getMinutes() < 10
-                        ? "0" + currentdate.getMinutes()
-                        : currentdate.getMinutes();
-                    var sc =
-                      currentdate.getSeconds() < 10
-                        ? "0" + currentdate.getSeconds()
-                        : currentdate.getSeconds();
-                    var pTime = hr + ":" + mi + ":" + sc;
-                    var dt = "";
-                    this.state.orderDate === ""
-                      ? (dt = todaysDate)
-                      : (dt = this.state.orderDate);
-                    var timeCheck = true;
-                    // console.log(this.state.orderTime, dt, pTime, pDate);
-                    if (dt === pDate) {
-                      console.log("sdsd");
-                      var t1 = pTime.split(":");
-
-                      var t2 = this.state.orderTime.split(":");
-                      // console.log(parseInt(t1[0]), parseInt(t2[0]));
-                      if (parseInt(t1[0]) >= parseInt(t2[0])) {
-                        timeCheck = false;
-                      }
-                    }
-                    // if (timeCheck) {
-                    axios
-                      .post("https://lit-peak-13067.herokuapp.com/add/order", {
-                        storeId: sId,
-                        products: storeProducts,
-                        totalAmount: subTotal,
-                        storeName: this.props.store.name,
-                        storeAddress: this.props.store.address,
-                        storePhone: this.props.store.phone,
-                        userId: this.props.user.user._id,
-                        name: this.state.firstName + " " + this.state.lastName,
-                        firstName: this.state.firstName,
-                        lastName: this.state.lastName,
-                        phone: "+1" + this.state.mobile,
-                        email: this.state.email,
-                        // address: "bac Street",
-                        orderTime: this.state.orderTime,
-                        orderDate:
-                          this.state.orderDate === ""
-                            ? todaysDate
-                            : this.state.orderDate,
-                        // orderTimeZone: "UST",
-                        postDate: pDate,
-                        postTime: pTime,
-                        tax: (parseFloat(this.state.tax) / 100) * subTotal,
-                        orderNumber: codeId,
-                        isGuest: this.props.user.user.isGuest,
-                        isSomeOneElse: this.state.isChecked,
-                        someoneElseFirstName: this.state.someoneElseFirstName,
-                        someoneElseLastName: this.state.someoneElseLastName,
-                        someoneElseEmail: this.state.someoneElseEmail,
-                        someoneElseMobile: this.state.someoneElsePhone,
-                      })
-                      .then((resp) => {
-                        axios
-                          .put(
-                            "https://lit-peak-13067.herokuapp.com/edit/store/orderNum/" +
-                              this.props.store.id +
-                              "/" +
-                              (parseInt(this.props.store.oId) + 1)
-                          )
-                          .then((resp1) => {
-                            // var temp = this.props.store
-                            // temp.oId = parseInt(this.props.store.oId)+1
-                            // this.props.storeAsync(temp)
-                            // this.props.storeHeaderAsync(temp)
-                            this.props.navigation.navigate("QrCode", {
-                              orderId: resp.data.order1._id,
-                              codeId: codeId,
-                              order: resp.data.order1,
-                            });
-                          })
-                          .catch((err) => console.log("e1",err));
-                      });
-                    // } else {
-                    //   alert(
-                    //     "Store is closed in this date and time, please change date and time."
-                    //   );
-                    // }
-                  } else {
-                    console.log("pnamepnamepnamepname", pname);
-                    var name = "";
-                    if (pname) {
-                      name = pname;
-                    } else {
-                      name = this.state.pname;
-                    }
-                    alert(
-                      "Sorry, " +
-                        name +
-                        " Item is out of stock for the selected date, change pickup date or remove this product to procceed"
-                    );
-                  }
-                }}
+                onPress={() => this.handleConfirm()}
                 style={[
                   this.state.storeTimings.isClosed ||
                   !nameCheck ||
@@ -1783,7 +1782,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     paddingVertical: 8,
     justifyContent: "center",
-  }
+  },
 });
 
 const mapStateToProps = (state) => ({
