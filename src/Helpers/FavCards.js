@@ -46,7 +46,26 @@ class FavCards extends React.Component {
         this.setState({ image: url });
       })
       .catch((err) => console.log(err));
+    var pCart = this.props.cart;
+    var inCart = false;
+    var inCartIndex = "";
+    for (var i = 0; i < pCart.length; i++) {
+      if (pCart[i].product._id === this.props.product.product._id) {
+        inCart = true;
+        inCartIndex = i;
+        break;
+      }
+    }
 
+    if (inCart) {
+      console.log(
+        "inCarttttttttttt",
+        inCart,
+        inCartIndex,
+        pCart[inCartIndex].quantity
+      );
+      this.setState({ qt: pCart[inCartIndex].quantity });
+    }
     if (this.props.product.product.favourites === undefined) {
       this.setState({ favourites: [] });
     } else {

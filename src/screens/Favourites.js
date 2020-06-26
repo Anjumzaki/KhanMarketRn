@@ -63,6 +63,7 @@ class Favourites extends Component {
                 console.log(items[i]._id);
                 if (that.props.cart[j].product._id == items[i].product._id) {
                   items[i].carted = true;
+                
                 }
               }
             }
