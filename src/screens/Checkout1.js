@@ -359,9 +359,9 @@ class Cart extends Component {
                     arr.splice(arr.length-closingRemove, arr.length-1) 
                                   
                }else{
-
+                if(!resp.data.storeTimings[i].isClosed){
                 var timesRemove = 0
-              if(Number(this.state.minTime) >= 60){
+                if(Number(this.state.minTime) >= 60){
                   xHours = Number(this.state.minTime) /60
                   console.log("xHours",Math.ceil(xHours))
                   timesRemove+=Math.ceil(xHours)
@@ -386,8 +386,10 @@ class Cart extends Component {
                   arr.splice(0, timesRemove) 
                   console.log(arr.length,"arr.length", closingRemove)
                   arr.splice(arr.length-closingRemove, arr.length-1) 
-               }
-               console.log("arrrrrr SIZE", arr)
+                }else{
+                  arr= []
+                }}
+               console.log("arrrrrr SIZE", arr, resp.data.storeTimings[i].isClosed, )
             if (resp.data.storeTimings[i].isClosed || arr.length === 0) {
               this.setState({
                 storeTimings: "",

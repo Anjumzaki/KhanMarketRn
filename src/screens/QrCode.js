@@ -192,7 +192,7 @@ class QrCode extends Component {
               fontName="Lato-Regular"
               fonSiz={15}
               col="#2E2E2E"
-              text="(Only possible before the order is 'being prepared)"
+              text="Terms and conditions apply"
             />
           </View>
          
