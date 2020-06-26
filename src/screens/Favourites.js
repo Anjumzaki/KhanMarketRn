@@ -91,7 +91,8 @@ class Favourites extends Component {
     this.setState(
       {
         imageL: true,
-        favourites: [],
+        loading: true,
+        // favourites: [],
       },
       () => {
         items.splice(id, 1);
@@ -106,6 +107,7 @@ class Favourites extends Component {
             this.setState({
               favourites: items,
               imageL: false,
+              loading: false,
             })
           )
           .catch((err) => err);
@@ -251,7 +253,7 @@ class Favourites extends Component {
               justifyContent: "center",
             }}
           >
-            {!this.state.imageL && (
+            {!this.state.imageL ? (
               <>
                 {myfavs.length > 0 ? (
                   myfavs.map((item, ind) => (
@@ -276,6 +278,12 @@ class Favourites extends Component {
                   </Text>
                 )}
               </>
+            ) : (
+              <ActivityIndicator
+                style={{ marginTop: 100 }}
+                size="large"
+                color="black"
+              />
             )}
           </View>
         </ScrollView>
