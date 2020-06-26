@@ -50,6 +50,8 @@ import { connect } from "react-redux";
 import axios from "axios";
 import timestamp from "time-stamp";
 import Modal from "react-native-modalbox";
+import firebase from "firebase";
+
 
 class Cart extends Component {
   constructor(props) {
@@ -95,12 +97,24 @@ class Cart extends Component {
       previousMobileNumber: "",
       keyState: false,
       minTime: "90",
+      image:''
     };
     this._keyboardDidShow = this._keyboardDidShow.bind(this);
     this._keyboardDidHide = this._keyboardDidHide.bind(this);
   }
 
   componentDidMount() {
+      if (this.props.store) {
+        const ref = firebase
+          .storage()
+          .ref("/store_logos/" + this.props.store.id + ".jpg");
+        ref
+          .getDownloadURL()
+          .then((url) => {
+            this.setState({ image: url });
+          })
+          .catch((err) => console.log(err));
+        }
     console.log("ORDERRRRRRRRRRRRRRR numer", this.props.user.user);
     this.keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -1240,7 +1254,7 @@ class Cart extends Component {
             >
               <Image
                 style={{ width: 44, height: 44, marginRight: 10 }}
-                source={require("../../assets/new.png")}
+                source={{uri:this.state.image}}
               />
               <View>
                 <LatoText
