@@ -170,7 +170,12 @@ class FavCards extends React.Component {
               </TouchableOpacity> */}
               {this.props.product.favItem ? (
                 <TouchableOpacity
-                  onPress={()=>this.props.handleFav(this.props.ind,this.props.product.product._id)}
+                  onPress={() =>
+                    this.props.handleFav(
+                      this.props.ind,
+                      this.props.product.product._id
+                    )
+                  }
                 >
                   <AntDesign color="#B50000" size={18} name="heart" />
                 </TouchableOpacity>
@@ -228,7 +233,7 @@ class FavCards extends React.Component {
               />
             </View>
             <View style={{ marginTop: 10 }}>
-              {this.props.myCart ? (
+              {this.props.product.carted ? (
                 <View
                   style={{
                     flexDirection: "row",
@@ -258,102 +263,11 @@ class FavCards extends React.Component {
               ) : (
                 <TouchableOpacity
                   onPress={() => {
-                    if (this.props.cart.length === 0) {
-                      var pCart = this.props.cart;
-                      pCart.push({
-                        product: this.props.product.product,
-                        quantity: this.state.qt,
-                      });
-                      this.props.favStoreAsync(
-                        this.props.product.product.storeId
-                      );
-                      this.props.cartAsync(pCart);
-                      this.setState({ cart: true });
-
-                      if (this.props.store === "") {
-                        axios
-                          .get(
-                            "https://lit-peak-13067.herokuapp.com/get/store/" +
-                              this.props.product.product.storeId
-                          )
-                          .then((resp) => {
-                            this.props.storeAsync({
-                              name: resp.data.storeName,
-                              address: resp.data.storeAddress,
-                              id: resp.data._id,
-                              phone: resp.data.phoneNumber,
-                              sId: resp.data.storeId,
-                              oId: resp.data.orderNum,
-                            });
-                          });
-                      }
-                    } else {
-                      if (
-                        this.props.favStore ===
-                        this.props.product.product.storeId
-                      ) {
-                        var pCart = this.props.cart;
-                        pCart.push({
-                          product: this.props.product.product,
-                          quantity: this.state.qt,
-                        });
-                        this.props.favStoreAsync(
-                          this.props.product.product.storeId
-                        );
-                        this.props.cartAsync(pCart);
-                        this.setState({ cart: true });
-                      } else {
-                        this.setState(
-                          { temp: this.props.product.product.storeId },
-                          () => {
-                            Alert.alert(
-                              "Alert!",
-                              "If you add a product from a new store, you will lose your cart from the previous store",
-                              [
-                                {
-                                  text: "Cancel",
-                                  onPress: () => console.log("Cancel Pressed"),
-                                  style: "cancel",
-                                },
-                                {
-                                  text: "OK",
-                                  onPress: () => {
-                                    var pCart = [];
-                                    pCart.push({
-                                      product: this.props.product.product,
-                                      quantity: this.state.qt,
-                                    });
-                                    this.props.favStoreAsync(
-                                      this.props.product.product.storeId
-                                    );
-                                    this.props.cartAsync(pCart);
-                                    this.setState({ cart: true });
-
-                                    axios
-                                      .get(
-                                        "https://lit-peak-13067.herokuapp.com/get/store/" +
-                                          this.state.temp
-                                      )
-                                      .then((resp) => {
-                                        this.props.storeAsync({
-                                          name: resp.data.storeName,
-                                          address: resp.data.storeAddress,
-                                          id: resp.data._id,
-                                          phone: resp.data.phoneNumber,
-                                          sId: resp.data.storeId,
-                                          oId: resp.data.orderNum,
-                                        });
-                                        this.refs.modal3.close();
-                                      });
-                                  },
-                                },
-                              ],
-                              { cancelable: true }
-                            );
-                          }
-                        );
-                      }
-                    }
+                    this.props.handleCart(
+                      this.props.product.product,
+                      this.state.qt,
+                      this.props.ind
+                    );
                   }}
                   style={btnStyles.cartBtn}
                 >
