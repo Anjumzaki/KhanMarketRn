@@ -38,15 +38,24 @@ class ProCards extends React.Component {
     }
     this.setState({favourites: this.props.product.favourites})
   }
+      
+  var pCart = this.props.cart;
+  var inCart = false
+  var inCartIndex = ""
+  for(var i=0; i<pCart.length; i++){
+    if(pCart[i].product._id === this.props.product._id){
+      inCart =true
+      inCartIndex=i
+      break
+    }
   }
 
-// handleChange(num) {
-//   var preNum = this.state.qt;
-//   preNum = num + preNum;
-//   if (preNum >= 1) {
-//     this.setState({ qt: preNum });
-//   }
-// }
+  if(inCart){
+    console.log("inCarttttttttttt",inCart, inCartIndex, pCart[inCartIndex].quantity)
+    this.setState({ cart: true, qt: pCart[inCartIndex].quantity});
+  }
+
+  }
 
 handleChange(num) {
   var preNum = this.state.qt;

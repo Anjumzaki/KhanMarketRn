@@ -62,19 +62,31 @@ class ProductDetails extends Component {
       }
       this.setState({ favourites: this.props.route.params.product.favourites });
     }
+
+    
+    var pCart = this.props.cart;
+    var inCart = false
+    var inCartIndex = ""
+    for(var i=0; i<pCart.length; i++){
+      if(pCart[i].product._id === this.props.route.params.product._id){
+        inCart =true
+        inCartIndex=i
+        break
+      }
+    }
+
+    if(inCart){
+      console.log("inCarttttttttttt",inCart, inCartIndex, pCart[inCartIndex].quantity)
+      this.setState({ cart: true, qt: pCart[inCartIndex].quantity, buttonDisable: true});
+    }
+
   }
 
   _onLayoutDidChange = (e) => {
     const layout = e.nativeEvent.layout;
     this.setState({ size: { width: layout.width, height: layout.height } });
   };
-  // handleChange (num){
-  //   var preNum = this.state.qt
-  //   preNum =num + preNum
-  //   if(preNum>=1){
-  //     this.setState({qt:preNum})
-  //   }
-  // }
+
   handleChange(num) {
     var preNum = this.state.qt;
     preNum = num + preNum;

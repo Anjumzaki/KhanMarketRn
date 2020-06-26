@@ -67,22 +67,6 @@ class ProCards extends React.Component {
 
     if(inCart){
       console.log("inCarttttttttttt",inCart, inCartIndex, pCart[inCartIndex].quantity)
-
-      // pCart[inCartIndex ].quantity = pCart[inCartIndex ].quantity+1
-      // // pCart.push({
-      // //   product: this.props.product,
-      // //   quantity: this.state.qt,
-      // // });
-      // this.props.storeAsync({
-      //   name: this.props.storeHeader.name,
-      //   address: this.props.storeHeader.address,
-      //   id: this.props.storeHeader.id,
-      //   phone: this.props.storeHeader.phone,
-      //   sId: this.props.storeHeader.storeId,
-      //   oId: this.props.storeHeader.oId,
-      // });
-      // this.props.favStoreAsync(this.props.product.storeId);
-      // this.props.cartAsync(pCart);
       this.setState({ cart: true, qt: pCart[inCartIndex].quantity});
     }
   }

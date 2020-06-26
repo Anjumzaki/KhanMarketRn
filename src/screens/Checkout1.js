@@ -314,11 +314,6 @@ class Cart extends Component {
                         console.log("xHours",Math.ceil(xHours))
                         timesRemove+=Math.ceil(xHours)
                     }
-                    // else if(Number(this.state.minTime) === 30){
-                    //   timesRemove=1
-                    // }else{
-                    //  timesRemove=0
-                    // }
                     console.log("after xhours min time", timesRemove)
                     var tempMinTime= Number(this.state.minTime)
                     if(tempMinTime > 60){
@@ -486,7 +481,7 @@ class Cart extends Component {
     // ;
   }
 
-  handleConfirm(isOut, sId, storeProducts,subTotal,codeId){
+  handleConfirm(isOut, sId, storeProducts,subTotal,codeId, todaysDate){
 
     console.log(
       "ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -532,7 +527,7 @@ class Cart extends Component {
           timeCheck = false;
         }
       }
-      // if (timeCheck) {
+      if (EmailValidator.validate(this.state.someoneElseEmail) || this.state.someoneElseEmail === "") {
       axios
         .post("https://lit-peak-13067.herokuapp.com/add/order", {
           storeId: sId,
@@ -578,6 +573,9 @@ class Cart extends Component {
             })
             .catch((err) => console.log("e1", err));
         });
+      }else{
+        alert("Invalid Email of Someone Else Picking")
+      }
     } else {
       console.log("pnamepnamepnamepname", pname);
       var name = "";
@@ -1140,6 +1138,7 @@ class Cart extends Component {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={async () => {
+                  if(EmailValidator.validate(this.state.email) || this.state.email === ""){
                   if (this.state.firstName && this.state.lastName) {
                     nameCheck = true;
                   }
@@ -1194,7 +1193,9 @@ class Cart extends Component {
                     .catch((err) => console.log("ee", err));
 
                   this.refs.modal4.close();
-                }}
+                }else{
+                  alert("Invalid Email")
+                }}}
               >
                 <LatoText
                   fontName="Lato-Regular"
@@ -1730,7 +1731,7 @@ class Cart extends Component {
                   !this.state.numVerified ||
                   this.state.isStoreClosed
                 }
-                onPress={() => this.handleConfirm(isOut,sId, storeProducts,subTotal,codeId)}
+                onPress={() => this.handleConfirm(isOut,sId, storeProducts,subTotal,codeId,todaysDate)}
                 style={[
                   this.state.storeTimings.isClosed ||
                   !nameCheck ||

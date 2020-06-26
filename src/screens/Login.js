@@ -35,6 +35,7 @@ import { bindActionCreators } from "redux";
 import { userAsync, locationAsync } from "../store/actions";
 import { connect } from "react-redux";
 import { getUniqueId, getManufacturer } from "react-native-device-info";
+
 class Login extends React.Component {
   static navigationOptions = { header: null };
 
@@ -55,11 +56,6 @@ class Login extends React.Component {
     // const jsonValue1 = "";
     const jsonValue1 = await AsyncStorage.getItem("user");
     var jsonValue = JSON.parse(jsonValue1)
-    console.log("jsonValuejsonValuejsonValuejsonValuejsonValue",jsonValue)
-    // const loc1 = await AsyncStorage.getItem("userLocation");
-    // const loc = JSON.parse(loc1);
-      // /get/user/byId/
-     
       
 
     if (jsonValue) {
