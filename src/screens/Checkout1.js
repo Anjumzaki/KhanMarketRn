@@ -284,63 +284,105 @@ class Cart extends Component {
               //  console.log("current timeeeeeee",pTime)
               //  console.log("STOREEEE TIMINGS",resp.data.storeTimings[i])
               //  console.log("selected Date",this.state.orderDate, pDate)
-
+              console.log(arr)
                if(this.state.orderDate === "" || this.state.orderDate === pDate ){
-                  //  console.log("current date")
+                   console.log("current date")
                   //  if(Number(hr) > 12){
                   //    hr = Number(hr) - 12
                   //  }
-                  //  console.log("current hour",Number(hr))
+                   console.log("current hour",Number(hr))
                    var result = arr[0].split(" ")
                    var result1 = result[0].split(":")
                   //  openTime.includes("PM")
-                  // console.log("unit check",arr[0].substring(5,8))
+                  console.log("unit check",arr[0].substring(5,8))
                   var selectedTime = Number(result1[0])
                   if(arr[0].substring(5,8) === "PM"){
                     selectedTime = Number(result1[0]) + 12
                   }
 
-                  //  console.log("intial timings hour",selectedTime)
+                  if(selectedTime === 12){
+                    selectedTime = 0
+                  }
+                   console.log("intial timings hour",selectedTime)
 
                    var timesRemove = Number(hr) - selectedTime +1
-                    // console.log("current min",mi)
-                    // console.log("min x min",this.state.minTime)
+                   if(timesRemove < 1){
+                    timesRemove=0
+                   }
+                   console.log("timesRemovetimesRemove",timesRemove)
+                    console.log("current min",mi)
+                    console.log("min x min",this.state.minTime)
                     var xHours = 0
-                    if(Number(this.state.minTime) >= 60){
+                    if(Number(this.state.minTime) > 60){
                         xHours = Number(this.state.minTime) /60
-                        // console.log("xHours",Math.floor(xHours))
+                        console.log("xHours",Math.floor(xHours))
                         timesRemove+=Math.floor(xHours)
                     }
+                    // else if(Number(this.state.minTime) === 30){
+                    //   timesRemove=1
+                    // }else{
+                    //  timesRemove=0
+                    // }
+                    console.log("after xhours min time", timesRemove)
                     var tempMinTime= Number(this.state.minTime)
                     if(tempMinTime > 60){
                       tempMinTime = tempMinTime % 60
                     }
-                    // console.log("tempMinTime",tempMinTime)
+                    console.log("tempMinTime",tempMinTime)
                     if(Number(mi) > tempMinTime && tempMinTime !== 0){
                       timesRemove+=1
                     }
-                    // console.log("timesRemove", timesRemove)
+                    console.log("timesRemove", timesRemove)
 
                     var cxHours = 0
                     var closingRemove= arr.length -1
                     if(Number(this.state.minTime) > 60){
-                      // console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
+                      console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
                         cxHours = Number(this.state.minTime) /60
-                        // console.log("cxHours",Math.floor(cxHours))
+                        console.log("cxHours",Math.floor(cxHours))
                         closingRemove =Math.floor(cxHours)
                     }else if(Number(this.state.minTime) <= 60){
                         closingRemove =1
                     }else{
                       closingRemove=0
                     }
-                    // console.log("closingRemove",closingRemove)
+                    console.log("closingRemove",closingRemove)
+                    console.log("timesRemove final",timesRemove)
 
                     arr.splice(0, timesRemove) 
-                    // console.log(arr.length,"arr.length")
+                    console.log(arr.length,"arr.length")
                     arr.splice(arr.length-closingRemove, arr.length-1) 
                                   
+               }else{
+
+                var timesRemove = 0
+              if(Number(this.state.minTime) >= 60){
+                  xHours = Number(this.state.minTime) /60
+                  console.log("xHours",Math.floor(xHours))
+                  timesRemove+=Math.floor(xHours)
+                 }else if(Number(this.state.minTime) === 30){
+                   timesRemove=1
+                 }else{
+                  timesRemove=0
+                 }
+                  console.log("after xhours min time", timesRemove)
+                  var cxHours = 0
+                  var closingRemove= arr.length -1
+                  if(Number(this.state.minTime) > 60){
+                    console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
+                      cxHours = Number(this.state.minTime) /60
+                      console.log("cxHours",Math.floor(cxHours))
+                      closingRemove =Math.floor(cxHours)
+                  }else if(Number(this.state.minTime) <= 60 && Number(this.state.minTime) > 0){
+                      closingRemove =1
+                  }else{
+                    closingRemove=0
+                  }
+                  arr.splice(0, timesRemove) 
+                  console.log(arr.length,"arr.length", closingRemove)
+                  arr.splice(arr.length-closingRemove, arr.length-1) 
                }
-              //  console.log("arrrrrr SIZE", arr)
+               console.log("arrrrrr SIZE", arr)
             if (resp.data.storeTimings[i].isClosed || arr.length === 0) {
               this.setState({
                 storeTimings: "",
@@ -447,7 +489,8 @@ class Cart extends Component {
 
     // ;
   }
-  handleConfirm = () =>{
+
+  handleConfirm(isOut){
 
     console.log(
       "ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -1701,7 +1744,7 @@ class Cart extends Component {
                   !this.state.numVerified ||
                   this.state.isStoreClosed
                 }
-                onPress={() => this.handleConfirm()}
+                onPress={() => this.handleConfirm(isOut)}
                 style={[
                   this.state.storeTimings.isClosed ||
                   !nameCheck ||
