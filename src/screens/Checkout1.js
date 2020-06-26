@@ -94,7 +94,7 @@ class Cart extends Component {
       someoneElsePhone: "",
       previousMobileNumber: "",
       keyState: false,
-      minTime: "30",
+      minTime: "90",
     };
     this._keyboardDidShow = this._keyboardDidShow.bind(this);
     this._keyboardDidHide = this._keyboardDidHide.bind(this);
@@ -230,11 +230,7 @@ class Cart extends Component {
                 if (parseInt(st) > 12) {
                   st = 1;
                 }
-                // if(parseInt(st) === parseInt(et) && unit === eu) {
-                //   break
-                // }
                 var temp2 = parseInt(st) + ":00 " + unit;
-                // st=parseInt(parseInt(st)+1)
 
                 if (parseInt(st) > 11) {
                   if (unit === "PM") {
@@ -315,8 +311,8 @@ class Cart extends Component {
                     var xHours = 0
                     if(Number(this.state.minTime) > 60){
                         xHours = Number(this.state.minTime) /60
-                        console.log("xHours",Math.floor(xHours))
-                        timesRemove+=Math.floor(xHours)
+                        console.log("xHours",Math.ceil(xHours))
+                        timesRemove+=Math.ceil(xHours)
                     }
                     // else if(Number(this.state.minTime) === 30){
                     //   timesRemove=1
@@ -339,8 +335,8 @@ class Cart extends Component {
                     if(Number(this.state.minTime) > 60){
                       console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
                         cxHours = Number(this.state.minTime) /60
-                        console.log("cxHours",Math.floor(cxHours))
-                        closingRemove =Math.floor(cxHours)
+                        console.log("cxHours",Math.ceil(cxHours))
+                        closingRemove =Math.ceil(cxHours)
                     }else if(Number(this.state.minTime) <= 60){
                         closingRemove =1
                     }else{
@@ -358,8 +354,8 @@ class Cart extends Component {
                 var timesRemove = 0
               if(Number(this.state.minTime) >= 60){
                   xHours = Number(this.state.minTime) /60
-                  console.log("xHours",Math.floor(xHours))
-                  timesRemove+=Math.floor(xHours)
+                  console.log("xHours",Math.ceil(xHours))
+                  timesRemove+=Math.ceil(xHours)
                  }else if(Number(this.state.minTime) === 30){
                    timesRemove=1
                  }else{
@@ -371,8 +367,8 @@ class Cart extends Component {
                   if(Number(this.state.minTime) > 60){
                     console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
                       cxHours = Number(this.state.minTime) /60
-                      console.log("cxHours",Math.floor(cxHours))
-                      closingRemove =Math.floor(cxHours)
+                      console.log("cxHours",Math.ceil(cxHours))
+                      closingRemove =Math.ceil(cxHours)
                   }else if(Number(this.state.minTime) <= 60 && Number(this.state.minTime) > 0){
                       closingRemove =1
                   }else{
@@ -1418,9 +1414,6 @@ class Cart extends Component {
                 fonSiz={17}
                 col="#2E2E2E"
                 text={
-                  // this.props.user.user.firstName
-                  //   ? this.props.user.user.firstName +" "+ this.props.user.user.lastName
-                  //   :
                   this.state.firstName + " " + this.state.lastName
                 }
               />
@@ -1445,10 +1438,6 @@ class Cart extends Component {
                 fonSiz={17}
                 col="#2E2E2E"
                 text={
-                  // (this.props.user.user.mobile ? "+" : "") +
-                  // this.props.user.user.mobile
-                  //   ? this.props.user.user.mobile
-                  //   :
                   this.state.mobile
                     ? "+1" + this.state.mobile
                     : this.state.mobile

@@ -53,6 +53,38 @@ class ProCards extends React.Component {
       }
       this.setState({ favourites: this.props.product.favourites });
     }
+
+    var pCart = this.props.cart;
+    var inCart = false
+    var inCartIndex = ""
+    for(var i=0; i<pCart.length; i++){
+      if(pCart[i].product._id === this.props.product._id){
+        inCart =true
+        inCartIndex=i
+        break
+      }
+    }
+
+    if(inCart){
+      console.log("inCarttttttttttt",inCart, inCartIndex, pCart[inCartIndex].quantity)
+
+      // pCart[inCartIndex ].quantity = pCart[inCartIndex ].quantity+1
+      // // pCart.push({
+      // //   product: this.props.product,
+      // //   quantity: this.state.qt,
+      // // });
+      // this.props.storeAsync({
+      //   name: this.props.storeHeader.name,
+      //   address: this.props.storeHeader.address,
+      //   id: this.props.storeHeader.id,
+      //   phone: this.props.storeHeader.phone,
+      //   sId: this.props.storeHeader.storeId,
+      //   oId: this.props.storeHeader.oId,
+      // });
+      // this.props.favStoreAsync(this.props.product.storeId);
+      // this.props.cartAsync(pCart);
+      this.setState({ cart: true, qt: pCart[inCartIndex].quantity});
+    }
   }
 
   handleChange(num) {
@@ -269,13 +301,6 @@ class ProCards extends React.Component {
             ) : (
               <TouchableOpacity
                 onPress={() => {
-                  // var pCart=this.props.cart;
-                  // pCart.push({
-                  //   product: this.props.product,
-                  //   quantity: this.state.qt
-                  // })
-                  // this.props.cartAsync(pCart)
-                  // this.setState({cart: true})
                   if (this.props.cart.length === 0) {
                     var pCart = this.props.cart;
                     pCart.push({
@@ -296,21 +321,52 @@ class ProCards extends React.Component {
                   } else {
                     if (this.props.store.id === this.props.product.storeId) {
                       var pCart = this.props.cart;
-                      pCart.push({
-                        product: this.props.product,
-                        quantity: this.state.qt,
-                      });
-                      this.props.storeAsync({
-                        name: this.props.storeHeader.name,
-                        address: this.props.storeHeader.address,
-                        id: this.props.storeHeader.id,
-                        phone: this.props.storeHeader.phone,
-                        sId: this.props.storeHeader.storeId,
-                        oId: this.props.storeHeader.oId,
-                      });
-                      this.props.favStoreAsync(this.props.product.storeId);
-                      this.props.cartAsync(pCart);
-                      this.setState({ cart: true });
+                      // var inCart = false
+                      // var inCartIndex = ""
+                      // for(var i=0; i<pCart.length; i++){
+                      //   if(pCart[i].product._id === this.props.product._id){
+                      //     inCart =true
+                      //     inCartIndex=i
+                      //     break
+                      //   }
+                      // }
+
+                      // console.log("inCarttttttttttt",inCart, inCartIndex)
+                      // if(inCart){
+                      //   pCart[inCartIndex ].quantity = pCart[inCartIndex ].quantity+1
+                      //   // pCart.push({
+                      //   //   product: this.props.product,
+                      //   //   quantity: this.state.qt,
+                      //   // });
+                      //   this.props.storeAsync({
+                      //     name: this.props.storeHeader.name,
+                      //     address: this.props.storeHeader.address,
+                      //     id: this.props.storeHeader.id,
+                      //     phone: this.props.storeHeader.phone,
+                      //     sId: this.props.storeHeader.storeId,
+                      //     oId: this.props.storeHeader.oId,
+                      //   });
+                      //   this.props.favStoreAsync(this.props.product.storeId);
+                      //   this.props.cartAsync(pCart);
+                      //   this.setState({ cart: true });
+                      // }else{
+                        pCart.push({
+                          product: this.props.product,
+                          quantity: this.state.qt,
+                        });
+                        this.props.storeAsync({
+                          name: this.props.storeHeader.name,
+                          address: this.props.storeHeader.address,
+                          id: this.props.storeHeader.id,
+                          phone: this.props.storeHeader.phone,
+                          sId: this.props.storeHeader.storeId,
+                          oId: this.props.storeHeader.oId,
+                        });
+                        this.props.favStoreAsync(this.props.product.storeId);
+                        this.props.cartAsync(pCart);
+                        this.setState({ cart: true });
+                      // }
+                     
                     } else {
                       this.setState(
                         { temp: this.props.product.storeId },
