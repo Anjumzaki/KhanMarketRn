@@ -38,58 +38,74 @@ class Favourites extends Component {
       qt: 1,
       favourites: [],
       loading: true,
+      imageL: false,
     };
   }
-
+  getData = () => {
+    this.setState(
+      {
+        favourites: [],
+        loading: true,
+      },
+      () =>
+        axios
+          .get(
+            "https://lit-peak-13067.herokuapp.com/get/all/favourites/" +
+              this.props.user.user._id
+          )
+          .then((resp) => {
+            var items = resp.data;
+            for (var i = 0; i < items.length; i++) {
+              items[i].carted = false;
+              items[i].favItem = true;
+            }
+            this.setState({
+              favourites: items,
+              loading: false,
+            });
+          })
+          .catch((err) => console.log(err))
+    );
+  };
   componentDidMount() {
-    axios
-      .get(
-        "https://lit-peak-13067.herokuapp.com/get/all/favourites/" +
-          this.props.user.user._id
-      )
-      .then((resp) => {
-        var items = resp.data;
-        for (var i = 0; i < items.length; i++) {
-          items[i].carted = false;
-        }
-        this.setState({
-          favourites:items,
-          loading: false,
-        });
-      })
-      .catch((err) => console.log(err));
+    this.getData();
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
-      this.setState(
-        {
-          favourites: [],
-          loading: true,
-        },
-        () =>
-          axios
-            .get(
-              "https://lit-peak-13067.herokuapp.com/get/all/favourites/" +
-                this.props.user.user._id
-            )
-            .then((resp) => {
-              var items = resp.data;
-              for (var i = 0; i < items.length; i++) {
-                items[i].carted = false;
-              }
-              this.setState({
-                favourites:items,
-                loading: false,
-              });
-            })
-            .catch((err) => console.log(err))
-      );
+      this.getData();
     });
   }
   componentWillUnmount() {
     this._unsubscribe();
   }
-
+  handleFav = async (id, _id) => {
+    var items = this.state.favourites;
+    this.setState(
+      {
+        imageL: true,
+        favourites: [],
+      },
+      () => {
+        items.splice(id, 1);
+        axios
+          .delete(
+            "https://lit-peak-13067.herokuapp.com/delete/favourite/" +
+              this.props.user.user._id +
+              "/" +
+              _id
+          )
+          .then((resp) =>
+            this.setState({
+              favourites: items,
+              imageL: false,
+            })
+          )
+          .catch((err) => err);
+      }
+    );
+  };
+  handleCart = () => {};
   render() {
     console.log(this.state.favourites, " favaspdaskk");
+    const myfavs = this.state.favourites;
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white", paddingTop: 20 }}>
@@ -102,27 +118,31 @@ class Favourites extends Component {
               justifyContent: "center",
             }}
           >
-            {this.state.favourites.length > 0 ? (
-              this.state.favourites
-                .slice(0)
-                .reverse()
-                .map((item, ind) => (
-                  <FavCards
-                    navigation={this.props.navigation}
-                    key={1}
-                    product={item}
+            {!this.state.imageL && (
+              <>
+                {myfavs.length > 0 ? (
+                  myfavs.map((item, ind) => (
+                    <FavCards
+                      navigation={this.props.navigation}
+                      key={ind}
+                      ind={ind}
+                      product={item}
+                      handleFav={this.handleFav}
+                      handleCart={this.handleCart}
+                    />
+                  ))
+                ) : this.state.loading ? (
+                  <ActivityIndicator
+                    style={{ marginTop: 100 }}
+                    size="large"
+                    color="black"
                   />
-                ))
-            ) : this.state.loading ? (
-              <ActivityIndicator
-                style={{ marginTop: 100 }}
-                size="large"
-                color="black"
-              />
-            ) : (
-              <Text style={{ textAlign: "center", marginTop: 100 }}>
-                No favourite items
-              </Text>
+                ) : (
+                  <Text style={{ textAlign: "center", marginTop: 100 }}>
+                    No favourite items
+                  </Text>
+                )}
+              </>
             )}
           </View>
         </ScrollView>

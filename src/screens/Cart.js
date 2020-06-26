@@ -202,6 +202,7 @@ class Cart extends Component {
                   isFeatured={item.isFeatured}
                   id={item.product._id}
                   handleRe={this.handleRemove}
+                  
                 /> 
               )}
             />

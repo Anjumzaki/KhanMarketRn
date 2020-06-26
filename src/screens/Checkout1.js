@@ -205,7 +205,7 @@ class Cart extends Component {
               } else {
                 eu = "AM";
               }
-           
+
               var st = resp.data.storeTimings[i].openTime.substring(0, 2);
               var et = resp.data.storeTimings[i].ClosingTime.substring(0, 2);
               if (ishalf) {
@@ -256,91 +256,89 @@ class Cart extends Component {
               temp = resp.data.storeTimings[i];
             }
 
-               //need to put logic here :)
-               var pDate = new Date();
-               var dd = String(pDate.getDate()).padStart(2, "0");
-               var mm = String(pDate.getMonth() + 1).padStart(2, "0"); //January is 0!
-               var yyyy = pDate.getFullYear();
- 
-               pDate = dd + "-" + mm + "-" + yyyy;
- 
- 
-               var currentdate = new Date();
-               var hr =
-                 currentdate.getHours() < 10
-                   ? "0" + currentdate.getHours()
-                   : currentdate.getHours();
-               var mi =
-                 currentdate.getMinutes() < 10
-                   ? "0" + currentdate.getMinutes()
-                   : currentdate.getMinutes();
-               var sc =
-                 currentdate.getSeconds() < 10
-                   ? "0" + currentdate.getSeconds()
-                   : currentdate.getSeconds();
-               var pTime = hr + ":" + mi + ":" + sc;
+            //need to put logic here :)
+            var pDate = new Date();
+            var dd = String(pDate.getDate()).padStart(2, "0");
+            var mm = String(pDate.getMonth() + 1).padStart(2, "0"); //January is 0!
+            var yyyy = pDate.getFullYear();
 
-              //  console.log("todays time",arr)
-              //  console.log("current timeeeeeee",pTime)
-              //  console.log("STOREEEE TIMINGS",resp.data.storeTimings[i])
-              //  console.log("selected Date",this.state.orderDate, pDate)
+            pDate = dd + "-" + mm + "-" + yyyy;
 
-               if(this.state.orderDate === "" || this.state.orderDate === pDate ){
-                  //  console.log("current date")
-                  //  if(Number(hr) > 12){
-                  //    hr = Number(hr) - 12
-                  //  }
-                  //  console.log("current hour",Number(hr))
-                   var result = arr[0].split(" ")
-                   var result1 = result[0].split(":")
-                  //  openTime.includes("PM")
-                  // console.log("unit check",arr[0].substring(5,8))
-                  var selectedTime = Number(result1[0])
-                  if(arr[0].substring(5,8) === "PM"){
-                    selectedTime = Number(result1[0]) + 12
-                  }
+            var currentdate = new Date();
+            var hr =
+              currentdate.getHours() < 10
+                ? "0" + currentdate.getHours()
+                : currentdate.getHours();
+            var mi =
+              currentdate.getMinutes() < 10
+                ? "0" + currentdate.getMinutes()
+                : currentdate.getMinutes();
+            var sc =
+              currentdate.getSeconds() < 10
+                ? "0" + currentdate.getSeconds()
+                : currentdate.getSeconds();
+            var pTime = hr + ":" + mi + ":" + sc;
 
-                  //  console.log("intial timings hour",selectedTime)
+            //  console.log("todays time",arr)
+            //  console.log("current timeeeeeee",pTime)
+            //  console.log("STOREEEE TIMINGS",resp.data.storeTimings[i])
+            //  console.log("selected Date",this.state.orderDate, pDate)
 
-                   var timesRemove = Number(hr) - selectedTime +1
-                    // console.log("current min",mi)
-                    // console.log("min x min",this.state.minTime)
-                    var xHours = 0
-                    if(Number(this.state.minTime) >= 60){
-                        xHours = Number(this.state.minTime) /60
-                        // console.log("xHours",Math.floor(xHours))
-                        timesRemove+=Math.floor(xHours)
-                    }
-                    var tempMinTime= Number(this.state.minTime)
-                    if(tempMinTime > 60){
-                      tempMinTime = tempMinTime % 60
-                    }
-                    // console.log("tempMinTime",tempMinTime)
-                    if(Number(mi) > tempMinTime && tempMinTime !== 0){
-                      timesRemove+=1
-                    }
-                    // console.log("timesRemove", timesRemove)
+            if (this.state.orderDate === "" || this.state.orderDate === pDate) {
+              //  console.log("current date")
+              //  if(Number(hr) > 12){
+              //    hr = Number(hr) - 12
+              //  }
+              //  console.log("current hour",Number(hr))
+              var result = arr[0].split(" ");
+              var result1 = result[0].split(":");
+              //  openTime.includes("PM")
+              // console.log("unit check",arr[0].substring(5,8))
+              var selectedTime = Number(result1[0]);
+              if (arr[0].substring(5, 8) === "PM") {
+                selectedTime = Number(result1[0]) + 12;
+              }
 
-                    var cxHours = 0
-                    var closingRemove= arr.length -1
-                    if(Number(this.state.minTime) > 60){
-                      // console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
-                        cxHours = Number(this.state.minTime) /60
-                        // console.log("cxHours",Math.floor(cxHours))
-                        closingRemove =Math.floor(cxHours)
-                    }else if(Number(this.state.minTime) <= 60){
-                        closingRemove =1
-                    }else{
-                      closingRemove=0
-                    }
-                    // console.log("closingRemove",closingRemove)
+              //  console.log("intial timings hour",selectedTime)
 
-                    arr.splice(0, timesRemove) 
-                    // console.log(arr.length,"arr.length")
-                    arr.splice(arr.length-closingRemove, arr.length-1) 
-                                  
-               }
-              //  console.log("arrrrrr SIZE", arr)
+              var timesRemove = Number(hr) - selectedTime + 1;
+              // console.log("current min",mi)
+              // console.log("min x min",this.state.minTime)
+              var xHours = 0;
+              if (Number(this.state.minTime) >= 60) {
+                xHours = Number(this.state.minTime) / 60;
+                // console.log("xHours",Math.floor(xHours))
+                timesRemove += Math.floor(xHours);
+              }
+              var tempMinTime = Number(this.state.minTime);
+              if (tempMinTime > 60) {
+                tempMinTime = tempMinTime % 60;
+              }
+              // console.log("tempMinTime",tempMinTime)
+              if (Number(mi) > tempMinTime && tempMinTime !== 0) {
+                timesRemove += 1;
+              }
+              // console.log("timesRemove", timesRemove)
+
+              var cxHours = 0;
+              var closingRemove = arr.length - 1;
+              if (Number(this.state.minTime) > 60) {
+                // console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
+                cxHours = Number(this.state.minTime) / 60;
+                // console.log("cxHours",Math.floor(cxHours))
+                closingRemove = Math.floor(cxHours);
+              } else if (Number(this.state.minTime) <= 60) {
+                closingRemove = 1;
+              } else {
+                closingRemove = 0;
+              }
+              // console.log("closingRemove",closingRemove)
+
+              arr.splice(0, timesRemove);
+              // console.log(arr.length,"arr.length")
+              arr.splice(arr.length - closingRemove, arr.length - 1);
+            }
+            //  console.log("arrrrrr SIZE", arr)
             if (resp.data.storeTimings[i].isClosed || arr.length === 0) {
               this.setState({
                 storeTimings: "",
@@ -395,9 +393,9 @@ class Cart extends Component {
     var tes = tes.replace("-", "/");
     var dt = tes.split("/");
     var rt = dt[1] + "/" + dt[0] + "/" + dt[2];
-     //
+    //
     // // var tes = "05/23/2014";
-   //
+    //
 
     return days[new Date(rt).getDay()];
   }
@@ -439,7 +437,7 @@ class Cart extends Component {
           this.makeid(6);
         }
       })
-      .catch((err) => console.log("e333",err));
+      .catch((err) => console.log("e333", err));
 
     if (result) {
       return result;
@@ -447,12 +445,8 @@ class Cart extends Component {
 
     // ;
   }
-  handleConfirm = () =>{
-
-    console.log(
-      "ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      isOut
-    );
+  handleConfirm = () => {
+    console.log("ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", isOut);
     if (!isOut && !this.state.isOut) {
       this.setState({ cart: true });
 
@@ -510,9 +504,7 @@ class Cart extends Component {
           email: this.state.email,
           orderTime: this.state.orderTime,
           orderDate:
-            this.state.orderDate === ""
-              ? todaysDate
-              : this.state.orderDate,
+            this.state.orderDate === "" ? todaysDate : this.state.orderDate,
           postDate: pDate,
           postTime: pTime,
           tax: (parseFloat(this.state.tax) / 100) * subTotal,
@@ -533,14 +525,13 @@ class Cart extends Component {
                 (parseInt(this.props.store.oId) + 1)
             )
             .then((resp1) => {
-             
               this.props.navigation.navigate("QrCode", {
                 orderId: resp.data.order1._id,
                 codeId: codeId,
                 order: resp.data.order1,
               });
             })
-            .catch((err) => console.log("e1",err));
+            .catch((err) => console.log("e1", err));
         });
     } else {
       console.log("pnamepnamepnamepname", pname);
@@ -556,7 +547,7 @@ class Cart extends Component {
           " Item is out of stock for the selected date, change pickup date or remove this product to procceed"
       );
     }
-  }
+  };
   //  ejIEyo
   render() {
     var codeId = this.makeid(3);
