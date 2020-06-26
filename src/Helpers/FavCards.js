@@ -11,6 +11,7 @@ import {
   Image,
   Alert,
 } from "react-native";
+
 import { TouchableOpacity } from "react-native-gesture-handler";
 import LatoText from "./LatoText";
 import { btnStyles } from "../styles/base";

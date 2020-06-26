@@ -21,7 +21,7 @@ import { Row } from "native-base";
 import CheckBox from "react-native-check-box";
 import FavCards from "../Helpers/FavCards";
 import { bindActionCreators } from "redux";
-import { cartAsync, cartSizeAsync, favStoreAsync } from "../store/actions";
+import { cartAsync, cartSizeAsync, favStoreAsync,storeAsync } from "../store/actions";
 import { connect } from "react-redux";
 import axios from "axios";
 import { NavigationEvents } from "@react-navigation/native";
@@ -39,6 +39,7 @@ class Favourites extends Component {
       favourites: [],
       loading: true,
       imageL: false,
+      temp: "",
     };
   }
   getData = () => {
@@ -63,7 +64,6 @@ class Favourites extends Component {
                 console.log(items[i]._id);
                 if (that.props.cart[j].product._id == items[i].product._id) {
                   items[i].carted = true;
-                
                 }
               }
             }
@@ -202,6 +202,7 @@ class Favourites extends Component {
                   {
                     text: "OK",
                     onPress: () => {
+                      this.getData()
                       var pCart = [];
                       pCart.push({
                         product: product,
@@ -210,25 +211,30 @@ class Favourites extends Component {
                       this.props.favStoreAsync(product.storeId);
                       this.props.cartAsync(pCart);
                       items[ind].carted = true;
-                      this.setState({
-                        favourites: items,
-                        imageL: false,
-                      });
-                      axios
-                        .get(
-                          "https://lit-peak-13067.herokuapp.com/get/store/" +
-                            this.state.temp
-                        )
-                        .then((resp) => {
-                          this.props.storeAsync({
-                            name: resp.data.storeName,
-                            address: resp.data.storeAddress,
-                            id: resp.data._id,
-                            phone: resp.data.phoneNumber,
-                            sId: resp.data.storeId,
-                            oId: resp.data.orderNum,
-                          });
-                        });
+                      this.setState(
+                        {
+                          favourites: items,
+                          imageL: false,
+                        },
+                        () =>
+                        // alert(this.state.temp)
+                          axios
+                            .get(
+                              "https://lit-peak-13067.herokuapp.com/get/store/" +
+                                this.state.temp
+                            )
+                            .then((resp) => {
+                              console.log(resp.data)
+                              this.props.storeAsync({
+                                name: resp.data.storeName,
+                                address: resp.data.storeAddress,
+                                id: resp.data._id,
+                                phone: resp.data.phoneNumber,
+                                sId: resp.data.storeId,
+                                oId: resp.data.orderNum,
+                              });
+                            })
+                      );
                     },
                   },
                 ],
@@ -353,6 +359,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
       cartAsync,
       cartSizeAsync,
       favStoreAsync,
+      storeAsync
     },
     dispatch
   );
