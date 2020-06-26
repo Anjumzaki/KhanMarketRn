@@ -77,7 +77,6 @@ class FavCards extends React.Component {
     }
 
     this.props.cartSizeAsync(cSize);
-    alert(JSON.stringify(this.props.product));
     return (
       <View style={styles.procards}>
         <View style={styles.wrapCards}>
@@ -108,7 +107,7 @@ class FavCards extends React.Component {
                 text={this.props.product.product.productName}
               ></LatoText>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={async () => {
                   if (this.state.heart === false) {
                     await this.state.favourites.push({
@@ -163,12 +162,23 @@ class FavCards extends React.Component {
                     .catch((err) => console.log(err));
                 }}
               >
-                {this.state.heart ? (
+                {this.props.product.favItem ? (
                   <AntDesign color="#B50000" size={18} name="heart" />
                 ) : (
                   <AntDesign color="#B50000" size={18} name="hearto" />
                 )}
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+              {this.props.product.favItem ? (
+                <TouchableOpacity
+                  onPress={()=>this.props.handleFav(this.props.ind,this.props.product.product._id)}
+                >
+                  <AntDesign color="#B50000" size={18} name="heart" />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity>
+                  <AntDesign color="#B50000" size={18} name="hearto" />
+                </TouchableOpacity>
+              )}
             </View>
 
             <View style={{ flex: 1, flexDirection: "row", paddingTop: 5 }}>
@@ -218,7 +228,7 @@ class FavCards extends React.Component {
               />
             </View>
             <View style={{ marginTop: 10 }}>
-              {this.state.cart ? (
+              {this.props.myCart ? (
                 <View
                   style={{
                     flexDirection: "row",

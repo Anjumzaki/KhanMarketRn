@@ -205,7 +205,7 @@ class Cart extends Component {
               } else {
                 eu = "AM";
               }
-           
+
               var st = resp.data.storeTimings[i].openTime.substring(0, 2);
               var et = resp.data.storeTimings[i].ClosingTime.substring(0, 2);
               if (ishalf) {
@@ -437,9 +437,9 @@ class Cart extends Component {
     var tes = tes.replace("-", "/");
     var dt = tes.split("/");
     var rt = dt[1] + "/" + dt[0] + "/" + dt[2];
-     //
+    //
     // // var tes = "05/23/2014";
-   //
+    //
 
     return days[new Date(rt).getDay()];
   }
@@ -481,7 +481,7 @@ class Cart extends Component {
           this.makeid(6);
         }
       })
-      .catch((err) => console.log("e333",err));
+      .catch((err) => console.log("e333", err));
 
     if (result) {
       return result;
@@ -490,7 +490,7 @@ class Cart extends Component {
     // ;
   }
 
-  handleConfirm(isOut){
+  handleConfirm(isOut, sId, storeProducts,subTotal,codeId){
 
     console.log(
       "ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -553,9 +553,7 @@ class Cart extends Component {
           email: this.state.email,
           orderTime: this.state.orderTime,
           orderDate:
-            this.state.orderDate === ""
-              ? todaysDate
-              : this.state.orderDate,
+            this.state.orderDate === "" ? todaysDate : this.state.orderDate,
           postDate: pDate,
           postTime: pTime,
           tax: (parseFloat(this.state.tax) / 100) * subTotal,
@@ -576,14 +574,13 @@ class Cart extends Component {
                 (parseInt(this.props.store.oId) + 1)
             )
             .then((resp1) => {
-             
               this.props.navigation.navigate("QrCode", {
                 orderId: resp.data.order1._id,
                 codeId: codeId,
                 order: resp.data.order1,
               });
             })
-            .catch((err) => console.log("e1",err));
+            .catch((err) => console.log("e1", err));
         });
     } else {
       console.log("pnamepnamepnamepname", pname);
@@ -599,7 +596,7 @@ class Cart extends Component {
           " Item is out of stock for the selected date, change pickup date or remove this product to procceed"
       );
     }
-  }
+  };
   //  ejIEyo
   render() {
     var codeId = this.makeid(3);
@@ -1744,7 +1741,7 @@ class Cart extends Component {
                   !this.state.numVerified ||
                   this.state.isStoreClosed
                 }
-                onPress={() => this.handleConfirm(isOut)}
+                onPress={() => this.handleConfirm(isOut,sId, storeProducts,subTotal,codeId)}
                 style={[
                   this.state.storeTimings.isClosed ||
                   !nameCheck ||
