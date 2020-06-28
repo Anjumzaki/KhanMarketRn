@@ -370,7 +370,7 @@ class OrderDetails extends Component {
                 />
                 <LatoText
                   fontName="Lato-Regular"
-                  fonSiz={15}
+                  fonSiz={17}
                   col="#2E2E2E"
                   text={
                     this.props.route.params.order.postDate

@@ -97,7 +97,8 @@ class Cart extends Component {
       previousMobileNumber: "",
       keyState: false,
       minTime: "90",
-      image:''
+      image:'',
+      storeTimeCLose: true
     };
     this._keyboardDidShow = this._keyboardDidShow.bind(this);
     this._keyboardDidHide = this._keyboardDidHide.bind(this);
@@ -325,8 +326,8 @@ class Cart extends Component {
                     var xHours = 0
                     if(Number(this.state.minTime) > 60){
                         xHours = Number(this.state.minTime) /60
-                        console.log("xHours",Math.ceil(xHours))
-                        timesRemove+=Math.ceil(xHours)
+                        console.log("xHours",Math.floor(xHours))
+                        timesRemove+=Math.floor(xHours)
                     }
                     console.log("after xhours min time", timesRemove)
                     var tempMinTime= Number(this.state.minTime)
@@ -390,7 +391,8 @@ class Cart extends Component {
                   arr= []
                 }}
                console.log("arrrrrr SIZE", arr, resp.data.storeTimings[i].isClosed, )
-            if (resp.data.storeTimings[i].isClosed || arr.length === 0) {
+            if (resp.data.storeTimings[i].isClosed) {
+              console.log("111111111111111111111111111")
               this.setState({
                 storeTimings: "",
                 start: "",
@@ -401,8 +403,26 @@ class Cart extends Component {
                 orderTime: "",
                 tax: resp.data.tax,
                 isStoreClosed: true,
+                storeTimeCLose: false
+              });
+            } else if (arr.length === 0) {
+              console.log("22222222222222222222222222")
+
+              this.setState({
+                storeTimings: "",
+                start: "",
+                end: "",
+                startUnit: "",
+                endUnit: "",
+                timeArray: ["TBD, kashif to give me a text message"],
+                orderTime: "",
+                tax: resp.data.tax,
+                // isStoreClosed: true,
+                storeTimeCLose: true
               });
             } else {
+              console.log("3333333333333333333333333333333")
+
               this.setState({
                 storeTimings: resp.data.storeTimings[i],
                 start: resp.data.storeTimings[i].openTime.substring(0, 2),
@@ -413,6 +433,7 @@ class Cart extends Component {
                 orderTime: arr[0],
                 tax: resp.data.tax,
                 isStoreClosed: false,
+                storeTimeCLose: false
               });
             }
           }
@@ -1360,13 +1381,22 @@ class Cart extends Component {
                     text={"    Store Closed"}
                   />
                 ) : (
+                  this.state.storeTimeCLose ? (
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={15}
+                    col={"#2E2E2E"}
+                    txtAlign={"center"}
+                    text={"    TBD message"}
+                  />
+                  ): (
                   <LatoText
                     fontName="Lato-Regular"
                     fonSiz={15}
                     col={"#2E2E2E"}
                     txtAlign={"center"}
                     text={"     " + this.state.orderTime}
-                  />
+                  />)
                 )}
               </View>
               <TouchableOpacity
@@ -1745,14 +1775,16 @@ class Cart extends Component {
                   this.state.storeTimings.isClosed ||
                   !nameCheck ||
                   !this.state.numVerified ||
-                  this.state.isStoreClosed
+                  this.state.isStoreClosed ||
+                  this.state.storeTimeCLose
                 }
                 onPress={() => this.handleConfirm(isOut,sId, storeProducts,subTotal,codeId,todaysDate)}
                 style={[
                   this.state.storeTimings.isClosed ||
                   !nameCheck ||
                   !this.state.numVerified ||
-                  this.state.isStoreClosed
+                  this.state.isStoreClosed ||
+                  this.state.storeTimeCLose
                     ? btnStyles.cartBtn1
                     : btnStyles.cartBtn,
                   { width: "100%" },
