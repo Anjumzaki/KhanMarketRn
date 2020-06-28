@@ -386,9 +386,9 @@ class OrderDetails extends Component {
                   size={15}
                   color="black"
                 />
-                <LatoText
+                  <LatoText
                   fontName="Lato-Regular"
-                  fonSiz={15}
+                  fonSiz={17}
                   col="#2E2E2E"
                   text={
                     this.props.route.params.order.postTime
@@ -397,6 +397,24 @@ class OrderDetails extends Component {
                   }
                 ></LatoText>
               </View>
+              {/* <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <AntDesign
+                  style={{ paddingRight: 10 }}
+                  name="clockcircleo"
+                  size={15}
+                  color="black"
+                />
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col="#2E2E2E"
+                  text={
+                    this.props.route.params.order.postTime
+                      ? "    " + this.props.route.params.order.postTime
+                      : ""
+                  }
+                ></LatoText>
+              </View> */}
             </View>
           </View>
 
