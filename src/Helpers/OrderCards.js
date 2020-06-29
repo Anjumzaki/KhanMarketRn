@@ -124,13 +124,15 @@ class OrderCards extends React.Component {
           >
             <LatoText
               fontName="Lato-Regular"
-              fonSiz={15}
+              fonSiz={12}
               col="#5C5C5C"
-              text={
-                this.props.order.orderDate +
-                "       " +
-                this.props.order.orderTime
-              }
+              text={this.props.order.orderTime}
+            />
+            <LatoText
+              fontName="Lato-Regular"
+              fonSiz={12}
+              col="#5C5C5C"
+              text={this.props.order.orderDate}
             />
           </TouchableOpacity>
           {this.props.type === "active" ? (
