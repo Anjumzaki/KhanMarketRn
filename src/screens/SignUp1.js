@@ -612,7 +612,7 @@ export default class SignUp1 extends React.Component {
 
                                         axios
                                           .get(
-                                            "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
+                                            "http://lit-peak-13067.herokuapp.com/api/number/verification/" +
                                               mainNumber +
                                               "/" +
                                               num
