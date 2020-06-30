@@ -157,7 +157,7 @@ class Favourites extends Component {
             favourites: items,
             imageL: false,
           });
-          if (this.props.store === "") {
+          // if (this.props.store === "") {
             axios
               .get(
                 "https://lit-peak-13067.herokuapp.com/get/store/" +
@@ -173,7 +173,7 @@ class Favourites extends Component {
                   oId: resp.data.orderNum,
                 });
               });
-          }
+          // }
         } else {
           if (this.props.favStore === product.storeId) {
             var pCart = this.props.cart;

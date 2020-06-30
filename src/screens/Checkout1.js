@@ -96,7 +96,7 @@ class Cart extends Component {
       someoneElsePhone: "",
       previousMobileNumber: "",
       keyState: false,
-      minTime: "90",
+      minTime: "0",
       image:'',
       storeTimeCLose: true
     };
@@ -155,6 +155,7 @@ class Cart extends Component {
         this.setState({
           sId: resp.data.storeId,
           oId: resp.data.orderNum,
+          minTime: resp.data.bufferTime
         });
       });
 
@@ -290,7 +291,8 @@ class Cart extends Component {
                    ? "0" + currentdate.getSeconds()
                    : currentdate.getSeconds();
                var pTime = hr + ":" + mi + ":" + sc;
-
+                mi=33
+                // hr=6
               //  console.log("todays time",arr)
               //  console.log("current timeeeeeee",pTime)
               //  console.log("STOREEEE TIMINGS",resp.data.storeTimings[i])
@@ -356,9 +358,12 @@ class Cart extends Component {
                     console.log("timesRemove final",timesRemove)
 
                     arr.splice(0, timesRemove) 
-                    console.log(arr.length,"arr.length")
-                    arr.splice(arr.length-closingRemove, arr.length-1) 
-                                  
+                    console.log(arr.length,"arr.21length", closingRemove, arr.length-closingRemove, arr.length-1,arr)
+                    if(arr.length === 1 && closingRemove > 0){
+                      arr =[]
+                    }else{
+                      arr.splice(arr.length-closingRemove, arr.length-1) 
+                    }                                  
                }else{
                 if(!resp.data.storeTimings[i].isClosed){
                 var timesRemove = 0
@@ -385,8 +390,12 @@ class Cart extends Component {
                     closingRemove=0
                   }
                   arr.splice(0, timesRemove) 
-                  console.log(arr.length,"arr.length", closingRemove)
-                  arr.splice(arr.length-closingRemove, arr.length-1) 
+                  console.log(arr.length,"arr.21length", closingRemove, arr.length-closingRemove, arr.length-1,arr)
+                  if(arr.length === 1 && closingRemove > 0){
+                    arr =[]
+                  }else{
+                    arr.splice(arr.length-closingRemove, arr.length-1) 
+                  }
                 }else{
                   arr= []
                 }}
