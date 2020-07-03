@@ -41,32 +41,28 @@ class MyOrders extends Component {
       pastCollapsed: true,
     };
   }
+  getData = () => {
+    this.setState(
+      {
+        loading: true,
+      },
+      () =>
+        axios
+          .get(
+            "https://lit-peak-13067.herokuapp.com/get/my/orders/" +
+              this.props.user.user._id
+          )
+          .then((resp) =>
+            this.setState({ myOrders: resp.data, loading: false })
+          )
+          .catch((err) => console.log(err))
+    );
+  };
 
   componentDidMount() {
-    axios
-      .get(
-        "https://lit-peak-13067.herokuapp.com/get/my/orders/" +
-          this.props.user.user._id
-      )
-      .then((resp) => this.setState({ myOrders: resp.data, loading: false }))
-      .catch((err) => console.log(err));
-
+    this.getData();
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
-      this.setState(
-        {
-          loading: true,
-        },
-        () =>
-          axios
-            .get(
-              "https://lit-peak-13067.herokuapp.com/get/my/orders/" +
-                this.props.user.user._id
-            )
-            .then((resp) =>
-              this.setState({ myOrders: resp.data, loading: false })
-            )
-            .catch((err) => console.log(err))
-      );
+      this.getData();
     });
   }
   componentWillUnmount() {
@@ -158,6 +154,7 @@ class MyOrders extends Component {
                       key={ind}
                       order={item}
                       type="active"
+                      getData={this.getData}
                     />
                   ))}
               </Collapsible>

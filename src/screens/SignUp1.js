@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
   // Modal
   BackHandler,
+  KeyboardAvoidingView,
 } from "react-native";
 import { BackStack } from "../Helpers/BackStack";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -174,7 +175,8 @@ export default class SignUp1 extends React.Component {
     console.log(mainNumber);
     const { icEye, isPassword } = this.state;
     return (
-      <SafeAreaView
+      <KeyboardAvoidingView
+      behavior='padding'
         style={[conStyles.safeAreaMy, { backgroundColor: "white" }]}
       >
         <StatusBar translucent={true} barStyle="dark-content" />
@@ -742,7 +744,7 @@ export default class SignUp1 extends React.Component {
               disabled={!this.state.numVerified}
               style={[
                 btnStyles.basic,
-                !this.state.numVerified ? { backgroundColor: "silver" } : null,
+                !this.state.numVerified ? { backgroundColor: "silver", marginTop:20 } : null,
               ]}
               onPress={() => this.handleSignUp()}
             >
@@ -770,7 +772,7 @@ export default class SignUp1 extends React.Component {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </KeyboardAvoidingView>
     );
   }
 }
