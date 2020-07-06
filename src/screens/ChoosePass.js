@@ -22,6 +22,8 @@ import {
   listenOrientationChange as lor,
   removeOrientationListener as rol,
 } from "react-native-responsive-screen";
+import BarPasswordStrengthDisplay from "react-native-password-strength-meter";
+
 import { conStyles, textStyles, textIn, btnStyles } from "../styles/base";
 import LatoText from "../Helpers/LatoText";
 import axios from "axios";
@@ -38,11 +40,14 @@ class SignUp1 extends React.Component {
     this.state = {
       icEye: "visibility-off",
       isPassword: true,
-      icEye1: "visibility-off",
+      icEye1: "visibility",
       isPassword1: true,
       fontLoaded: false,
       user: {},
-      errMessage:''
+      errMessage: "",
+      score: "",
+      password: "",
+      score: "",
     };
   }
   async componentDidMount() {
@@ -73,57 +78,60 @@ class SignUp1 extends React.Component {
     const { isPassword1 } = this.state;
     // set new state value
     this.setState({
-      icEye1: isPassword1 ? "visibility" : "visibility-off",
+      icEye1: isPassword1 ? "visibility-off" : "visibility",
       isPassword1: !isPassword1,
     });
   };
   handleSignUp = () => {
-    if(this.state.password){
-      if(this.state.password.length > 5 ){
-        if(this.state.password == this.state.coPassword){
-          axios
-          .post(
-            "https://lit-peak-13067.herokuapp.com/api/users/signup",
-            this.state.user
-          )
-          .then((resp) => {
-            this.props.userAsync(resp.data);
-            Alert.alert(
-              "Account Created",
-              "Please Login",
-              [
-                {
-                  text: "OK",
-                  onPress: () =>
-                    this.props.navigation.navigate("Login"),
-                },
-              ],
-              { cancelable: false }
-            );
-          })
-          .catch((err) =>
-            this.setState({ msg: err.message })
-          );
-        }
-        else{
+    if (this.state.password) {
+      if (this.state.password.length > 5) {
+        if (this.state.score > 40) {
+          if (this.state.password == this.state.coPassword) {
+            axios
+              .post(
+                "https://lit-peak-13067.herokuapp.com/api/users/signup",
+                this.state.user
+              )
+              .then((resp) => {
+                this.props.userAsync(resp.data);
+                Alert.alert(
+                  "Account Created",
+                  "Please Login",
+                  [
+                    {
+                      text: "OK",
+                      onPress: () => this.props.navigation.navigate("Login"),
+                    },
+                  ],
+                  { cancelable: false }
+                );
+              })
+              .catch((err) => this.setState({ msg: err.message }));
+          } else {
+            this.setState({
+              errMessage: "Password and confirm password does not matches",
+            });
+          }
+        } else {
           this.setState({
-            errMessage:"Password and confirm password does not matches"
-          })
+            errMessage:
+              "Password needs to be strong, please add symbols or numbers",
+          });
         }
-      }
-      else{
+      } else {
         this.setState({
-          errMessage:"Password must contain minimum 6 characters"
-        })
+          errMessage: "Password must contain minimum 6 characters",
+        });
       }
-    }
-    else{
+    } else {
       this.setState({
-        errMessage:"Please enter password"
-      })
+        errMessage: "Please enter password",
+      });
     }
-    
-  }
+  };
+  onChange = (score) => {
+    this.setState(score);
+  };
   render() {
     console.log("stas", this.state);
     const { icEye, isPassword, icEye1, isPassword1 } = this.state;
@@ -184,7 +192,25 @@ class SignUp1 extends React.Component {
                 />
               </View>
               <View>
-                <TextInput
+                <BarPasswordStrengthDisplay
+                  wrapperStyle={{
+                    width: "100%",
+                    backgroundColor: "green",
+                    paddingLeft: 0,
+                    marginLeft: 0,
+                  }}
+                  onChangeText={(password, score) => {
+                    this.setState({
+                      password,
+                      score,
+                    });
+                    this.state.user.password = password;
+                  }}
+                  password={this.state.password300}
+                  meterType="text"
+                />
+
+                {/* <TextInput
                   style={textIn.input}
                   secureTextEntry={isPassword}
                   onChangeText={(password) => {
@@ -195,14 +221,14 @@ class SignUp1 extends React.Component {
                   }}
                   autoCapitalize="none"
                   value={this.state.password}
-                />
-                <Icon
+                /> */}
+                {/* <Icon
                   style={styles.icon}
                   name={icEye}
                   size={20}
                   color={"#000000"}
                   onPress={this.changePwdType}
-                />
+                /> */}
               </View>
               <TouchableOpacity
                 style={{
@@ -256,37 +282,43 @@ class SignUp1 extends React.Component {
                 />
               </TouchableOpacity>
             </View>
+
             <View></View>
           </View>
-          <View>
+          <View style={{ paddingHorizontal: 40 }}>
             <Text
-              style={{ textAlign: "center", color: "red", fontWeight: "bold" }}
+              style={{
+                textAlign: "center",
+                color: "red",
+                fontWeight: "bold",
+              }}
             >
               {this.state.msg}
             </Text>
           </View>
           <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {this.state.errMessage != '' && (
-                <>
-                  <Image
-                    style={{ marginRight: 10 }}
-                    source={require("../../assets/Vector.png")}
-                  />
-                  <LatoText
-                    fontName="Lato-Regular"
-                    fonSiz={17}
-                    col="red"
-                    text={this.state.errMessage || ""}
-                  />
-                </>
-              )}
-            </View>
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              paddingHorizontal: 40,
+            }}
+          >
+            {this.state.errMessage != "" && (
+              <>
+                <Image
+                  style={{ marginRight: 10 }}
+                  source={require("../../assets/Vector.png")}
+                />
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col="red"
+                  text={this.state.errMessage || ""}
+                />
+              </>
+            )}
+          </View>
           <View
             style={{
               justifyContent: "space-evenly",

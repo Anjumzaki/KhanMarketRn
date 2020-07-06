@@ -10,6 +10,7 @@ class OrderCards extends React.Component {
     heart: true,
     image: "",
     qt: 1,
+    orderDate: new Date(),
   };
 
   handleChange(num) {
@@ -18,6 +19,30 @@ class OrderCards extends React.Component {
     if (preNum >= 1) {
       this.setState({ qt: preNum });
     }
+  }
+  componentDidMount() {
+    this.setState({
+      orderDate: this.props.order.orderDate,
+    });
+  }
+  reformatDate(s) {
+    var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    var months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    var date = s.split(/[ -]/);
+    return months[parseInt(date[1])] + " " + date[0] + ", " + date[2];
   }
   render() {
     return (
@@ -58,20 +83,29 @@ class OrderCards extends React.Component {
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                width: "80%",
+                width: Dimensions.get("window").width - 50,
               }}
             >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={17}
-                col="#5C5C5C"
-                text={
-                  "Order # " + this.props.order.orderNumber
-                    ? this.props.order.orderNumber.toUpperCase()
-                    : null
-                }
-                // text={"Order # "+ this.props.order.orderNumber !== undefined ? this.props.order.orderNumber.toUpperCase() : null}
-              />
+              <View style={{ flexDirection: "row" }}>
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col="#5C5C5C"
+                  text={"Order # "}
+                />
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={17}
+                  col="#5C5C5C"
+                  text={
+                    this.props.order.orderNumber
+                      ? this.props.order.orderNumber.toUpperCase()
+                      : null
+                  }
+                  // text={"Order # "+ this.props.order.orderNumber !== undefined ? this.props.order.orderNumber.toUpperCase() : null}
+                />
+              </View>
+
               {this.props.order.isRejected === true ? (
                 <LatoText
                   fontName="Lato-Regular"
@@ -113,7 +147,13 @@ class OrderCards extends React.Component {
             />
           </TouchableOpacity>
         </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+          }}
+        >
           <TouchableOpacity
             onPress={() =>
               this.props.navigation.navigate("OrderDetails", {
@@ -124,12 +164,17 @@ class OrderCards extends React.Component {
           >
             <LatoText
               fontName="Lato-Regular"
-              fonSiz={15}
+              fonSiz={17}
+              col="#5C5C5C"
+              text={this.props.order.orderTime}
+            />
+            <LatoText
+              fontName="Lato-Regular"
+              fonSiz={17}
               col="#5C5C5C"
               text={
-                this.props.order.orderDate +
-                "       " +
-                this.props.order.orderTime
+                this.props.order.orderDate &&
+                this.reformatDate(this.props.order.orderDate)
               }
             />
           </TouchableOpacity>
@@ -158,7 +203,8 @@ class OrderCards extends React.Component {
                             .then((resp) => {
                               // this.setState({bd: true})
                               alert("Order Cancelled Successfully.");
-                              this.props.navigation.navigate("Home");
+                              this.props.getData();
+                              // this.props.navigation.navigate("Home");
                             })
                             .catch((err) => console.log(err));
                         },
