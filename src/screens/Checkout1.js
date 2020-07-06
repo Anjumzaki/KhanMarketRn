@@ -342,28 +342,28 @@ class Cart extends Component {
                     }
                     console.log("timesRemove", timesRemove)
 
-                    var cxHours = 0
-                    var closingRemove= arr.length -1
-                    if(Number(this.state.minTime) > 60){
-                      console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
-                        cxHours = Number(this.state.minTime) /60
-                        console.log("cxHours",Math.ceil(cxHours))
-                        closingRemove =Math.ceil(cxHours)
-                    }else if(Number(this.state.minTime) <= 60){
-                        closingRemove =1
-                    }else{
-                      closingRemove=0
-                    }
-                    console.log("closingRemove",closingRemove)
-                    console.log("timesRemove final",timesRemove)
+                    // var cxHours = 0
+                    // var closingRemove= arr.length -1
+                    // if(Number(this.state.minTime) > 60){
+                    //   console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
+                    //     cxHours = Number(this.state.minTime) /60
+                    //     console.log("cxHours",Math.ceil(cxHours))
+                    //     closingRemove =Math.ceil(cxHours)
+                    // }else if(Number(this.state.minTime) <= 60){
+                    //     closingRemove =1
+                    // }else{
+                    //   closingRemove=0
+                    // }
+                    // console.log("closingRemove",closingRemove)
+                    // console.log("timesRemove final",timesRemove)
 
-                    arr.splice(0, timesRemove) 
-                    console.log(arr.length,"arr.21length", closingRemove, arr.length-closingRemove, arr.length-1,arr)
-                    if(arr.length === 1 && closingRemove > 0){
-                      arr =[]
-                    }else{
-                      arr.splice(arr.length-closingRemove, arr.length-1) 
-                    }                                  
+                    // arr.splice(0, timesRemove) 
+                    // console.log(arr.length,"arr.21length", closingRemove, arr.length-closingRemove, arr.length-1,arr)
+                    // if(arr.length === 1 && closingRemove > 0){
+                    //   arr =[]
+                    // }else{
+                    //   arr.splice(arr.length-closingRemove, arr.length-1) 
+                    // }                                  
                }else{
                 if(!resp.data.storeTimings[i].isClosed){
                 var timesRemove = 0
@@ -377,25 +377,25 @@ class Cart extends Component {
                   timesRemove=0
                  }
                   console.log("after xhours min time", timesRemove)
-                  var cxHours = 0
-                  var closingRemove= arr.length -1
-                  if(Number(this.state.minTime) > 60){
-                    console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
-                      cxHours = Number(this.state.minTime) /60
-                      console.log("cxHours",Math.ceil(cxHours))
-                      closingRemove =Math.ceil(cxHours)
-                  }else if(Number(this.state.minTime) <= 60 && Number(this.state.minTime) > 0){
-                      closingRemove =1
-                  }else{
-                    closingRemove=0
-                  }
-                  arr.splice(0, timesRemove) 
-                  console.log(arr.length,"arr.21length", closingRemove, arr.length-closingRemove, arr.length-1,arr)
-                  if(arr.length === 1 && closingRemove > 0){
-                    arr =[]
-                  }else{
-                    arr.splice(arr.length-closingRemove, arr.length-1) 
-                  }
+                  // var cxHours = 0
+                  // var closingRemove= arr.length -1
+                  // if(Number(this.state.minTime) > 60){
+                  //   console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
+                  //     cxHours = Number(this.state.minTime) /60
+                  //     console.log("cxHours",Math.ceil(cxHours))
+                  //     closingRemove =Math.ceil(cxHours)
+                  // }else if(Number(this.state.minTime) <= 60 && Number(this.state.minTime) > 0){
+                  //     closingRemove =1
+                  // }else{
+                  //   closingRemove=0
+                  // }
+                  // arr.splice(0, timesRemove) 
+                  // console.log(arr.length,"arr.21length", closingRemove, arr.length-closingRemove, arr.length-1,arr)
+                  // if(arr.length === 1 && closingRemove > 0){
+                  //   arr =[]
+                  // }else{
+                  //   arr.splice(arr.length-closingRemove, arr.length-1) 
+                  // }
                 }else{
                   arr= []
                 }}
