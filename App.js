@@ -247,7 +247,7 @@ const DrawerScreen = () => (
   <Drawer.Navigator
     drawerContentOptions={{
       activeTintColor: "#e91e63",
-      itemStyle: { backgroundColor: "transparent" },
+      itemStyle: { backgroundColor: "transparent"},
       labelStyle: { color: "#FFFFFF" },
     }}
     drawerContent={(props) => <CustomDrawerContent {...props} />}

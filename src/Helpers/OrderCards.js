@@ -162,13 +162,7 @@ class OrderCards extends React.Component {
             }
             style={{ paddingVertical: 10 }}
           >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={17}
-              col="#5C5C5C"
-              text={this.props.order.orderTime}
-            />
-            <LatoText
+             <LatoText
               fontName="Lato-Regular"
               fonSiz={17}
               col="#5C5C5C"
@@ -177,6 +171,13 @@ class OrderCards extends React.Component {
                 this.reformatDate(this.props.order.orderDate)
               }
             />
+            <LatoText
+              fontName="Lato-Regular"
+              fonSiz={17}
+              col="#5C5C5C"
+              text={this.props.order.orderTime}
+            />
+           
           </TouchableOpacity>
           {this.props.type === "active" ? (
             <TouchableOpacity
