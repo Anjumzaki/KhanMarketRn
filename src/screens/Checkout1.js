@@ -551,13 +551,11 @@ class Cart extends Component {
     console.log("ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", isOut);
     if (!isOut && !this.state.isOut) {
       this.setState({ cart: true });
-
       var pDate = new Date();
       var dd = String(pDate.getDate()).padStart(2, "0");
       var mm = String(pDate.getMonth() + 1).padStart(2, "0"); //January is 0!
       var yyyy = pDate.getFullYear();
       pDate = dd + "-" + mm + "-" + yyyy;
-
       var currentdate = new Date();
       var hr =
         currentdate.getHours() < 10

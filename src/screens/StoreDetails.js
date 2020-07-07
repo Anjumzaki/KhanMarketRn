@@ -66,33 +66,7 @@ class StoreDetails extends React.Component {
   componentDidMount() {
     this.getMyData();
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
-      axios
-        .get(
-          "https://lit-peak-13067.herokuapp.com/get/all/products/" +
-            this.props.route.params.storeId
-        )
-        .then((resp) => {
-          this.setState({ products: resp.data });
-        })
-        .catch((err) => console.log(err));
-
-      axios
-        .get(
-          "https://lit-peak-13067.herokuapp.com/get/all/featured/products/" +
-            this.props.route.params.storeId
-        )
-        .then((resp) => {
-          this.setState({ featuredProducts: resp.data });
-        })
-        .catch((err) => console.log(err));
-
-      axios
-        .get("https://lit-peak-13067.herokuapp.com/get/all/subCategories")
-        .then((resp) => {
-          // console.log("Cat", resp.data)
-          this.setState({ categories: resp.data, loading: false });
-        })
-        .catch((err) => console.log(err));
+      this.getMyData();
     });
   }
   componentWillUnmount() {

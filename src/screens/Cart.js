@@ -284,6 +284,7 @@ class Cart extends Component {
                 marginTop: 5,
               }}
             >
+              
               <LatoText
                 fontName="Lato-Bold"
                 fonSiz={22}

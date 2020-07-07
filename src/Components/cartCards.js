@@ -15,7 +15,7 @@ import { bindActionCreators } from "redux";
 import { cartAsync, cartSizeAsync } from "../store/actions";
 import { connect } from "react-redux";
 import { Entypo } from "@expo/vector-icons";
-import CartCardImage from'./CartCardImage'
+import CartCardImage from "./CartCardImage";
 class CartCards extends PureComponent {
   state = {
     heart: false,
@@ -25,31 +25,33 @@ class CartCards extends PureComponent {
   };
 
   async componentWillMount() {
-
-      await this.setState({ cart: this.props.cart, qt: this.props.product.quantity });
-      var temp = this.state.cart[this.props.index];
-      temp.price = (
-        (this.props.product.product.price -
-          (this.props.product.product.price *
-            this.props.product.product.discount) /
-            100) *
-        parseInt(this.state.qt)
-      ).toFixed(2);
-      this.state.cart[this.props.index] = temp;
-      this.props.cartAsync(this.state.cart); 
+    await this.setState({
+      cart: this.props.cart,
+      qt: this.props.product.quantity,
+    });
+    var temp = this.state.cart[this.props.index];
+    temp.price = (
+      (this.props.product.product.price -
+        (this.props.product.product.price *
+          this.props.product.product.discount) /
+          100) *
+      parseInt(this.state.qt)
+    ).toFixed(2);
+    this.state.cart[this.props.index] = temp;
+    this.props.cartAsync(this.state.cart);
     // }
   }
 
   render() {
     // console.log("cart cards",this.props.cart)
     // console.log("image URLL",this.state.image, this.props.index)
-    var cSize=0
-    if(this.props.cart.length > 0){
-      for(var i=0; i<this.props.cart.length; i++){
-        cSize=cSize + parseInt(this.props.cart[i].quantity)
-    }
-    }else{
-        cSize =0
+    var cSize = 0;
+    if (this.props.cart.length > 0) {
+      for (var i = 0; i < this.props.cart.length; i++) {
+        cSize = cSize + parseInt(this.props.cart[i].quantity);
+      }
+    } else {
+      cSize = 0;
     }
 
     this.props.cartSizeAsync(cSize);
@@ -63,16 +65,18 @@ class CartCards extends PureComponent {
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <TouchableOpacity style={{ padding: 10,paddingLeft:0 }} onPress ={() => {
-            this.props.handleRe(this.props.id)
-            if(this.props.cart.length === 1){
-              this.props.cartSizeAsync(0);
-            }
+          {/* <TouchableOpacity
+            style={{ padding: 10, paddingLeft: 0 }}
+            onPress={() => {
+              this.props.handleRe(this.props.id);
+              if (this.props.cart.length === 1) {
+                this.props.cartSizeAsync(0);
+              }
             }}
           >
             <Entypo name="circle-with-cross" size={24} color="#B50000" />
-          </TouchableOpacity>
-          <CartCardImage id={this.props.id}/>
+          </TouchableOpacity> */}
+          <CartCardImage id={this.props.id} />
           <LatoText
             fontName="Lato-Regular"
             fonSiz={15}
@@ -108,6 +112,11 @@ class CartCards extends PureComponent {
                   temp.quantity = parseInt(this.state.qt - 1);
                   this.state.cart[this.props.index] = temp;
                   this.props.cartAsync(this.state.cart);
+                } else {
+                  this.props.handleRe(this.props.id);
+                  if (this.props.cart.length === 1) {
+                    this.props.cartSizeAsync(0);
+                  }
                 }
               }}
             >
@@ -124,7 +133,6 @@ class CartCards extends PureComponent {
               onPress={() => {
                 //   this.handleChange(1)
                 this.setState({ qt: this.state.qt + 1 });
-
                 var temp = this.state.cart[this.props.index];
                 temp.price = (
                   (this.props.product.product.price -
