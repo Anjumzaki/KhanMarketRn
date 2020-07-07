@@ -188,14 +188,14 @@ class Login extends React.Component {
                   if (resp.data === "Incorrect password.") {
                     // this.props.userAsync(resp.data);
                     this.setState({
-                      errMessage: "Password is incorrect",
+                      errMessage: "username or password is invalid",
                       loading: false,
                     });
                     Î;
                   } else if (resp.data === "Email does not exist.") {
                     // this.props.navigation.navigate("Map");
                     this.setState({
-                      errMessage: "Email does not exist.",
+                      errMessage: "username or password is invalid",
                       loading: false,
                     });
                   } else {

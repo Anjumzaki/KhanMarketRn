@@ -106,6 +106,20 @@ class OrderDetails extends Component {
 
     Linking.openURL(phoneNumber);
   };
+
+  tConvert (time) {
+    // Check correct time format and split into components
+    time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+  
+    if (time.length > 1) { // If time format correct
+      time = time.slice (1);  // Remove full string match value
+      time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
+      time[0] = +time[0] % 12 || 12; // Adjust hours
+    }
+    return time.join (''); // return adjusted time or original string
+  }
+  
+  
   render() {
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
@@ -392,7 +406,7 @@ class OrderDetails extends Component {
                   col="#2E2E2E"
                   text={
                     this.props.route.params.order.postTime
-                      ? "    " + this.props.route.params.order.postTime
+                      ? "    " +   this.tConvert(this.props.route.params.order.postTime)
                       : ""
                   }
                 ></LatoText>

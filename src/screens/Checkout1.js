@@ -311,115 +311,93 @@ class Cart extends Component {
                 selectedTime = Number(result1[0]) + 12;
               }
 
-              if (selectedTime === 12) {
-                selectedTime = 0;
-              }
-              console.log("intial timings hour", selectedTime);
+                  if(selectedTime === 12){
+                    selectedTime = 0
+                  }
+                   console.log("intial timings hour",selectedTime)
 
-              var timesRemove = Number(hr) - selectedTime + 1;
-              if (timesRemove < 1) {
-                timesRemove = 0;
-              }
-              console.log("timesRemovetimesRemove", timesRemove);
-              console.log("current min", mi);
-              console.log("min x min", this.state.minTime);
-              var xHours = 0;
-              if (Number(this.state.minTime) > 60) {
-                xHours = Number(this.state.minTime) / 60;
-                console.log("xHours", Math.floor(xHours));
-                timesRemove += Math.floor(xHours);
-              }
-              console.log("after xhours min time", timesRemove);
-              var tempMinTime = Number(this.state.minTime);
-              if (tempMinTime > 60) {
-                tempMinTime = tempMinTime % 60;
-              }
-              console.log("tempMinTime", tempMinTime);
-              if (Number(mi) > tempMinTime && tempMinTime !== 0) {
-                timesRemove += 1;
-              }
-              console.log("timesRemove", timesRemove);
+                   var timesRemove = Number(hr) - selectedTime +1
+                   if(timesRemove < 1){
+                    timesRemove=0
+                   }
+                   console.log("timesRemovetimesRemove",timesRemove)
+                    console.log("current min",mi)
+                    console.log("min x min",this.state.minTime)
+                    var xHours = 0
+                    if(Number(this.state.minTime) > 60){
+                        xHours = Number(this.state.minTime) /60
+                        console.log("xHours",Math.floor(xHours))
+                        timesRemove+=Math.floor(xHours)
+                    }
+                    console.log("after xhours min time", timesRemove)
+                    var tempMinTime= Number(this.state.minTime)
+                    if(tempMinTime > 60){
+                      tempMinTime = tempMinTime % 60
+                    }
+                    console.log("tempMinTime",tempMinTime)
+                    if(Number(mi) > tempMinTime && tempMinTime !== 0){
+                      timesRemove+=1
+                    }
+                    console.log("timesRemove", timesRemove)
 
-              var cxHours = 0;
-              var closingRemove = arr.length - 1;
-              if (Number(this.state.minTime) > 60) {
-                console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn");
-                cxHours = Number(this.state.minTime) / 60;
-                console.log("cxHours", Math.ceil(cxHours));
-                closingRemove = Math.ceil(cxHours);
-              } else if (Number(this.state.minTime) <= 60) {
-                closingRemove = 1;
-              } else {
-                closingRemove = 0;
-              }
-              console.log("closingRemove", closingRemove);
-              console.log("timesRemove final", timesRemove);
+                    // var cxHours = 0
+                    // var closingRemove= arr.length -1
+                    // if(Number(this.state.minTime) > 60){
+                    //   console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
+                    //     cxHours = Number(this.state.minTime) /60
+                    //     console.log("cxHours",Math.ceil(cxHours))
+                    //     closingRemove =Math.ceil(cxHours)
+                    // }else if(Number(this.state.minTime) <= 60){
+                    //     closingRemove =1
+                    // }else{
+                    //   closingRemove=0
+                    // }
+                    // console.log("closingRemove",closingRemove)
+                    // console.log("timesRemove final",timesRemove)
 
-              arr.splice(0, timesRemove);
-              console.log(
-                arr.length,
-                "arr.21length",
-                closingRemove,
-                arr.length - closingRemove,
-                arr.length - 1,
-                arr
-              );
-              if (arr.length === 1 && closingRemove > 0) {
-                arr = [];
-              } else {
-                arr.splice(arr.length - closingRemove, arr.length - 1);
-              }
-            } else {
-              if (!resp.data.storeTimings[i].isClosed) {
-                var timesRemove = 0;
-                if (Number(this.state.minTime) >= 60) {
-                  xHours = Number(this.state.minTime) / 60;
-                  console.log("xHours", Math.ceil(xHours));
-                  timesRemove += Math.ceil(xHours);
-                } else if (Number(this.state.minTime) === 30) {
-                  timesRemove = 1;
-                } else {
-                  timesRemove = 0;
-                }
-                console.log("after xhours min time", timesRemove);
-                var cxHours = 0;
-                var closingRemove = arr.length - 1;
-                if (Number(this.state.minTime) > 60) {
-                  console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn");
-                  cxHours = Number(this.state.minTime) / 60;
-                  console.log("cxHours", Math.ceil(cxHours));
-                  closingRemove = Math.ceil(cxHours);
-                } else if (
-                  Number(this.state.minTime) <= 60 &&
-                  Number(this.state.minTime) > 0
-                ) {
-                  closingRemove = 1;
-                } else {
-                  closingRemove = 0;
-                }
-                arr.splice(0, timesRemove);
-                console.log(
-                  arr.length,
-                  "arr.21length",
-                  closingRemove,
-                  arr.length - closingRemove,
-                  arr.length - 1,
-                  arr
-                );
-                if (arr.length === 1 && closingRemove > 0) {
-                  arr = [];
-                } else {
-                  arr.splice(arr.length - closingRemove, arr.length - 1);
-                }
-              } else {
-                arr = [];
-              }
-            }
-            console.log(
-              "arrrrrr SIZE",
-              arr,
-              resp.data.storeTimings[i].isClosed
-            );
+                    // arr.splice(0, timesRemove) 
+                    // console.log(arr.length,"arr.21length", closingRemove, arr.length-closingRemove, arr.length-1,arr)
+                    // if(arr.length === 1 && closingRemove > 0){
+                    //   arr =[]
+                    // }else{
+                    //   arr.splice(arr.length-closingRemove, arr.length-1) 
+                    // }                                  
+               }else{
+                if(!resp.data.storeTimings[i].isClosed){
+                var timesRemove = 0
+                if(Number(this.state.minTime) >= 60){
+                  xHours = Number(this.state.minTime) /60
+                  console.log("xHours",Math.ceil(xHours))
+                  timesRemove+=Math.ceil(xHours)
+                 }else if(Number(this.state.minTime) === 30){
+                   timesRemove=1
+                 }else{
+                  timesRemove=0
+                 }
+                  console.log("after xhours min time", timesRemove)
+                  // var cxHours = 0
+                  // var closingRemove= arr.length -1
+                  // if(Number(this.state.minTime) > 60){
+                  //   console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
+                  //     cxHours = Number(this.state.minTime) /60
+                  //     console.log("cxHours",Math.ceil(cxHours))
+                  //     closingRemove =Math.ceil(cxHours)
+                  // }else if(Number(this.state.minTime) <= 60 && Number(this.state.minTime) > 0){
+                  //     closingRemove =1
+                  // }else{
+                  //   closingRemove=0
+                  // }
+                  // arr.splice(0, timesRemove) 
+                  // console.log(arr.length,"arr.21length", closingRemove, arr.length-closingRemove, arr.length-1,arr)
+                  // if(arr.length === 1 && closingRemove > 0){
+                  //   arr =[]
+                  // }else{
+                  //   arr.splice(arr.length-closingRemove, arr.length-1) 
+                  // }
+                }else{
+                  arr= []
+                }}
+               console.log("arrrrrr SIZE", arr, resp.data.storeTimings[i].isClosed, )
             if (resp.data.storeTimings[i].isClosed) {
               console.log("111111111111111111111111111");
               this.setState({
