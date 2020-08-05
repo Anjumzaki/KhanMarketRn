@@ -89,7 +89,7 @@ class SignUp1 extends React.Component {
           if (this.state.password == this.state.coPassword) {
             axios
               .post(
-                "https://secret-cove-59835.herokuapp.com/v1/user/",
+                "https://secret-cove-59835.herokuapp.com/v1/user",
                 this.state.user
               )
               .then((resp) => {

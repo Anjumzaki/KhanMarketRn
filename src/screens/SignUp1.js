@@ -119,8 +119,8 @@ export default class SignUp1 extends React.Component {
                             : "+92" + this.state.mobile,
                         // zipCode: this.state.zipCode,
                         password: this.state.password,
-                        isGuest: false,
-                        guestId: "",
+                        isGuest: 0,
+                        // guestId: "",
                         type: "user",
                       });
                     } else {
