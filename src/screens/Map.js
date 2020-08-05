@@ -266,9 +266,12 @@ class Map extends Component {
     try {
       const user = await AsyncStorage.getItem("user");
       const token = await AsyncStorage.getItem("token");
-      this.setState({ user, token });
+      this.setState({ user, token }, alert(user));
+      // alert(user);
+      // alert(token);
     } catch (e) {
       // saving error
+      console.log(e);
     }
   }
   handleMapApp = async () => {
@@ -332,6 +335,7 @@ class Map extends Component {
       lng: this.state.region.longitude,
     });
     this.props.navigation.navigate("App");
+
     // var loc = { refId: this.props.user.user._id,
     //   type: "Customer",
     //   address1: ad1 + " " + temp,
@@ -359,23 +363,36 @@ class Map extends Component {
     //     console.log(resp1.data);
     //   })
     //   .catch((err) => console.log(err));
-    // axios
-    //   .post("https://lit-peak-13067.herokuapp.com/add/location", {
-    //     refId: this.props.user.user._id,
-    //     type: "Customer",
-    //     address1: ad1 + " " + temp,
-    //     address2: ad2,
-    //     city: ct,
-    //     country: cnt,
-    //     state: state,
-    //     zipCode: zipc,
-    //     latitude: this.state.region.latitude,
-    //     longitude: this.state.region.longitude,
-    //   })
-    //   .then((resp1) => {
-    //     this.props.navigation.navigate("App");
-    //   })
-    //   .catch((err) => console.log(err));
+    console.log(this.state.token, "SADS");
+    alert(this.state.token);
+
+    axios
+      .post(
+        "https://secret-cove-59835.herokuapp.com/v1/location",
+        {
+          type: "user",
+          // refId: this.props.user.user._id,
+          type: "user",
+          address1: ad1 + " " + temp,
+          address2: ad2,
+          city: ct,
+          country: cnt,
+          state: state,
+          zipCode: zipc,
+          lat: this.state.region.latitude,
+          lng: this.state.region.longitude,
+        },
+        {
+          headers: {
+            authorization: this.state.token,
+          },
+        }
+      )
+      .then((resp1) => {
+        this.props.navigation.navigate("App");
+        console.log(resp1.data.message);
+      })
+      .catch((err) => console.log(err));
   };
   getMyLocations = () => {
     Geolocation.getCurrentPosition(

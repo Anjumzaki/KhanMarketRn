@@ -68,7 +68,7 @@ class Cart extends Component {
       isStore: true,
       imagesLoading: false,
       cartItem: [],
-      imageL:false
+      imageL: false,
     };
   }
 
@@ -118,7 +118,7 @@ class Cart extends Component {
         this.setState(
           {
             cartData: temp,
-            imageL: false, 
+            imageL: false,
           },
           () => this.props.cartAsync(temp)
         );
@@ -202,8 +202,7 @@ class Cart extends Component {
                   isFeatured={item.isFeatured}
                   id={item.product._id}
                   handleRe={this.handleRemove}
-                  
-                /> 
+                />
               )}
             />
           )}
@@ -284,7 +283,6 @@ class Cart extends Component {
                 marginTop: 5,
               }}
             >
-              
               <LatoText
                 fontName="Lato-Bold"
                 fonSiz={22}

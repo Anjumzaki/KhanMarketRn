@@ -74,7 +74,7 @@ class Home extends React.Component {
           {
             stores: resp.data.result,
           },
-          console.log("stores",this.state.stores)
+          console.log("stores", this.state.stores)
         );
       })
       .catch((err) => console.log(err.message));
@@ -166,7 +166,7 @@ class Home extends React.Component {
                   <StoreCard
                     key={ind}
                     navigation={this.props.navigation}
-                    name={item.storeName}
+                    name={item.storeName ? item.storeName : "Error Handled"}
                     distance={
                       "dummy"
                       // this.getDistanceFromLatLonInKm(

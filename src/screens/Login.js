@@ -119,7 +119,8 @@ class Login extends React.Component {
   handleApp = async (value, token, loc) => {
     try {
       await AsyncStorage.setItem("user", JSON.stringify(value));
-      await AsyncStorage.setItem("token", JSON.stringify(token));
+      await AsyncStorage.setItem("token", token);
+      // alert(token);
       // await AsyncStorage.setItem("user", JSON.stringify(value));
       // await AsyncStorage.setItem("userLocation", JSON.stringify(loc));
     } catch (e) {
@@ -149,13 +150,19 @@ class Login extends React.Component {
         msg: "",
         loading: false,
       },
+      // alert(token)
+
       () => this.props.navigation.navigate("App")
     );
+    const user = await AsyncStorage.getItem("user");
+    const anjum = await AsyncStorage.getItem("token");
+    alert(anjum);
   };
-  handleMap = async (value) => {
+  handleMap = async (value, token) => {
     try {
       await AsyncStorage.setItem("user", JSON.stringify(value));
-      await AsyncStorage.setItem("token", JSON.stringify(token));
+      await AsyncStorage.setItem("token", token);
+      // alert(token);
     } catch (e) {
       // saving error
     }
@@ -170,14 +177,18 @@ class Login extends React.Component {
         loading: false,
       },
       () => this.props.navigation.navigate("Map")
+      // alert(token)
     );
+    const user = await AsyncStorage.getItem("user");
+    const anjum = await AsyncStorage.getItem("token");
+    alert(anjum);
   };
   handleLogin = async () => {
     this.setState(
       {
         loading: true,
       },
-      () => {
+      async () => {
         if (this.state.email.trim()) {
           if (EmailValidator.validate(this.state.email.trim())) {
             if (this.state.password) {
@@ -186,11 +197,14 @@ class Login extends React.Component {
                   email: this.state.email.toLowerCase().trim(),
                   password: this.state.password,
                 })
-                .then((resp) => {
+                .then(async (resp) => {
                   this.setState({ errMessage: false });
                   // alert(JSON.stringify(resp.data.token));
                   const token = resp.data.token;
                   const user = jwt(resp.data.token);
+                  // await AsyncStorage.setItem("user", JSON.stringify(user));
+                  // await AsyncStorage.setItem("token", JSON.stringify(token));
+                  // alert(resp.data.token);
                   this.props.userAsync({ user: { user } });
 
                   // alert(JSON.stringify(user.shippingAddress));
@@ -208,7 +222,6 @@ class Login extends React.Component {
                       )
                       .then((resp1) => {
                         this.handleApp(user, token, resp1.data);
-
                         console.log(resp1.data);
                       })
                       .catch((err) => console.log(err));
