@@ -35,7 +35,7 @@ import { bindActionCreators } from "redux";
 import { userAsync, locationAsync } from "../store/actions";
 import { connect } from "react-redux";
 import { getUniqueId, getManufacturer } from "react-native-device-info";
-
+import jwt from "jwt-decode";
 class Login extends React.Component {
   static navigationOptions = { header: null };
 
@@ -49,60 +49,61 @@ class Login extends React.Component {
       email: "",
       password: "",
       msg: "",
-      mainLoading: true,
+      mainLoading: false,
     };
   }
   async componentDidMount() {
     // const jsonValue1 = "";
-    const jsonValue1 = await AsyncStorage.getItem("user");
-    var jsonValue = JSON.parse(jsonValue1)
-      
-
-    if (jsonValue) {
-
-      await axios.get('https://lit-peak-13067.herokuapp.com/get/user/byId/'+jsonValue)
-      .then(async resp => {
-        console.log("res[p",resp.data)
-        await this.props.userAsync({user: resp.data})
-      })
-      .catch(err => console.log("err1",err))
-      
-      var flag= false
-      await axios.get('https://lit-peak-13067.herokuapp.com/get/location/'+jsonValue)
-      .then(async resp1 => {
-        console.log("res[p1",resp1.data)
-        if(resp1.data.length === 0){
-          console.log("iffffffffffffffffff")
-
-          this.props.navigation.navigate("Map")
-        }else{
-          console.log("elseeeeeeeeeeeeeeeeeeeeee")
-           flag= true
-
-         this.props.locationAsync({
-        location: resp1.data[0].address1 +
-        " " +
-        resp1.data[0].address2 + 
-        " " +
-        resp1.data[0].city +
-        " " +
-        resp1.data[0].country,
-        lat: resp1.data[0].latitude,
-        lng: resp1.data[0].longitude
-      })}})
-      .catch(err => console.log("err2",err))
-      // alert("blew")
-      if(flag){
-           this.setState({
-        mainLoading:false
-      },()=> this.props.navigation.navigate("App"))
-      }
-    }
-    else{
-      this.setState({
-        mainLoading:false
-      })
-    }
+    // const jsonValue1 = await AsyncStorage.getItem("user");
+    // var jsonValue = JSON.parse(jsonValue1);
+    // if (jsonValue) {
+    //   await axios
+    //     .get("https://lit-peak-13067.herokuapp.com/get/user/byId/" + jsonValue)
+    //     .then(async (resp) => {
+    //       console.log("res[p", resp.data);
+    //       await this.props.userAsync({ user: resp.data });
+    //     })
+    //     .catch((err) => console.log("err1", err));
+    //   var flag = false;
+    //   await axios
+    //     .get("https://lit-peak-13067.herokuapp.com/get/location/" + jsonValue)
+    //     .then(async (resp1) => {
+    //       console.log("res[p1", resp1.data);
+    //       if (resp1.data.length === 0) {
+    //         console.log("iffffffffffffffffff");
+    //         this.props.navigation.navigate("Map");
+    //       } else {
+    //         console.log("elseeeeeeeeeeeeeeeeeeeeee");
+    //         flag = true;
+    //         this.props.locationAsync({
+    //           location:
+    //             resp1.data[0].address1 +
+    //             " " +
+    //             resp1.data[0].address2 +
+    //             " " +
+    //             resp1.data[0].city +
+    //             " " +
+    //             resp1.data[0].country,
+    //           lat: resp1.data[0].latitude,
+    //           lng: resp1.data[0].longitude,
+    //         });
+    //       }
+    //     })
+    //     .catch((err) => console.log("err2", err));
+    //   // alert("blew")
+    //   if (flag) {
+    //     this.setState(
+    //       {
+    //         mainLoading: false,
+    //       },
+    //       () => this.props.navigation.navigate("App")
+    //     );
+    //   }
+    // } else {
+    //   this.setState({
+    //     mainLoading: false,
+    //   });
+    // }
   }
   getRef = (ref) => {
     if (this.props.getRef) this.props.getRef(ref);
@@ -115,28 +116,29 @@ class Login extends React.Component {
       isPassword: !isPassword,
     });
   };
-  handleApp = async (value, loc) => {
+  handleApp = async (value, token, loc) => {
     try {
-      await AsyncStorage.setItem("user", JSON.stringify(value.user._id));
+      await AsyncStorage.setItem("user", JSON.stringify(value));
+      await AsyncStorage.setItem("token", JSON.stringify(token));
       // await AsyncStorage.setItem("user", JSON.stringify(value));
       // await AsyncStorage.setItem("userLocation", JSON.stringify(loc));
-
     } catch (e) {
       alert(error);
     }
-    this.props.locationAsync(
-      {
-        location:loc[0].address1 +
+    alert(JSON.stringify(loc));
+    alert(JSON.stringify(this.props.user));
+    this.props.locationAsync({
+      location:
+        loc.result[0].address1 +
         " " +
-       loc[0].address2 + 
+        loc.result[0].address2 +
         " " +
-       loc[0].city +
+        loc.result[0].city +
         " " +
-       loc[0].country,
-        lat:loc[0].latitude,
-        lng:loc[0].longitude
-      }
-    );
+        loc.result[0].country,
+      lat: loc.result[0].lat,
+      lng: loc.result[0].lng,
+    });
     this.setState(
       {
         icEye: "visibility-off",
@@ -152,8 +154,8 @@ class Login extends React.Component {
   };
   handleMap = async (value) => {
     try {
-      // alert(JSON.stringify(value.user._id))
-      await AsyncStorage.setItem("user", JSON.stringify(value.user._id));
+      await AsyncStorage.setItem("user", JSON.stringify(value));
+      await AsyncStorage.setItem("token", JSON.stringify(token));
     } catch (e) {
       // saving error
     }
@@ -170,7 +172,7 @@ class Login extends React.Component {
       () => this.props.navigation.navigate("Map")
     );
   };
-  handleLogin = () => {
+  handleLogin = async () => {
     this.setState(
       {
         loading: true,
@@ -180,46 +182,46 @@ class Login extends React.Component {
           if (EmailValidator.validate(this.state.email.trim())) {
             if (this.state.password) {
               axios
-                .post("https://lit-peak-13067.herokuapp.com/api/users/signin", {
+                .post("https://secret-cove-59835.herokuapp.com/v1/login/user", {
                   email: this.state.email.toLowerCase().trim(),
                   password: this.state.password,
                 })
                 .then((resp) => {
-                  if (resp.data === "Incorrect password.") {
-                    // this.props.userAsync(resp.data);
-                    this.setState({
-                      errMessage: "username or password is invalid",
-                      loading: false,
-                    });
-                    Î;
-                  } else if (resp.data === "Email does not exist.") {
-                    // this.props.navigation.navigate("Map");
-                    this.setState({
-                      errMessage: "username or password is invalid",
-                      loading: false,
-                    });
-                  } else {
-                    this.setState({ errMessage: false });
+                  this.setState({ errMessage: false });
+                  // alert(JSON.stringify(resp.data.token));
+                  const token = resp.data.token;
+                  const user = jwt(resp.data.token);
+                  this.props.userAsync({ user: { user } });
+
+                  // alert(JSON.stringify(user.shippingAddress));
+                  if (Number(user.shippingAddress) > 0) {
                     axios
-                      .get(
-                        "https://lit-peak-13067.herokuapp.com/get/location/" +
-                          resp.data.user._id
+                      .post(
+                        "https://secret-cove-59835.herokuapp.com/v1/location/" +
+                          Number(user.shippingAddress),
+                        { a: "fg" },
+                        {
+                          headers: {
+                            authorization: token,
+                          },
+                        }
                       )
                       .then((resp1) => {
-                        this.props.userAsync(resp.data);
-                        // this.props.navigation.navigate("Map");
-                        if (resp1.data.length > 0) {
-                          this.handleApp(resp.data, resp1.data);
-                        } else {
-                          this.handleMap(resp.data);
-                        }
+                        this.handleApp(user, token, resp1.data);
+
+                        console.log(resp1.data);
                       })
                       .catch((err) => console.log(err));
+                  } else {
+                    this.handleMap(user, token);
                   }
                 })
-                .catch((err) =>
-                  this.setState({ msg: err.message, loading: false })
-                );
+                .catch((err) => {
+                  this.setState({
+                    errMessage: "Incorrect Email or password",
+                    loading: false,
+                  });
+                });
             } else {
               this.setState({
                 errMessage: "Please Enter Your Password",
@@ -478,7 +480,10 @@ class Login extends React.Component {
                       }
                     )
                     .then(async (resp) => {
-                      await AsyncStorage.setItem("user", JSON.stringify(resp.data.user._id));
+                      await AsyncStorage.setItem(
+                        "user",
+                        JSON.stringify(resp.data.user._id)
+                      );
 
                       axios
                         .get(
@@ -490,22 +495,21 @@ class Login extends React.Component {
                           // this.props.navigation.navigate("Map");
                           if (resp1.data.length > 0) {
                             this.props.locationAsync({
-                              location: resp1.data[0].address1 +
-                              " " +
-                              resp1.data[0].address2 + 
-                              " " +
-                              resp1.data[0].city +
-                              " " +
-                              resp1.data[0].country,
+                              location:
+                                resp1.data[0].address1 +
+                                " " +
+                                resp1.data[0].address2 +
+                                " " +
+                                resp1.data[0].city +
+                                " " +
+                                resp1.data[0].country,
                               lat: resp1.data[0].latitude,
-                              lng: resp1.data[0].longitude
-                            }
-                              
-                            );
+                              lng: resp1.data[0].longitude,
+                            });
 
-                          this.props.navigation.navigate('App')
+                            this.props.navigation.navigate("App");
                           } else {
-                            this.props.navigation.navigate('Map')
+                            this.props.navigation.navigate("Map");
                           }
                         })
                         .catch((err) => console.log(err));

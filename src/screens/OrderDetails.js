@@ -57,6 +57,7 @@ class OrderDetails extends Component {
         })
         .catch((err) => console.log(err));
     });
+    // alert(JSON.stringify(this.props.route.params.order));
   }
   componentWillUnmount() {
     this._unsubscribe();
@@ -107,19 +108,21 @@ class OrderDetails extends Component {
     Linking.openURL(phoneNumber);
   };
 
-  tConvert (time) {
+  tConvert(time) {
     // Check correct time format and split into components
-    time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
-  
-    if (time.length > 1) { // If time format correct
-      time = time.slice (1);  // Remove full string match value
-      time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
+    time = time
+      .toString()
+      .match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+    if (time.length > 1) {
+      // If time format correct
+      time = time.slice(1); // Remove full string match value
+      time[5] = +time[0] < 12 ? "AM" : "PM"; // Set AM/PM
       time[0] = +time[0] % 12 || 12; // Adjust hours
     }
-    return time.join (''); // return adjusted time or original string
+    return time.join(""); // return adjusted time or original string
   }
-  
-  
+
   render() {
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
@@ -133,15 +136,15 @@ class OrderDetails extends Component {
       var temp = this.props.cart[i].price;
       subTotal = subTotal + parseFloat(temp);
     }
-    console.log("this.props.route.params.order", this.props.route.params.order);
-    console.log(this.props.route.params.order.isRejected ||
-      this.state.bd ||
-      this.props.route.params.order.isPicked)
-      console.log(
-        this.props.route.params.order.isRejected ,
-                    this.state.bd ,
-                    this.props.route.params.order.isPicked
-      )
+    // console.log("this.props.route.params.order", this.props.route.params.order);
+    // console.log(this.props.route.params.order.isRejected ||
+    //   this.state.bd ||
+    //   this.props.route.params.order.isPicked)
+    //   console.log(
+    //     this.props.route.params.order.isRejected ,
+    //                 this.state.bd ,
+    //                 this.props.route.params.order.isPicked
+    //   )
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
@@ -273,6 +276,78 @@ class OrderDetails extends Component {
               </TouchableOpacity>
             </View>
           )}
+          {this.props.route.params.order.isSomeOneElse && (
+            <>
+              <View style={lines.simple} />
+              <View
+                style={{
+                  flexDirection: "row",
+                  paddingHorizontal: 20,
+                  paddingTop: 30,
+                  paddingBottom: 20,
+                  alignItems: "center",
+                }}
+              >
+                <LatoText
+                  fontName="Lato-Bold"
+                  fonSiz={20}
+                  col="#2E2E2E"
+                  text="Someone else is picking your order"
+                ></LatoText>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  paddingHorizontal: 20,
+                  paddingBottom: 20,
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    alignItems: "center",
+                  }}
+                >
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <AntDesign
+                      style={{ paddingRight: 10 }}
+                      name="user"
+                      size={15}
+                      color="black"
+                    />
+                    <LatoText
+                      fontName="Lato-Regular"
+                      fonSiz={17}
+                      col="#2E2E2E"
+                      text={
+                        this.props.route.params.order.someoneElseFirstName +
+                        " " +
+                        this.props.route.params.order.someoneElseLastName
+                      }
+                    ></LatoText>
+                  </View>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <AntDesign
+                      style={{ paddingRight: 10 }}
+                      name="mail"
+                      size={15}
+                      color="black"
+                    />
+                    <LatoText
+                      fontName="Lato-Regular"
+                      fonSiz={17}
+                      col="#2E2E2E"
+                      text={this.props.route.params.order.someoneElseEmail}
+                    ></LatoText>
+                  </View>
+                </View>
+              </View>
+            </>
+          )}
 
           <View style={lines.simple} />
           <View
@@ -400,35 +475,18 @@ class OrderDetails extends Component {
                   size={15}
                   color="black"
                 />
-                  <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={17}
-                  col="#2E2E2E"
-                  text={
-                    this.props.route.params.order.postTime
-                      ? "    " +   this.tConvert(this.props.route.params.order.postTime)
-                      : ""
-                  }
-                ></LatoText>
-              </View>
-              {/* <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <AntDesign
-                  style={{ paddingRight: 10 }}
-                  name="clockcircleo"
-                  size={15}
-                  color="black"
-                />
                 <LatoText
                   fontName="Lato-Regular"
                   fonSiz={17}
                   col="#2E2E2E"
                   text={
                     this.props.route.params.order.postTime
-                      ? "    " + this.props.route.params.order.postTime
+                      ? "    " +
+                        this.tConvert(this.props.route.params.order.postTime)
                       : ""
                   }
                 ></LatoText>
-              </View> */}
+              </View>
             </View>
           </View>
 
@@ -649,92 +707,81 @@ class OrderDetails extends Component {
             />
           </View>
           <View style={lines.simple} />
-          { this.props.route.params.order.isRejected ||
-              this.state.bd ||
-            this.props.route.params.order.isPicked ? (
-                  null
-               
-              ): (
-                <TouchableOpacity
-                style={{
-                  flexDirection: "row",
-                  paddingHorizontal: 20,
-                  paddingBottom: 20,
-                  paddingTop: 10,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-
-                onPress={() => {
-                  if (this.props.route.params.order.isAccepted === false) {
-                    Alert.alert(
-                      "Alert!",
-                      "Are you sure you want to cancel the order?",
-                      [
-                        {
-                          text: "No",
-                          onPress: () => console.log("Cancel Pressed"),
-                          style: "cancel",
-                        },
-                        {
-                          text: "Yes",
-                          onPress: () => {
-                            axios
-                              .put(
-                                "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
-                                  this.props.route.params.order._id
-                              )
-                              .then((resp) => {
-                                this.setState({ bd: true });
-                                alert("Order Cancelled Successfully.");
-                                this.props.navigation.navigate("MyOrders");
-                              })
-                              .catch((err) => console.log(err));
-                          },
-                        },
-                      ],
-                      { cancelable: true }
-                    );
-                  } else {
-                    alert("Order cannot be cancelled after preperation state.");
-                  }
-                }}
-              >
-                <LatoText
-                  fontName="Lato-Bold"
-                  fonSiz={17}
-                  col={
-          
-                     
-                       "#2E2E2E"
-                  }
-                  text="Cancel Order"
-                />
-              </TouchableOpacity>
-              )}
           {this.props.route.params.order.isRejected ||
-            this.state.bd ||
-            this.props.route.params.order.isPicked ? (
-                  null
-              ): (
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingBottom: 20,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={15}
-              col="#2E2E2E"
-              text="(Only possible before the order is 'being prepared')"
-            />
-          </View>
+          this.state.bd ||
+          this.props.route.params.order.isPicked ? null : (
+            <TouchableOpacity
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingBottom: 20,
+                paddingTop: 10,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={() => {
+                if (this.props.route.params.order.isAccepted === false) {
+                  Alert.alert(
+                    "Alert!",
+                    "Are you sure you want to cancel the order?",
+                    [
+                      {
+                        text: "No",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel",
+                      },
+                      {
+                        text: "Yes",
+                        onPress: () => {
+                          axios
+                            .put(
+                              "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
+                                this.props.route.params.order._id
+                            )
+                            .then((resp) => {
+                              this.setState({ bd: true });
+                              alert("Order Cancelled Successfully.");
+                              this.props.navigation.navigate("MyOrders");
+                            })
+                            .catch((err) => console.log(err));
+                        },
+                      },
+                    ],
+                    { cancelable: true }
+                  );
+                } else {
+                  alert("Order cannot be cancelled after preperation state.");
+                }
+              }}
+            >
+              <LatoText
+                fontName="Lato-Bold"
+                fonSiz={17}
+                col={"#2E2E2E"}
+                text="Cancel Order"
+              />
+            </TouchableOpacity>
           )}
-
+          {this.props.route.params.order.isRejected ||
+          this.state.bd ||
+          this.props.route.params.order.isPicked ? null : (
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingBottom: 20,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col="#2E2E2E"
+                text="(Only possible before the order is 'being prepared')"
+              />
+            </View>
+          )}
         </ScrollView>
       </View>
     );

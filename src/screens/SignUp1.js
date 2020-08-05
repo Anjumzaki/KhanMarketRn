@@ -117,10 +117,11 @@ export default class SignUp1 extends React.Component {
                           this.state.selectedCountry == "USA"
                             ? "+1" + this.state.mobile
                             : "+92" + this.state.mobile,
-                        zipCode: this.state.zipCode,
+                        // zipCode: this.state.zipCode,
                         password: this.state.password,
                         isGuest: false,
                         guestId: "",
+                        type: "user",
                       });
                     } else {
                       this.setState({
@@ -176,7 +177,7 @@ export default class SignUp1 extends React.Component {
     const { icEye, isPassword } = this.state;
     return (
       <KeyboardAvoidingView
-      behavior='padding'
+        behavior="padding"
         style={[conStyles.safeAreaMy, { backgroundColor: "white" }]}
       >
         <StatusBar translucent={true} barStyle="dark-content" />
@@ -568,13 +569,13 @@ export default class SignUp1 extends React.Component {
                             this.forceUpdate();
                             axios
                               .get(
-                                "https://lit-peak-13067.herokuapp.com/get/user/" +
+                                "https://secret-cove-59835.herokuapp.com/v1/checkEmail/" +
                                   this.state.email.trim()
                               )
                               .then((resp) => {
                                 axios
                                   .get(
-                                    "https://lit-peak-13067.herokuapp.com/get/user/number/" +
+                                    "https://secret-cove-59835.herokuapp.com/v1/checkNumber/" +
                                       mainNumber
                                   )
                                   .then((resp1) => {
@@ -583,8 +584,8 @@ export default class SignUp1 extends React.Component {
                                       resp.data,
                                       resp1.data
                                     );
-                                    if (resp.data === null) {
-                                      if (resp1.data === null) {
+                                    if (resp.data.result.length == 0) {
+                                      if (resp1.data.result.length == 0) {
                                         var cd = "1";
                                         if (
                                           this.state.selectedCountry == "PAK"
@@ -594,7 +595,7 @@ export default class SignUp1 extends React.Component {
                                         console.log("CDDDDDDDDD", cd);
                                         axios
                                           .get(
-                                            "https://lit-peak-13067.herokuapp.com/api/email/verification/" +
+                                            "https://secret-cove-59835.herokuapp.com/v1/email/verification/" +
                                               this.state.email
                                                 .toLowerCase()
                                                 .trim() +
@@ -607,14 +608,16 @@ export default class SignUp1 extends React.Component {
                                                 numberModal: true,
                                                 errMessage: "",
                                               },
-                                              () => this.refs.modal3.open()
+                                              () => console.log(resp.data)
                                             )
                                           )
-                                          .catch((err) => console.log(err));
+                                          .catch((err) =>
+                                            console.log(err, "ASD")
+                                          );
 
                                         axios
                                           .get(
-                                            "http://lit-peak-13067.herokuapp.com/api/number/verification/" +
+                                            "https://secret-cove-59835.herokuapp.com/v1/number/verification/" +
                                               mainNumber +
                                               "/" +
                                               num
@@ -744,7 +747,9 @@ export default class SignUp1 extends React.Component {
               disabled={!this.state.numVerified}
               style={[
                 btnStyles.basic,
-                !this.state.numVerified ? { backgroundColor: "silver", marginTop:20 } : null,
+                !this.state.numVerified
+                  ? { backgroundColor: "silver", marginTop: 20 }
+                  : null,
               ]}
               onPress={() => this.handleSignUp()}
             >

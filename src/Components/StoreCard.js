@@ -6,14 +6,20 @@ import {
   Image,
   Button,
   Dimensions,
-  Alert
+  Alert,
 } from "react-native";
 import { cardStyles } from "../styles/base";
 import LatoText from "../Helpers/LatoText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import firebase from "firebase";
 import { bindActionCreators } from "redux";
-import { storeAsync, cartAsync, cartSizeAsync,favStoreAsync,storeHeaderAsync } from "../store/actions";
+import {
+  storeAsync,
+  cartAsync,
+  cartSizeAsync,
+  favStoreAsync,
+  storeHeaderAsync,
+} from "../store/actions";
 import { connect } from "react-redux";
 import Modal from "react-native-modalbox";
 
@@ -38,7 +44,7 @@ class StoreCard extends React.Component {
   }
   render() {
     const { name, distance, address, id, phone, sId, oId } = this.props;
-    console.log(oId)
+    console.log(oId);
     return (
       <TouchableOpacity
         onPress={() => {
@@ -106,13 +112,13 @@ class StoreCard extends React.Component {
           //   }
           // }
           this.props.storeHeaderAsync({
-                name: name,
-                address: address,
-                id: id,
-                phone: phone,
-                sId: sId,
-                oId: oId
-          })
+            name: name,
+            address: address,
+            id: id,
+            phone: phone,
+            sId: sId,
+            oId: oId,
+          });
           this.props.navigation.push("StoreDetails", {
             storeId: id,
             name: name,
@@ -209,7 +215,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
       cartAsync,
       cartSizeAsync,
       favStoreAsync,
-      storeHeaderAsync
+      storeHeaderAsync,
     },
     dispatch
   );

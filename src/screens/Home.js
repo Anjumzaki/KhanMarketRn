@@ -60,19 +60,24 @@ class Home extends React.Component {
       return false;
     }
   };
-  componentDidMount() {
+  async componentDidMount() {
+    const token = await AsyncStorage.getItem("token");
+    console.log(token, "asdas");
     axios
-      .get(
-        "https://lit-peak-13067.herokuapp.com/get/stores/" +
-          this.props.userLocation.lat +
-          "/" +
-          this.props.userLocation.lng
-      )
+      .get("https://secret-cove-59835.herokuapp.com/v1/store", {
+        headers: {
+          authorization: token,
+        },
+      })
       .then((resp) => {
-        this.setState({
-          stores: resp.data,
-        });
-      });
+        this.setState(
+          {
+            stores: resp.data.result,
+          },
+          console.log("stores",this.state.stores)
+        );
+      })
+      .catch((err) => console.log(err.message));
     this.backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       this.backAction
@@ -154,16 +159,16 @@ class Home extends React.Component {
         />
         {this.state.stores.length > 0 ? (
           <View>
+            {console.log(this.state.stores)}
             <ScrollView contentContainerStyle={{ paddingBottom: 180 }}>
               {this.state.stores.length > 0 &&
                 this.state.stores.map((item, ind) => (
                   <StoreCard
                     key={ind}
-                    key={item.store._id}
                     navigation={this.props.navigation}
-                    name={item.store.storeName}
+                    name={item.storeName}
                     distance={
-                      item.dist + " mi"
+                      "dummy"
                       // this.getDistanceFromLatLonInKm(
                       //   this.props.userLocation.lat,
                       //   this.props.userLocation.lng,
@@ -171,11 +176,11 @@ class Home extends React.Component {
                       //   item.store.lng
                       // ).toFixed(2) + " mi"
                     }
-                    address={item.store.storeAddress}
-                    id={item.store._id}
-                    phone={item.store.phoneNumber}
-                    sId={item.store.storeId}
-                    oId={item.store.orderNum}
+                    address={item.address1}
+                    id={item.storeID}
+                    phone={item.zipCode}
+                    sId={item.storeID}
+                    oId={item.storeID}
                   />
                 ))}
             </ScrollView>

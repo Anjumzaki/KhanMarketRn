@@ -224,7 +224,7 @@ import {
   Button,
   StatusBar,
   Platform,
-  AsyncStorage
+  AsyncStorage,
 } from "react-native";
 import Geolocation from "@react-native-community/geolocation";
 import LatoText from "../Helpers/LatoText";
@@ -259,23 +259,26 @@ class Map extends Component {
       userLocation: "",
       regionChangeProgress: false,
       completeLoc: "",
+      user: "",
     };
   }
+  async componentDidMount() {
+    try {
+      const user = await AsyncStorage.getItem("user");
+      const token = await AsyncStorage.getItem("token");
+      this.setState({ user, token });
+    } catch (e) {
+      // saving error
+    }
+  }
   handleMapApp = async () => {
-    axios
-      .delete(
-        "https://lit-peak-13067.herokuapp.com/delete/location/" +
-          this.props.user.user._id
-      )
-      .then((resp) => console.log(resp))
-      .catch((err) => console.log(err));
-
     var ad1 = "",
       temp = "",
       ad2 = "",
       ct = "",
       cnt = "",
       zipc = "";
+    var state = "";
     console.log(" ins state", this.state.completeLoc);
     for (
       var i = 0;
@@ -305,6 +308,12 @@ class Map extends Component {
         ct = this.state.completeLoc.results[0].address_components[i].long_name;
       } else if (
         this.state.completeLoc.results[0].address_components[i].types[0] ===
+        "administrative_area_level_2"
+      ) {
+        state = this.state.completeLoc.results[0].address_components[i]
+          .long_name;
+      } else if (
+        this.state.completeLoc.results[0].address_components[i].types[0] ===
         "country"
       ) {
         cnt = this.state.completeLoc.results[0].address_components[i].long_name;
@@ -322,6 +331,7 @@ class Map extends Component {
       lat: this.state.region.latitude,
       lng: this.state.region.longitude,
     });
+    this.props.navigation.navigate("App");
     // var loc = { refId: this.props.user.user._id,
     //   type: "Customer",
     //   address1: ad1 + " " + temp,
@@ -331,23 +341,41 @@ class Map extends Component {
     //   zipCode: zipc,
     //   latitude: this.state.region.latitude,
     //   longitude: this.state.region.longitude}
-    //  await AsyncStorage.setItem("userLocation",JSON.stringify(loc));
-    axios
-      .post("https://lit-peak-13067.herokuapp.com/add/location", {
-        refId: this.props.user.user._id,
-        type: "Customer",
-        address1: ad1 + " " + temp,
-        address2: ad2,
-        city: ct,
-        country: cnt,
-        zipCode: zipc,
-        latitude: this.state.region.latitude,
-        longitude: this.state.region.longitude,
-      })
-      .then((resp1) => {
-        this.props.navigation.navigate("App");
-      })
-      .catch((err) => console.log(err));
+    // //  await AsyncStorage.setItem("userLocation",JSON.stringify(loc));
+    // axios
+    //   .post(
+    //     "https://secret-cove-59835.herokuapp.com/v1/location",
+    //     { a: "fg" },
+    //     {
+    //       headers: {
+    //         authorization:
+    //           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFuanVtemFraThAZ21haWwuY29tIiwidXNlcklkIjozNDEsImZpcnN0TmFtZSI6IkFpamF6IiwibWlkZGxlTmFtZSI6InVuZGVmaW5lZCIsImxhc3ROYW1lIjoiQWxpIiwibW9iaWxlIjoiMDMxMzc2Njk5NjUiLCJpc0d1ZXN0IjowLCJ0eXBlIjoidXNlciIsInN0b3JlSUQiOjMxMSwic2hpcHBpbmdBZGRyZXNzIjoiMTEiLCJpYXQiOjE1OTYxNDM5MDUsImV4cCI6MTU5ODczNTkwNX0.dBov8CzqpaignGePaW_20GTunJFcoPfvp1jpg9BKbXg",
+    //       },
+    //     }
+    //   )
+    //   .then((resp1) => {
+    //     this.handleApp(user);
+
+    //     console.log(resp1.data);
+    //   })
+    //   .catch((err) => console.log(err));
+    // axios
+    //   .post("https://lit-peak-13067.herokuapp.com/add/location", {
+    //     refId: this.props.user.user._id,
+    //     type: "Customer",
+    //     address1: ad1 + " " + temp,
+    //     address2: ad2,
+    //     city: ct,
+    //     country: cnt,
+    //     state: state,
+    //     zipCode: zipc,
+    //     latitude: this.state.region.latitude,
+    //     longitude: this.state.region.longitude,
+    //   })
+    //   .then((resp1) => {
+    //     this.props.navigation.navigate("App");
+    //   })
+    //   .catch((err) => console.log(err));
   };
   getMyLocations = () => {
     Geolocation.getCurrentPosition(

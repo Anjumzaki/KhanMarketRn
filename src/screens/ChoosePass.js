@@ -89,7 +89,7 @@ class SignUp1 extends React.Component {
           if (this.state.password == this.state.coPassword) {
             axios
               .post(
-                "https://lit-peak-13067.herokuapp.com/api/users/signup",
+                "https://secret-cove-59835.herokuapp.com/v1/user/",
                 this.state.user
               )
               .then((resp) => {
@@ -106,7 +106,7 @@ class SignUp1 extends React.Component {
                   { cancelable: false }
                 );
               })
-              .catch((err) => this.setState({ msg: err.message }));
+              .catch((err) => this.setState({ msg: JSON.stringify(err) },console.log(err)));
           } else {
             this.setState({
               errMessage: "Password and confirm password does not matches",
