@@ -20,7 +20,7 @@ class CourseImage extends React.Component {
     ref.getDownloadURL().then(url => {
       this.setState({ image: url });
     })
-    // .catch(err=>console.log(err));
+    .catch(err=>console.log(err));
 }
 
 

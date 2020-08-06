@@ -5,6 +5,7 @@ import {
   View,
   ScrollView,
   ActivityIndicator,
+  AsyncStorage,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -13,7 +14,7 @@ import CardsRow from "../Components/CardsRow";
 import axios from "axios";
 import SingleStoreHeader from "../Helpers/SingleStoreHeader";
 import { bindActionCreators } from "redux";
-import { filterAsync, searchAsync } from "../store/actions";
+import { filterAsync, searchAsync, userAsync } from "../store/actions";
 import { connect } from "react-redux";
 
 class StoreDetails extends React.Component {
@@ -27,19 +28,27 @@ class StoreDetails extends React.Component {
       loading: true,
     };
   }
-  getMyData = () => {
+  getMyData = async () => {
+    const token = this.props.user.user.token;
+
     this.setState(
       {
         loading: true,
       },
       () => {
         axios
-          .get(
-            "https://lit-peak-13067.herokuapp.com/get/all/products/" +
-              this.props.route.params.storeId
+          .post(
+            "https://secret-cove-59835.herokuapp.com/v1/item/store/" +
+              this.props.route.params.storeId,
+            { asd: "sxd" },
+            {
+              headers: {
+                authorization: token,
+              },
+            }
           )
           .then((resp) => {
-            this.setState({ products: resp.data });
+            this.setState({ products: resp.data.result });
           })
           .catch((err) => console.log(err));
 
@@ -54,10 +63,14 @@ class StoreDetails extends React.Component {
           .catch((err) => console.log(err));
 
         axios
-          .get("https://lit-peak-13067.herokuapp.com/get/all/subCategories")
+          .get("https://secret-cove-59835.herokuapp.com/v1/subCategory", {
+            headers: {
+              authorization: token,
+            },
+          })
           .then((resp) => {
             // console.log("Cat", resp.data)
-            this.setState({ categories: resp.data, loading: false });
+            this.setState({ categories: resp.data.result, loading: false });
           })
           .catch((err) => console.log(err));
       }
@@ -85,29 +98,13 @@ class StoreDetails extends React.Component {
     var fp = [];
     this.state.categories.map((category, index) =>
       fp.push({
-        name: category.subCategory,
+        name: category.subCategoryName,
         products: this.state.products.filter(function (item) {
-          return item.productType == category.subCategory;
+          return item.subCategoryName == category.subCategoryName;
         }),
       })
     );
 
-    var searchedProducts = [];
-    var key1 = this.props.searchInput;
-    if (this.props.searchInput) {
-      for (var i = 0; i < fp.length; i++) {
-        let totalProducts = [...fp[i].products];
-        var temp = totalProducts.filter(function (product) {
-          return product.productName
-            ? product.productName.toLowerCase().includes(key1.toLowerCase())
-            : null;
-        });
-        searchedProducts.push({
-          name: fp[i].name,
-          products: temp,
-        });
-      }
-    }
 
     return (
       <View>
@@ -164,12 +161,14 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   searchInput: state.Search.searchData,
+  user: state.user.user,
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
     {
       filterAsync,
       searchAsync,
+      userAsync,
     },
     dispatch
   );

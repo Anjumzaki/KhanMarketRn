@@ -189,6 +189,12 @@ class Settings extends React.Component {
             col="#5C5C5C"
             text="Account Settings"
           />
+          <LatoText
+            fontName="Lato-Regular"
+            fonSiz={20}
+            col="#5C5C5C"
+            text={JSON.stringify(this.props.user.user.user)}
+          />
           <View style={{ marginTop: 20 }} />
 
           <View

@@ -84,20 +84,14 @@ class Cart extends Component {
         })
         .catch((err) => console.log(err));
 
-      axios
-        .get(
-          "https://lit-peak-13067.herokuapp.com/get/store/" +
-            this.props.store.id
-        )
-        .then((resp) => {
-          this.setState({ tax: resp.data.tax });
-        });
+      this.setState({ tax: this.props.store.storeTax });
     } else {
       this.setState({ isStore: false });
     }
     this.setState({
       cartItem: this.props.cart,
     });
+    // alert(JSON.stringify(this.props.store));
   }
   handleRemove = (id) => {
     this.setState(
@@ -145,7 +139,7 @@ class Cart extends Component {
     var myCart = this.props.cart.length;
     var subTotal = 0;
     for (var i = 0; i < this.props.cart.length; i++) {
-      var temp = this.props.cart[i].price;
+      var temp = this.props.cart[i].productPrice;
       subTotal = subTotal + parseFloat(temp);
     }
     return (

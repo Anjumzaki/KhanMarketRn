@@ -33,7 +33,7 @@ class ProCards extends React.Component {
   componentDidMount() {
     const ref = firebase
       .storage()
-      .ref("/product_images/" + this.props.product._id + "_1.jpg");
+      .ref("/product_images/" + this.props.product.productID + "_1.jpg");
     ref
       .getDownloadURL()
       .then((url) => {
@@ -55,19 +55,24 @@ class ProCards extends React.Component {
     }
 
     var pCart = this.props.cart;
-    var inCart = false
-    var inCartIndex = ""
-    for(var i=0; i<pCart.length; i++){
-      if(pCart[i].product._id === this.props.product._id){
-        inCart =true
-        inCartIndex=i
-        break
+    var inCart = false;
+    var inCartIndex = "";
+    for (var i = 0; i < pCart.length; i++) {
+      if (pCart[i].product.itemID === this.props.product.itemID) {
+        inCart = true;
+        inCartIndex = i;
+        break;
       }
     }
 
-    if(inCart){
-      console.log("inCarttttttttttt",inCart, inCartIndex, pCart[inCartIndex].quantity)
-      this.setState({ cart: true, qt: pCart[inCartIndex].quantity});
+    if (inCart) {
+      console.log(
+        "inCarttttttttttt",
+        inCart,
+        inCartIndex,
+        pCart[inCartIndex].quantity
+      );
+      this.setState({ cart: true, qt: pCart[inCartIndex].quantity });
     }
   }
 
@@ -101,7 +106,6 @@ class ProCards extends React.Component {
           style={styles.proCardsImage}
           source={{ uri: this.state.image }}
         >
-          
           <View style={{ flex: 1 }}>
             <TouchableOpacity
               style={{ height: "100%" }}
@@ -224,8 +228,9 @@ class ProCards extends React.Component {
                 text={
                   "$" +
                   (
-                    this.props.product.price -
-                    (this.props.product.price * this.props.product.discount) /
+                    this.props.product.productPrice -
+                    (this.props.product.productPrice *
+                      this.props.product.productDiscount) /
                       100
                   ).toFixed(2) +
                   " / lb"
@@ -240,7 +245,7 @@ class ProCards extends React.Component {
                 col="#89898C"
                 text={
                   "$" +
-                  parseFloat(this.props.product.price).toFixed(2) +
+                  parseFloat(this.props.product.productPrice).toFixed(2) +
                   " / lb"
                 }
               ></LatoText>
@@ -251,7 +256,7 @@ class ProCards extends React.Component {
               fontName="Lato-Regular"
               fonSiz={15}
               col="#B50000"
-              text={"You will save " + this.props.product.discount + "%"}
+              text={"You will save " + this.props.product.productDiscount + "%"}
             ></LatoText>
           </View>
           <View style={{ marginTop: 20 }}>
@@ -299,11 +304,11 @@ class ProCards extends React.Component {
                       sId: this.props.storeHeader.storeId,
                       oId: this.props.storeHeader.oId,
                     });
-                    this.props.favStoreAsync(this.props.product.storeId);
+                    this.props.favStoreAsync(this.props.product.storeID);
                     this.props.cartAsync(pCart);
                     this.setState({ cart: true });
                   } else {
-                    if (this.props.store.id === this.props.product.storeId) {
+                    if (this.props.store.id === this.props.product.storeID) {
                       var pCart = this.props.cart;
                       // var inCart = false
                       // var inCartIndex = ""
@@ -334,23 +339,22 @@ class ProCards extends React.Component {
                       //   this.props.cartAsync(pCart);
                       //   this.setState({ cart: true });
                       // }else{
-                        pCart.push({
-                          product: this.props.product,
-                          quantity: this.state.qt,
-                        });
-                        this.props.storeAsync({
-                          name: this.props.storeHeader.name,
-                          address: this.props.storeHeader.address,
-                          id: this.props.storeHeader.id,
-                          phone: this.props.storeHeader.phone,
-                          sId: this.props.storeHeader.storeId,
-                          oId: this.props.storeHeader.oId,
-                        });
-                        this.props.favStoreAsync(this.props.product.storeId);
-                        this.props.cartAsync(pCart);
-                        this.setState({ cart: true });
+                      pCart.push({
+                        product: this.props.product,
+                        quantity: this.state.qt,
+                      });
+                      this.props.storeAsync({
+                        name: this.props.storeHeader.name,
+                        address: this.props.storeHeader.address,
+                        id: this.props.storeHeader.id,
+                        phone: this.props.storeHeader.phone,
+                        sId: this.props.storeHeader.storeId,
+                        oId: this.props.storeHeader.oId,
+                      });
+                      this.props.favStoreAsync(this.props.product.storeId);
+                      this.props.cartAsync(pCart);
+                      this.setState({ cart: true });
                       // }
-                     
                     } else {
                       this.setState(
                         { temp: this.props.product.storeId },

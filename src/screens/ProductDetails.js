@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import Toast from 'react-native-simple-toast';
+import Toast from "react-native-simple-toast";
 import Carousel from "react-native-looped-carousel";
 import { AntDesign } from "@expo/vector-icons";
 import LatoText from "../Helpers/LatoText";
@@ -40,7 +40,7 @@ class ProductDetails extends Component {
       heart: false,
       qt: 1,
       favourites: [],
-      buttonDisable: false
+      buttonDisable: false,
     };
   }
 
@@ -63,23 +63,30 @@ class ProductDetails extends Component {
       this.setState({ favourites: this.props.route.params.product.favourites });
     }
 
-    
     var pCart = this.props.cart;
-    var inCart = false
-    var inCartIndex = ""
-    for(var i=0; i<pCart.length; i++){
-      if(pCart[i].product._id === this.props.route.params.product._id){
-        inCart =true
-        inCartIndex=i
-        break
+    var inCart = false;
+    var inCartIndex = "";
+    for (var i = 0; i < pCart.length; i++) {
+      if (pCart[i].product._id === this.props.route.params.product._id) {
+        inCart = true;
+        inCartIndex = i;
+        break;
       }
     }
 
-    if(inCart){
-      console.log("inCarttttttttttt",inCart, inCartIndex, pCart[inCartIndex].quantity)
-      this.setState({ cart: true, qt: pCart[inCartIndex].quantity, buttonDisable: true});
+    if (inCart) {
+      console.log(
+        "inCarttttttttttt",
+        inCart,
+        inCartIndex,
+        pCart[inCartIndex].quantity
+      );
+      this.setState({
+        cart: true,
+        qt: pCart[inCartIndex].quantity,
+        buttonDisable: true,
+      });
     }
-
   }
 
   _onLayoutDidChange = (e) => {
@@ -108,7 +115,7 @@ class ProductDetails extends Component {
   }
   render() {
     var product = this.props.route.params.product;
-    var noOfImg = product.noOfImages;
+    var noOfImg = product.noOfImage;
     noOfImg = parseInt(noOfImg);
     var temp = [];
     for (var i = 0; i < noOfImg; i++) {
@@ -164,7 +171,7 @@ class ProductDetails extends Component {
               {temp.map((item, index) => (
                 // <View style={{ borderRadius: 10, overflow: "hidden" }}>
 
-                <CourselImage id={product._id} index={index + 1} />
+                <CourselImage id={item.productID} index={index + 1} />
                 // </View>
               ))}
               {/* </> */}
@@ -285,7 +292,8 @@ class ProductDetails extends Component {
                   fonSiz={20}
                   col="#5C5C5C"
                   text={` $  ${parseFloat(
-                    product.price - (product.price * product.discount) / 100
+                    product.productPrice -
+                      (product.productPrice * product.productDiscount) / 100
                   ).toFixed(2)} / lb `}
                 />
                 <LatoText
@@ -293,7 +301,7 @@ class ProductDetails extends Component {
                   fonSiz={17}
                   lineThrough="line-through"
                   col="#89898C"
-                  text={`$${product.price} / lb `}
+                  text={`$${product.productPrice} / lb `}
                 />
               </View>
               <View style={{ marginTop: 22 }}>
@@ -301,7 +309,7 @@ class ProductDetails extends Component {
                   fontName="Lato-Regular"
                   fonSiz={17}
                   col="#B50000"
-                  text={` You will save ${product.discount}% `}
+                  text={` You will save ${product.productDiscount}% `}
                 />
               </View>
             </View>
@@ -345,7 +353,7 @@ class ProductDetails extends Component {
             </TouchableOpacity>
           </View>
           <TouchableOpacity
-          disabled={this.state.buttonDisable}
+            disabled={this.state.buttonDisable}
             onPress={() => {
               // var pCart=this.props.cart;
               // pCart.push({
@@ -367,7 +375,6 @@ class ProductDetails extends Component {
                   phone: this.props.storeHeader.phone,
                   sId: this.props.storeHeader.storeId,
                   oId: this.props.storeHeader.oId,
-
                 });
                 this.props.favStoreAsync(product.storeId);
                 this.props.cartAsync(pCart);
@@ -386,12 +393,11 @@ class ProductDetails extends Component {
                     phone: this.props.storeHeader.phone,
                     sId: this.props.storeHeader.storeId,
                     oId: this.props.storeHeader.oId,
-
                   });
                   this.props.favStoreAsync(product.storeId);
                   this.props.cartAsync(pCart);
                   this.setState({ cart: true, buttonDisable: true }, () => {
-                    Toast.show('Product added to cart');
+                    Toast.show("Product added to cart");
                   });
                 } else {
                   this.setState({ temp: product.storeId }, () => {
@@ -419,7 +425,6 @@ class ProductDetails extends Component {
                               phone: this.props.storeHeader.phone,
                               sId: this.props.storeHeader.storeId,
                               oId: this.props.storeHeader.oId,
-
                             });
                             this.props.favStoreAsync(product.storeId);
                             this.props.cartAsync(pCart);
@@ -433,8 +438,10 @@ class ProductDetails extends Component {
                 }
               }
             }}
-            style={[this.state.buttonDisable ? btnStyles.cartBtn1 : btnStyles.cartBtn, { width: "40%" }]}
-            
+            style={[
+              this.state.buttonDisable ? btnStyles.cartBtn1 : btnStyles.cartBtn,
+              { width: "40%" },
+            ]}
           >
             <LatoText
               fontName="Lato-Regular"

@@ -90,17 +90,22 @@ class Home extends React.Component {
         "hardwareBackPress",
         this.backAction
       );
+      // alert(this.props.user.user.token);
+      // alert(this.props.userLocation.lat);
+      // alert(this.props.userLocation.lng);
       axios
-        .get(
-          "https://lit-peak-13067.herokuapp.com/get/stores/" +
-            this.props.userLocation.lat +
-            "/" +
-            this.props.userLocation.lng
-        )
+        .get("https://secret-cove-59835.herokuapp.com/v1/store", {
+          headers: {
+            authorization: token,
+          },
+        })
         .then((resp) => {
-          this.setState({
-            stores: resp.data,
-          });
+          this.setState(
+            {
+              stores: resp.data.result,
+            },
+            console.log("stores", this.state.stores)
+          );
         });
     });
   }
@@ -168,19 +173,21 @@ class Home extends React.Component {
                     navigation={this.props.navigation}
                     name={item.storeName ? item.storeName : "Error Handled"}
                     distance={
-                      "dummy"
-                      // this.getDistanceFromLatLonInKm(
-                      //   this.props.userLocation.lat,
-                      //   this.props.userLocation.lng,
-                      //   item.store.lat,
-                      //   item.store.lng
-                      // ).toFixed(2) + " mi"
+                      // "dummy"
+                      this.getDistanceFromLatLonInKm(
+                        this.props.userLocation.lat,
+                        this.props.userLocation.lng,
+                        item.lat,
+                        item.lng
+                      ).toFixed(2) + " mi"
                     }
                     address={item.address1}
                     id={item.storeID}
                     phone={item.zipCode}
                     sId={item.storeID}
                     oId={item.storeID}
+                    storeTax={item.storeTax}
+                    token={this}
                   />
                 ))}
             </ScrollView>

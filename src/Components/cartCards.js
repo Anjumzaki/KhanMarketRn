@@ -31,9 +31,9 @@ class CartCards extends PureComponent {
     });
     var temp = this.state.cart[this.props.index];
     temp.price = (
-      (this.props.product.product.price -
-        (this.props.product.product.price *
-          this.props.product.product.discount) /
+      (this.props.product.product.productPrice -
+        (this.props.product.product.productPrice *
+          this.props.product.product.productDiscount) /
           100) *
       parseInt(this.state.qt)
     ).toFixed(2);
@@ -103,9 +103,9 @@ class CartCards extends PureComponent {
                   this.setState({ qt: this.state.qt - 1 });
                   var temp = this.state.cart[this.props.index];
                   temp.price = (
-                    (this.props.product.product.price -
-                      (this.props.product.product.price *
-                        this.props.product.product.discount) /
+                    (this.props.product.product.productPrice -
+                      (this.props.product.product.productPrice *
+                        this.props.product.product.productDiscount) /
                         100) *
                     parseInt(this.state.qt - 1)
                   ).toFixed(2);
@@ -135,9 +135,9 @@ class CartCards extends PureComponent {
                 this.setState({ qt: this.state.qt + 1 });
                 var temp = this.state.cart[this.props.index];
                 temp.price = (
-                  (this.props.product.product.price -
-                    (this.props.product.product.price *
-                      this.props.product.product.discount) /
+                  (this.props.product.product.priceproductPrice-
+                    (this.props.product.product.productPrice *
+                      this.props.product.product.productDiscount) /
                       100) *
                   parseInt(this.state.qt + 1)
                 ).toFixed(2);
@@ -158,13 +158,13 @@ class CartCards extends PureComponent {
               text={
                 !this.props.isFeatured
                   ? `$${(
-                      (this.props.product.product.price -
-                        (this.props.product.product.price *
-                          this.props.product.product.discount) /
+                      (this.props.product.product.productPrice -
+                        (this.props.product.product.productPrice *
+                          this.props.product.product.productDiscount) /
                           100) *
                       parseInt(this.state.qt)
                     ).toFixed(2)}`
-                  : "$" + this.props.product.product.price
+                  : "$" + this.props.product.product.productPrice
               }
             />
           </View>

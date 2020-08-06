@@ -43,7 +43,7 @@ class StoreCard extends React.Component {
       .catch((err) => console.log(err));
   }
   render() {
-    const { name, distance, address, id, phone, sId, oId } = this.props;
+    const { name, distance, address, id, phone, sId, oId,storeTax } = this.props;
     console.log(oId);
     return (
       <TouchableOpacity
@@ -118,12 +118,14 @@ class StoreCard extends React.Component {
             phone: phone,
             sId: sId,
             oId: oId,
+            storeTax:storeTax
           });
           this.props.navigation.push("StoreDetails", {
             storeId: id,
             name: name,
             address: address,
             phone: phone,
+            storeTax:storeTax
           });
         }}
         style={cardStyles.storeCard}

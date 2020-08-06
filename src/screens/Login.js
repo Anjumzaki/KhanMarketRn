@@ -202,32 +202,49 @@ class Login extends React.Component {
                   // alert(JSON.stringify(resp.data.token));
                   const token = resp.data.token;
                   const user = jwt(resp.data.token);
+                  user.token = token;
                   // await AsyncStorage.setItem("user", JSON.stringify(user));
                   // await AsyncStorage.setItem("token", JSON.stringify(token));
                   // alert(resp.data.token);
-                  this.props.userAsync({ user: { user } });
+                  this.props.userAsync({ user });
 
                   // alert(JSON.stringify(user.shippingAddress));
-                  if (Number(user.shippingAddress) > 0) {
-                    axios
-                      .post(
-                        "https://secret-cove-59835.herokuapp.com/v1/location/" +
-                          Number(user.shippingAddress),
-                        { a: "fg" },
-                        {
-                          headers: {
-                            authorization: token,
-                          },
-                        }
-                      )
-                      .then((resp1) => {
-                        this.handleApp(user, token, resp1.data);
-                        console.log(resp1.data);
+                  // if (Number(user.shippingAddress) > 0) {
+                  //   axios
+                  //     .post(
+                  //       "https://secret-cove-59835.herokuapp.com/v1/location/" +
+                  //         Number(user.shippingAddress),
+                  //       { a: "fg" },
+                  //       {
+                  //         headers: {
+                  //           authorization: token,
+                  //         },
+                  //       }
+                  //     )
+                  //     .then((resp1) => {
+                  //       // this.handleApp(user, token, resp1.data);
+                  //       console.log(resp1.data);
+                  //     })
+                  //     .catch((err) => console.log(err));
+                  // } else {
+                  //   // this.handleMap(user, token);
+                  // }
+                  this.setState(
+                    {
+                      icEye: "visibility-off",
+                      isPassword: true,
+                      fontLoaded: false,
+                      email: "",
+                      password: "",
+                      msg: "",
+                      loading: false,
+                    },
+                    () =>
+                      this.props.navigation.navigate("Map", {
+                        token: token,
+                        user: user,
                       })
-                      .catch((err) => console.log(err));
-                  } else {
-                    this.handleMap(user, token);
-                  }
+                  );
                 })
                 .catch((err) => {
                   this.setState({
@@ -504,7 +521,7 @@ class Login extends React.Component {
                             resp.data.user._id
                         )
                         .then((resp1) => {
-                          this.props.userAsync(resp.data);
+                          // this.props.userAsync(resp.data);
                           // this.props.navigation.navigate("Map");
                           if (resp1.data.length > 0) {
                             this.props.locationAsync({
