@@ -303,6 +303,7 @@ class ProCards extends React.Component {
                       phone: this.props.storeHeader.phone,
                       sId: this.props.storeHeader.storeId,
                       oId: this.props.storeHeader.oId,
+                      storeTax: this.props.storeHeader.storeTax,
                     });
                     this.props.favStoreAsync(this.props.product.storeID);
                     this.props.cartAsync(pCart);
@@ -350,6 +351,7 @@ class ProCards extends React.Component {
                         phone: this.props.storeHeader.phone,
                         sId: this.props.storeHeader.storeId,
                         oId: this.props.storeHeader.oId,
+                        storeTax: this.props.storeHeader.storeTax,
                       });
                       this.props.favStoreAsync(this.props.product.storeId);
                       this.props.cartAsync(pCart);
@@ -383,6 +385,7 @@ class ProCards extends React.Component {
                                     phone: this.props.storeHeader.phone,
                                     sId: this.props.storeHeader.storeId,
                                     oId: this.props.storeHeader.oId,
+                                    storeTax: this.props.storeHeader.storeTax,
                                   });
                                   this.props.favStoreAsync(
                                     this.props.product.storeId

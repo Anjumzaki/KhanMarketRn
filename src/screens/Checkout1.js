@@ -11,6 +11,7 @@ import {
   Keyboard,
   TextInput,
   KeyboardAvoidingView,
+  AsyncStorage,
 } from "react-native";
 import {
   widthPercentageToDP as wp,
@@ -188,41 +189,47 @@ class Cart extends Component {
       keyState: false,
     });
   }
-  getTimings(day) {
+  async getTimings(day) {
     axios
       .get(
-        "https://lit-peak-13067.herokuapp.com/get/store/" + this.props.store.id
+        "https://secret-cove-59835.herokuapp.com/v1/storeTimings/" +
+          this.props.store.id,
+        {
+          headers: {
+            authorization: this.props.user.user.token,
+          },
+        }
       )
       .then((resp) => {
         //
         var ishalf = false;
-        for (var i = 0; i < resp.data.storeTimings.length; i++) {
+        for (var i = 0; i < resp.data.result.length; i++) {
           //
 
-          if (resp.data.storeTimings[i].day.substring(0, 3) === day) {
+          if (resp.data.result[i].day.substring(0, 3) === day) {
             //
             var temp = {};
-            if (resp.data.storeTimings[i].isClosed === true) {
+            if (resp.data.result[i].isClosed === true) {
               temp = {};
             } else {
-              if (resp.data.storeTimings[i].openTime.includes("30")) {
+              if (resp.data.result[i].openTime.includes("30")) {
                 ishalf = true;
               }
               var su = "";
               var eu = "";
-              if (resp.data.storeTimings[i].openTime.includes("PM")) {
+              if (resp.data.result[i].openTime.includes("PM")) {
                 su = "PM";
               } else {
                 su = "AM";
               }
-              if (resp.data.storeTimings[i].ClosingTime.includes("PM")) {
+              if (resp.data.result[i].closeTime.includes("PM")) {
                 eu = "PM";
               } else {
                 eu = "AM";
               }
 
-              var st = resp.data.storeTimings[i].openTime.substring(0, 2);
-              var et = resp.data.storeTimings[i].ClosingTime.substring(0, 2);
+              var st = resp.data.result[i].openTime.substring(0, 2);
+              var et = resp.data.result[i].closeTime.substring(0, 2);
               if (ishalf) {
                 st = parseInt(st) + 1;
               }
@@ -264,7 +271,7 @@ class Cart extends Component {
                   break;
                 }
               }
-              temp = resp.data.storeTimings[i];
+              temp = resp.data.result[i];
             }
 
             //need to put logic here :)
@@ -311,94 +318,95 @@ class Cart extends Component {
                 selectedTime = Number(result1[0]) + 12;
               }
 
-                  if(selectedTime === 12){
-                    selectedTime = 0
-                  }
-                   console.log("intial timings hour",selectedTime)
+              if (selectedTime === 12) {
+                selectedTime = 0;
+              }
+              console.log("intial timings hour", selectedTime);
 
-                   var timesRemove = Number(hr) - selectedTime +1
-                   if(timesRemove < 1){
-                    timesRemove=0
-                   }
-                   console.log("timesRemovetimesRemove",timesRemove)
-                    console.log("current min",mi)
-                    console.log("min x min",this.state.minTime)
-                    var xHours = 0
-                    if(Number(this.state.minTime) > 60){
-                        xHours = Number(this.state.minTime) /60
-                        console.log("xHours",Math.floor(xHours))
-                        timesRemove+=Math.floor(xHours)
-                    }
-                    console.log("after xhours min time", timesRemove)
-                    var tempMinTime= Number(this.state.minTime)
-                    if(tempMinTime > 60){
-                      tempMinTime = tempMinTime % 60
-                    }
-                    console.log("tempMinTime",tempMinTime)
-                    if(Number(mi) > tempMinTime && tempMinTime !== 0){
-                      timesRemove+=1
-                    }
-                    console.log("timesRemove", timesRemove)
+              var timesRemove = Number(hr) - selectedTime + 1;
+              if (timesRemove < 1) {
+                timesRemove = 0;
+              }
+              console.log("timesRemovetimesRemove", timesRemove);
+              console.log("current min", mi);
+              console.log("min x min", this.state.minTime);
+              var xHours = 0;
+              if (Number(this.state.minTime) > 60) {
+                xHours = Number(this.state.minTime) / 60;
+                console.log("xHours", Math.floor(xHours));
+                timesRemove += Math.floor(xHours);
+              }
+              console.log("after xhours min time", timesRemove);
+              var tempMinTime = Number(this.state.minTime);
+              if (tempMinTime > 60) {
+                tempMinTime = tempMinTime % 60;
+              }
+              console.log("tempMinTime", tempMinTime);
+              if (Number(mi) > tempMinTime && tempMinTime !== 0) {
+                timesRemove += 1;
+              }
+              console.log("timesRemove", timesRemove);
 
-                    // var cxHours = 0
-                    // var closingRemove= arr.length -1
-                    // if(Number(this.state.minTime) > 60){
-                    //   console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
-                    //     cxHours = Number(this.state.minTime) /60
-                    //     console.log("cxHours",Math.ceil(cxHours))
-                    //     closingRemove =Math.ceil(cxHours)
-                    // }else if(Number(this.state.minTime) <= 60){
-                    //     closingRemove =1
-                    // }else{
-                    //   closingRemove=0
-                    // }
-                    // console.log("closingRemove",closingRemove)
-                    // console.log("timesRemove final",timesRemove)
+              // var cxHours = 0
+              // var closingRemove= arr.length -1
+              // if(Number(this.state.minTime) > 60){
+              //   console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
+              //     cxHours = Number(this.state.minTime) /60
+              //     console.log("cxHours",Math.ceil(cxHours))
+              //     closingRemove =Math.ceil(cxHours)
+              // }else if(Number(this.state.minTime) <= 60){
+              //     closingRemove =1
+              // }else{
+              //   closingRemove=0
+              // }
+              // console.log("closingRemove",closingRemove)
+              // console.log("timesRemove final",timesRemove)
 
-                    // arr.splice(0, timesRemove) 
-                    // console.log(arr.length,"arr.21length", closingRemove, arr.length-closingRemove, arr.length-1,arr)
-                    // if(arr.length === 1 && closingRemove > 0){
-                    //   arr =[]
-                    // }else{
-                    //   arr.splice(arr.length-closingRemove, arr.length-1) 
-                    // }                                  
-               }else{
-                if(!resp.data.storeTimings[i].isClosed){
-                var timesRemove = 0
-                if(Number(this.state.minTime) >= 60){
-                  xHours = Number(this.state.minTime) /60
-                  console.log("xHours",Math.ceil(xHours))
-                  timesRemove+=Math.ceil(xHours)
-                 }else if(Number(this.state.minTime) === 30){
-                   timesRemove=1
-                 }else{
-                  timesRemove=0
-                 }
-                  console.log("after xhours min time", timesRemove)
-                  // var cxHours = 0
-                  // var closingRemove= arr.length -1
-                  // if(Number(this.state.minTime) > 60){
-                  //   console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
-                  //     cxHours = Number(this.state.minTime) /60
-                  //     console.log("cxHours",Math.ceil(cxHours))
-                  //     closingRemove =Math.ceil(cxHours)
-                  // }else if(Number(this.state.minTime) <= 60 && Number(this.state.minTime) > 0){
-                  //     closingRemove =1
-                  // }else{
-                  //   closingRemove=0
-                  // }
-                  // arr.splice(0, timesRemove) 
-                  // console.log(arr.length,"arr.21length", closingRemove, arr.length-closingRemove, arr.length-1,arr)
-                  // if(arr.length === 1 && closingRemove > 0){
-                  //   arr =[]
-                  // }else{
-                  //   arr.splice(arr.length-closingRemove, arr.length-1) 
-                  // }
-                }else{
-                  arr= []
-                }}
-               console.log("arrrrrr SIZE", arr, resp.data.storeTimings[i].isClosed, )
-            if (resp.data.storeTimings[i].isClosed) {
+              // arr.splice(0, timesRemove)
+              // console.log(arr.length,"arr.21length", closingRemove, arr.length-closingRemove, arr.length-1,arr)
+              // if(arr.length === 1 && closingRemove > 0){
+              //   arr =[]
+              // }else{
+              //   arr.splice(arr.length-closingRemove, arr.length-1)
+              // }
+            } else {
+              if (!resp.data.result[i].isClosed) {
+                var timesRemove = 0;
+                if (Number(this.state.minTime) >= 60) {
+                  xHours = Number(this.state.minTime) / 60;
+                  console.log("xHours", Math.ceil(xHours));
+                  timesRemove += Math.ceil(xHours);
+                } else if (Number(this.state.minTime) === 30) {
+                  timesRemove = 1;
+                } else {
+                  timesRemove = 0;
+                }
+                console.log("after xhours min time", timesRemove);
+                // var cxHours = 0
+                // var closingRemove= arr.length -1
+                // if(Number(this.state.minTime) > 60){
+                //   console.log("INNNNNNNNNNNNNNNNNNNNNNNNNn")
+                //     cxHours = Number(this.state.minTime) /60
+                //     console.log("cxHours",Math.ceil(cxHours))
+                //     closingRemove =Math.ceil(cxHours)
+                // }else if(Number(this.state.minTime) <= 60 && Number(this.state.minTime) > 0){
+                //     closingRemove =1
+                // }else{
+                //   closingRemove=0
+                // }
+                // arr.splice(0, timesRemove)
+                // console.log(arr.length,"arr.21length", closingRemove, arr.length-closingRemove, arr.length-1,arr)
+                // if(arr.length === 1 && closingRemove > 0){
+                //   arr =[]
+                // }else{
+                //   arr.splice(arr.length-closingRemove, arr.length-1)
+                // }
+              } else {
+                arr = [];
+              }
+            }
+            console.log("arrrrrr SIZE", arr, resp.data.result[i].isClosed);
+            if (resp.data.result[i].isClosed) {
               console.log("111111111111111111111111111");
               this.setState({
                 storeTimings: "",
@@ -431,9 +439,9 @@ class Cart extends Component {
               console.log("3333333333333333333333333333333");
 
               this.setState({
-                storeTimings: resp.data.storeTimings[i],
-                start: resp.data.storeTimings[i].openTime.substring(0, 2),
-                end: resp.data.storeTimings[i].ClosingTime.substring(0, 2),
+                storeTimings: resp.data.result[i],
+                start: resp.data.result[i].openTime.substring(0, 2),
+                end: resp.data.result[i].closeTime.substring(0, 2),
                 startUnit: su,
                 endUnit: eu,
                 timeArray: arr,
@@ -569,50 +577,91 @@ class Cart extends Component {
         this.state.someoneElseEmail === ""
       ) {
         axios
-          .post("https://lit-peak-13067.herokuapp.com/add/order", {
-            storeId: sId,
-            products: storeProducts,
-            totalAmount: subTotal,
-            storeName: this.props.store.name,
-            storeAddress: this.props.store.address,
-            storePhone: this.props.store.phone,
-            userId: this.props.user.user._id,
-            name: this.state.firstName + " " + this.state.lastName,
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            phone: "+1" + this.state.mobile,
-            email: this.state.email,
-            orderTime: this.state.orderTime,
-            orderDate:
-              this.state.orderDate === "" ? todaysDate : this.state.orderDate,
-            postDate: pDate,
-            postTime: pTime,
-            tax: (parseFloat(this.state.tax) / 100) * subTotal,
-            orderNumber: codeId,
-            isGuest: this.props.user.user.isGuest,
-            isSomeOneElse: this.state.isChecked,
-            someoneElseFirstName: this.state.someoneElseFirstName,
-            someoneElseLastName: this.state.someoneElseLastName,
-            someoneElseEmail: this.state.someoneElseEmail,
-            someoneElseMobile: this.state.someoneElsePhone,
-          })
+          .post(
+            "https://secret-cove-59835.herokuapp.com/v1/transaction",
+
+            {
+              storeID: this.props.store.id,
+              // products: storeProducts,
+              totalAmount: subTotal,
+              // storeName: this.props.store.name,
+              // storeAddress: this.props.store.address,
+              // storePhone: this.props.store.phone,
+              customerName: this.props.user.user.userId,
+              // name: this.state.firstName + " " + this.state.lastName,
+              // firstName: this.state.firstName,
+              // lastName: this.state.lastName,
+              // phone: "+1" + this.state.mobile,
+              // email: this.state.email,
+              pickupTime: this.state.orderTime,
+              salesPrice: subTotal,
+              pickupDate:
+                this.state.orderDate === "" ? todaysDate : this.state.orderDate,
+              orderDate: pDate,
+              orderTime: pTime,
+              tax: (parseFloat(this.props.store.storeTax) / 100) * subTotal,
+              orderNumber:
+                this.props.store.id +
+                "-" +
+                Math.floor(Math.random() * 899999 + 100000),
+              isGuest: this.props.user.user.isGuest,
+              isSomeOneElse: this.state.isChecked,
+              someoneElseFirstName: this.state.someoneElseFirstName,
+              someoneElseLastName: this.state.someoneElseLastName,
+              someoneElseEmail: this.state.someoneElseEmail,
+              someoneElseMobile: this.state.someoneElsePhone,
+            },
+            {
+              headers: {
+                authorization: this.props.user.user.token,
+              },
+            }
+          )
           .then((resp) => {
-            axios
-              .put(
-                "https://lit-peak-13067.herokuapp.com/edit/store/orderNum/" +
-                  this.props.store.id +
-                  "/" +
-                  (parseInt(this.props.store.oId) + 1)
-              )
-              .then((resp1) => {
-                this.props.navigation.navigate("QrCode", {
-                  orderId: resp.data.order1._id,
-                  codeId: codeId,
-                  order: resp.data.order1,
+            // alert(JSON.stringify(resp.data));
+            for (var i = 0; i < this.props.cart.length; i++) {
+              axios
+                .post(
+                  "https://secret-cove-59835.herokuapp.com/v1/ref_trans_products",
+
+                  {
+                    orderID: resp.data.id,
+                    itemID: this.props.cart[i].product.itemID,
+                    itemQuantity: this.props.cart[i].quantity,
+                  },
+                  {
+                    headers: {
+                      authorization: this.props.user.user.token,
+                    },
+                  }
+                )
+                .then((resp1) => {
+                  this.props.navigation
+                    .navigate("QrCode", {
+                      orderId: codeId,
+                      codeId: codeId,
+                      // order: resp.data.order1,
+                    })
+                    .catch((err) => alert(JSON.stringify(err)));
                 });
-              })
-              .catch((err) => console.log("e1", err));
-          });
+            }
+            // axios
+            //   .put(
+            //     "https://lit-peak-13067.herokuapp.com/edit/store/orderNum/" +
+            //       this.props.store.id +
+            //       "/" +
+            //       (parseInt(this.props.store.oId) + 1)
+            //   )
+            //   .then((resp1) => {
+            //     this.props.navigation.navigate("QrCode", {
+            //       orderId: resp.data.order1._id,
+            //       codeId: codeId,
+            //       order: resp.data.order1,
+            //     });
+            //   })
+            //   .catch((err) => console.log("e1", err));
+          })
+          .catch((err) => alert(JSON.stringify(err)));
       } else {
         alert("Invalid Email of Someone Else Picking");
       }

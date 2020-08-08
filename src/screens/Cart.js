@@ -139,7 +139,7 @@ class Cart extends Component {
     var myCart = this.props.cart.length;
     var subTotal = 0;
     for (var i = 0; i < this.props.cart.length; i++) {
-      var temp = this.props.cart[i].productPrice;
+      var temp = this.props.cart[i].product.productPrice;
       subTotal = subTotal + parseFloat(temp);
     }
     return (

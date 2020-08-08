@@ -8,7 +8,7 @@ import {
   StyleSheet,
   LinearGradient,
   TouchableOpacity,
-  Alert
+  Alert,
 } from "react-native";
 import Carousel from "react-native-looped-carousel";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -18,17 +18,19 @@ import Expandable from "../Helpers/Expandable";
 import { btnStyles, bottomTab, lines } from "../styles/base";
 import { Row } from "native-base";
 import CheckBox from "react-native-check-box";
-import InQrCode from './InQrCode'
+import InQrCode from "./InQrCode";
 import { bindActionCreators } from "redux";
-import { cartAsync, cartSizeAsync,
+import {
+  cartAsync,
+  cartSizeAsync,
   favStoreAsync,
   storeHeaderAsync,
-  storeAsync } from "../store/actions";
+  storeAsync,
+} from "../store/actions";
 import { connect } from "react-redux";
-import axios from 'axios'
+import axios from "axios";
 const { width } = Dimensions.get("window");
 const { height } = 300;
-
 
 class QrCode extends Component {
   constructor(props) {
@@ -36,14 +38,14 @@ class QrCode extends Component {
 
     this.state = {
       heart: false,
-      qt: 1
+      qt: 1,
     };
   }
 
-  componentDidMount(){
-    this.props.cartAsync([])
+  componentDidMount() {
+    this.props.cartAsync([]);
   }
-  _onLayoutDidChange = e => {
+  _onLayoutDidChange = (e) => {
     const layout = e.nativeEvent.layout;
     this.setState({ size: { width: layout.width, height: layout.height } });
   };
@@ -64,7 +66,7 @@ class QrCode extends Component {
               paddingHorizontal: 20,
               paddingVertical: 30,
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
             }}
           >
             <LatoText
@@ -79,10 +81,10 @@ class QrCode extends Component {
               flexDirection: "row",
               paddingHorizontal: 20,
               alignItems: "center",
-              paddingBottom:30,
+              paddingBottom: 30,
               justifyContent: "center",
-              alignContent:'center',
-              alignItems:'center'
+              alignContent: "center",
+              alignItems: "center",
             }}
           >
             <LatoText
@@ -97,23 +99,24 @@ class QrCode extends Component {
               flexDirection: "row",
               paddingHorizontal: 20,
               justifyContent: "center",
-
             }}
           >
             <LatoText
               fontName="Lato-Regular"
               fonSiz={20}
               col="#5C5C5C"
-              text={"Your order number is "+this.props.route.params.codeId.toUpperCase()}
+              text={
+                "Your order number is " +
+                this.props.route.params.codeId.toUpperCase()
+              }
             />
           </View>
           <View
             style={{
               flexDirection: "row",
               paddingHorizontal: 20,
-              paddingVertical:30,
+              paddingVertical: 30,
               justifyContent: "center",
-
             }}
           >
             <LatoText
@@ -123,21 +126,20 @@ class QrCode extends Component {
               text="Use the below QR code while recieving the order."
             />
           </View>
-        
-          <InQrCode orderId={this.props.route.params.orderId}/>
+
+          <InQrCode orderId={this.props.route.params.orderId} />
           <TouchableOpacity
             style={{
               flexDirection: "row",
               paddingHorizontal: 20,
               paddingBottom: 20,
-              paddingTop:10,
+              paddingTop: 10,
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
             }}
-            disabled={this.props.route.params.order.isRejected || this.props.route.params.order.isPicked}
+            // disabled={this.props.route.params.order.isRejected || this.props.route.params.order.isPicked}
             onPress={() => {
               if (this.props.route.params.order.isAccepted === false) {
-              
                 Alert.alert(
                   "Alert!",
                   "Are you sure you want to cancel the order?",
@@ -151,26 +153,27 @@ class QrCode extends Component {
                       text: "Yes",
                       onPress: () => {
                         axios
-                      .put(
-                        "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
-                          this.props.route.params.order._id
-                      )
-                      .then((resp) => {
-                        // this.setState({bd: true})
-                        alert("Order Cancelled Successfully.")
-                        this.props.navigation.navigate('MyOrderStackScreen')
-                      })
-                      .catch((err) => console.log(err));
+                          .put(
+                            "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
+                              this.props.route.params.order._id
+                          )
+                          .then((resp) => {
+                            // this.setState({bd: true})
+                            alert("Order Cancelled Successfully.");
+                            this.props.navigation.navigate(
+                              "MyOrderStackScreen"
+                            );
+                          })
+                          .catch((err) => console.log(err));
                       },
                     },
                   ],
                   { cancelable: true }
                 );
-              
               } else {
                 alert("Order cannot be cancelled after preperation state.");
               }
-            }} 
+            }}
           >
             <LatoText
               fontName="Lato-Bold"
@@ -185,7 +188,7 @@ class QrCode extends Component {
               paddingHorizontal: 20,
               paddingBottom: 20,
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
             }}
           >
             <LatoText
@@ -195,16 +198,16 @@ class QrCode extends Component {
               text="Terms and conditions apply"
             />
           </View>
-         
         </ScrollView>
         <View style={bottomTab.cartSheet}>
           <TouchableOpacity
             onPress={() => {
-              this.props.storeAsync('')
-              this.props.cartSizeAsync(0)
-              this.props.storeHeaderAsync('')
-              this.props.favStoreAsync('')
-              this.props.navigation.navigate('Home')}}
+              this.props.storeAsync("");
+              this.props.cartSizeAsync(0);
+              this.props.storeHeaderAsync("");
+              this.props.favStoreAsync("");
+              this.props.navigation.navigate("Home");
+            }}
             style={[btnStyles.cartBtn, { width: "55%" }]}
           >
             <LatoText
@@ -216,11 +219,13 @@ class QrCode extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              this.props.storeAsync('')
-              this.props.cartSizeAsync(0)
-              this.props.storeHeaderAsync('')
-              this.props.favStoreAsync('')
-              this.props.navigation.navigate('MyOrderStackScreen', { screen: 'MyOrders' })
+              this.props.storeAsync("");
+              this.props.cartSizeAsync(0);
+              this.props.storeHeaderAsync("");
+              this.props.favStoreAsync("");
+              this.props.navigation.navigate("MyOrderStackScreen", {
+                screen: "MyOrders",
+              });
             }}
             style={[btnStyles.cartBtn, { width: "40%" }]}
           >
@@ -231,7 +236,6 @@ class QrCode extends Component {
               text="MY ORDERS"
             ></LatoText>
           </TouchableOpacity>
-        
         </View>
       </View>
     );
@@ -242,14 +246,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   imgCon: {
     width: Dimensions.get("window").width,
-    height: 250
+    height: 250,
   },
   topRight: {
-    alignSelf: "flex-end"
+    alignSelf: "flex-end",
   },
   wrapTop: {
     alignSelf: "flex-end",
@@ -259,11 +263,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderTopLeftRadius: 15,
-    borderBottomLeftRadius: 15
+    borderBottomLeftRadius: 15,
   },
   bottomText: {
     height: 200,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   buybBtn: {
     alignSelf: "center",
@@ -274,33 +278,30 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
 
-    elevation: 5
-  }
+    elevation: 5,
+  },
 });
 
-const mapStateToProps = state => ({
-  cart: state.Cart.cartData, 
+const mapStateToProps = (state) => ({
+  cart: state.Cart.cartData,
   loading: state.Cart.cartLoading,
-  error: state.Cart.cartError
+  error: state.Cart.cartError,
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
-      {
-          cartAsync,
-          cartSizeAsync,
-          favStoreAsync,
-          storeHeaderAsync,
-          storeAsync
-      },
-      dispatch
+    {
+      cartAsync,
+      cartSizeAsync,
+      favStoreAsync,
+      storeHeaderAsync,
+      storeAsync,
+    },
+    dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(QrCode);
+export default connect(mapStateToProps, mapDispatchToProps)(QrCode);
