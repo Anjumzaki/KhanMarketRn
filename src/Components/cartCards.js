@@ -76,7 +76,7 @@ class CartCards extends PureComponent {
           >
             <Entypo name="circle-with-cross" size={24} color="#B50000" />
           </TouchableOpacity> */}
-          <CartCardImage id={this.props.id} />
+          <CartCardImage id={this.props.product.product.productID} />
           <LatoText
             fontName="Lato-Regular"
             fonSiz={15}

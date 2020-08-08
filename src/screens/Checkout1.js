@@ -535,6 +535,8 @@ class Cart extends Component {
 
   handleConfirm(isOut, sId, storeProducts, subTotal, codeId, todaysDate) {
     console.log("ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", isOut);
+    var orderN =
+      this.props.store.id + "-" + Math.floor(Math.random() * 899999 + 100000);
     if (!isOut && !this.state.isOut) {
       this.setState({ cart: true });
       var pDate = new Date();
@@ -600,10 +602,7 @@ class Cart extends Component {
               orderDate: pDate,
               orderTime: pTime,
               tax: (parseFloat(this.props.store.storeTax) / 100) * subTotal,
-              orderNumber:
-                this.props.store.id +
-                "-" +
-                Math.floor(Math.random() * 899999 + 100000),
+              orderNumber: orderN,
               isGuest: this.props.user.user.isGuest,
               isSomeOneElse: this.state.isChecked,
               someoneElseFirstName: this.state.someoneElseFirstName,
@@ -638,8 +637,8 @@ class Cart extends Component {
                 .then((resp1) => {
                   this.props.navigation
                     .navigate("QrCode", {
-                      orderId: codeId,
-                      codeId: codeId,
+                      orderId: orderN,
+                      codeId: orderN,
                       // order: resp.data.order1,
                     })
                     .catch((err) => alert(JSON.stringify(err)));
