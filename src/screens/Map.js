@@ -54,11 +54,28 @@ class Map extends Component {
     try {
       const user = await AsyncStorage.getItem("user");
       const token = await AsyncStorage.getItem("token");
-      this.setState({ user, token });
+      this.setState({ user, token }, alert(user));
     } catch (e) {
       console.log(e);
     }
   }
+  handleNavi = async (myUser) => {
+    try {
+      //code which may potentially have an error.
+      await AsyncStorage.removeItem("user");
+      await AsyncStorage.setItem("user", JSON.stringify(myUser));
+      const newUser = await AsyncStorage.getItem("user");
+      alert(newUser);
+      this.props.navigation.navigate('App')
+    } catch (error) {
+      //code which will only run if an error happened in the try block.
+      alert(JSON.stringify("error"));
+    } finally {
+      //code which will run after the try and catch blocks whether an error happens or not.
+      const newUser = await AsyncStorage.getItem(user);
+      alert("newUser");
+    }
+  };
   handleMapApp = async () => {
     var ad1 = "",
       temp = "",
@@ -129,7 +146,71 @@ class Map extends Component {
       lat: this.state.region.latitude,
       lng: this.state.region.longitude,
     });
-    this.props.navigation.navigate("App");
+    axios
+      .post(
+        "https://secret-cove-59835.herokuapp.com/v1/location",
+        {
+          locationType: "customer",
+          address1: ad1 + " " + temp,
+          address2: ad2,
+          city: ct,
+          country: cnt,
+          state: state,
+          zipCode: zipc,
+          lat: this.state.region.latitude,
+          lng: this.state.region.longitude,
+        },
+        {
+          headers: {
+            authorization: this.props.user.token,
+          },
+        }
+      )
+      .then(async (resp) => {
+        if (resp.data.id) {
+          var myUser = this.props.user;
+          myUser.user.shippingAddress = resp.data.id;
+          alert(this.props.user.token);
+          axios
+            .put(
+              "https://secret-cove-59835.herokuapp.com/v1/user/" +
+                this.props.user.user.userId,
+              {
+                firstName: myUser.user.firstName,
+                middleName: myUser.user.middleName,
+                lastName: myUser.user.lastName,
+                email: myUser.user.email,
+                mobile: myUser.user.mobile,
+                password: myUser.user.password,
+                isGuest: myUser.user.isGuest,
+                type: myUser.user.type,
+                shippingAddress: myUser.user.shippingAddress,
+                storeID: myUser.user.storeID,
+                type: "user",
+              },
+              {
+                headers: {
+                  authorization: this.props.user.token,
+                },
+              }
+            )
+            .then(async (resp1) => {
+              //  alert(JSON.stringify(resp1.data))
+              this.handleNavi(myUser);
+
+              // alert(JSON.stringify(myUser));
+              // this.props.navigation.navigate("App");
+            })
+            .catch((err) => {
+              alert("asdas");
+            });
+        } else {
+          alert("something went wrong");
+        }
+      })
+      .catch((err) => {
+        alert(JSON.stringify(err));
+      });
 
     // var loc = { refId: this.props.user.user._id,
     //   type: "Customer",
@@ -276,7 +357,6 @@ class Map extends Component {
   // onLocationSelect = () => alert(this.state.userLocation);
 
   render() {
-    console.log(this.state.completeLoc);
     if (this.state.loading) {
       return (
         <View style={styles.spinnerView}>

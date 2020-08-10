@@ -196,7 +196,7 @@ class Cart extends Component {
           this.props.store.id,
         {
           headers: {
-            authorization: this.props.user.user.token,
+            authorization: this.props.user.token,
           },
         }
       )
@@ -534,6 +534,8 @@ class Cart extends Component {
   }
 
   handleConfirm(isOut, sId, storeProducts, subTotal, codeId, todaysDate) {
+    // var user = JSON.parse(this.props.user.user);
+    var user = this.props.user.user;
     console.log("ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", isOut);
     var orderN =
       this.props.store.id + "-" + Math.floor(Math.random() * 899999 + 100000);
@@ -589,7 +591,7 @@ class Cart extends Component {
               // storeName: this.props.store.name,
               // storeAddress: this.props.store.address,
               // storePhone: this.props.store.phone,
-              customerName: this.props.user.user.userId,
+              customerName: user.userId,
               // name: this.state.firstName + " " + this.state.lastName,
               // firstName: this.state.firstName,
               // lastName: this.state.lastName,
@@ -603,7 +605,7 @@ class Cart extends Component {
               orderTime: pTime,
               tax: (parseFloat(this.props.store.storeTax) / 100) * subTotal,
               orderNumber: orderN,
-              isGuest: this.props.user.user.isGuest,
+              isGuest: user.isGuest,
               isSomeOneElse: this.state.isChecked,
               someoneElseFirstName: this.state.someoneElseFirstName,
               someoneElseLastName: this.state.someoneElseLastName,
@@ -612,7 +614,7 @@ class Cart extends Component {
             },
             {
               headers: {
-                authorization: this.props.user.user.token,
+                authorization: this.props.user.token,
               },
             }
           )
@@ -630,7 +632,7 @@ class Cart extends Component {
                   },
                   {
                     headers: {
-                      authorization: this.props.user.user.token,
+                      authorization: this.props.user.token,
                     },
                   }
                 )

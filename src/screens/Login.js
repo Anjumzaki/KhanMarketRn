@@ -49,61 +49,72 @@ class Login extends React.Component {
       email: "",
       password: "",
       msg: "",
-      mainLoading: false,
+      mainLoading: true,
     };
   }
   async componentDidMount() {
-    // const jsonValue1 = "";
-    // const jsonValue1 = await AsyncStorage.getItem("user");
-    // var jsonValue = JSON.parse(jsonValue1);
-    // if (jsonValue) {
-    //   await axios
-    //     .get("https://lit-peak-13067.herokuapp.com/get/user/byId/" + jsonValue)
-    //     .then(async (resp) => {
-    //       console.log("res[p", resp.data);
-    //       await this.props.userAsync({ user: resp.data });
-    //     })
-    //     .catch((err) => console.log("err1", err));
-    //   var flag = false;
-    //   await axios
-    //     .get("https://lit-peak-13067.herokuapp.com/get/location/" + jsonValue)
-    //     .then(async (resp1) => {
-    //       console.log("res[p1", resp1.data);
-    //       if (resp1.data.length === 0) {
-    //         console.log("iffffffffffffffffff");
-    //         this.props.navigation.navigate("Map");
-    //       } else {
-    //         console.log("elseeeeeeeeeeeeeeeeeeeeee");
-    //         flag = true;
-    //         this.props.locationAsync({
-    //           location:
-    //             resp1.data[0].address1 +
-    //             " " +
-    //             resp1.data[0].address2 +
-    //             " " +
-    //             resp1.data[0].city +
-    //             " " +
-    //             resp1.data[0].country,
-    //           lat: resp1.data[0].latitude,
-    //           lng: resp1.data[0].longitude,
-    //         });
-    //       }
-    //     })
-    //     .catch((err) => console.log("err2", err));
-    //   // alert("blew")
-    //   if (flag) {
-    //     this.setState(
-    //       {
-    //         mainLoading: false,
-    //       },
-    //       () => this.props.navigation.navigate("App")
-    //     );
-    //   }
-    // } else {
-    //   this.setState({
-    //     mainLoading: false,
-    //   });
-    // }
+    var user = await AsyncStorage.getItem("user");
+    const token = await AsyncStorage.getItem("token");
+  
+
+    if (user) {
+      user = JSON.parse(user);
+      if (user.shippingAddress) {
+        this.props.userAsync({ user, token });
+        this.props.locationAsync({
+          location: user.address1 + user.address2,
+          type: "user",
+          address1: user.address1,
+          address2: user.address2,
+          city: user,
+          country: user.country,
+          state: user.state,
+          zipCode: user.zipCode,
+          lat: user.lat,
+          lng: user.lng,
+        });
+        this.setState(
+          {
+            icEye: "visibility-off",
+            isPassword: true,
+            fontLoaded: false,
+            email: "",
+            password: "",
+            msg: "",
+            loading: false,
+            mainLoading: false,
+          },
+          () =>
+            this.props.navigation.navigate("App", {
+              token: token,
+              user: user,
+            })
+        );
+      } else {
+        user = JSON.parse(user);
+        this.props.userAsync({ user, token });
+
+        this.setState(
+          {
+            icEye: "visibility-off",
+            isPassword: true,
+            fontLoaded: false,
+            email: "",
+            password: "",
+            msg: "",
+            loading: false,
+            mainLoading: false,
+          },
+          () =>
+            this.props.navigation.navigate("App", {
+              token: token,
+              user: user,
+            })
+        );
+      }
+    } else {
+      this.setState({ mainLoading: false });
+    }
   }
   getRef = (ref) => {
     if (this.props.getRef) this.props.getRef(ref);
@@ -149,6 +160,7 @@ class Login extends React.Component {
         password: "",
         msg: "",
         loading: false,
+        mainLoading: false,
       },
       // alert(token)
 
@@ -175,6 +187,7 @@ class Login extends React.Component {
         password: "",
         msg: "",
         loading: false,
+        mainLoading: false,
       },
       () => this.props.navigation.navigate("Map")
       // alert(token)
@@ -202,49 +215,60 @@ class Login extends React.Component {
                   // alert(JSON.stringify(resp.data.token));
                   const token = resp.data.token;
                   const user = jwt(resp.data.token);
-                  user.token = token;
-                  // await AsyncStorage.setItem("user", JSON.stringify(user));
-                  // await AsyncStorage.setItem("token", JSON.stringify(token));
-                  // alert(resp.data.token);
-                  this.props.userAsync({ user });
-
-                  // alert(JSON.stringify(user.shippingAddress));
-                  // if (Number(user.shippingAddress) > 0) {
-                  //   axios
-                  //     .post(
-                  //       "https://secret-cove-59835.herokuapp.com/v1/location/" +
-                  //         Number(user.shippingAddress),
-                  //       { a: "fg" },
-                  //       {
-                  //         headers: {
-                  //           authorization: token,
-                  //         },
-                  //       }
-                  //     )
-                  //     .then((resp1) => {
-                  //       // this.handleApp(user, token, resp1.data);
-                  //       console.log(resp1.data);
-                  //     })
-                  //     .catch((err) => console.log(err));
-                  // } else {
-                  //   // this.handleMap(user, token);
-                  // }
-                  this.setState(
-                    {
-                      icEye: "visibility-off",
-                      isPassword: true,
-                      fontLoaded: false,
-                      email: "",
-                      password: "",
-                      msg: "",
-                      loading: false,
-                    },
-                    () =>
-                      this.props.navigation.navigate("Map", {
-                        token: token,
-                        user: user,
-                      })
-                  );
+                  await AsyncStorage.setItem("user", JSON.stringify(user));
+                  await AsyncStorage.setItem("token", token);
+                  if (user.shippingAddress) {
+                    console.log(user.address2);
+                    this.props.userAsync({ user, token });
+                    this.props.locationAsync({
+                      location: user.address1 + user.address2,
+                      type: "user",
+                      address1: user.address1,
+                      address2: user.address2,
+                      city: user,
+                      country: user.country,
+                      state: user.state,
+                      zipCode: user.zipCode,
+                      lat: user.lat,
+                      lng: user.lng,
+                    });
+                    this.setState(
+                      {
+                        icEye: "visibility-off",
+                        isPassword: true,
+                        fontLoaded: false,
+                        email: "",
+                        password: "",
+                        msg: "",
+                        loading: false,
+                        mainLoading: false,
+                      },
+                      () =>
+                        this.props.navigation.navigate("App", {
+                          token: token,
+                          user: user,
+                        })
+                    );
+                  } else {
+                    this.props.userAsync({ user, token });
+                    this.setState(
+                      {
+                        icEye: "visibility-off",
+                        isPassword: true,
+                        fontLoaded: false,
+                        email: "",
+                        password: "",
+                        msg: "",
+                        loading: false,
+                        mainLoading: false,
+                      },
+                      () =>
+                        this.props.navigation.navigate("Map", {
+                          token: token,
+                          user: user,
+                        })
+                    );
+                  }
                 })
                 .catch((err) => {
                   this.setState({

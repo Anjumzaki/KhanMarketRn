@@ -49,7 +49,7 @@ class OrderDetails extends Component {
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
       const ref = firebase
         .storage()
-        .ref("/store_logos/" + this.props.route.params.order.storeId + ".jpg");
+        .ref("/store_logos/" + this.props.route.params.order.storeID + ".jpg");
       ref
         .getDownloadURL()
         .then((url) => {
@@ -364,7 +364,7 @@ class OrderDetails extends Component {
               fontName="Lato-Bold"
               fonSiz={20}
               col="#2E2E2E"
-              text="Order should be ready till"
+              text="Order was placed at"
             ></LatoText>
           </View>
           <View
@@ -431,7 +431,7 @@ class OrderDetails extends Component {
               fontName="Lato-Bold"
               fonSiz={20}
               col="#2E2E2E"
-              text="Order was placed at"
+              text="Order should be ready till"
             ></LatoText>
           </View>
           <View
@@ -462,8 +462,10 @@ class OrderDetails extends Component {
                   fonSiz={17}
                   col="#2E2E2E"
                   text={
-                    this.props.route.params.order.postDate
-                      ? this.dateConvert(this.props.route.params.order.postDate)
+                    this.props.route.params.order.pickupDate
+                      ? this.dateConvert(
+                          this.props.route.params.order.pickupDate
+                        )
                       : ""
                   }
                 ></LatoText>
@@ -480,9 +482,9 @@ class OrderDetails extends Component {
                   fonSiz={17}
                   col="#2E2E2E"
                   text={
-                    this.props.route.params.order.postTime
+                    this.props.route.params.order.pickupTime
                       ? "    " +
-                        this.tConvert(this.props.route.params.order.postTime)
+                        this.tConvert(this.props.route.params.order.pickupTime)
                       : ""
                   }
                 ></LatoText>
@@ -492,38 +494,34 @@ class OrderDetails extends Component {
 
           <View style={lines.simple} />
           <View style={{ marginHorizontal: 30, marginVertical: 10 }}>
-            {this.props.route.params.order.isAccepted === false &&
-              this.props.route.params.order.isRejected === false && (
-                <Image
-                  style={{ width: "100%" }}
-                  resizeMode="contain"
-                  source={require("../../assets/order1.png")}
-                />
-              )}
-            {this.props.route.params.order.isAccepted === true &&
-              this.props.route.params.order.isInPreparation === true && (
-                <Image
-                  style={{ width: "100%" }}
-                  resizeMode="contain"
-                  source={require("../../assets/order2.png")}
-                />
-              )}
-            {this.props.route.params.order.isAccepted === true &&
-              this.props.route.params.order.isReady === true && (
-                <Image
-                  style={{ width: "100%" }}
-                  resizeMode="contain"
-                  source={require("../../assets/order3.png")}
-                />
-              )}
-            {this.props.route.params.order.isAccepted === true &&
-              this.props.route.params.order.isPicked === true && (
-                <Image
-                  style={{ width: "100%" }}
-                  resizeMode="contain"
-                  source={require("../../assets/order4.png")}
-                />
-              )}
+            {this.props.route.params.order.statusCode === 0 && (
+              <Image
+                style={{ width: "100%" }}
+                resizeMode="contain"
+                source={require("../../assets/order1.png")}
+              />
+            )}
+            {this.props.route.params.order.statusCode === 1 && (
+              <Image
+                style={{ width: "100%" }}
+                resizeMode="contain"
+                source={require("../../assets/order2.png")}
+              />
+            )}
+            {this.props.route.params.order.statusCode === 2 && (
+              <Image
+                style={{ width: "100%" }}
+                resizeMode="contain"
+                source={require("../../assets/order3.png")}
+              />
+            )}
+            {this.props.route.params.order.statusCode === 3 && (
+              <Image
+                style={{ width: "100%" }}
+                resizeMode="contain"
+                source={require("../../assets/order4.png")}
+              />
+            )}
           </View>
           <View style={lines.simple} />
           <View
@@ -543,7 +541,7 @@ class OrderDetails extends Component {
             </View>
 
             <QRCode
-              value={this.props.route.params.order._id}
+              value={this.props.route.params.order.orderNumber}
               size={200}
               bgColor="black"
               fgColor="white"
@@ -589,7 +587,7 @@ class OrderDetails extends Component {
                     fontName="Lato-Regular"
                     fonSiz={17}
                     col="#2E2E2E"
-                    text={item.product.productName}
+                    text={item.productName}
                   />
                 </View>
                 <View
@@ -606,8 +604,8 @@ class OrderDetails extends Component {
                     text={
                       "$" +
                       parseFloat(
-                        item.product.price -
-                          (item.product.price * item.product.discount) / 100
+                        item.productPrice -
+                          (item.productPrice * item.productDiscount) / 100
                       ).toFixed(2) +
                       " x " +
                       item.quantity
@@ -622,8 +620,8 @@ class OrderDetails extends Component {
                       "$" +
                       item.quantity *
                         parseFloat(
-                          item.product.price -
-                            (item.product.price * item.product.discount) / 100
+                          item.productPrice -
+                            (item.productPrice * item.productDiscount) / 100
                         ).toFixed(2)
                     }
                   />

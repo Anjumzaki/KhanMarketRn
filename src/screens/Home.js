@@ -61,7 +61,6 @@ class Home extends React.Component {
     }
   };
   async componentDidMount() {
-    
     const token = await AsyncStorage.getItem("token");
     console.log(token, "asdas");
     axios
@@ -182,7 +181,7 @@ class Home extends React.Component {
                         item.lng
                       ).toFixed(2) + " mi"
                     }
-                    address={item.address1}
+                    address={item.address1 +  " " + item.state + " " + item.city}
                     id={item.storeID}
                     phone={item.zipCode}
                     sId={item.storeID}

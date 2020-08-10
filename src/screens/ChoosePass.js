@@ -106,42 +106,7 @@ class SignUp1 extends React.Component {
                   { cancelable: false }
                 );
               })
-              // var myHeaders = new Headers();
-              // myHeaders.append(
-              //   "Content-Type",
-              //   "application/x-www-form-urlencoded"
-              // );
 
-              // var urlencoded = new URLSearchParams();
-              // urlencoded.append("firstName", this.state.user.firstName);
-              // urlencoded.append("lastName", this.state.user.lastName);
-              // urlencoded.append("email", this.state.user.email);
-              // urlencoded.append("mobile", this.state.user.mobile);
-              // urlencoded.append("password", this.state.user.password);
-              // urlencoded.append("isGuest", "0");
-              // urlencoded.append("type", "user");
-              // var requestOptions = {
-              //   method: "POST",
-              //   headers: myHeaders,
-              //   body: urlencoded,
-              //   redirect: "follow",
-              // };
-              // fetch("http://192.168.18.255:5000/v1/user", requestOptions)
-              //   .then((resp) => {
-              // this.props.userAsync(resp.data);
-              // Alert.alert(
-              //   "Account Created",
-              //   "Please Login",
-              //   [
-              //     {
-              //       text: "OK",
-              //       onPress: () => this.props.navigation.navigate("Login"),
-              //     },
-              //   ],
-              //   { cancelable: false }
-              // );
-              //   console.log(resp);
-              // })
               .catch((err) =>
                 this.setState({ msg: JSON.stringify(err) }, console.log(err))
               );

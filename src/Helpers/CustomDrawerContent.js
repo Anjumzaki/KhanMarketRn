@@ -145,7 +145,6 @@ class CustomDrawerContent extends Component {
         <TouchableOpacity
           onPress={() => {
             AsyncStorage.removeItem("user");
-            AsyncStorage.removeItem("userLocation");
             this.props.cartAsync([]);
             this.props.storeAsync("");
             this.props.cartSizeAsync(0);

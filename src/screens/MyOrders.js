@@ -41,7 +41,8 @@ class MyOrders extends Component {
       pastCollapsed: true,
     };
   }
-  getData = () => {
+  getData = async () => {
+    var user = this.props.user.user;
     this.setState(
       {
         loading: true,
@@ -49,13 +50,20 @@ class MyOrders extends Component {
       () =>
         axios
           .get(
-            "https://lit-peak-13067.herokuapp.com/get/my/orders/" +
-              this.props.user.user._id
+            "https://secret-cove-59835.herokuapp.com/v1/transaction/state/user/userID/" +
+              user.userId,
+            {
+              headers: {
+                authorization: this.props.user.token,
+              },
+            }
           )
-          .then((resp) =>
-            this.setState({ myOrders: resp.data, loading: false })
+          .then(
+            (resp) =>
+              this.setState({ myOrders: resp.data.result, loading: false })
+            // alert(JSON.stringify(resp.data.result))
           )
-          .catch((err) => console.log(err))
+          .catch((err) => alert(JSON.stringify(err)))
     );
   };
 

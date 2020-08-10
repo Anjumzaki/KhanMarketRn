@@ -119,16 +119,15 @@ class OrderCards extends React.Component {
                   fonSiz={15}
                   col="#2AA034"
                   text={
-                    this.props.order.isAccepted === true &&
-                    this.props.order.isInPreparation === true
-                      ? "Being Prepared"
-                      : this.props.order.isAccepted === true &&
-                        this.props.order.isReady === true
-                      ? "Ready"
-                      : this.props.order.isAccepted === true &&
-                        this.props.order.isPicked === true
+                    this.props.order.statusCode === 0
+                      ? "in queue"
+                      : this.props.order.statusCode === 1
+                      ? "In Prepration"
+                      : this.props.order.statusCode === 2
+                      ? "Ready For Pickup"
+                      : this.props.order.statusCode === 3
                       ? "Completed"
-                      : "in queue"
+                      : "Cancelled"
                   }
                 />
               )}
@@ -162,7 +161,7 @@ class OrderCards extends React.Component {
             }
             style={{ paddingVertical: 10 }}
           >
-             <LatoText
+            <LatoText
               fontName="Lato-Regular"
               fonSiz={17}
               col="#5C5C5C"
@@ -177,7 +176,6 @@ class OrderCards extends React.Component {
               col="#5C5C5C"
               text={this.props.order.orderTime}
             />
-           
           </TouchableOpacity>
           {this.props.type === "active" ? (
             <TouchableOpacity

@@ -81,7 +81,6 @@ class SingleStoreHeader extends React.Component {
             top: 0,
             left: 0,
             backgroundColor: "rgba(0,0,0,0.7)",
-            
           }}
           source={{ uri: this.state.image }}
           // source={require("../../assets/bgheader.png")}
@@ -121,7 +120,7 @@ class SingleStoreHeader extends React.Component {
               text={this.props.store.name.toUpperCase().substring(0, 18)}
             />
           </TouchableOpacity>
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={() => this.props.navigation.navigate("Cart")}
             style={{ padding: 20 }}
           >

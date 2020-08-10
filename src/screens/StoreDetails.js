@@ -29,7 +29,7 @@ class StoreDetails extends React.Component {
     };
   }
   getMyData = async () => {
-    const token = this.props.user.user.token;
+    const token = this.props.user.token;
 
     this.setState(
       {
@@ -104,7 +104,6 @@ class StoreDetails extends React.Component {
         }),
       })
     );
-
 
     return (
       <View>
