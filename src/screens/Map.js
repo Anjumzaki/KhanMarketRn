@@ -530,7 +530,6 @@ class Map extends Component {
     }
   }
 }
-
 const mapStateToProps = (state) => ({
   location: state.Location.locationData,
   user: state.user.user,

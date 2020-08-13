@@ -55,8 +55,7 @@ class Login extends React.Component {
   async componentDidMount() {
     var user = await AsyncStorage.getItem("user");
     const token = await AsyncStorage.getItem("token");
-  
-
+    // alert(user)
     if (user) {
       user = JSON.parse(user);
       if (user.shippingAddress) {

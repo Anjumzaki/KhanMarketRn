@@ -237,28 +237,43 @@ class ProCards extends React.Component {
                 }
               ></LatoText>
             </View>
-            <View style={{ marginLeft: 5 }}>
+            {this.props.product.productPrice -
+              (this.props.product.productPrice *
+                this.props.product.productDiscount) /
+                100 ==
+            parseFloat(this.props.product.productPrice) ? null : (
+              <View style={{ marginLeft: 5 }}>
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={15}
+                  lineThrough="line-through"
+                  col="#89898C"
+                  text={
+                    "$" +
+                    parseFloat(this.props.product.productPrice).toFixed(2) +
+                    " / lb"
+                  }
+                ></LatoText>
+              </View>
+            )}
+          </View>
+          {this.props.product.productPrice -
+            (this.props.product.productPrice *
+              this.props.product.productDiscount) /
+              100 ==
+          parseFloat(this.props.product.productPrice) ? null : (
+            <View>
               <LatoText
                 fontName="Lato-Regular"
                 fonSiz={15}
-                lineThrough="line-through"
-                col="#89898C"
+                col="#B50000"
                 text={
-                  "$" +
-                  parseFloat(this.props.product.productPrice).toFixed(2) +
-                  " / lb"
+                  "You will save " + this.props.product.productDiscount + "%"
                 }
               ></LatoText>
             </View>
-          </View>
-          <View>
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={15}
-              col="#B50000"
-              text={"You will save " + this.props.product.productDiscount + "%"}
-            ></LatoText>
-          </View>
+          )}
+
           <View style={{ marginTop: 20 }}>
             {this.state.cart ? (
               <View

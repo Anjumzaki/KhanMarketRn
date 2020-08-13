@@ -19,7 +19,7 @@ import { Row } from "native-base";
 import CheckBox from "react-native-check-box";
 import ProcardsSmall from "../Helpers/ProcardsSmall";
 import { bindActionCreators } from "redux";
-import { filterAsync, searchAsync } from "../store/actions";
+import { filterAsync, searchAsync, search1Async } from "../store/actions";
 import { connect } from "react-redux";
 
 const { width } = Dimensions.get("window");
@@ -35,16 +35,23 @@ class SingleCateg extends Component {
     };
   }
   componentDidMount() {
+    this.props.searchAsync("");
+    this.props.search1Async("");
+    this.props.filterAsync("");
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
+      this.props.searchAsync("");
+      this.props.filterAsync("");
+      this.props.search1Async("");
     });
   }
   componentWillUnmount() {
     this._unsubscribe();
-    this.props.searchAsync('')
+    this.props.searchAsync("");
+    this.props.search1Async("");
+    this.props.filterAsync("");
   }
 
   render() {
-
     var searchedProducts = [];
     var key1 = this.props.searchInput;
     if (this.props.searchInput) {
@@ -179,7 +186,8 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
     {
       filterAsync,
-      searchAsync
+      searchAsync,
+      search1Async,
     },
     dispatch
   );

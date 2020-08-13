@@ -4,7 +4,7 @@ import * as Font from "expo-font";
 
 class LatoText extends React.Component {
   state = {
-    fontLoaded: false
+    fontLoaded: false,
   };
   async componentDidMount() {
     await Font.loadAsync({
@@ -14,14 +14,10 @@ class LatoText extends React.Component {
       "Sarabun-Regular": require("../../assets/fonts/Sarabun-Regular.ttf"),
       "Sarabun-Medium": require("../../assets/fonts/Sarabun-Medium.ttf"),
       "Sarabun-Light": require("../../assets/fonts/Sarabun-Light.ttf"),
-      "Lato-LightItalic": require("../../assets/fonts/Lato-LightItalic.ttf")
-
-    
+      "Lato-LightItalic": require("../../assets/fonts/Lato-LightItalic.ttf"),
     });
-
     this.setState({ fontLoaded: true });
   }
-
   render() {
     return (
       <Text
@@ -29,8 +25,8 @@ class LatoText extends React.Component {
           fontFamily: this.state.fontLoaded ? this.props.fontName : null,
           color: this.props.col,
           fontSize: this.props.fonSiz,
-          textAlign:this.props.txtAlign && this.props.txtAlign,
-          textDecorationLine:this.props.lineThrough && this.props.lineThrough,
+          textAlign: this.props.txtAlign && this.props.txtAlign,
+          textDecorationLine: this.props.lineThrough && this.props.lineThrough,
           // textDecoration: this.props.lineThrough ? "line-through" : null
         }}
       >
@@ -45,6 +41,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 });

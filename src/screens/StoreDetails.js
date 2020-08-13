@@ -54,11 +54,16 @@ class StoreDetails extends React.Component {
 
         axios
           .get(
-            "https://lit-peak-13067.herokuapp.com/get/all/featured/products/" +
-              this.props.route.params.storeId
+            "https://secret-cove-59835.herokuapp.com/v1/item/featured/" +
+              this.props.route.params.storeId,
+            {
+              headers: {
+                authorization: token,
+              },
+            }
           )
           .then((resp) => {
-            this.setState({ featuredProducts: resp.data });
+            this.setState({ featuredProducts: resp.data.result });
           })
           .catch((err) => console.log(err));
 
@@ -95,6 +100,16 @@ class StoreDetails extends React.Component {
     this.props.searchAsync("");
   }
   render() {
+    var searchedProducts = [];
+    var key1 = this.props.searchInput;
+    if (this.props.searchInput) {
+      let totalProducts = this.state.products;
+      searchedProducts = totalProducts.filter(function (product) {
+        return product.productName
+          ? product.productName.toLowerCase().includes(key1.toLowerCase())
+          : null;
+      });
+    }
     var fp = [];
     this.state.categories.map((category, index) =>
       fp.push({
@@ -121,16 +136,14 @@ class StoreDetails extends React.Component {
               />
             ) : null}
             {this.props.searchInput
-              ? searchedProducts.map((cat, index) =>
-                  cat.products.length > 0 ? (
-                    <CardsRow
-                      navigation={this.props.navigation}
-                      key={index}
-                      products={cat.products}
-                      name={this.capitalize(cat.name)}
-                    />
-                  ) : null
-                )
+              ? searchedProducts.map((cat, index) => (
+                  <CardsRow
+                    navigation={this.props.navigation}
+                    key={index}
+                    products={cat.products}
+                    name={this.capitalize(cat.name)}
+                  />
+                ))
               : fp.map((cat, index) =>
                   cat.products.length > 0 ? (
                     <CardsRow

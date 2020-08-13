@@ -171,7 +171,7 @@ class ProductDetails extends Component {
               {temp.map((item, index) => (
                 // <View style={{ borderRadius: 10, overflow: "hidden" }}>
 
-                <CourselImage id={item.productID} index={index + 1} />
+                <CourselImage id={product.productID} index={item + 1} />
                 // </View>
               ))}
               {/* </> */}
@@ -296,22 +296,32 @@ class ProductDetails extends Component {
                       (product.productPrice * product.productDiscount) / 100
                   ).toFixed(2)} / lb `}
                 />
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={17}
-                  lineThrough="line-through"
-                  col="#89898C"
-                  text={`$${product.productPrice} / lb `}
-                />
+                {parseFloat(
+                  product.productPrice -
+                    (product.productPrice * product.productDiscount) / 100
+                ) == product.productPrice ? null : (
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={17}
+                    lineThrough="line-through"
+                    col="#89898C"
+                    text={`$${product.productPrice} / lb `}
+                  />
+                )}
               </View>
-              <View style={{ marginTop: 22 }}>
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={17}
-                  col="#B50000"
-                  text={` You will save ${product.productDiscount}% `}
-                />
-              </View>
+              {parseFloat(
+                product.productPrice -
+                  (product.productPrice * product.productDiscount) / 100
+              ) == product.productPrice ? null : (
+                <View style={{ marginTop: 22 }}>
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={17}
+                    col="#B50000"
+                    text={` You will save ${product.productDiscount}% `}
+                  />
+                </View>
+              )}
             </View>
             <View style={{ marginTop: 22 }}>
               <LatoText

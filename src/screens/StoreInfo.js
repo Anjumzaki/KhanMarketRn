@@ -19,7 +19,12 @@ import { btnStyles, bottomTab, lines } from "../styles/base";
 import { Row } from "native-base";
 import CheckBox from "react-native-check-box";
 import firebase from "firebase";
+import { bindActionCreators } from "redux";
+import { filterAsync, searchAsync, userAsync } from "../store/actions";
+import { connect } from "react-redux";
+
 import axios from "axios";
+import AsyncStorage from "@react-native-community/async-storage";
 const { width } = Dimensions.get("window");
 const { height } = 300;
 
@@ -48,22 +53,24 @@ export default class StoreInfo extends Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    var token = await AsyncStorage.getItem("token");
     // this.props.route.params.storeId
+    // /v1/storeTimings/:id
     axios
-      .get(
+      .post(
         "https://secret-cove-59835.herokuapp.com/v1/store/" +
           this.props.route.params.storeId,
+        { a: "sd" },
         {
           headers: {
-            authorization: this.props.route.params.token,
+            authorization: token,
           },
         }
       )
       .then((resp) =>
         this.setState({
-          store: resp.data.result,
-          // timings: resp.data.storeTimings,
+          store: resp.data.result[0],
         })
       )
       .catch((err) => console.log(err));
@@ -76,6 +83,20 @@ export default class StoreInfo extends Component {
       .then((url) => {
         this.setState({ image: url });
       })
+      .catch((err) => console.log(err));
+    // /v1/storeTimings/:id
+    axios
+      .get(
+        "https://secret-cove-59835.herokuapp.com/v1/storeTimings/" +
+          this.props.route.params.storeId,
+
+        {
+          headers: {
+            authorization: token,
+          },
+        }
+      )
+      .then((resp) => this.setState({ timings: resp.data.result }))
       .catch((err) => console.log(err));
   }
 
@@ -91,7 +112,7 @@ export default class StoreInfo extends Component {
     Linking.openURL(phoneNumber);
   };
   render() {
-    alert(JSON.stringify(this.state));
+    // alert(JSON.stringify(this.state.timings))
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
@@ -168,7 +189,7 @@ export default class StoreInfo extends Component {
               fontName="Lato-Regular"
               fonSiz={20}
               col="#5C5C5C"
-              text={this.state.store.storeAddress}
+              text={this.state.store.address1 + " " + this.state.store.city}
             />
           </View>
           <View
@@ -197,7 +218,7 @@ export default class StoreInfo extends Component {
                 fontName="Lato-Regular"
                 fonSiz={20}
                 col="#5C5C5C"
-                text={this.state.store.phoneNumber}
+                text={this.state.store.storeContact}
               />
             </View>
             <TouchableOpacity onPress={this.makeCall}>
@@ -249,7 +270,7 @@ export default class StoreInfo extends Component {
                   ? "Closed"
                   : this.state.timings[6].openTime +
                     "-" +
-                    this.state.timings[6].ClosingTime)
+                    this.state.timings[6].closeTime)
               }
             />
           </View>
@@ -279,7 +300,7 @@ export default class StoreInfo extends Component {
                   ? "Closed"
                   : this.state.timings[0].openTime +
                     "-" +
-                    this.state.timings[0].ClosingTime)
+                    this.state.timings[0].closeTime)
               }
             />
           </View>
@@ -309,7 +330,7 @@ export default class StoreInfo extends Component {
                   ? "Closed"
                   : this.state.timings[1].openTime +
                     "-" +
-                    this.state.timings[1].ClosingTime)
+                    this.state.timings[1].closeTime)
               }
             />
           </View>
@@ -337,7 +358,7 @@ export default class StoreInfo extends Component {
                   ? "Closed"
                   : this.state.timings[2].openTime +
                     "-" +
-                    this.state.timings[2].ClosingTime)
+                    this.state.timings[2].closeTime)
               }
             />
           </View>
@@ -365,7 +386,7 @@ export default class StoreInfo extends Component {
                   ? "Closed"
                   : this.state.timings[3].openTime +
                     "-" +
-                    this.state.timings[3].ClosingTime)
+                    this.state.timings[3].closeTime)
               }
             />
           </View>
@@ -393,7 +414,7 @@ export default class StoreInfo extends Component {
                   ? "Closed"
                   : this.state.timings[4].openTime +
                     "-" +
-                    this.state.timings[4].ClosingTime)
+                    this.state.timings[4].closeTime)
               }
             />
           </View>
@@ -421,7 +442,7 @@ export default class StoreInfo extends Component {
                   ? "Closed"
                   : this.state.timings[5].openTime +
                     "-" +
-                    this.state.timings[5].ClosingTime)
+                    this.state.timings[5].closeTime)
               }
             />
           </View>
@@ -494,7 +515,7 @@ export default class StoreInfo extends Component {
               ></LatoText>
             </View>
           ) : null}
-          {this.state.store.termsAndCondition ? (
+          {this.state.store.termsAndConditions ? (
             <View
               style={{
                 flexDirection: "row",
@@ -511,7 +532,7 @@ export default class StoreInfo extends Component {
               ></LatoText>
             </View>
           ) : null}
-          {this.state.store.termsAndCondition ? (
+          {this.state.store.termsAndConditions ? (
             <View
               style={{
                 flexDirection: "row",
@@ -524,7 +545,7 @@ export default class StoreInfo extends Component {
                 fontName="Lato-Regular"
                 fonSiz={17}
                 col="#5C5C5C"
-                text={this.state.store.termsAndCondition}
+                text={this.state.store.termsAndConditions}
               ></LatoText>
             </View>
           ) : null}

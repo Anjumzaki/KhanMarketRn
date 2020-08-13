@@ -64,7 +64,7 @@ class Home extends React.Component {
     const token = await AsyncStorage.getItem("token");
     console.log(token, "asdas");
     axios
-      .get("https://secret-cove-59835.herokuapp.com/v1/store", {
+      .get("https://secret-cove-59835.herokuapp.com/v1/store/status/1", {
         headers: {
           authorization: token,
         },
@@ -94,7 +94,7 @@ class Home extends React.Component {
       // alert(this.props.userLocation.lat);
       // alert(this.props.userLocation.lng);
       axios
-        .get("https://secret-cove-59835.herokuapp.com/v1/store", {
+        .get("https://secret-cove-59835.herokuapp.com/v1/store/status/1", {
           headers: {
             authorization: token,
           },
@@ -169,6 +169,7 @@ class Home extends React.Component {
               {this.state.stores.length > 0 &&
                 this.state.stores.map((item, ind) => (
                   <StoreCard
+                  
                     key={ind}
                     navigation={this.props.navigation}
                     name={item.storeName ? item.storeName : "Error Handled"}
@@ -181,7 +182,7 @@ class Home extends React.Component {
                         item.lng
                       ).toFixed(2) + " mi"
                     }
-                    address={item.address1 +  " " + item.state + " " + item.city}
+                    address={item.address1 + " " + item.state + " " + item.city}
                     id={item.storeID}
                     phone={item.zipCode}
                     sId={item.storeID}

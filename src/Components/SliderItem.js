@@ -21,7 +21,7 @@ class SliderItem extends React.Component {
   componentDidMount() {
     const ref = firebase
       .storage()
-      .ref("/product_images/" + this.props.data._id + "_1.jpg");
+      .ref("/product_images/" + this.props.data.productID + "_1.jpg");
     ref
       .getDownloadURL()
       .then((url) => {
@@ -43,7 +43,9 @@ class SliderItem extends React.Component {
                 fontName="Lato-Bold"
                 fonSiz={16}
                 col="white"
-                text={"You will get " + this.props.data.discount + "% off"}
+                text={
+                  "You will get " + this.props.data.productDiscount + "% off"
+                }
               />
               <View style={{ marginTop: 5 }}>
                 <LatoText
@@ -53,16 +55,16 @@ class SliderItem extends React.Component {
                   text={
                     "$" +
                     (
-                      parseFloat(this.props.data.price).toFixed(2) -
+                      parseFloat(this.props.data.productPrice).toFixed(2) -
                       (
-                        parseFloat(this.props.data.discount / 100) *
-                        parseFloat(this.props.data.price)
+                        parseFloat(this.props.data.productDiscount / 100) *
+                        parseFloat(this.props.data.productPrice)
                       ).toFixed(2)
                     ).toFixed(2) +
                     " (Save $" +
                     (
-                      parseFloat(this.props.data.discount / 100) *
-                      parseFloat(this.props.data.price)
+                      parseFloat(this.props.data.productDiscount / 100) *
+                      parseFloat(this.props.data.productPrice)
                     ).toFixed(2) +
                     ")"
                   }
