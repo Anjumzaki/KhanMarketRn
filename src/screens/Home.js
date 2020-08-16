@@ -62,6 +62,7 @@ class Home extends React.Component {
   };
   async componentDidMount() {
     const token = await AsyncStorage.getItem("token");
+    // alert(JSON.stringify(this.props.user));
     console.log(token, "asdas");
     axios
       .get("https://secret-cove-59835.herokuapp.com/v1/store/status/1", {
@@ -169,7 +170,6 @@ class Home extends React.Component {
               {this.state.stores.length > 0 &&
                 this.state.stores.map((item, ind) => (
                   <StoreCard
-                  
                     key={ind}
                     navigation={this.props.navigation}
                     name={item.storeName ? item.storeName : "Error Handled"}

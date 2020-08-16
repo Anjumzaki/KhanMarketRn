@@ -54,7 +54,7 @@ class Map extends Component {
     try {
       const user = await AsyncStorage.getItem("user");
       const token = await AsyncStorage.getItem("token");
-      this.setState({ user, token }, alert(user));
+      this.setState({ user, token });
     } catch (e) {
       console.log(e);
     }
@@ -65,15 +65,13 @@ class Map extends Component {
       await AsyncStorage.removeItem("user");
       await AsyncStorage.setItem("user", JSON.stringify(myUser));
       const newUser = await AsyncStorage.getItem("user");
-      alert(newUser);
-      this.props.navigation.navigate('App')
+      this.props.navigation.navigate("App");
     } catch (error) {
       //code which will only run if an error happened in the try block.
       alert(JSON.stringify("error"));
     } finally {
       //code which will run after the try and catch blocks whether an error happens or not.
       const newUser = await AsyncStorage.getItem(user);
-      alert("newUser");
     }
   };
   handleMapApp = async () => {
@@ -130,7 +128,6 @@ class Map extends Component {
           .long_name;
       }
     }
-
     this.props.locationAsync({
       location: ad1 + " " + temp + " " + ad2 + " " + ct + " " + cnt,
       // lat: this.state.region.latitude,
@@ -170,7 +167,6 @@ class Map extends Component {
         if (resp.data.id) {
           var myUser = this.props.user;
           myUser.user.shippingAddress = resp.data.id;
-          alert(this.props.user.token);
           axios
             .put(
               "https://secret-cove-59835.herokuapp.com/v1/user/" +
@@ -197,9 +193,23 @@ class Map extends Component {
             .then(async (resp1) => {
               //  alert(JSON.stringify(resp1.data))
               this.handleNavi(myUser);
-
-              // alert(JSON.stringify(myUser));
-              // this.props.navigation.navigate("App");
+              await AsyncStorage.removeItem("user");
+              await AsyncStorage.setItem(
+                "user",
+                JSON.stringify({
+                  firstName: myUser.user.firstName,
+                  middleName: myUser.user.middleName,
+                  lastName: myUser.user.lastName,
+                  email: myUser.user.email,
+                  mobile: myUser.user.mobile,
+                  password: myUser.user.password,
+                  isGuest: myUser.user.isGuest,
+                  type: myUser.user.type,
+                  shippingAddress: myUser.user.shippingAddress,
+                  storeID: myUser.user.storeID,
+                  type: "user",
+                })
+              );
             })
             .catch((err) => {
               alert("asdas");
@@ -295,7 +305,7 @@ class Map extends Component {
     );
   };
   componentWillMount() {
-    Geocoder.init("AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI");
+    Geocoder.init("AIzaSyCSNUzCDjt1SEhbn6EvYtyRL4TK-0m_BN8");
     this.getMyLocations();
   }
 
@@ -310,7 +320,7 @@ class Map extends Component {
         this.state.location.coords.latitude +
         "," +
         this.state.location.coords.longitude +
-        "&key=AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI"
+        "&key=AIzaSyCSNUzCDjt1SEhbn6EvYtyRL4TK-0m_BN8"
     )
       .then((response) => response.json())
       .then((responseJson) => {
@@ -328,7 +338,7 @@ class Map extends Component {
         "," +
         this.state.region.longitude +
         "&key=" +
-        "AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI"
+        "AIzaSyCSNUzCDjt1SEhbn6EvYtyRL4TK-0m_BN8"
     )
       .then((response) => response.json())
       .then((responseJson) => {
@@ -440,7 +450,7 @@ class Map extends Component {
                   .catch((error) => console.warn(error));
               }}
               query={{
-                key: "AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI",
+                key: "AIzaSyCSNUzCDjt1SEhbn6EvYtyRL4TK-0m_BN8",
                 language: "en",
               }}
             />

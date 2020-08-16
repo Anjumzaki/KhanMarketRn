@@ -15,13 +15,9 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 
-import Geolocation from "@react-native-community/geolocation";
-import { BackStack } from "../Helpers/BackStack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import * as Font from "expo-font";
 import * as EmailValidator from "email-validator";
-import { CommonActions } from "@react-navigation/native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -53,64 +49,90 @@ class Login extends React.Component {
     };
   }
   async componentDidMount() {
+    alert(getUniqueId());
+    console.log(getUniqueId());
     var user = await AsyncStorage.getItem("user");
     const token = await AsyncStorage.getItem("token");
-    // alert(user)
     if (user) {
       user = JSON.parse(user);
-      if (user.shippingAddress) {
-        this.props.userAsync({ user, token });
-        this.props.locationAsync({
-          location: user.address1 + user.address2,
-          type: "user",
-          address1: user.address1,
-          address2: user.address2,
-          city: user,
-          country: user.country,
-          state: user.state,
-          zipCode: user.zipCode,
-          lat: user.lat,
-          lng: user.lng,
-        });
-        this.setState(
-          {
-            icEye: "visibility-off",
-            isPassword: true,
-            fontLoaded: false,
-            email: "",
-            password: "",
-            msg: "",
-            loading: false,
-            mainLoading: false,
-          },
-          () =>
-            this.props.navigation.navigate("App", {
-              token: token,
-              user: user,
-            })
-        );
-      } else {
-        user = JSON.parse(user);
-        this.props.userAsync({ user, token });
+      var uID = user.userID ? user.userID : user.userId;
+      axios
+        .get(
+          "https://secret-cove-59835.herokuapp.com/v1/user/" + uID,
 
-        this.setState(
           {
-            icEye: "visibility-off",
-            isPassword: true,
-            fontLoaded: false,
-            email: "",
-            password: "",
-            msg: "",
-            loading: false,
-            mainLoading: false,
-          },
-          () =>
-            this.props.navigation.navigate("App", {
-              token: token,
-              user: user,
-            })
-        );
-      }
+            headers: {
+              authorization: token,
+            },
+          }
+        )
+        .then(async (resp) => {
+          if (resp.data.success == "true") {
+            this.setState({ errMessage: false });
+            const user = resp.data.result[0];
+            await AsyncStorage.removeItem("user");
+            await AsyncStorage.setItem("user", JSON.stringify(user));
+            if (user.shippingAddress) {
+              console.log(user.address2);
+              await this.props.userAsync({ user, token });
+              await this.props.locationAsync({
+                location: user.address1 + " " + user.address2,
+                type: "user",
+                address1: user.address1,
+                address2: user.address2,
+                city: user,
+                country: user.country,
+                state: user.state,
+                zipCode: user.zipCode,
+                lat: user.lat,
+                lng: user.lng,
+              });
+              this.setState(
+                {
+                  icEye: "visibility-off",
+                  isPassword: true,
+                  fontLoaded: false,
+                  email: "",
+                  password: "",
+                  msg: "",
+                  loading: false,
+                  mainLoading: false,
+                },
+                () =>
+                  this.props.navigation.navigate("App", {
+                    token: token,
+                    user: user,
+                  })
+              );
+            } else {
+              this.props.userAsync({ user, token });
+              this.setState(
+                {
+                  icEye: "visibility-off",
+                  isPassword: true,
+                  fontLoaded: false,
+                  email: "",
+                  password: "",
+                  msg: "",
+                  loading: false,
+                  mainLoading: false,
+                },
+                () =>
+                  this.props.navigation.navigate("Map", {
+                    token: token,
+                    user: user,
+                  })
+              );
+            }
+          } else {
+            this.setState({
+              errMessage: "Fuck OFF",
+              loading: false,
+              mainLoading: false,
+            });
+          }
+          // alert(JSON.stringify(resp));
+        });
     } else {
       this.setState({ mainLoading: false });
     }
@@ -126,75 +148,7 @@ class Login extends React.Component {
       isPassword: !isPassword,
     });
   };
-  handleApp = async (value, token, loc) => {
-    try {
-      await AsyncStorage.setItem("user", JSON.stringify(value));
-      await AsyncStorage.setItem("token", token);
-      // alert(token);
-      // await AsyncStorage.setItem("user", JSON.stringify(value));
-      // await AsyncStorage.setItem("userLocation", JSON.stringify(loc));
-    } catch (e) {
-      alert(error);
-    }
-    alert(JSON.stringify(loc));
-    alert(JSON.stringify(this.props.user));
-    this.props.locationAsync({
-      location:
-        loc.result[0].address1 +
-        " " +
-        loc.result[0].address2 +
-        " " +
-        loc.result[0].city +
-        " " +
-        loc.result[0].country,
-      lat: loc.result[0].lat,
-      lng: loc.result[0].lng,
-    });
-    this.setState(
-      {
-        icEye: "visibility-off",
-        isPassword: true,
-        fontLoaded: false,
-        email: "",
-        password: "",
-        msg: "",
-        loading: false,
-        mainLoading: false,
-      },
-      // alert(token)
 
-      () => this.props.navigation.navigate("App")
-    );
-    const user = await AsyncStorage.getItem("user");
-    const anjum = await AsyncStorage.getItem("token");
-    alert(anjum);
-  };
-  handleMap = async (value, token) => {
-    try {
-      await AsyncStorage.setItem("user", JSON.stringify(value));
-      await AsyncStorage.setItem("token", token);
-      // alert(token);
-    } catch (e) {
-      // saving error
-    }
-    this.setState(
-      {
-        icEye: "visibility-off",
-        isPassword: true,
-        fontLoaded: false,
-        email: "",
-        password: "",
-        msg: "",
-        loading: false,
-        mainLoading: false,
-      },
-      () => this.props.navigation.navigate("Map")
-      // alert(token)
-    );
-    const user = await AsyncStorage.getItem("user");
-    const anjum = await AsyncStorage.getItem("token");
-    alert(anjum);
-  };
   handleLogin = async () => {
     this.setState(
       {
@@ -335,20 +289,6 @@ class Login extends React.Component {
       ],
       { cancelable: true }
     );
-    // }{
-    //   Alert.alert(
-    //     "Reset Password",
-    //     "Please enter your email first",
-    //     [
-    //       {
-    //         text: "Okay",
-    //         onPress: () => console.log("Cancel Pressed"),
-    //         style: "cancel",
-    //       }
-    //     ],
-    //     { cancelable: true }
-    //   );
-    // }
   }
   render() {
     const { icEye, isPassword } = this.state;
@@ -522,55 +462,115 @@ class Login extends React.Component {
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                style={{ alignItems: "center", marginTop: 20 }}
-                onPress={() => {
+                onPress={() =>
                   axios
-                    .post(
-                      "https://lit-peak-13067.herokuapp.com/api/users/guest/register",
-                      {
-                        isGuest: true,
-                        guestId: getUniqueId(),
-                      }
-                    )
-                    .then(async (resp) => {
-                      await AsyncStorage.setItem(
-                        "user",
-                        JSON.stringify(resp.data.user._id)
-                      );
-
-                      axios
-                        .get(
-                          "https://lit-peak-13067.herokuapp.com/get/location/" +
-                            resp.data.user._id
-                        )
-                        .then((resp1) => {
-                          // this.props.userAsync(resp.data);
-                          // this.props.navigation.navigate("Map");
-                          if (resp1.data.length > 0) {
-                            this.props.locationAsync({
-                              location:
-                                resp1.data[0].address1 +
-                                " " +
-                                resp1.data[0].address2 +
-                                " " +
-                                resp1.data[0].city +
-                                " " +
-                                resp1.data[0].country,
-                              lat: resp1.data[0].latitude,
-                              lng: resp1.data[0].longitude,
-                            });
-
-                            this.props.navigation.navigate("App");
-                          } else {
-                            this.props.navigation.navigate("Map");
-                          }
-                        })
-                        .catch((err) => console.log(err));
+                    .post("https://secret-cove-59835.herokuapp.com/v1/guest", {
+                      firstName: "-",
+                      lastName: "-",
+                      email: "-",
+                      mobile: "-",
+                      password: "-",
+                      isGuest: 1,
+                      type: "user",
+                      guestID: getUniqueId(),
                     })
+                    .then((resp) => {
+                      alert(JSON.stringify(resp.data));
+                      if (resp.data.id) {
+                        axios
+                          .post(
+                            "https://secret-cove-59835.herokuapp.com/v1/login/guest",
+                            {
+                              guestID: getUniqueId(),
+                            }
+                          )
+                          .then(async (resp) => {
+                            this.setState({ errMessage: false });
+                            // alert(JSON.stringify(resp.data.token));
+                            const token = resp.data.token;
+                            const user = jwt(resp.data.token);
+                            await AsyncStorage.setItem(
+                              "user",
+                              JSON.stringify(user)
+                            );
+                            await AsyncStorage.setItem("token", token);
+                            alert(user.shippingAddress);
+                            if (
+                              user.shippingAddress &&
+                              user.shippingAddress != "undefined"
+                            ) {
+                              console.log(user.address2);
+                              this.props.userAsync({ user, token });
+                              this.props.locationAsync({
+                                location: user.address1 + user.address2,
+                                type: "user",
+                                address1: user.address1,
+                                address2: user.address2,
+                                city: user,
+                                country: user.country,
+                                state: user.state,
+                                zipCode: user.zipCode,
+                                lat: user.lat,
+                                lng: user.lng,
+                              });
+                              this.setState(
+                                {
+                                  icEye: "visibility-off",
+                                  isPassword: true,
+                                  fontLoaded: false,
+                                  email: "",
+                                  password: "",
+                                  msg: "",
+                                  loading: false,
+                                  mainLoading: false,
+                                },
+                                () =>
+                                  this.props.navigation.navigate("App", {
+                                    token: token,
+                                    user: user,
+                                  })
+                              );
+                            } else {
+                              this.props.userAsync({ user, token });
+                              this.setState(
+                                {
+                                  icEye: "visibility-off",
+                                  isPassword: true,
+                                  fontLoaded: false,
+                                  email: "",
+                                  password: "",
+                                  msg: "",
+                                  loading: false,
+                                  mainLoading: false,
+                                },
+                                () =>
+                                  this.props.navigation.navigate("Map", {
+                                    token: token,
+                                    user: user,
+                                  })
+                              );
+                            }
+                          })
+                          .catch((err) => {
+                            this.setState({
+                              errMessage: "Incorrect Email or password",
+                              loading: false,
+                              mainLoading: false,
+                            });
+                          });
+                      } else {
+                        this.setState({ mainLoading: false });
+                      }
+                    })
+
                     .catch((err) =>
-                      this.setState({ msg: "Email already exist!" })
-                    );
-                }}
+                      this.setState(
+                        { msg: JSON.stringify(err) },
+                        console.log(err)
+                      )
+                    )
+                }
+                style={{ alignItems: "center", marginTop: 20 }}
               >
                 <LatoText
                   fontName="Lato-Regular"

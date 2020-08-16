@@ -61,9 +61,11 @@ class Map extends Component {
   }
   handleNavi = async (myUser) => {
     try {
-      await AsyncStorage.removeItem("user");
-      await AsyncStorage.setItem("user", JSON.stringify(myUser));
-      const newUser = await AsyncStorage.getItem("user");
+      // await AsyncStorage.removeItem("user");
+      // await AsyncStorage.setItem("user", JSON.stringify(myUser));
+
+      // const newUser = await AsyncStorage.getItem("user");
+      // alert(newUser)
       // const token = this.props.user.token;
       // const user = JSON.parse(newUser);
       // this.props.userAsync({ user, token });
@@ -172,10 +174,12 @@ class Map extends Component {
         if (resp.data.id) {
           var myUser = this.props.user;
           myUser.user.shippingAddress = resp.data.id;
+          var uID = this.props.user.user.userID
+            ? this.props.user.user.userID
+            : this.props.user.user.userId;
           axios
             .put(
-              "https://secret-cove-59835.herokuapp.com/v1/user/" +
-                this.props.user.user.userId,
+              "https://secret-cove-59835.herokuapp.com/v1/user/" + uID,
               {
                 firstName: myUser.user.firstName,
                 middleName: myUser.user.middleName,
@@ -296,7 +300,7 @@ class Map extends Component {
     );
   };
   componentWillMount() {
-    Geocoder.init("AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI");
+    Geocoder.init("AIzaSyCSNUzCDjt1SEhbn6EvYtyRL4TK-0m_BN8");
     this.getMyLocations();
   }
 
@@ -311,7 +315,7 @@ class Map extends Component {
         this.state.location.coords.latitude +
         "," +
         this.state.location.coords.longitude +
-        "&key=AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI"
+        "&key=AIzaSyCSNUzCDjt1SEhbn6EvYtyRL4TK-0m_BN8"
     )
       .then((response) => response.json())
       .then((responseJson) => {
@@ -329,7 +333,7 @@ class Map extends Component {
         "," +
         this.state.region.longitude +
         "&key=" +
-        "AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI"
+        "AIzaSyCSNUzCDjt1SEhbn6EvYtyRL4TK-0m_BN8"
     )
       .then((response) => response.json())
       .then((responseJson) => {
@@ -441,7 +445,7 @@ class Map extends Component {
                   .catch((error) => console.warn(error));
               }}
               query={{
-                key: "AIzaSyCYwrgArmp1NxJsU8LsgVKu5De5uCx57dI",
+                key: "AIzaSyCSNUzCDjt1SEhbn6EvYtyRL4TK-0m_BN8",
                 language: "en",
               }}
             />

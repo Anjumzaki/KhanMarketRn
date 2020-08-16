@@ -90,10 +90,10 @@ class Cart extends Component {
       oId: "",
       isOut: false,
       clickCheck: true,
-      someoneElseFirstName: "",
-      someoneElseLastName: "",
-      someoneElseEmail: "",
-      someoneElsePhone: "",
+      someOneElseFirstName: "",
+      someOneElseLastName: "",
+      someOneElseEmail: "",
+      someOneElsePhone: "",
       previousMobileNumber: "",
       keyState: false,
       minTime: "0",
@@ -577,8 +577,8 @@ class Cart extends Component {
         }
       }
       if (
-        EmailValidator.validate(this.state.someoneElseEmail) ||
-        this.state.someoneElseEmail === ""
+        EmailValidator.validate(this.state.someOneElseEmail) ||
+        this.state.someOneElseEmail === ""
       ) {
         axios
           .post(
@@ -607,10 +607,10 @@ class Cart extends Component {
               orderNumber: orderN,
               isGuest: user.isGuest,
               isSomeOneElse: this.state.isChecked,
-              someoneElseFirstName: this.state.someoneElseFirstName,
-              someoneElseLastName: this.state.someoneElseLastName,
-              someoneElseEmail: this.state.someoneElseEmail,
-              someoneElseMobile: this.state.someoneElsePhone,
+              someOneElseFirstName: this.state.someOneElseFirstName,
+              someOneElseLastName: this.state.someOneElseLastName,
+              someOneElseEmail: this.state.someOneElseEmail,
+              someOneElseMobile: this.state.someOneElsePhone,
             },
             {
               headers: {
@@ -1705,12 +1705,12 @@ class Cart extends Component {
                           <View>
                             <TextInput
                               style={[textIn.input, { width: "100%" }]}
-                              onChangeText={(someoneElseFirstName) =>
+                              onChangeText={(someOneElseFirstName) =>
                                 this.setState({
-                                  someoneElseFirstName,
+                                  someOneElseFirstName,
                                 })
                               }
-                              value={this.state.someoneElseFirstName}
+                              value={this.state.someOneElseFirstName}
                             />
                           </View>
                         </View>
@@ -1731,12 +1731,12 @@ class Cart extends Component {
                           <View>
                             <TextInput
                               style={[textIn.input, { width: "100%" }]}
-                              onChangeText={(someoneElseLastName) =>
+                              onChangeText={(someOneElseLastName) =>
                                 this.setState({
-                                  someoneElseLastName,
+                                  someOneElseLastName,
                                 })
                               }
-                              value={this.state.someoneElseLastName}
+                              value={this.state.someOneElseLastName}
                             />
                           </View>
                         </View>
@@ -1782,12 +1782,12 @@ class Cart extends Component {
                             <TextInput
                               placeholder={"(555) 555-5678"}
                               keyboardType={"numeric"}
-                              onChangeText={(someoneElsePhone) =>
+                              onChangeText={(someOneElsePhone) =>
                                 this.setState({
-                                  someoneElsePhone,
+                                  someOneElsePhone,
                                 })
                               }
-                              value={this.state.someoneElsePhone}
+                              value={this.state.someOneElsePhone}
                               style={[textIn.input, { width: "81%" }]}
                             />
                           </View>
@@ -1811,12 +1811,13 @@ class Cart extends Component {
                         <View>
                           <TextInput
                             style={[textIn.input, { width: "100%" }]}
-                            onChangeText={(someoneElseEmail) =>
+                            autoCapitalize={"none"}
+                            onChangeText={(someOneElseEmail) =>
                               this.setState({
-                                someoneElseEmail,
+                                someOneElseEmail,
                               })
                             }
-                            value={this.state.someoneElseEmail}
+                            value={this.state.someOneElseEmail}
                           />
                         </View>
                       </View>
