@@ -98,30 +98,41 @@ class Favourites extends Component {
   handleFav = async (id, _id) => {
     var items = this.state.favourites;
     var items1 = this.state.favourites;
-    alert(_id);
-    // var that = this;
-    // this.setState(
-    //   {
-    //     imageL: true,
-    //     loading: true,
-    //     // favourites: [],
-    //   },
-    //   () => {
-    //     items.splice(id, 1);
-    //     axios
-    //       .delete(
-    //         "https://secret-cove-59835.herokuapp.com/v1/ref_prod_fav/" + _id
-    //       )
-    //       .then((resp) =>
-    //         this.setState({
-    //           favourites: items,
-    //           imageL: false,
-    //           loading: false,
-    //         })
-    //       )
-    //       .catch((err) => err);
-    //   }
-    // );
+    var favID = items[id].favID;
+    // alert(JSON.stringify(favID));
+    items.splice(id, 1);
+    // alert(_id);
+    // alert(JSON.stringify(items));
+    // alert(items1[id].favID);
+    var that = this;
+    this.setState(
+      {
+        imageL: true,
+        loading: true,
+        favourites: [],
+      },
+      () => {
+        // alert(JSON.stringify(items));
+        // that.setState({ favourites: items, loading: false, imageL: false });
+        axios
+          .delete(
+            "https://secret-cove-59835.herokuapp.com/v1/ref_prod_fav/" + favID,
+            {
+              headers: {
+                authorization: this.props.user.token,
+              },
+            }
+          )
+          .then((resp) =>
+            this.setState({
+              favourites: items,
+              imageL: false,
+              loading: false,
+            })
+          )
+          .catch((err) => err);
+      }
+    );
   };
 
   handleCart = (product, qt, ind) => {

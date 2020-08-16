@@ -106,31 +106,12 @@ class OrderCards extends React.Component {
                 />
               </View>
 
-              {this.props.order.isRejected === true ? (
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={15}
-                  col="#808080"
-                  text={"Cancelled"}
-                />
-              ) : (
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={15}
-                  col="#2AA034"
-                  text={
-                    this.props.order.statusCode === 0
-                      ? "in queue"
-                      : this.props.order.statusCode === 1
-                      ? "In Prepration"
-                      : this.props.order.statusCode === 2
-                      ? "Ready For Pickup"
-                      : this.props.order.statusCode === 3
-                      ? "Completed"
-                      : "Cancelled"
-                  }
-                />
-              )}
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={15}
+                col="#2AA034"
+                text={this.props.order.statusName}
+              />
             </View>
             <LatoText
               fontName="Lato-Regular"
@@ -181,7 +162,7 @@ class OrderCards extends React.Component {
             <TouchableOpacity
               style={{ padding: 10 }}
               onPress={() => {
-                if (this.props.order.isAccepted === false) {
+                if (this.props.order.statusCode === 0) {
                   Alert.alert(
                     "Alert!",
                     "Are you sure you want to cancel the order?",
@@ -196,8 +177,25 @@ class OrderCards extends React.Component {
                         onPress: () => {
                           axios
                             .put(
+                              "https://secret-cove-59835.herokuapp.com/v1/transaction/status/" +
+                                this.props.order.orderID +
+                                "/4",
+                              { a: "a" },
+                              {
+                                headers: {
+                                  authorization: this.props.token,
+                                },
+                              }
+                            )
+                            .then((resp) => {
+                              alert("Order Cancelled Successfully.");
+                              this.props.getData();
+                            })
+                            .catch((err) => console.log(err));
+                          axios
+                            .put(
                               "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
-                                this.props.order._id
+                                this.props.order.orderID
                             )
                             .then((resp) => {
                               // this.setState({bd: true})

@@ -81,14 +81,10 @@ class MyOrders extends Component {
     var past = [];
 
     for (var i = 0; i < this.state.myOrders.length; i++) {
-      if (
-        (this.state.myOrders[i].isPicked === true &&
-          this.state.myOrders[i].isAccepted === true) ||
-        this.state.myOrders[i].isRejected === true
-      ) {
-        past.push(this.state.myOrders[i]);
-      } else {
+      if (this.state.myOrders[i].statusCode < 3) {
         active.push(this.state.myOrders[i]);
+      } else {
+        past.push(this.state.myOrders[i]);
       }
     }
     return (
@@ -162,6 +158,7 @@ class MyOrders extends Component {
                       order={item}
                       type="active"
                       getData={this.getData}
+                      token={this.props.user.token}
                     />
                   ))}
               </Collapsible>
