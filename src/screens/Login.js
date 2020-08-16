@@ -49,7 +49,7 @@ class Login extends React.Component {
     };
   }
   async componentDidMount() {
-    alert(getUniqueId());
+    // alert(getUniqueId());
     console.log(getUniqueId());
     var user = await AsyncStorage.getItem("user");
     const token = await AsyncStorage.getItem("token");
@@ -564,10 +564,10 @@ class Login extends React.Component {
                     })
 
                     .catch((err) =>
-                      this.setState(
-                        { msg: JSON.stringify(err) },
-                        console.log(err)
-                      )
+                      this.setState({
+                        msg: JSON.stringify(err),
+                        mainLoading: false,
+                      })
                     )
                 }
                 style={{ alignItems: "center", marginTop: 20 }}

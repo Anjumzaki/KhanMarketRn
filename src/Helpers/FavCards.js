@@ -37,10 +37,13 @@ class FavCards extends React.Component {
   };
 
   componentDidMount() {
+    // alert(JSON.stringify(this.props.product));
     const ref = firebase
 
       .storage()
-      .ref("/product_images/" + this.props.product.product._id + "_1.jpg");
+      .ref(
+        "/product_images/" + this.props.product.product.productID + "_1.jpg"
+      );
     ref
       .getDownloadURL()
       .then((url) => {
@@ -48,15 +51,9 @@ class FavCards extends React.Component {
       })
       .catch((err) => console.log(err));
     var pCart = this.props.cart;
+
     var inCart = false;
     var inCartIndex = "";
-    for (var i = 0; i < pCart.length; i++) {
-      if (pCart[i].product._id === this.props.product.product._id) {
-        inCart = true;
-        inCartIndex = i;
-        break;
-      }
-    }
 
     if (inCart) {
       console.log(
@@ -67,11 +64,11 @@ class FavCards extends React.Component {
       );
       this.setState({ qt: pCart[inCartIndex].quantity });
     }
-    if (this.props.product.product.favourites === undefined) {
-      this.setState({ favourites: [] });
-    } else {
-      this.setState({ favourites: this.props.product.product.favourites });
-    }
+    // if (this.props.product.product.favourites === undefined) {
+    //   this.setState({ favourites: [] });
+    // } else {
+    //   this.setState({ favourites: this.props.product.product.favourites });
+    // }
   }
   handleChange(num) {
     var preNum = this.state.qt;
@@ -188,12 +185,12 @@ class FavCards extends React.Component {
                   <AntDesign color="#B50000" size={18} name="hearto" />
                 )}
               </TouchableOpacity> */}
-              {this.props.product.favItem ? (
+              {this.state.heart ? (
                 <TouchableOpacity
                   onPress={() =>
                     this.props.handleFav(
                       this.props.ind,
-                      this.props.product.product._id
+                      this.props.product.product.productID
                     )
                   }
                 >
@@ -215,9 +212,11 @@ class FavCards extends React.Component {
                   text={
                     "$" +
                     (
-                      parseFloat(this.props.product.product.price) -
-                      (parseFloat(this.props.product.product.price) *
-                        parseFloat(this.props.product.product.discount)) /
+                      parseFloat(this.props.product.product.productPrice) -
+                      (parseFloat(this.props.product.product.productPrice) *
+                        parseFloat(
+                          this.props.product.product.productDiscount
+                        )) /
                         100
                     ).toFixed(2) +
                     " / lb"
@@ -230,7 +229,7 @@ class FavCards extends React.Component {
                   fonSiz={13}
                   col="#89898C"
                   lineThrough="line-through"
-                  text={"$" + this.props.product.product.price + " / lb"}
+                  text={"$" + this.props.product.product.productPrice + " / lb"}
                 ></LatoText>
               </View>
             </View>
@@ -240,7 +239,9 @@ class FavCards extends React.Component {
                 fonSiz={15}
                 col="#B50000"
                 text={
-                  "You will save " + this.props.product.product.discount + "%"
+                  "You will save " +
+                  this.props.product.product.productDiscount +
+                  "%"
                 }
               ></LatoText>
             </View>
@@ -249,11 +250,11 @@ class FavCards extends React.Component {
                 fontName="Lato-Regular"
                 fonSiz={13}
                 col="#2E2E2E"
-                text={this.props.product.storeName}
+                text={this.props.product.product.storeName}
               />
             </View>
             <View style={{ marginTop: 10 }}>
-              {this.props.product.carted ? (
+              {this.props.product.product.carted ? (
                 <View
                   style={{
                     flexDirection: "row",

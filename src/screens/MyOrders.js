@@ -24,7 +24,6 @@ import { userAsync } from "../store/actions";
 import { connect } from "react-redux";
 import Collapsible from "react-native-collapsible";
 import { Ionicons } from "@expo/vector-icons";
-
 const { width } = Dimensions.get("window");
 const { height } = 300;
 
@@ -51,7 +50,7 @@ class MyOrders extends Component {
         axios
           .get(
             "https://secret-cove-59835.herokuapp.com/v1/transaction/state/user/userID/" +
-              user.userId,
+              user.userID,
             {
               headers: {
                 authorization: this.props.user.token,
@@ -95,7 +94,7 @@ class MyOrders extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
-          {active.length > 0 ? (
+          {active.length > 0 && !this.state.loading ? (
             <View
               style={{
                 marginVertical: 10,

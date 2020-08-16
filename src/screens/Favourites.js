@@ -21,7 +21,12 @@ import { Row } from "native-base";
 import CheckBox from "react-native-check-box";
 import FavCards from "../Helpers/FavCards";
 import { bindActionCreators } from "redux";
-import { cartAsync, cartSizeAsync, favStoreAsync,storeAsync } from "../store/actions";
+import {
+  cartAsync,
+  cartSizeAsync,
+  favStoreAsync,
+  storeAsync,
+} from "../store/actions";
 import { connect } from "react-redux";
 import axios from "axios";
 import { NavigationEvents } from "@react-navigation/native";
@@ -43,7 +48,7 @@ class Favourites extends Component {
     };
   }
   getData = () => {
-    // alert(JSON.stringify(this.props.cart[0]))
+    // alert(JSON.stringify(this.props.user.token));
     var that = this;
     this.setState(
       {
@@ -53,16 +58,22 @@ class Favourites extends Component {
       () =>
         axios
           .get(
-            "https://lit-peak-13067.herokuapp.com/get/all/favourites/" +
-              this.props.user.user._id
+            "https://secret-cove-59835.herokuapp.com/v1/user/ref_prod_fav/" +
+              this.props.user.user.userID,
+            {
+              headers: {
+                authorization: this.props.user.token,
+              },
+            }
           )
           .then((resp) => {
-            var items = resp.data;
+            // alert(JSON.stringify(resp.data.result));
+            var items = resp.data.result;
             for (var i = 0; i < items.length; i++) {
               items[i].favItem = true;
               for (var j = 0; j < that.props.cart.length; j++) {
                 console.log(items[i]._id);
-                if (that.props.cart[j].product._id == items[i].product._id) {
+                if (that.props.cart[j].productID == items[i].productID) {
                   items[i].carted = true;
                 }
               }
@@ -72,7 +83,7 @@ class Favourites extends Component {
               loading: false,
             });
           })
-          .catch((err) => console.log(err))
+          .catch((err) => console.log(err.message))
     );
   };
   componentDidMount() {
@@ -87,101 +98,72 @@ class Favourites extends Component {
   handleFav = async (id, _id) => {
     var items = this.state.favourites;
     var items1 = this.state.favourites;
-
-    var that = this;
-    this.setState(
-      {
-        imageL: true,
-        loading: true,
-        // favourites: [],
-      },
-      () => {
-        items.splice(id, 1);
-        axios
-          .delete(
-            "https://lit-peak-13067.herokuapp.com/delete/favourite/" +
-              this.props.user.user._id +
-              "/" +
-              _id
-          )
-          .then((resp) =>
-            this.setState({
-              favourites: items,
-              imageL: false,
-              loading: false,
-            })
-          )
-          .catch((err) => err);
-        items1 = items1.filter(function (el) {
-          return el.userId !== that.props.user.user._id;
-        });
-        axios
-          .put("https://lit-peak-13067.herokuapp.com/edit/favourites/" + _id, {
-            favourites: items1,
-          })
-          .then((resp) => {})
-          .catch((err) => console.log(err));
-      }
-    );
+    alert(_id);
+    // var that = this;
+    // this.setState(
+    //   {
+    //     imageL: true,
+    //     loading: true,
+    //     // favourites: [],
+    //   },
+    //   () => {
+    //     items.splice(id, 1);
+    //     axios
+    //       .delete(
+    //         "https://secret-cove-59835.herokuapp.com/v1/ref_prod_fav/" + _id
+    //       )
+    //       .then((resp) =>
+    //         this.setState({
+    //           favourites: items,
+    //           imageL: false,
+    //           loading: false,
+    //         })
+    //       )
+    //       .catch((err) => err);
+    //   }
+    // );
   };
 
   handleCart = (product, qt, ind) => {
-    // alert(this.props.favStore === product.storeId)
-    // alert(product.storeId)
-    // var items = this.state.favourites;
-    // items[ind].carted = true;
-    // this.setState(
-    //   {
-    //     favourites: items,
-    //   },
-    //   () => alert(JSON.stringify(this.state.favourites))
-    // );
-
     var items = this.state.favourites;
+    // alert(product.storeID)
+    // alert(this.props.favStore);
+    // alert(this.props.cart);
     this.setState(
       {
         imageL: true,
         favourites: [],
       },
       () => {
-        if (this.props.cart.length === 0) {
+        if (this.props.cart.length === 0 || !this.props.cart) {
           var pCart = this.props.cart;
           pCart.push({
             product: product,
             quantity: qt,
           });
-          this.props.favStoreAsync(product.storeId);
+          this.props.favStoreAsync(product.storeID);
           this.props.cartAsync(pCart);
           items[ind].carted = true;
           this.setState({
             favourites: items,
             imageL: false,
           });
-          // if (this.props.store === "") {
-            axios
-              .get(
-                "https://lit-peak-13067.herokuapp.com/get/store/" +
-                  product.storeId
-              )
-              .then((resp) => {
-                this.props.storeAsync({
-                  name: resp.data.storeName,
-                  address: resp.data.storeAddress,
-                  id: resp.data._id,
-                  phone: resp.data.phoneNumber,
-                  sId: resp.data.storeId,
-                  oId: resp.data.orderNum,
-                });
-              });
-          // }
+          this.props.storeAsync({
+            name: product.storeName,
+            address: product.address,
+            id: product.storeID,
+            // phone: resp.data.phoneNumber,
+            sId: product.storeID,
+            // oId: resp.data.orderNum,
+          });
         } else {
-          if (this.props.favStore === product.storeId) {
+          if (this.props.favStore === product.storeID) {
             var pCart = this.props.cart;
             pCart.push({
               product: product,
               quantity: qt,
             });
-            this.props.favStoreAsync(product.storeId);
+            this.props.favStoreAsync(product.storeID);
             this.props.cartAsync(pCart);
             items[ind].carted = true;
             this.setState({
@@ -202,13 +184,13 @@ class Favourites extends Component {
                   {
                     text: "OK",
                     onPress: () => {
-                      this.getData()
+                      this.getData();
                       var pCart = [];
                       pCart.push({
                         product: product,
                         quantity: qt,
                       });
-                      this.props.favStoreAsync(product.storeId);
+                      this.props.favStoreAsync(product.storeID);
                       this.props.cartAsync(pCart);
                       items[ind].carted = true;
                       this.setState(
@@ -217,14 +199,14 @@ class Favourites extends Component {
                           imageL: false,
                         },
                         () =>
-                        // alert(this.state.temp)
+                          // alert(this.state.temp)
                           axios
                             .get(
                               "https://lit-peak-13067.herokuapp.com/get/store/" +
                                 this.state.temp
                             )
                             .then((resp) => {
-                              console.log(resp.data)
+                              console.log(resp.data);
                               this.props.storeAsync({
                                 name: resp.data.storeName,
                                 address: resp.data.storeAddress,
@@ -248,6 +230,7 @@ class Favourites extends Component {
   };
   render() {
     const myfavs = this.state.favourites;
+    // alert(JSON.stringify(myfavs));
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white", paddingTop: 20 }}>
@@ -268,7 +251,7 @@ class Favourites extends Component {
                       navigation={this.props.navigation}
                       key={ind}
                       ind={ind}
-                      product={item}
+                      product={{ product: item }}
                       handleFav={this.handleFav}
                       handleCart={this.handleCart}
                     />
@@ -359,7 +342,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>
       cartAsync,
       cartSizeAsync,
       favStoreAsync,
-      storeAsync
+      storeAsync,
     },
     dispatch
   );

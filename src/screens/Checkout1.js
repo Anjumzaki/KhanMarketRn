@@ -591,7 +591,7 @@ class Cart extends Component {
               // storeName: this.props.store.name,
               // storeAddress: this.props.store.address,
               // storePhone: this.props.store.phone,
-              customerName: user.userId,
+              customerName: user.userID,
               // name: this.state.firstName + " " + this.state.lastName,
               // firstName: this.state.firstName,
               // lastName: this.state.lastName,
