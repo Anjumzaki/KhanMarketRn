@@ -18,12 +18,12 @@ class StoreHeader extends React.Component {
         <StatusBar translucent={true} barStyle="light-content" />
         <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
           <TouchableOpacity
-            style={{ padding: 20 }}
+            style={{ paddingVertical: 10, paddingHorizontal: 20 }}
             onPress={() => this.props.navigation.toggleDrawer()}
           >
             <Image source={require("../../assets/menu-1.png")} />
           </TouchableOpacity>
-          <View style={{ padding: 20 }}>
+          <View style={{ paddingVertical: 10, paddingHorizontal: 20 }}>
             <LatoText
               fontName="Lato-Regular"
               fonSiz={20}
@@ -33,7 +33,7 @@ class StoreHeader extends React.Component {
           </View>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate("Cart")}
-            style={{ padding: 20 }}
+            style={{ paddingVertical: 10, paddingHorizontal: 20 }}
           >
             <View>
               <View style={headerStyles.cartTxt}>
@@ -53,7 +53,7 @@ class StoreHeader extends React.Component {
           style={{
             flexDirection: "row",
             justifyContent: "center",
-            paddingBottom: 20,
+            paddingBottom: 15,
           }}
           onPress={() => this.props.navigation.navigate("HomeMap")}
         >
