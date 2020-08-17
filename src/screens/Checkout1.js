@@ -684,7 +684,7 @@ class Cart extends Component {
   //  ejIEyo
   render() {
     var codeId = this.makeid(3);
-    alert(this.props.user.user)
+    // alert(JSON.stringify(this.props.user.user))
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
     } else {
@@ -784,6 +784,8 @@ class Cart extends Component {
       "Nov",
       "Dec",
     ];
+    var uid = this.props.user.user.userID ? this.props.user.user.userID : this.props.user.user.userId
+
     console.log("THIS.STATE", this.state);
     return (
       <>
@@ -1253,8 +1255,7 @@ class Cart extends Component {
                     console.log("SDDDDDDDDDDDDDDDDDDDDDDDDDDs33", verifyCheck);
                     axios
                       .put(
-                        "https://lit-peak-13067.herokuapp.com/api/users/guest/edit/" +
-                          this.props.user.user._id,
+                        "https://secret-cove-59835.herokuapp.com/v1/user/"+ uid,
                         {
                           firstName: this.state.firstName,
                           lastName: this.state.lastName,
@@ -1263,10 +1264,14 @@ class Cart extends Component {
                             ? "+1" + this.state.mobile
                             : this.state.mobile,
                           isGuestVerified: verifyCheck,
+                          isGuest: 1,
+                          password: "none",
+                          type: 'user'
                           // mobile: mob ?  (this.state.mobile) : ("+1" + this.state.mobile),
                         }
                       )
                       .then(async (resp) => {
+                        alert("resp")
                         var temp = this.props.user.user;
                         temp.firstName = this.state.firstName;
                         temp.lastName = this.state.lastName;
@@ -1603,20 +1608,34 @@ class Cart extends Component {
                       // }
 
                       // console.log("numv", numV);
-                      axios
+                      // axios
+                      //   .get(
+                      //     "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
+                      //       "+1" +
+                      //       this.state.mobile +
+                      //       "/" +
+                      //       num
+                      //   )
+                      //   .then((resp) => {
+                      //     // console.log(resp);
+
+                      //     this.refs.modal6.open();
+                      //   })
+                      //   .catch((err) => console.log("sdf", err));
+
+                        axios
                         .get(
-                          "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
-                            "+1" +
-                            this.state.mobile +
+                          "https://secret-cove-59835.herokuapp.com/v1/number/verification/" +
+                          this.state.mobile +
                             "/" +
                             num
                         )
-                        .then((resp) => {
-                          // console.log(resp);
-
-                          this.refs.modal6.open();
-                        })
-                        .catch((err) => console.log("sdf", err));
+                        .then((resp) =>
+                            this.refs.modal6.open()
+                        )
+                        .catch((err) =>
+                          console.log("num err", err)
+                        );
                     }}
                     style={[
                       !this.state.mobile
