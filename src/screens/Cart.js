@@ -136,11 +136,14 @@ class Cart extends Component {
   };
   render() {
     console.log("CART PROPS NEW RENDER", this.props.cart.length);
+    alert(JSON.stringify(this.props.cart))
+
     var myCart = this.props.cart.length;
     var subTotal = 0;
     for (var i = 0; i < this.props.cart.length; i++) {
       var temp = this.props.cart[i].product.productPrice;
       subTotal = subTotal + parseFloat(temp);
+      // alert(temp)
     }
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>

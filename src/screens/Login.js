@@ -481,6 +481,8 @@ class Login extends React.Component {
                             "https://secret-cove-59835.herokuapp.com/v1/login/guest",
                             {
                               guestID: getUniqueId(),
+                              isGuest: 1,
+                              isGuestVerified: 0
                             }
                           )
                           .then(async (resp) => {

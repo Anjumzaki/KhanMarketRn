@@ -115,6 +115,7 @@ class ProductDetails extends Component {
   }
   render() {
     var product = this.props.route.params.product;
+    alert(JSON.stringify(product))
     var noOfImg = product.noOfImage;
     noOfImg = parseInt(noOfImg);
     var temp = [];

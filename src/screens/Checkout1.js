@@ -536,7 +536,7 @@ class Cart extends Component {
   handleConfirm(isOut, sId, storeProducts, subTotal, codeId, todaysDate) {
     // var user = JSON.parse(this.props.user.user);
     var user = this.props.user.user;
-    var uid = user.userID ? user.userID : user.userId
+    var uid = user.userID ? user.userID : user.userId;
     // alert(user.userId)
     console.log("ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", isOut);
     var orderN =
@@ -639,7 +639,6 @@ class Cart extends Component {
                   }
                 )
                 .then((resp1) => {
-                  
                   this.props.navigation
                     .navigate("QrCode", {
                       orderId: orderN,
@@ -698,6 +697,7 @@ class Cart extends Component {
     for (var i = 0; i < this.props.cart.length; i++) {
       var temp = this.props.cart[i].price;
       subTotal = subTotal + parseFloat(temp);
+      // alert(temp)
     }
     const daysMap = [1, 2, 3, 4, 5];
     const timeMap = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -787,6 +787,10 @@ class Cart extends Component {
       "Nov",
       "Dec",
     ];
+    var uid = this.props.user.user.userID
+      ? this.props.user.user.userID
+      : this.props.user.user.userId;
+
     console.log("THIS.STATE", this.state);
     return (
       <>
@@ -1256,8 +1260,8 @@ class Cart extends Component {
                     console.log("SDDDDDDDDDDDDDDDDDDDDDDDDDDs33", verifyCheck);
                     axios
                       .put(
-                        "https://lit-peak-13067.herokuapp.com/api/users/guest/edit/" +
-                          this.props.user.user._id,
+                        "https://secret-cove-59835.herokuapp.com/v1/user/" +
+                          uid,
                         {
                           firstName: this.state.firstName,
                           lastName: this.state.lastName,
@@ -1266,10 +1270,14 @@ class Cart extends Component {
                             ? "+1" + this.state.mobile
                             : this.state.mobile,
                           isGuestVerified: verifyCheck,
+                          isGuest: 1,
+                          password: "none",
+                          type: "user",
                           // mobile: mob ?  (this.state.mobile) : ("+1" + this.state.mobile),
                         }
                       )
                       .then(async (resp) => {
+                        alert("resp");
                         var temp = this.props.user.user;
                         temp.firstName = this.state.firstName;
                         temp.lastName = this.state.lastName;
@@ -1606,20 +1614,30 @@ class Cart extends Component {
                       // }
 
                       // console.log("numv", numV);
+                      // axios
+                      //   .get(
+                      //     "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
+                      //       "+1" +
+                      //       this.state.mobile +
+                      //       "/" +
+                      //       num
+                      //   )
+                      //   .then((resp) => {
+                      //     // console.log(resp);
+
+                      //     this.refs.modal6.open();
+                      //   })
+                      //   .catch((err) => console.log("sdf", err));
+
                       axios
                         .get(
-                          "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
-                            "+1" +
+                          "https://secret-cove-59835.herokuapp.com/v1/number/verification/" +
                             this.state.mobile +
                             "/" +
                             num
                         )
-                        .then((resp) => {
-                          // console.log(resp);
-
-                          this.refs.modal6.open();
-                        })
-                        .catch((err) => console.log("sdf", err));
+                        .then((resp) => this.refs.modal6.open())
+                        .catch((err) => console.log("num err", err));
                     }}
                     style={[
                       !this.state.mobile

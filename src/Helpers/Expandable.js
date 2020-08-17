@@ -531,7 +531,7 @@ export default class App extends Component {
       subcategory: [
         {
           id: 1,
-          val: this.props.product.specialInstruction,
+          val: this.props.product.specialInstructions,
         },
       ],
     });
@@ -542,7 +542,7 @@ export default class App extends Component {
         {
           id: 7,
           val:
-            "Eiusmod qui esse ullamco laborum quis. Magna duis laborum est et exercitation minim esse ad esse excepteur. Cupidatat minim consequat anim non laboris veniam nisi ullamco esse. Ullamco aliqua aliqua tempor fugiat esse exercitation culpa.",
+          this.props.product.disclaimer,
         },
       ],
     });
