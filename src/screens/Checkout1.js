@@ -176,6 +176,8 @@ class Cart extends Component {
   componentWillUnmount() {
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
+
+    alert(JSON.stringify(this.props.user.user))
   }
 
   _keyboardDidShow() {
@@ -1258,6 +1260,7 @@ class Cart extends Component {
                       verifyCheck = true;
                     }
                     console.log("SDDDDDDDDDDDDDDDDDDDDDDDDDDs33", verifyCheck);
+                    // alert("in condition")
                     axios
                       .put(
                         "https://secret-cove-59835.herokuapp.com/v1/user/" +
@@ -1274,7 +1277,13 @@ class Cart extends Component {
                           password: "none",
                           type: "user",
                           // mobile: mob ?  (this.state.mobile) : ("+1" + this.state.mobile),
+                        },
+                        {
+                          headers: {
+                            authorization: this.props.user.token,
+                          },
                         }
+
                       )
                       .then(async (resp) => {
                         alert("resp");

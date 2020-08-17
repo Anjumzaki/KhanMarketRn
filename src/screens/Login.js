@@ -465,11 +465,11 @@ class Login extends React.Component {
                 onPress={() =>
                   axios
                     .post("https://secret-cove-59835.herokuapp.com/v1/guest", {
-                      firstName: "-",
-                      lastName: "-",
-                      email: "-",
-                      mobile: "-",
-                      password: "-",
+                      firstName: "",
+                      lastName: "",
+                      email: "",
+                      mobile: "",
+                      password: "",
                       isGuest: 1,
                       type: "user",
                       guestID: getUniqueId(),
