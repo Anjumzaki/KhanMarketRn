@@ -396,6 +396,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     marginBottom: 10,
+    backgroundColor:'white'
   },
   proCardsImage: {
     height: 155,
