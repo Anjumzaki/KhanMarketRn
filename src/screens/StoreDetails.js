@@ -31,7 +31,10 @@ class StoreDetails extends React.Component {
   }
   getMyData = async () => {
     const token = this.props.user.token;
-    // alert(this.props.route.params.storeId);
+    var uid = this.props.user.user.userId
+      ? this.props.user.user.userId
+      : this.props.user.user.userID;
+    // alert(uid);
     this.setState(
       {
         loading: true,
@@ -82,7 +85,7 @@ class StoreDetails extends React.Component {
         axios
           .get(
             "https://secret-cove-59835.herokuapp.com/v1/store/user/ref_prod_fav/" +
-              this.props.user.user.userID +
+              uid +
               "/" +
               this.props.route.params.storeId,
             {

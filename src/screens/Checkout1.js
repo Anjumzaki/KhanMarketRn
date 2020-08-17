@@ -536,6 +536,8 @@ class Cart extends Component {
   handleConfirm(isOut, sId, storeProducts, subTotal, codeId, todaysDate) {
     // var user = JSON.parse(this.props.user.user);
     var user = this.props.user.user;
+    var uid = user.userID ? user.userID : user.userId
+    // alert(user.userId)
     console.log("ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", isOut);
     var orderN =
       this.props.store.id + "-" + Math.floor(Math.random() * 899999 + 100000);
@@ -591,7 +593,7 @@ class Cart extends Component {
               // storeName: this.props.store.name,
               // storeAddress: this.props.store.address,
               // storePhone: this.props.store.phone,
-              customerName: user.userID,
+              customerName: uid,
               // name: this.state.firstName + " " + this.state.lastName,
               // firstName: this.state.firstName,
               // lastName: this.state.lastName,
@@ -619,7 +621,7 @@ class Cart extends Component {
             }
           )
           .then((resp) => {
-            // alert(JSON.stringify(resp.data));
+            alert(JSON.stringify(resp.data));
             for (var i = 0; i < this.props.cart.length; i++) {
               axios
                 .post(
@@ -637,6 +639,7 @@ class Cart extends Component {
                   }
                 )
                 .then((resp1) => {
+                  
                   this.props.navigation
                     .navigate("QrCode", {
                       orderId: orderN,
@@ -684,7 +687,7 @@ class Cart extends Component {
   //  ejIEyo
   render() {
     var codeId = this.makeid(3);
-    alert(this.props.user.user)
+    // alert(this.props.user.user)
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
     } else {
