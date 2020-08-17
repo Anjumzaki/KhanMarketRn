@@ -53,6 +53,7 @@ class Login extends React.Component {
     console.log(getUniqueId());
     var user = await AsyncStorage.getItem("user");
     const token = await AsyncStorage.getItem("token");
+    alert(user)
     if (user) {
       user = JSON.parse(user);
       var uID = user.userID ? user.userID : user.userId;

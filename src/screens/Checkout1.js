@@ -684,7 +684,7 @@ class Cart extends Component {
   //  ejIEyo
   render() {
     var codeId = this.makeid(3);
-
+    alert(this.props.user.user)
     if (this.props.cart.length > 0) {
       var sId = this.props.cart[0].product.storeId;
     } else {
