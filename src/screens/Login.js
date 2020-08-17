@@ -37,7 +37,6 @@ class Login extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       icEye: "visibility-off",
       isPassword: true,
@@ -475,8 +474,8 @@ class Login extends React.Component {
                       guestID: getUniqueId(),
                     })
                     .then((resp) => {
-                      alert(JSON.stringify(resp.data));
                       if (resp.data.id) {
+                        alert(resp.data.id)
                         axios
                           .post(
                             "https://secret-cove-59835.herokuapp.com/v1/login/guest",
@@ -531,6 +530,7 @@ class Login extends React.Component {
                                   })
                               );
                             } else {
+
                               this.props.userAsync({ user, token });
                               this.setState(
                                 {
@@ -567,7 +567,7 @@ class Login extends React.Component {
                       this.setState({
                         msg: JSON.stringify(err),
                         mainLoading: false,
-                      })
+                      },alert(JSON.stringify(err)))
                     )
                 }
                 style={{ alignItems: "center", marginTop: 20 }}
