@@ -37,7 +37,6 @@ class Login extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       icEye: "visibility-off",
       isPassword: true,
@@ -476,7 +475,6 @@ class Login extends React.Component {
                       guestID: getUniqueId(),
                     })
                     .then((resp) => {
-                      alert(JSON.stringify(resp.data));
                       if (resp.data.id) {
                         axios
                           .post(

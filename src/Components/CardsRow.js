@@ -8,7 +8,7 @@ import { bindActionCreators } from "redux";
 import { singleCatAsync, searchAsync } from "../store/actions";
 import { connect } from "react-redux";
 
-class Cart extends React.Component {
+class CardsRow extends React.Component {
   render() {
     return (
       <View>
@@ -63,6 +63,7 @@ class Cart extends React.Component {
                 navigation={this.props.navigation}
                 key={index}
                 product={prod}
+                favProducts={this.props.favProducts}
               />
             ))}
           </ScrollView>
@@ -95,4 +96,4 @@ const mapDispatchToProps = (dispatch, ownProps) =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+export default connect(mapStateToProps, mapDispatchToProps)(CardsRow);

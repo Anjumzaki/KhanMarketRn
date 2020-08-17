@@ -30,12 +30,12 @@ class StoreDetails extends React.Component {
   }
   getMyData = async () => {
     const token = this.props.user.token;
-
+    // alert(this.props.route.params.storeId);
     this.setState(
       {
         loading: true,
       },
-      () => {
+      async () => {
         axios
           .post(
             "https://secret-cove-59835.herokuapp.com/v1/item/store/" +
@@ -75,7 +75,23 @@ class StoreDetails extends React.Component {
           })
           .then((resp) => {
             // console.log("Cat", resp.data)
-            this.setState({ categories: resp.data.result, loading: false });
+            this.setState({ categories: resp.data.result, });
+          })
+          .catch((err) => console.log(err));
+        axios
+          .get(
+            "https://secret-cove-59835.herokuapp.com/v1/store/user/ref_prod_fav/" +
+              this.props.user.user.userID +
+              "/" +
+              this.props.route.params.storeId,
+            {
+              headers: {
+                authorization: token,
+              },
+            }
+          )
+          .then((resp) => {
+            this.setState({ favourites: resp.data.result, loading: false });
           })
           .catch((err) => console.log(err));
       }
@@ -142,6 +158,7 @@ class StoreDetails extends React.Component {
                     key={index}
                     products={cat.products}
                     name={this.capitalize(cat.name)}
+                    favProducts={this.state.favourites}
                   />
                 ))
               : fp.map((cat, index) =>
@@ -151,6 +168,7 @@ class StoreDetails extends React.Component {
                       key={index}
                       products={cat.products}
                       name={this.capitalize(cat.name)}
+                      favProducts={this.state.favourites}
                     />
                   ) : null
                 )}

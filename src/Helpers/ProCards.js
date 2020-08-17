@@ -28,9 +28,11 @@ class ProCards extends React.Component {
     image: "",
     qt: 1,
     favourites: [],
+    currentFavID: "",
   };
 
   componentDidMount() {
+    // alert(this.props.favProducts);
     const ref = firebase
       .storage()
       .ref("/product_images/" + this.props.product.productID + "_1.jpg");
@@ -41,17 +43,18 @@ class ProCards extends React.Component {
       })
       .catch((err) => console.log(err));
 
-    if (this.props.product.favourites === undefined) {
+    if (this.props.favProducts === undefined) {
       this.setState({ favourites: [] });
     } else {
-      for (var i = 0; i < this.props.product.favourites.length; i++) {
-        if (
-          this.props.product.favourites[i].userId === this.props.user.user._id
-        ) {
-          this.setState({ heart: true });
+      for (var i = 0; i < this.props.favProducts.length; i++) {
+        if (this.props.favProducts[i].itemID === this.props.product.itemID) {
+          this.setState({
+            heart: true,
+            currentFavID: this.props.favProducts[i].favID,
+          });
         }
       }
-      this.setState({ favourites: this.props.product.favourites });
+      this.setState({ favourites: this.props.favProducts });
     }
 
     var pCart = this.props.cart;
@@ -123,56 +126,46 @@ class ProCards extends React.Component {
               onPress={async () => {
                 if (this.state.heart === false) {
                   await this.state.favourites.push({
-                    userId: this.props.user.user._id,
+                    userId: this.props.prodcuts,
                   });
 
                   axios
                     .post(
-                      "https://lit-peak-13067.herokuapp.com/add/favourite",
+                      "https://secret-cove-59835.herokuapp.com/v1/ref_prod_fav",
                       {
-                        userId: this.props.user.user._id,
-                        product: this.props.product,
-                        storeName: this.props.storeHeader.name,
+                        userID: this.props.user.user.userID,
+                        itemID: this.props.product.itemID,
+                        // storeName: this.props.storeHeader.name,
+                      },
+                      {
+                        headers: {
+                          authorization: this.props.user.token,
+                        },
                       }
                     )
-                    .then((resp) => console.log(resp))
+                    .then((resp) => this.setState({ heart: true }))
                     .catch((err) => console.log(err));
                 } else {
                   var that = this;
                   this.state.favourites = this.state.favourites.filter(
                     function (el) {
-                      return el.userId !== that.props.user.user._id;
+                      return el.itemID !== that.props.product.itemID;
                       // console.log("asd",el.userId,that.props.user.user._id)
                     }
                   );
-
                   axios
                     .delete(
-                      "https://lit-peak-13067.herokuapp.com/delete/favourite/" +
-                        this.props.user.user._id +
-                        "/" +
-                        this.props.product._id
+                      "https://secret-cove-59835.herokuapp.com/v1/ref_prod_fav/" +
+                        this.state.currentFavID,
+                      {
+                        headers: {
+                          authorization: this.props.user.token,
+                        },
+                      }
                     )
-                    .then((resp) => console.log(resp))
+                    .then((resp) => this.setState({ heart: false }))
                     .catch((err) => err);
                 }
-
-                axios
-                  .put(
-                    "https://lit-peak-13067.herokuapp.com/edit/favourites/" +
-                      this.props.product._id,
-                    {
-                      favourites: this.state.favourites,
-                    }
-                  )
-                  .then((resp) => {
-                    this.setState((prevState) => {
-                      return {
-                        heart: !prevState.heart,
-                      };
-                    });
-                  })
-                  .catch((err) => console.log(err));
               }}
               style={{
                 alignSelf: "flex-end",

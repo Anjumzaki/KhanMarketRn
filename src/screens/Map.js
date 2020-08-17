@@ -305,7 +305,7 @@ class Map extends Component {
     );
   };
   componentWillMount() {
-    Geocoder.init("AIzaSyCSNUzCDjt1SEhbn6EvYtyRL4TK-0m_BN8");
+    Geocoder.init("AIzaSyA_jzgsNBD9FklOoEVmmdAH9nufXVgqQIE");
     this.getMyLocations();
   }
 
@@ -320,7 +320,7 @@ class Map extends Component {
         this.state.location.coords.latitude +
         "," +
         this.state.location.coords.longitude +
-        "&key=AIzaSyCSNUzCDjt1SEhbn6EvYtyRL4TK-0m_BN8"
+        "&key=AIzaSyA_jzgsNBD9FklOoEVmmdAH9nufXVgqQIE"
     )
       .then((response) => response.json())
       .then((responseJson) => {
@@ -338,7 +338,7 @@ class Map extends Component {
         "," +
         this.state.region.longitude +
         "&key=" +
-        "AIzaSyCSNUzCDjt1SEhbn6EvYtyRL4TK-0m_BN8"
+        "AIzaSyA_jzgsNBD9FklOoEVmmdAH9nufXVgqQIE"
     )
       .then((response) => response.json())
       .then((responseJson) => {
@@ -450,7 +450,7 @@ class Map extends Component {
                   .catch((error) => console.warn(error));
               }}
               query={{
-                key: "AIzaSyCSNUzCDjt1SEhbn6EvYtyRL4TK-0m_BN8",
+                key: "AIzaSyA_jzgsNBD9FklOoEVmmdAH9nufXVgqQIE",
                 language: "en",
               }}
             />
