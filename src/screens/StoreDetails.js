@@ -8,6 +8,7 @@ import {
   AsyncStorage,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import ProcardsSmall from "../Helpers/ProcardsSmall";
 
 import Slider from "../Components/Slider";
 import CardsRow from "../Components/CardsRow";
@@ -75,7 +76,7 @@ class StoreDetails extends React.Component {
           })
           .then((resp) => {
             // console.log("Cat", resp.data)
-            this.setState({ categories: resp.data.result, });
+            this.setState({ categories: resp.data.result });
           })
           .catch((err) => console.log(err));
         axios
@@ -118,9 +119,12 @@ class StoreDetails extends React.Component {
   render() {
     var searchedProducts = [];
     var key1 = this.props.searchInput;
+    // alert(key1);
     if (this.props.searchInput) {
       let totalProducts = this.state.products;
+      // alert(JSON.stringify(totalProducts))
       searchedProducts = totalProducts.filter(function (product) {
+        // alert(JSON.stringify(product.name))
         return product.productName
           ? product.productName.toLowerCase().includes(key1.toLowerCase())
           : null;
@@ -151,8 +155,38 @@ class StoreDetails extends React.Component {
                 navigation={this.props.navigation}
               />
             ) : null}
-            {this.props.searchInput
-              ? searchedProducts.map((cat, index) => (
+            {this.props.searchInput ? (
+              <>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    marginTop: 20,
+                    // justifyContent: "space-between",s
+                    flexWrap: "wrap",
+                    // flexWrap: "row-wrap",
+                  }}
+                >
+                  {searchedProducts.map((cat, index) => (
+                    <ProcardsSmall
+                      navigation={this.props.navigation}
+                      key={index}
+                      product={cat}
+                      favProducts={this.props.favProducts}
+                    />
+
+                    // <CardsRow
+                    //   navigation={this.props.navigation}
+                    //   key={index}
+                    //   products={cat.products}
+                    //   name={this.capitalize(cat.productName)}
+                    //   favProducts={this.state.favourites}
+                    // />
+                  ))}
+                </View>
+              </>
+            ) : (
+              fp.map((cat, index) =>
+                cat.products.length > 0 ? (
                   <CardsRow
                     navigation={this.props.navigation}
                     key={index}
@@ -160,18 +194,9 @@ class StoreDetails extends React.Component {
                     name={this.capitalize(cat.name)}
                     favProducts={this.state.favourites}
                   />
-                ))
-              : fp.map((cat, index) =>
-                  cat.products.length > 0 ? (
-                    <CardsRow
-                      navigation={this.props.navigation}
-                      key={index}
-                      products={cat.products}
-                      name={this.capitalize(cat.name)}
-                      favProducts={this.state.favourites}
-                    />
-                  ) : null
-                )}
+                ) : null
+              )
+            )}
             <View style={{ paddingTop: 10 }}></View>
           </ScrollView>
         )}
