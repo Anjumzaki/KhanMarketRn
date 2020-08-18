@@ -177,7 +177,7 @@ class Cart extends Component {
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
 
-    alert(JSON.stringify(this.props.user.user))
+    // alert(JSON.stringify(this.props.user.user))
   }
 
   _keyboardDidShow() {
@@ -1286,7 +1286,7 @@ class Cart extends Component {
 
                       )
                       .then(async (resp) => {
-                        alert("resp");
+                        // alert("resp");
                         var temp = this.props.user.user;
                         temp.firstName = this.state.firstName;
                         temp.lastName = this.state.lastName;
