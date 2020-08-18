@@ -42,6 +42,7 @@ class MyOrders extends Component {
   }
   getData = async () => {
     var user = this.props.user.user;
+    var uid = user.userID ? user.userID : user.userId;
     this.setState(
       {
         loading: true,
@@ -50,7 +51,7 @@ class MyOrders extends Component {
         axios
           .get(
             "https://secret-cove-59835.herokuapp.com/v1/transaction/state/user/userID/" +
-              user.userID,
+              uid,
             {
               headers: {
                 authorization: this.props.user.token,
