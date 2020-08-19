@@ -65,6 +65,7 @@ class OrderCards extends React.Component {
             onPress={() =>
               this.props.navigation.navigate("OrderDetails", {
                 order: this.props.order,
+                token: this.props.token,
               })
             }
             style={{
@@ -109,7 +110,7 @@ class OrderCards extends React.Component {
               <LatoText
                 fontName="Lato-Regular"
                 fonSiz={15}
-                col="#2AA034"
+                col={this.props.order.statuseCode == 4 ? "red" : "#2AA034"}
                 text={this.props.order.statusName}
               />
             </View>

@@ -705,9 +705,7 @@ class OrderDetails extends Component {
             />
           </View>
           <View style={lines.simple} />
-          {this.props.route.params.order.isRejected ||
-          this.state.bd ||
-          this.props.route.params.order.isPicked ? null : (
+          {this.props.route.params.order.statusCode == 0 && (
             <TouchableOpacity
               style={{
                 flexDirection: "row",
@@ -718,7 +716,7 @@ class OrderDetails extends Component {
                 justifyContent: "center",
               }}
               onPress={() => {
-                if (this.props.route.params.order.isAccepted === false) {
+                if (this.props.route.params.order.statusCode == 0) {
                   Alert.alert(
                     "Alert!",
                     "Are you sure you want to cancel the order?",
@@ -733,13 +731,31 @@ class OrderDetails extends Component {
                         onPress: () => {
                           axios
                             .put(
-                              "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
-                                this.props.route.params.order._id
+                              "https://secret-cove-59835.herokuapp.com/v1/transaction/status/" +
+                                this.props.route.params.order.orderID +
+                                "/4",
+                              { a: "a" },
+                              {
+                                headers: {
+                                  authorization: this.props.route.params.token,
+                                },
+                              }
                             )
                             .then((resp) => {
-                              this.setState({ bd: true });
                               alert("Order Cancelled Successfully.");
-                              this.props.navigation.navigate("MyOrders");
+                              this.props.getData();
+                            })
+                            .catch((err) => console.log(err));
+                          axios
+                            .put(
+                              "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
+                                this.props.route.params.order.orderID
+                            )
+                            .then((resp) => {
+                              // this.setState({bd: true})
+                              alert("Order Cancelled Successfully.");
+                              this.props.getData();
+                              // this.props.navigation.navigate("Home");
                             })
                             .catch((err) => console.log(err));
                         },
@@ -760,9 +776,7 @@ class OrderDetails extends Component {
               />
             </TouchableOpacity>
           )}
-          {this.props.route.params.order.isRejected ||
-          this.state.bd ||
-          this.props.route.params.order.isPicked ? null : (
+          {this.props.route.params.order.statusCode > 0 && (
             <View
               style={{
                 flexDirection: "row",
@@ -780,6 +794,7 @@ class OrderDetails extends Component {
               />
             </View>
           )}
+          {/* <Text>{this.props.route.params.order.statusCode}</Text> */}
         </ScrollView>
       </View>
     );

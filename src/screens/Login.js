@@ -499,7 +499,7 @@ class Login extends React.Component {
                               JSON.stringify(user)
                             );
                             await AsyncStorage.setItem("token", token);
-                            alert(user.shippingAddress);
+                            // alert(user.shippingAddress);
                             if (
                               user.shippingAddress &&
                               user.shippingAddress != "undefined"

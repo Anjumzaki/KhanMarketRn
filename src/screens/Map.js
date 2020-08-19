@@ -191,7 +191,7 @@ class Map extends Component {
               }
             )
             .then(async (resp1) => {
-              //  alert(JSON.stringify(resp1.data))
+              // alert(JSON.stringify(resp1.data));
               this.handleNavi(myUser);
               await AsyncStorage.removeItem("user");
               await AsyncStorage.setItem(
@@ -212,7 +212,7 @@ class Map extends Component {
               );
             })
             .catch((err) => {
-              alert("asdas");
+              alert(JSON.stringify(err));
             });
         } else {
           alert("something went wrong");

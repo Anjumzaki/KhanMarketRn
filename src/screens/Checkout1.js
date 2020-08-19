@@ -623,7 +623,7 @@ class Cart extends Component {
             }
           )
           .then((resp) => {
-            alert(JSON.stringify(resp.data));
+            // alert(JSON.stringify(resp.data));
             for (var i = 0; i < this.props.cart.length; i++) {
               axios
                 .post(
