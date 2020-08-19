@@ -324,9 +324,9 @@ class OrderDetails extends Component {
                       fonSiz={17}
                       col="#2E2E2E"
                       text={
-                        this.props.route.params.order.someoneElseFirstName +
+                        this.props.route.params.order.someOneElseFirstName +
                         " " +
-                        this.props.route.params.order.someoneElseLastName
+                        this.props.route.params.order.someOneElseLastName
                       }
                     ></LatoText>
                   </View>
@@ -341,7 +341,7 @@ class OrderDetails extends Component {
                       fontName="Lato-Regular"
                       fonSiz={17}
                       col="#2E2E2E"
-                      text={this.props.route.params.order.someoneElseEmail}
+                      text={this.props.route.params.order.someOneElseEmail}
                     ></LatoText>
                   </View>
                 </View>
