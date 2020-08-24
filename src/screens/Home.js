@@ -182,7 +182,7 @@ class Home extends React.Component {
                         item.lng
                       ).toFixed(2) + " mi"
                     }
-                    address={item.address1 + " " + item.state + " " + item.city}
+                    address={item.address1 + " " + item.city + " " + item.state}
                     id={item.storeID}
                     phone={item.zipCode}
                     sId={item.storeID}
