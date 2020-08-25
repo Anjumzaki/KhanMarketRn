@@ -189,7 +189,15 @@ export default class StoreInfo extends Component {
               fontName="Lato-Regular"
               fonSiz={20}
               col="#5C5C5C"
-              text={this.state.store.address1 + " " + this.state.store.city}
+              text={
+                this.state.store.address1 +
+                " " +
+                this.state.store.city +
+                " " +
+                this.state.store.state +
+                " " +
+                this.state.store.zipCode
+              }
             />
           </View>
           <View
