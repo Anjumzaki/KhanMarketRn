@@ -49,6 +49,10 @@ class Favourites extends Component {
   }
   getData = () => {
     // alert(JSON.stringify(this.props.user.token));
+    var uid = this.props.user.user.userId
+      ? this.props.user.user.userId
+      : this.props.user.user.userID;
+    // alert(this.props.user.user.userId)
     var that = this;
     this.setState(
       {
@@ -59,7 +63,7 @@ class Favourites extends Component {
         axios
           .get(
             "https://secret-cove-59835.herokuapp.com/v1/user/ref_prod_fav/" +
-              this.props.user.user.userID,
+              uid,
             {
               headers: {
                 authorization: this.props.user.token,

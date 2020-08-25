@@ -76,11 +76,11 @@ class CustomDrawerContent extends Component {
   }
   render() {
     var isUser = true;
-    console.log(this.props.user);
+    // alert(this.props.user.user.isGuest);
     // alert( JSON.stringify(this.props.user) )
-    // if(this.props.user.user.isGuest){
-    //   isUser = false
-    // }
+    if (this.props.user.user.isGuest == 1) {
+      isUser = false;
+    }
     return (
       <DrawerContentScrollView
         style={{ backgroundColor: "#5C5C5C" }}

@@ -56,7 +56,11 @@ class Settings extends React.Component {
   componentDidMount() {
     const ref = firebase
       .storage()
-      .ref("profile_images/" + this.props.user.user._id + ".jpg");
+      .ref(
+        "profile_images/" + this.props.user.user.userID
+          ? this.props.user.user.userID
+          : this.props.user.user.userId + ".jpg"
+      );
     ref
       .getDownloadURL()
       .then((url) => {

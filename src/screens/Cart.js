@@ -131,12 +131,12 @@ class Cart extends Component {
       {
         imagesLoading: !this.state.imagesLoading,
       },
-      alert(this.imagesLoading)
+      // alert(this.imagesLoading)
     );
   };
   render() {
     console.log("CART PROPS NEW RENDER", this.props.cart.length);
-    alert(JSON.stringify(this.props.cart))
+    // alert(JSON.stringify(this.props.cart))
 
     var myCart = this.props.cart.length;
     var subTotal = 0;

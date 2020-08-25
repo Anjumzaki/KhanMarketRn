@@ -77,7 +77,7 @@ class Map extends Component {
     } finally {
       //code which will run after the try and catch blocks whether an error happens or not.
       const newUser = await AsyncStorage.getItem(user);
-      alert("newUser");
+      // alert("newUser");
     }
   };
   handleMapApp = async () => {
@@ -207,7 +207,8 @@ class Map extends Component {
               // this.props.navigation.navigate("App");
             })
             .catch((err) => {
-              alert("asdas");
+              console.log(err)
+              // alert("asdas");
             });
         } else {
           alert("something went wrong");

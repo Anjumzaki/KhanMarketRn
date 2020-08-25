@@ -133,7 +133,9 @@ class ProCards extends React.Component {
                     .post(
                       "https://secret-cove-59835.herokuapp.com/v1/ref_prod_fav",
                       {
-                        userID: this.props.user.user.userID,
+                        userID: this.props.user.user.userID
+                          ? this.props.user.user.userID
+                          : this.props.user.user.userId,
                         itemID: this.props.product.itemID,
                         // storeName: this.props.storeHeader.name,
                       },

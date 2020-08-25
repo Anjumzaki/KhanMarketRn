@@ -102,20 +102,15 @@ class SingleCategHeader extends React.Component {
           >
             <MaterialIcons name="arrow-back" color="white" size={25} />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              this.props.searchAsync("");
-              this.props.navigation.navigate("StoreInfo");
-            }}
-            style={{ padding: 20 }}
-          >
+          <View style={{ padding: 20 }}>
             <LatoText
               fontName="Lato-Regular"
               fonSiz={20}
               col="white"
               text={this.props.name}
             />
-          </TouchableOpacity>
+          </View>
+
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate("Cart")}
             style={{ padding: 20 }}
@@ -168,7 +163,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingLeft: 5,
     fontSize: 17,
-    color:'#000000'
+    color: "#000000",
   },
   wrapperText: {
     flexDirection: "row",
@@ -180,6 +175,8 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     marginLeft: 10,
     opacity: 0.9,
+    height: 40,
+
     alignItems: "center",
   },
 });

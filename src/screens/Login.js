@@ -53,87 +53,91 @@ class Login extends React.Component {
     console.log(getUniqueId());
     var user = await AsyncStorage.getItem("user");
     const token = await AsyncStorage.getItem("token");
-    alert(user)
-    user = JSON.parse(user);
-    if (user && user.userID || user.userId) {
-      var uID = user.userID ? user.userID : user.userId;
-      axios
-        .get(
-          "https://secret-cove-59835.herokuapp.com/v1/user/" + uID,
+    // alert(user);
+    if (user) {
+      user = JSON.parse(user);
+      if ((user && user.userID) || user.userId) {
+        var uID = user.userID ? user.userID : user.userId;
+        axios
+          .get(
+            "https://secret-cove-59835.herokuapp.com/v1/user/" + uID,
 
-          {
-            headers: {
-              authorization: token,
-            },
-          }
-        )
-        .then(async (resp) => {
-          if (resp.data.success == "true") {
-            this.setState({ errMessage: false });
-            const user = resp.data.result[0];
-            await AsyncStorage.removeItem("user");
-            await AsyncStorage.setItem("user", JSON.stringify(user));
-            if (user.shippingAddress) {
-              console.log(user.address2);
-              await this.props.userAsync({ user, token });
-              await this.props.locationAsync({
-                location: user.address1 + " " + user.address2,
-                type: "user",
-                address1: user.address1,
-                address2: user.address2,
-                city: user,
-                country: user.country,
-                state: user.state,
-                zipCode: user.zipCode,
-                lat: user.lat,
-                lng: user.lng,
-              });
-              this.setState(
-                {
-                  icEye: "visibility-off",
-                  isPassword: true,
-                  fontLoaded: false,
-                  email: "",
-                  password: "",
-                  msg: "",
-                  loading: false,
-                  mainLoading: false,
-                },
-                () =>
-                  this.props.navigation.navigate("App", {
-                    token: token,
-                    user: user,
-                  })
-              );
-            } else {
-              this.props.userAsync({ user, token });
-              this.setState(
-                {
-                  icEye: "visibility-off",
-                  isPassword: true,
-                  fontLoaded: false,
-                  email: "",
-                  password: "",
-                  msg: "",
-                  loading: false,
-                  mainLoading: false,
-                },
-                () =>
-                  this.props.navigation.navigate("Map", {
-                    token: token,
-                    user: user,
-                  })
-              );
+            {
+              headers: {
+                authorization: token,
+              },
             }
-          } else {
-            this.setState({
-              errMessage: "Fuck OFF",
-              loading: false,
-              mainLoading: false,
-            });
-          }
-          // alert(JSON.stringify(resp));
-        });
+          )
+          .then(async (resp) => {
+            if (resp.data.success == "true") {
+              this.setState({ errMessage: false });
+              const user = resp.data.result[0];
+              await AsyncStorage.removeItem("user");
+              await AsyncStorage.setItem("user", JSON.stringify(user));
+              if (user.shippingAddress) {
+                console.log(user.address2);
+                await this.props.userAsync({ user, token });
+                await this.props.locationAsync({
+                  location: user.address1 + " " + user.address2,
+                  type: "user",
+                  address1: user.address1,
+                  address2: user.address2,
+                  city: user,
+                  country: user.country,
+                  state: user.state,
+                  zipCode: user.zipCode,
+                  lat: user.lat,
+                  lng: user.lng,
+                });
+                this.setState(
+                  {
+                    icEye: "visibility-off",
+                    isPassword: true,
+                    fontLoaded: false,
+                    email: "",
+                    password: "",
+                    msg: "",
+                    loading: false,
+                    mainLoading: false,
+                  },
+                  () =>
+                    this.props.navigation.navigate("App", {
+                      token: token,
+                      user: user,
+                    })
+                );
+              } else {
+                this.props.userAsync({ user, token });
+                this.setState(
+                  {
+                    icEye: "visibility-off",
+                    isPassword: true,
+                    fontLoaded: false,
+                    email: "",
+                    password: "",
+                    msg: "",
+                    loading: false,
+                    mainLoading: false,
+                  },
+                  () =>
+                    this.props.navigation.navigate("Map", {
+                      token: token,
+                      user: user,
+                    })
+                );
+              }
+            } else {
+              this.setState({
+                errMessage: "Fuck OFF",
+                loading: false,
+                mainLoading: false,
+              });
+            }
+            // alert(JSON.stringify(resp));
+          });
+      } else {
+        this.setState({ mainLoading: false });
+      }
     } else {
       this.setState({ mainLoading: false });
     }
@@ -483,7 +487,7 @@ class Login extends React.Component {
                             {
                               guestID: getUniqueId(),
                               isGuest: 1,
-                              isGuestVerified: 0
+                              isGuestVerified: 0,
                             }
                           )
                           .then(async (resp) => {
@@ -496,7 +500,7 @@ class Login extends React.Component {
                               JSON.stringify(user)
                             );
                             await AsyncStorage.setItem("token", token);
-                            alert(user.shippingAddress);
+                            // alert(user.shippingAddress);
                             if (
                               user.shippingAddress &&
                               user.shippingAddress != "undefined"

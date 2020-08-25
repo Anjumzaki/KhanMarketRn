@@ -57,7 +57,7 @@ class SingleStoreHeader extends React.Component {
     return (
       <View
         style={{
-          height: 145 + getStatusBarHeight(),
+          height: 125 + getStatusBarHeight(),
           width: Dimensions.get("window").width,
           justifyContent: "flex-end",
           padding: 5,
@@ -75,7 +75,7 @@ class SingleStoreHeader extends React.Component {
       >
         <Image
           style={{
-            height: 145 + getStatusBarHeight(),
+            height: 125 + getStatusBarHeight(),
             width: Dimensions.get("window").width,
             position: "absolute",
             top: 0,
@@ -168,18 +168,17 @@ class SingleStoreHeader extends React.Component {
             />
           </TouchableOpacity>
         </View>
-        <View style={{ flexDirection: "row" }}>
-          <View style={styles.wrapperText}>
-            <EvilIcons name="search" size={26} color="#89898c" />
-            <TextInput
-              style={styles.textI}
-              placeholder="Search..."
-              onChangeText={(inputText) => {
-                this.setState({ inputText });
-                this.props.searchAsync(inputText);
-              }}
-            />
-          </View>
+
+        <View style={styles.wrapperText}>
+          <EvilIcons name="search" size={26} color="#89898c" />
+          <TextInput
+            style={styles.textI}
+            placeholder="Search..."
+            onChangeText={(inputText) => {
+              this.setState({ inputText });
+              this.props.searchAsync(inputText);
+            }}
+          />
         </View>
       </View>
     );
@@ -202,6 +201,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     opacity: 0.9,
     alignItems: "center",
+    height: 40,
   },
 });
 

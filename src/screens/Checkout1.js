@@ -177,7 +177,7 @@ class Cart extends Component {
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
 
-    alert(JSON.stringify(this.props.user.user))
+    // alert(JSON.stringify(this.props.user.user))
   }
 
   _keyboardDidShow() {
@@ -623,7 +623,7 @@ class Cart extends Component {
             }
           )
           .then((resp) => {
-            alert(JSON.stringify(resp.data));
+            // alert(JSON.stringify(resp.data));
             for (var i = 0; i < this.props.cart.length; i++) {
               axios
                 .post(
@@ -647,7 +647,7 @@ class Cart extends Component {
                       codeId: orderN,
                       // order: resp.data.order1,
                     })
-                    .catch((err) => alert(JSON.stringify(err)));
+                    .catch((err) => console.log(JSON.stringify(err)));
                 });
             }
             // axios
@@ -666,7 +666,7 @@ class Cart extends Component {
             //   })
             //   .catch((err) => console.log("e1", err));
           })
-          .catch((err) => alert(JSON.stringify(err)));
+          .catch((err) => console.log(JSON.stringify(err)));
       } else {
         alert("Invalid Email of Someone Else Picking");
       }
@@ -1286,7 +1286,7 @@ class Cart extends Component {
 
                       )
                       .then(async (resp) => {
-                        alert("resp");
+                        // alert("resp");
                         var temp = this.props.user.user;
                         temp.firstName = this.state.firstName;
                         temp.lastName = this.state.lastName;
