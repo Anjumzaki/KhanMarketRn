@@ -45,6 +45,7 @@ class Login extends React.Component {
       password: "",
       msg: "",
       mainLoading: true,
+      forgotMsg: ""
     };
   }
   async componentDidMount() {
