@@ -647,7 +647,7 @@ class Cart extends Component {
                       codeId: orderN,
                       // order: resp.data.order1,
                     })
-                    .catch((err) => alert(JSON.stringify(err)));
+                    .catch((err) => console.log(JSON.stringify(err)));
                 });
             }
             // axios
@@ -666,7 +666,7 @@ class Cart extends Component {
             //   })
             //   .catch((err) => console.log("e1", err));
           })
-          .catch((err) => alert(JSON.stringify(err)));
+          .catch((err) => console.log(JSON.stringify(err)));
       } else {
         alert("Invalid Email of Someone Else Picking");
       }
