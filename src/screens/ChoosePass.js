@@ -209,8 +209,9 @@ class SignUp1 extends React.Component {
                     });
                     this.state.user.password = password;
                   }}
-                  password={this.state.password300}
+                  password={this.state.password}
                   meterType="text"
+                  autoCapitalize="none"
                 />
 
                 {/* <TextInput

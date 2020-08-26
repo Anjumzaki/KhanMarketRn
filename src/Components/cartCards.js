@@ -135,7 +135,7 @@ class CartCards extends PureComponent {
                 this.setState({ qt: this.state.qt + 1 });
                 var temp = this.state.cart[this.props.index];
                 temp.price = (
-                  (this.props.product.product.priceproductPrice-
+                  (this.props.product.product.productPrice-
                     (this.props.product.product.productPrice *
                       this.props.product.product.productDiscount) /
                       100) *

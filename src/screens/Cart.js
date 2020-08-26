@@ -130,7 +130,7 @@ class Cart extends Component {
     this.setState(
       {
         imagesLoading: !this.state.imagesLoading,
-      },
+      }
       // alert(this.imagesLoading)
     );
   };
@@ -142,7 +142,7 @@ class Cart extends Component {
     var subTotal = 0;
 
     for (var i = 0; i < this.props.cart.length; i++) {
-      var temp = this.props.cart[i].product.productPrice;
+      var temp =parseFloat(this.props.cart[i].price)
       subTotal = subTotal + parseFloat(temp);
     }
 
