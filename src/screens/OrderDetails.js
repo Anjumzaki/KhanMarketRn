@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Linking,
   Alert,
+  AsyncStorage,
 } from "react-native";
 import Carousel from "react-native-looped-carousel";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -45,22 +46,40 @@ class OrderDetails extends Component {
     };
   }
 
-  componentDidMount() {
-    this._unsubscribe = this.props.navigation.addListener("focus", () => {
-      const ref = firebase
-        .storage()
-        .ref("/store_logos/" + this.props.route.params.order.storeID + ".jpg");
-      ref
-        .getDownloadURL()
-        .then((url) => {
-          this.setState({ image: url });
-        })
-        .catch((err) => console.log(err));
-    });
+  async componentDidMount() {
+    // this.props.route.params.storeId
+    // /v1/storeTimings/:id
+    axios
+      .post(
+        "https://secret-cove-59835.herokuapp.com/v1/store/" +
+          this.props.route.params.order.storeID,
+        { a: "sd" },
+        {
+          headers: {
+            authorization: this.props.route.params.token,
+          },
+        }
+      )
+      .then((resp) =>
+        this.setState(
+          {
+            store: resp.data.result[0],
+          },
+          console.log(resp.data.result[0])
+        )
+      )
+      .catch((err) => console.log(err));
+
+    const ref = firebase
+      .storage()
+      .ref("/store_logos/" + this.props.route.params.order.storeID + ".jpg");
+    ref
+      .getDownloadURL()
+      .then((url) => {
+        this.setState({ image: url });
+      })
+      .catch((err) => console.log(err));
     // alert(JSON.stringify(this.props.route.params.order));
-  }
-  componentWillUnmount() {
-    this._unsubscribe();
   }
 
   _onLayoutDidChange = (e) => {
@@ -96,13 +115,38 @@ class OrderDetails extends Component {
       "" + month_names[parseInt(date[1] - 1)] + " " + date[0] + ", " + date[2]
     );
   }
+  // var token = await AsyncStorage.getItem("token");
+  // // this.props.route.params.storeId
+  // // /v1/storeTimings/:id
+  // axios
+  //   .post(
+  //     "https://secret-cove-59835.herokuapp.com/v1/store/" +
+  //       this.props.route.params.storeId,
+  //     { a: "sd" },
+  //     {
+  //       headers: {
+  //         authorization: token,
+  //       },
+  //     }
+  //   )
+  //   .then((resp) =>
+  //     this.setState({
+  //       store: resp.data.result[0],
+  //     })
+  //   )
+  //   .catch((err) => console.log(err));
+
   makeCall = () => {
     let phoneNumber = "";
 
     if (Platform.OS === "android") {
-      phoneNumber = `tel:${this.props.route.params.order.storePhone}`;
+      phoneNumber = `tel:${
+        this.state.store ? this.state.store.storeContact : ""
+      }`;
     } else {
-      phoneNumber = `telprompt:${this.props.route.params.order.storePhone}`;
+      phoneNumber = `telprompt:${
+        this.state.store ? this.state.store.storeContact : ""
+      }`;
     }
 
     Linking.openURL(phoneNumber);
@@ -136,18 +180,9 @@ class OrderDetails extends Component {
       var temp = this.props.cart[i].price;
       subTotal = subTotal + parseFloat(temp);
     }
-    // console.log("this.props.route.params.order", this.props.route.params.order);
-    // console.log(this.props.route.params.order.isRejected ||
-    //   this.state.bd ||
-    //   this.props.route.params.order.isPicked)
-    //   console.log(
-    //     this.props.route.params.order.isRejected ,
-    //                 this.state.bd ,
-    //                 this.props.route.params.order.isPicked
-    //   )
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
-        <ScrollView style={{ backgroundColor: "white" }}>
+        <ScrollView style={{ backgroundColor: "white", paddingBottom: 20 }}>
           <View
             style={{
               flexDirection: "row",
@@ -234,12 +269,7 @@ class OrderDetails extends Component {
               justifyContent: "space-between",
             }}
           >
-            <LatoText
-              fontName="Lato-Regular"
-              fonSiz={17}
-              col="#2E2E2E"
-              text={this.props.route.params.order.storeAddress}
-            />
+            <LatoText fontName="Lato-Regular" fonSiz={17} col="#2E2E2E" />
           </View>
           {this.state.showNum && (
             <View
@@ -262,7 +292,7 @@ class OrderDetails extends Component {
                   fontName="Lato-Regular"
                   fonSiz={17}
                   col="#2E2E2E"
-                  text={this.props.route.params.order.storePhone}
+                  text={this.state.store ? this.state.store.storeContact : ""}
                 />
               </View>
 
@@ -743,19 +773,8 @@ class OrderDetails extends Component {
                             )
                             .then((resp) => {
                               alert("Order Cancelled Successfully.");
+                              this.props.navigation.goBack();
                               this.props.getData();
-                            })
-                            .catch((err) => console.log(err));
-                          axios
-                            .put(
-                              "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
-                                this.props.route.params.order.orderID
-                            )
-                            .then((resp) => {
-                              // this.setState({bd: true})
-                              alert("Order Cancelled Successfully.");
-                              this.props.getData();
-                              // this.props.navigation.navigate("Home");
                             })
                             .catch((err) => console.log(err));
                         },
@@ -776,7 +795,7 @@ class OrderDetails extends Component {
               />
             </TouchableOpacity>
           )}
-          {this.props.route.params.order.statusCode > 0 && (
+          {this.props.route.params.order.statusCode == 0 && (
             <View
               style={{
                 flexDirection: "row",

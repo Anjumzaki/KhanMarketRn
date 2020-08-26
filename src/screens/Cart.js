@@ -130,20 +130,19 @@ class Cart extends Component {
     this.setState(
       {
         imagesLoading: !this.state.imagesLoading,
-      },
+      }
       // alert(this.imagesLoading)
     );
   };
   render() {
-    console.log("CART PROPS NEW RENDER", this.props.cart.length);
+    console.log("CART PROPS NEW RENDER", this.props.cart);
     // alert(JSON.stringify(this.props.cart))
 
     var myCart = this.props.cart.length;
     var subTotal = 0;
     for (var i = 0; i < this.props.cart.length; i++) {
-      var temp = this.props.cart[i].product.productPrice;
+      var temp =parseFloat(this.props.cart[i].price)
       subTotal = subTotal + parseFloat(temp);
-      // alert(temp)
     }
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
