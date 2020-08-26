@@ -59,6 +59,7 @@ class Map extends Component {
       console.log(e);
     }
   }
+
   handleNavi = async (myUser) => {
     try {
       //code which may potentially have an error.
@@ -292,10 +293,9 @@ class Map extends Component {
           region: region,
           loading: false,
           error: null,
-        });
+        }); 
       },
       (error) => {
-        // alert(error);
         this.setState({
           error: error.message,
           loading: false,

@@ -752,10 +752,8 @@ class OrderDetails extends Component {
                                 this.props.route.params.order.orderID
                             )
                             .then((resp) => {
-                              // this.setState({bd: true})
                               alert("Order Cancelled Successfully.");
                               this.props.getData();
-                              // this.props.navigation.navigate("Home");
                             })
                             .catch((err) => console.log(err));
                         },
