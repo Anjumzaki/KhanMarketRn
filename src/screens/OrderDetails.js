@@ -735,7 +735,7 @@ class OrderDetails extends Component {
             />
           </View>
           <View style={lines.simple} />
-          {this.props.route.params.order.statusCode > 2 && (
+          {this.props.route.params.order.statusCode < 2 && (
             <TouchableOpacity
               style={{
                 flexDirection: "row",
@@ -795,7 +795,7 @@ class OrderDetails extends Component {
               />
             </TouchableOpacity>
           )}
-          {this.props.route.params.order.statusCode > 2 && (
+          {this.props.route.params.order.statusCode < 2 && (
             <View
               style={{
                 flexDirection: "row",
