@@ -645,6 +645,9 @@ class Cart extends Component {
                     .navigate("QrCode", {
                       orderId: orderN,
                       codeId: orderN,
+                      token: this.props.user.token,
+                    orderID: resp.data.id,
+
                       // order: resp.data.order1,
                     })
                     .catch((err) => console.log(JSON.stringify(err)));
@@ -1283,7 +1286,6 @@ class Cart extends Component {
                             authorization: this.props.user.token,
                           },
                         }
-
                       )
                       .then(async (resp) => {
                         // alert("resp");

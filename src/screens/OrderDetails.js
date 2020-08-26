@@ -735,84 +735,80 @@ class OrderDetails extends Component {
             />
           </View>
           <View style={lines.simple} />
-          {this.props.route.params.order.statusCode == 0 && (
-            <TouchableOpacity
-              style={{
-                flexDirection: "row",
-                paddingHorizontal: 20,
-                paddingBottom: 20,
-                paddingTop: 10,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onPress={() => {
-                if (this.props.route.params.order.statusCode == 0) {
-                  Alert.alert(
-                    "Alert!",
-                    "Are you sure you want to cancel the order?",
-                    [
-                      {
-                        text: "No",
-                        onPress: () => console.log("Cancel Pressed"),
-                        style: "cancel",
+          <TouchableOpacity
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              paddingBottom: 20,
+              paddingTop: 10,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onPress={() => {
+              if (this.props.route.params.order.statusCode == 0) {
+                Alert.alert(
+                  "Alert!",
+                  "Are you sure you want to cancel the order?",
+                  [
+                    {
+                      text: "No",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    {
+                      text: "Yes",
+                      onPress: () => {
+                        axios
+                          .put(
+                            "https://secret-cove-59835.herokuapp.com/v1/transaction/status/" +
+                              this.props.route.params.order.orderID +
+                              "/4",
+                            { a: "a" },
+                            {
+                              headers: {
+                                authorization: this.props.route.params.token,
+                              },
+                            }
+                          )
+                          .then((resp) => {
+                            alert("Order Cancelled Successfully.");
+                            this.props.navigation.goBack();
+                            this.props.getData();
+                          })
+                          .catch((err) => console.log(err));
                       },
-                      {
-                        text: "Yes",
-                        onPress: () => {
-                          axios
-                            .put(
-                              "https://secret-cove-59835.herokuapp.com/v1/transaction/status/" +
-                                this.props.route.params.order.orderID +
-                                "/4",
-                              { a: "a" },
-                              {
-                                headers: {
-                                  authorization: this.props.route.params.token,
-                                },
-                              }
-                            )
-                            .then((resp) => {
-                              alert("Order Cancelled Successfully.");
-                              this.props.navigation.goBack();
-                              this.props.getData();
-                            })
-                            .catch((err) => console.log(err));
-                        },
-                      },
-                    ],
-                    { cancelable: true }
-                  );
-                } else {
-                  alert("Order cannot be cancelled after preperation state.");
-                }
-              }}
-            >
-              <LatoText
-                fontName="Lato-Bold"
-                fonSiz={17}
-                col={"#2E2E2E"}
-                text="Cancel Order"
-              />
-            </TouchableOpacity>
-          )}
-          {this.props.route.params.order.statusCode == 0 && (
-            <View
-              style={{
-                flexDirection: "row",
-                paddingHorizontal: 20,
-                paddingBottom: 20,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={15}
-                col="#2E2E2E"
-                text="(Only possible before the order is 'being prepared')"
-              />
-            </View>
-          )}
+                    },
+                  ],
+                  { cancelable: true }
+                );
+              } else {
+                alert("Order cannot be cancelled after preperation state.");
+              }
+            }}
+          >
+            <LatoText
+              fontName="Lato-Bold"
+              fonSiz={17}
+              col={"#2E2E2E"}
+              text="Cancel Order"
+            />
+          </TouchableOpacity>
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              paddingBottom: 20,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <LatoText
+              fontName="Lato-Regular"
+              fonSiz={15}
+              col="#2E2E2E"
+              text="(Only possible before the order is 'being prepared')"
+            />
+          </View>
           {/* <Text>{this.props.route.params.order.statusCode}</Text> */}
         </ScrollView>
       </View>

@@ -128,6 +128,7 @@ class QrCode extends Component {
           </View>
 
           <InQrCode orderId={this.props.route.params.orderId} />
+          {/* <Text>{this.props.route.params.orderID}</Text> */}
           <TouchableOpacity
             style={{
               flexDirection: "row",
@@ -139,56 +140,42 @@ class QrCode extends Component {
             }}
             // disabled={this.props.route.params.order.isRejected || this.props.route.params.order.isPicked}
             onPress={() => {
-              if (this.props.route.params.order.statusCode == 0) {
-                Alert.alert(
-                  "Alert!",
-                  "Are you sure you want to cancel the order?",
-                  [
-                    {
-                      text: "No",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel",
+              Alert.alert(
+                "Alert!",
+                "Are you sure you want to cancel the order?",
+                [
+                  {
+                    text: "No",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  {
+                    text: "Yes",
+                    onPress: () => {
+                      axios
+                        .put(
+                          "https://secret-cove-59835.herokuapp.com/v1/transaction/status/" +
+                            this.props.route.params.orderID +
+                            "/4",
+                          { a: "a" },
+                          {
+                            headers: {
+                              authorization: this.props.route.params.token,
+                            },
+                          }
+                        )
+                        .then((resp) => {
+                          alert("Order Cancelled Successfully.");
+                          // this.props.getData();
+                          // alert(JSON.stringify(resp.data));
+                          this.props.navigation.navigate("MyOrders");
+                        })
+                        .catch((err) => alert(JSON.stringify(err)));
                     },
-                    {
-                      text: "Yes",
-                      onPress: () => {
-                        axios
-                          .put(
-                            "https://secret-cove-59835.herokuapp.com/v1/transaction/status/" +
-                              this.props.route.params.order.orderID +
-                              "/4",
-                            { a: "a" },
-                            {
-                              headers: {
-                                authorization: this.props.route.params.token,
-                              },
-                            }
-                          )
-                          .then((resp) => {
-                            alert("Order Cancelled Successfully.");
-                            this.props.getData();
-                          })
-                          .catch((err) => console.log(err));
-                        axios
-                          .put(
-                            "https://lit-peak-13067.herokuapp.com/edit/order/reject/" +
-                              this.props.route.params.order.orderID
-                          )
-                          .then((resp) => {
-                            // this.setState({bd: true})
-                            alert("Order Cancelled Successfully.");
-                            this.props.getData();
-                            // this.props.navigation.navigate("Home");
-                          })
-                          .catch((err) => console.log(err));
-                      },
-                    },
-                  ],
-                  { cancelable: true }
-                );
-              } else {
-                alert("Order cannot be cancelled after preperation state.");
-              }
+                  },
+                ],
+                { cancelable: true }
+              );
             }}
           >
             <LatoText

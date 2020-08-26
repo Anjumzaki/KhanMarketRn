@@ -165,11 +165,13 @@ class MyOrders extends Component {
               </Collapsible>
             </View>
           ) : this.state.loading ? (
-            <ActivityIndicator
-              style={{ marginTop: 100 }}
-              size="large"
-              color="black"
-            />
+            <View>
+              <ActivityIndicator
+                style={{ marginTop: 100 }}
+                size="large"
+                color="black"
+              />
+            </View>
           ) : (
             <Text style={{ textAlign: "center", marginTop: 100 }}>
               No recent orders
