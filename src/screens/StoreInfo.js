@@ -104,9 +104,9 @@ export default class StoreInfo extends Component {
     let phoneNumber = "";
 
     if (Platform.OS === "android") {
-      phoneNumber = `tel:${this.state.store.phoneNumber}`;
+      phoneNumber = `tel:${this.state.store.storeContact}`;
     } else {
-      phoneNumber = `telprompt:${this.state.store.phoneNumber}`;
+      phoneNumber = `telprompt:${this.state.store.storeContact}`;
     }
 
     Linking.openURL(phoneNumber);
