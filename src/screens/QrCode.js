@@ -168,7 +168,7 @@ class QrCode extends Component {
                           alert("Order Cancelled Successfully.");
                           // this.props.getData();
                           // alert(JSON.stringify(resp.data));
-                          this.props.navigation.navigate("MyOrders");
+                          this.props.navigation.navigate("Home");
                         })
                         .catch((err) => alert(JSON.stringify(err)));
                     },
