@@ -73,7 +73,7 @@ class FavCards extends React.Component {
   handleChange(num) {
     var preNum = this.state.qt;
     preNum = num + preNum;
-    if (preNum >= 1) {
+    if (preNum >= 0) {
       this.setState({ qt: preNum });
     }
 

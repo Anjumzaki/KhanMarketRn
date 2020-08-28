@@ -120,6 +120,7 @@ class StoreDetails extends React.Component {
     this.props.searchAsync("");
   }
   render() {
+    
     var searchedProducts = [];
     var key1 = this.props.searchInput;
     // alert(key1);

@@ -7,8 +7,8 @@ import {
   View,
   ScrollView,
   ImageBackground,
-  Dimensions,
   Alert,
+  Dimensions,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import LatoText from "./LatoText";
@@ -29,9 +29,11 @@ class ProCards extends React.Component {
     image: "",
     qt: 1,
     favourites: [],
+    currentFavID: "",
   };
 
   componentDidMount() {
+    // alert(this.props.favProducts);
     const ref = firebase
       .storage()
       .ref("/product_images/" + this.props.product.productID + "_1.jpg");
@@ -42,24 +44,25 @@ class ProCards extends React.Component {
       })
       .catch((err) => console.log(err));
 
-    if (this.props.product.favourites === undefined) {
+    if (this.props.favProducts === undefined) {
       this.setState({ favourites: [] });
     } else {
-      for (var i = 0; i < this.props.product.favourites.length; i++) {
-        if (
-          this.props.product.favourites[i].userId === this.props.user.user._id
-        ) {
-          this.setState({ heart: true });
+      for (var i = 0; i < this.props.favProducts.length; i++) {
+        if (this.props.favProducts[i].itemID === this.props.product.itemID) {
+          this.setState({
+            heart: true,
+            currentFavID: this.props.favProducts[i].favID,
+          });
         }
       }
-      this.setState({ favourites: this.props.product.favourites });
+      this.setState({ favourites: this.props.favProducts });
     }
 
     var pCart = this.props.cart;
     var inCart = false;
     var inCartIndex = "";
     for (var i = 0; i < pCart.length; i++) {
-      if (pCart[i].product._id === this.props.product._id) {
+      if (pCart[i].product.itemID === this.props.product.itemID) {
         inCart = true;
         inCartIndex = i;
         break;
@@ -80,7 +83,7 @@ class ProCards extends React.Component {
   handleChange(num) {
     var preNum = this.state.qt;
     preNum = num + preNum;
-    if (preNum >= 1) {
+    if (preNum >= 0) {
       this.setState({ qt: preNum });
     }
 
@@ -94,7 +97,6 @@ class ProCards extends React.Component {
 
     this.props.cartAsync(pCart);
   }
-
   render() {
     var cSize = 0;
     for (var i = 0; i < this.props.cart.length; i++) {
@@ -104,72 +106,69 @@ class ProCards extends React.Component {
     this.props.cartSizeAsync(cSize);
     return (
       <View style={styles.procards}>
-        <TouchableOpacity
-          onPress={() =>
-            this.props.navigation.navigate("ProductDetails", {
-              product: this.props.product,
-            })
-          }
+        <ImageBackground
+          style={styles.proCardsImage}
+          source={{ uri: this.state.image }}
         >
-          <ImageBackground
-            style={styles.proCardsImage}
-            source={{ uri: this.state.image }}
-          >
+          <View style={{ flex: 1 }}>
+            <TouchableOpacity
+              style={{ height: "100%" }}
+              onPress={() =>
+                this.props.navigation.navigate("ProductDetails", {
+                  product: this.props.product,
+                })
+              }
+            >
+              <Text> </Text>
+            </TouchableOpacity>
+          </View>
+          <View>
             <TouchableOpacity
               onPress={async () => {
                 if (this.state.heart === false) {
                   await this.state.favourites.push({
-                    userId: this.props.user.user._id,
+                    userId: this.props.prodcuts,
                   });
 
-                  // console.log("sdsdsdsdsdds", this.props.user.user._id,this.props.product, this.props.store.name)
                   axios
                     .post(
-                      "https://lit-peak-13067.herokuapp.com/add/favourite",
+                      "https://secret-cove-59835.herokuapp.com/v1/ref_prod_fav",
                       {
-                        userId: this.props.user.user._id,
-                        product: this.props.product,
-                        storeName: this.props.storeHeader.name,
+                        userID: this.props.user.user.userID
+                          ? this.props.user.user.userID
+                          : this.props.user.user.userId,
+                        itemID: this.props.product.itemID,
+                        // storeName: this.props.storeHeader.name,
+                      },
+                      {
+                        headers: {
+                          authorization: this.props.user.token,
+                        },
                       }
                     )
-                    .then((resp) => console.log("fav addedd", resp))
-                    .catch((err) => console.log("sds", err));
+                    .then((resp) => this.setState({ heart: true }))
+                    .catch((err) => console.log(err));
                 } else {
                   var that = this;
                   this.state.favourites = this.state.favourites.filter(
                     function (el) {
-                      return el.userId !== that.props.user.user._id;
+                      return el.itemID !== that.props.product.itemID;
                       // console.log("asd",el.userId,that.props.user.user._id)
                     }
                   );
-
                   axios
                     .delete(
-                      "https://lit-peak-13067.herokuapp.com/delete/favourite/" +
-                        this.props.user.user._id +
-                        "/" +
-                        this.props.product._id
+                      "https://secret-cove-59835.herokuapp.com/v1/ref_prod_fav/" +
+                        this.state.currentFavID,
+                      {
+                        headers: {
+                          authorization: this.props.user.token,
+                        },
+                      }
                     )
-                    .then((resp) => console.log(resp))
+                    .then((resp) => this.setState({ heart: false }))
                     .catch((err) => err);
                 }
-
-                axios
-                  .put(
-                    "https://lit-peak-13067.herokuapp.com/edit/favourites/" +
-                      this.props.product._id,
-                    {
-                      favourites: this.state.favourites,
-                    }
-                  )
-                  .then((resp) => {
-                    this.setState((prevState) => {
-                      return {
-                        heart: !prevState.heart,
-                      };
-                    });
-                  })
-                  .catch((err) => console.log(err));
               }}
               style={{
                 alignSelf: "flex-end",
@@ -185,44 +184,73 @@ class ProCards extends React.Component {
                 <AntDesign color="#B50000" size={18} name="hearto" />
               )}
             </TouchableOpacity>
-          </ImageBackground>
-        </TouchableOpacity>
+            <View style={{ flex: 1 }}>
+              <TouchableOpacity
+                style={{ height: "100%" }}
+                onPress={() =>
+                  this.props.navigation.navigate("ProductDetails", {
+                    product: this.props.product,
+                  })
+                }
+              >
+                <Text> </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ImageBackground>
+
         <View style={styles.underCard}>
-          <LatoText
-            fontName="Lato-Regular"
-            fonSiz={15}
-            col="#5C5C5C"
-            text={this.props.product.productName}
-          ></LatoText>
-          <View style={{ flex: 1, flexDirection: "row", paddingTop: 5 }}>
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate("ProductDetails", {
+                product: this.props.product,
+              })
+            }
+          >
             <LatoText
-              fontName="Lato-Regular"
-              fonSiz={13}
-              col="#2E2E2E"
-              text={
-                "$" +
-                (
-                  this.props.product.productPrice -
-                  (this.props.product.productPrice *
-                    this.props.product.productDiscount) /
-                    100
-                ).toFixed(2) +
-                " / lb"
-              }
+              fontName="Lato-Bold"
+              fonSiz={15}
+              col="#5C5C5C"
+              text={this.props.product.productName.substring(0, 15)}
             ></LatoText>
-            <Text> </Text>
+          </TouchableOpacity>
+
+          <View style={{ flex: 1, flexDirection: "row", paddingTop: 5 }}>
+            <View style={{ marginRight: 5 }}>
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={17}
+                col="#2E2E2E"
+                text={
+                  "$" +
+                  (
+                    this.props.product.productPrice -
+                    (this.props.product.productPrice *
+                      this.props.product.productDiscount) /
+                      100
+                  ).toFixed(2) +
+                  " / lb"
+                }
+              ></LatoText>
+            </View>
             {this.props.product.productPrice -
               (this.props.product.productPrice *
                 this.props.product.productDiscount) /
                 100 ==
             parseFloat(this.props.product.productPrice) ? null : (
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={13}
-                col="#89898C"
-                lineThrough="line-through"
-                text={"$" + this.props.product.productPrice + " / lb"}
-              ></LatoText>
+              <View style={{ marginLeft: 5 }}>
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={15}
+                  lineThrough="line-through"
+                  col="#89898C"
+                  text={
+                    "$" +
+                    parseFloat(this.props.product.productPrice).toFixed(2) +
+                    " / lb"
+                  }
+                ></LatoText>
+              </View>
             )}
           </View>
           {this.props.product.productPrice -
@@ -241,6 +269,7 @@ class ProCards extends React.Component {
               ></LatoText>
             </View>
           )}
+
           <View style={{ marginTop: 20 }}>
             {this.state.cart ? (
               <View
@@ -272,13 +301,6 @@ class ProCards extends React.Component {
             ) : (
               <TouchableOpacity
                 onPress={() => {
-                  // var pCart=this.props.cart;
-                  // pCart.push({
-                  //   product: this.props.product,
-                  //   quantity: this.state.qt
-                  // })
-                  // this.props.cartAsync(pCart)
-                  // this.setState({cart: true})
                   if (this.props.cart.length === 0) {
                     var pCart = this.props.cart;
                     pCart.push({
@@ -292,13 +314,43 @@ class ProCards extends React.Component {
                       phone: this.props.storeHeader.phone,
                       sId: this.props.storeHeader.storeId,
                       oId: this.props.storeHeader.oId,
+                      storeTax: this.props.storeHeader.storeTax,
                     });
-                    this.props.favStoreAsync(this.props.product.storeId);
+                    this.props.favStoreAsync(this.props.product.storeID);
                     this.props.cartAsync(pCart);
                     this.setState({ cart: true });
                   } else {
-                    if (this.props.store.id === this.props.product.storeId) {
+                    if (this.props.store.id === this.props.product.storeID) {
                       var pCart = this.props.cart;
+                      // var inCart = false
+                      // var inCartIndex = ""
+                      // for(var i=0; i<pCart.length; i++){
+                      //   if(pCart[i].product._id === this.props.product._id){
+                      //     inCart =true
+                      //     inCartIndex=i
+                      //     break
+                      //   }
+                      // }
+
+                      // console.log("inCarttttttttttt",inCart, inCartIndex)
+                      // if(inCart){
+                      //   pCart[inCartIndex ].quantity = pCart[inCartIndex ].quantity+1
+                      //   // pCart.push({
+                      //   //   product: this.props.product,
+                      //   //   quantity: this.state.qt,
+                      //   // });
+                      //   this.props.storeAsync({
+                      //     name: this.props.storeHeader.name,
+                      //     address: this.props.storeHeader.address,
+                      //     id: this.props.storeHeader.id,
+                      //     phone: this.props.storeHeader.phone,
+                      //     sId: this.props.storeHeader.storeId,
+                      //     oId: this.props.storeHeader.oId,
+                      //   });
+                      //   this.props.favStoreAsync(this.props.product.storeId);
+                      //   this.props.cartAsync(pCart);
+                      //   this.setState({ cart: true });
+                      // }else{
                       pCart.push({
                         product: this.props.product,
                         quantity: this.state.qt,
@@ -310,10 +362,12 @@ class ProCards extends React.Component {
                         phone: this.props.storeHeader.phone,
                         sId: this.props.storeHeader.storeId,
                         oId: this.props.storeHeader.oId,
+                        storeTax: this.props.storeHeader.storeTax,
                       });
                       this.props.favStoreAsync(this.props.product.storeId);
                       this.props.cartAsync(pCart);
                       this.setState({ cart: true });
+                      // }
                     } else {
                       this.setState(
                         { temp: this.props.product.storeId },
@@ -342,6 +396,7 @@ class ProCards extends React.Component {
                                     phone: this.props.storeHeader.phone,
                                     sId: this.props.storeHeader.storeId,
                                     oId: this.props.storeHeader.oId,
+                                    storeTax: this.props.storeHeader.storeTax,
                                   });
                                   this.props.favStoreAsync(
                                     this.props.product.storeId
@@ -374,7 +429,6 @@ class ProCards extends React.Component {
     );
   }
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -387,6 +441,7 @@ const styles = StyleSheet.create({
     height: 303,
     marginHorizontal: 10,
     borderRadius: 10,
+    marginBottom: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -395,14 +450,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
     elevation: 5,
-    marginBottom: 10,
-    backgroundColor:'white'
   },
   proCardsImage: {
     height: 155,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
     overflow: "hidden",
+    flexDirection: "row",
   },
   underCard: {
     backgroundColor: "white",

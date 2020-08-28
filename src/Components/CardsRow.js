@@ -28,6 +28,7 @@ class CardsRow extends React.Component {
               this.props.navigation.navigate("SingleCateg", {
                 products: this.props.products,
                 name: this.props.name,
+                favProducts: this.props.favProducts,
               });
             }}
           >

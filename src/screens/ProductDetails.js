@@ -45,29 +45,43 @@ class ProductDetails extends Component {
   }
 
   componentDidMount() {
-    if (this.props.route.params.product.favourites === undefined) {
+    // alert(this.props.route.params.favProducts);
+    const ref = firebase
+      .storage()
+      .ref(
+        "/product_images/" +
+          this.props.route.params.product.productID +
+          "_1.jpg"
+      );
+    ref
+      .getDownloadURL()
+      .then((url) => {
+        this.setState({ image: url });
+      })
+      .catch((err) => console.log(err));
+
+    if (this.props.route.params.favProducts === undefined) {
       this.setState({ favourites: [] });
     } else {
-      for (
-        var i = 0;
-        i < this.props.route.params.product.favourites.length;
-        i++
-      ) {
+      for (var i = 0; i < this.props.route.params.favProducts.length; i++) {
         if (
-          this.props.route.params.product.favourites[i].userId ===
-          this.props.user.user._id
+          this.props.route.params.favProducts[i].itemID ===
+          this.props.route.params.product.itemID
         ) {
-          this.setState({ heart: true });
+          this.setState({
+            heart: true,
+            currentFavID: this.props.route.params.favProducts[i].favID,
+          });
         }
       }
-      this.setState({ favourites: this.props.route.params.product.favourites });
+      this.setState({ favourites: this.props.route.params.favProducts });
     }
 
     var pCart = this.props.cart;
     var inCart = false;
     var inCartIndex = "";
     for (var i = 0; i < pCart.length; i++) {
-      if (pCart[i].product._id === this.props.route.params.product._id) {
+      if (pCart[i].product.itemID === this.props.route.params.product.itemID) {
         inCart = true;
         inCartIndex = i;
         break;
@@ -81,11 +95,7 @@ class ProductDetails extends Component {
         inCartIndex,
         pCart[inCartIndex].quantity
       );
-      this.setState({
-        cart: true,
-        qt: pCart[inCartIndex].quantity,
-        buttonDisable: true,
-      });
+      this.setState({ cart: true, qt: pCart[inCartIndex].quantity });
     }
   }
 
@@ -97,7 +107,7 @@ class ProductDetails extends Component {
   handleChange(num) {
     var preNum = this.state.qt;
     preNum = num + preNum;
-    if (preNum >= 1) {
+    if (preNum >= 0) {
       this.setState({ qt: preNum });
     }
 
@@ -366,17 +376,10 @@ class ProductDetails extends Component {
           <TouchableOpacity
             disabled={this.state.buttonDisable}
             onPress={() => {
-              // var pCart=this.props.cart;
-              // pCart.push({
-              //   product: product,
-              //   quantity: this.state.qt
-              // })
-              // this.props.cartAsync(pCart)
-
               if (this.props.cart.length === 0) {
                 var pCart = this.props.cart;
                 pCart.push({
-                  product: product,
+                  product: this.props.route.params.product,
                   quantity: this.state.qt,
                 });
                 this.props.storeAsync({
@@ -386,15 +389,50 @@ class ProductDetails extends Component {
                   phone: this.props.storeHeader.phone,
                   sId: this.props.storeHeader.storeId,
                   oId: this.props.storeHeader.oId,
+                  storeTax: this.props.storeHeader.storeTax,
                 });
-                this.props.favStoreAsync(product.storeId);
+                this.props.favStoreAsync(
+                  this.props.route.params.product.storeID
+                );
                 this.props.cartAsync(pCart);
-                this.setState({ cart: true, buttonDisable: true });
+                this.setState({ cart: true });
               } else {
-                if (this.props.store.id === product.storeId) {
+                if (
+                  this.props.store.id ===
+                  this.props.route.params.product.storeID
+                ) {
                   var pCart = this.props.cart;
+                  // var inCart = false
+                  // var inCartIndex = ""
+                  // for(var i=0; i<pCart.length; i++){
+                  //   if(pCart[i].product._id === this.props.route.params.product._id){
+                  //     inCart =true
+                  //     inCartIndex=i
+                  //     break
+                  //   }
+                  // }
+
+                  // console.log("inCarttttttttttt",inCart, inCartIndex)
+                  // if(inCart){
+                  //   pCart[inCartIndex ].quantity = pCart[inCartIndex ].quantity+1
+                  //   // pCart.push({
+                  //   //   product: this.props.route.params.product,
+                  //   //   quantity: this.state.qt,
+                  //   // });
+                  //   this.props.storeAsync({
+                  //     name: this.props.storeHeader.name,
+                  //     address: this.props.storeHeader.address,
+                  //     id: this.props.storeHeader.id,
+                  //     phone: this.props.storeHeader.phone,
+                  //     sId: this.props.storeHeader.storeId,
+                  //     oId: this.props.storeHeader.oId,
+                  //   });
+                  //   this.props.favStoreAsync(this.props.route.params.product.storeId);
+                  //   this.props.cartAsync(pCart);
+                  //   this.setState({ cart: true });
+                  // }else{
                   pCart.push({
-                    product: product,
+                    product: this.props.route.params.product,
                     quantity: this.state.qt,
                   });
                   this.props.storeAsync({
@@ -404,48 +442,56 @@ class ProductDetails extends Component {
                     phone: this.props.storeHeader.phone,
                     sId: this.props.storeHeader.storeId,
                     oId: this.props.storeHeader.oId,
+                    storeTax: this.props.storeHeader.storeTax,
                   });
-                  this.props.favStoreAsync(product.storeId);
+                  this.props.favStoreAsync(
+                    this.props.route.params.product.storeId
+                  );
                   this.props.cartAsync(pCart);
-                  this.setState({ cart: true, buttonDisable: true }, () => {
-                    Toast.show("Product added to cart");
-                  });
+                  this.setState({ cart: true });
+                  // }
                 } else {
-                  this.setState({ temp: product.storeId }, () => {
-                    Alert.alert(
-                      "Alert!",
-                      "If you add a product from a new store, you will lose your cart from the previous store",
-                      [
-                        {
-                          text: "Cancel",
-                          onPress: () => console.log("Cancel Pressed"),
-                          style: "cancel",
-                        },
-                        {
-                          text: "OK",
-                          onPress: () => {
-                            var pCart = [];
-                            pCart.push({
-                              product: product,
-                              quantity: this.state.qt,
-                            });
-                            this.props.storeAsync({
-                              name: this.props.storeHeader.name,
-                              address: this.props.storeHeader.address,
-                              id: this.props.storeHeader.id,
-                              phone: this.props.storeHeader.phone,
-                              sId: this.props.storeHeader.storeId,
-                              oId: this.props.storeHeader.oId,
-                            });
-                            this.props.favStoreAsync(product.storeId);
-                            this.props.cartAsync(pCart);
-                            this.setState({ cart: true, buttonDisable: true });
+                  this.setState(
+                    { temp: this.props.route.params.product.storeId },
+                    () => {
+                      Alert.alert(
+                        "Alert!",
+                        "If you add a product from a new store, you will lose your cart from the previous store",
+                        [
+                          {
+                            text: "Cancel",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel",
                           },
-                        },
-                      ],
-                      { cancelable: true }
-                    );
-                  });
+                          {
+                            text: "OK",
+                            onPress: () => {
+                              var pCart = [];
+                              pCart.push({
+                                product: this.props.route.params.product,
+                                quantity: this.state.qt,
+                              });
+                              this.props.storeAsync({
+                                name: this.props.storeHeader.name,
+                                address: this.props.storeHeader.address,
+                                id: this.props.storeHeader.id,
+                                phone: this.props.storeHeader.phone,
+                                sId: this.props.storeHeader.storeId,
+                                oId: this.props.storeHeader.oId,
+                                storeTax: this.props.storeHeader.storeTax,
+                              });
+                              this.props.favStoreAsync(
+                                this.props.route.params.product.storeId
+                              );
+                              this.props.cartAsync(pCart);
+                              this.setState({ cart: true });
+                            },
+                          },
+                        ],
+                        { cancelable: true }
+                      );
+                    }
+                  );
                 }
               }
             }}

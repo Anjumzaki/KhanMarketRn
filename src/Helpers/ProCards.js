@@ -82,7 +82,7 @@ class ProCards extends React.Component {
   handleChange(num) {
     var preNum = this.state.qt;
     preNum = num + preNum;
-    if (preNum >= 1) {
+    if (preNum >= 0) {
       this.setState({ qt: preNum });
     }
 
@@ -115,6 +115,7 @@ class ProCards extends React.Component {
               onPress={() =>
                 this.props.navigation.navigate("ProductDetails", {
                   product: this.props.product,
+                  favProducts: this.props.favProducts,
                 })
               }
             >

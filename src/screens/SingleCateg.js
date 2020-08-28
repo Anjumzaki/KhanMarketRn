@@ -35,6 +35,8 @@ class SingleCateg extends Component {
     };
   }
   componentDidMount() {
+    // alert(JSON.stringify(this.props.route.params.favProducts))
+
     this.props.searchAsync("");
     this.props.search1Async("");
     this.props.filterAsync("");
@@ -82,6 +84,7 @@ class SingleCateg extends Component {
                       key={1}
                       product={item}
                       filter1={this.props.searchInput}
+                      favProducts={this.props.route.params.favProducts}
                     />
                   ))
                 : searchedProducts
@@ -93,6 +96,7 @@ class SingleCateg extends Component {
                         key={1}
                         product={item}
                         filter1={this.props.filtered}
+                        favProducts={this.props.route.params.favProducts}
                       />
                     ))}
             </View>
@@ -112,6 +116,7 @@ class SingleCateg extends Component {
                       key={1}
                       product={item}
                       filter1={this.props.searchInput}
+                      favProducts={this.props.route.params.favProducts}
                     />
                   ))
                 : this.props.route.params.products
@@ -123,6 +128,7 @@ class SingleCateg extends Component {
                         key={1}
                         product={item}
                         filter1={this.props.filtered}
+                        favProducts={this.props.route.params.favProducts}
                       />
                     ))}
             </View>
