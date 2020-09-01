@@ -112,7 +112,6 @@ export default class StoreInfo extends Component {
     Linking.openURL(phoneNumber);
   };
   render() {
-    alert(JSON.stringify(this.state.store));
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>

@@ -90,167 +90,169 @@ class MyOrders extends Component {
     }
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
-        <ScrollView style={{ backgroundColor: "white" }}>
-          {active.length > 0 && !this.state.loading ? (
-            <View
-              style={{
-                marginVertical: 10,
-                flexDirection: "row",
-                width: "100%",
-                flexWrap: "wrap",
-              }}
-            >
+        {!this.state.loading ? (
+          <ScrollView style={{ backgroundColor: "white" }}>
+            {active.length > 0 ? (
               <View
                 style={{
-                  paddingLeft: 5,
-                  paddingTop: 20,
-                  paddingBottom: 10,
+                  marginVertical: 10,
                   flexDirection: "row",
-                  justifyContent: "space-between",
                   width: "100%",
+                  flexWrap: "wrap",
                 }}
               >
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={20}
-                  col="#5C5C5C"
-                  text={"Active (" + active.length + ")"}
-                />
-                {this.state.activeCollapsed ? (
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.setState({
-                        activeCollapsed: false,
-                      })
-                    }
-                  >
-                    <Ionicons
-                      style={{ paddingHorizontal: 20 }}
-                      name="ios-arrow-down"
-                      size={24}
-                      color="black"
-                    />
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.setState({
-                        activeCollapsed: true,
-                      })
-                    }
-                  >
-                    <Ionicons
-                      style={{ paddingHorizontal: 20 }}
-                      name="ios-arrow-up"
-                      size={24}
-                      color="black"
-                    />
-                  </TouchableOpacity>
-                )}
+                <View
+                  style={{
+                    paddingLeft: 5,
+                    paddingTop: 20,
+                    paddingBottom: 10,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={20}
+                    col="#5C5C5C"
+                    text={"Active (" + active.length + ")"}
+                  />
+                  {this.state.activeCollapsed ? (
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.setState({
+                          activeCollapsed: false,
+                        })
+                      }
+                    >
+                      <Ionicons
+                        style={{ paddingHorizontal: 20 }}
+                        name="ios-arrow-down"
+                        size={24}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.setState({
+                          activeCollapsed: true,
+                        })
+                      }
+                    >
+                      <Ionicons
+                        style={{ paddingHorizontal: 20 }}
+                        name="ios-arrow-up"
+                        size={24}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
+                <Collapsible collapsed={this.state.activeCollapsed}>
+                  {active
+                    .slice(0)
+                    .reverse()
+                    .map((item, ind) => (
+                      <OrderCards
+                        navigation={this.props.navigation}
+                        key={ind}
+                        order={item}
+                        type="active"
+                        getData={this.getData}
+                        token={this.props.user.token}
+                      />
+                    ))}
+                </Collapsible>
               </View>
-              <Collapsible collapsed={this.state.activeCollapsed}>
-                {active
-                  .slice(0)
-                  .reverse()
-                  .map((item, ind) => (
-                    <OrderCards
-                      navigation={this.props.navigation}
-                      key={ind}
-                      order={item}
-                      type="active"
-                      getData={this.getData}
-                      token={this.props.user.token}
-                    />
-                  ))}
-              </Collapsible>
-            </View>
-          ) : this.state.loading ? (
-            <View>
-              <ActivityIndicator
-                style={{ marginTop: 100 }}
-                size="large"
-                color="black"
-              />
-            </View>
-          ) : (
-            <Text style={{ textAlign: "center", marginTop: 100 }}>
-              No recent orders
-            </Text>
-          )}
+            ) : (
+              <Text style={{ textAlign: "center", marginTop: 100 }}>
+                No recent orders
+              </Text>
+            )}
 
-          {past.length > 0 ? (
-            <View
-              style={{
-                marginVertical: 10,
-                flexDirection: "row",
-                width: "100%",
-                flexWrap: "wrap",
-              }}
-            >
+            {past.length > 0 ? (
               <View
                 style={{
-                  paddingLeft: 5,
-                  paddingTop: 20,
-                  paddingBottom: 10,
+                  marginVertical: 10,
                   flexDirection: "row",
-                  justifyContent: "space-between",
                   width: "100%",
+                  flexWrap: "wrap",
                 }}
               >
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={20}
-                  col="#5C5C5C"
-                  text={"Past (" + past.length + ")"}
-                />
-                {this.state.pastCollapsed ? (
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.setState({
-                        pastCollapsed: false,
-                      })
-                    }
-                  >
-                    <Ionicons
-                      style={{ paddingHorizontal: 20 }}
-                      name="ios-arrow-down"
-                      size={24}
-                      color="black"
-                    />
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.setState({
-                        pastCollapsed: true,
-                      })
-                    }
-                  >
-                    <Ionicons
-                      style={{ paddingHorizontal: 20 }}
-                      name="ios-arrow-up"
-                      size={24}
-                      color="black"
-                    />
-                  </TouchableOpacity>
-                )}
+                <View
+                  style={{
+                    paddingLeft: 5,
+                    paddingTop: 20,
+                    paddingBottom: 10,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={20}
+                    col="#5C5C5C"
+                    text={"Past (" + past.length + ")"}
+                  />
+                  {this.state.pastCollapsed ? (
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.setState({
+                          pastCollapsed: false,
+                        })
+                      }
+                    >
+                      <Ionicons
+                        style={{ paddingHorizontal: 20 }}
+                        name="ios-arrow-down"
+                        size={24}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.setState({
+                          pastCollapsed: true,
+                        })
+                      }
+                    >
+                      <Ionicons
+                        style={{ paddingHorizontal: 20 }}
+                        name="ios-arrow-up"
+                        size={24}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
+                <Collapsible collapsed={this.state.pastCollapsed}>
+                  {past
+                    .slice(0)
+                    .reverse()
+                    .map((item, ind) => (
+                      <OrderCards
+                        navigation={this.props.navigation}
+                        key={ind}
+                        order={item}
+                        type="past"
+                      />
+                    ))}
+                </Collapsible>
               </View>
-              <Collapsible collapsed={this.state.pastCollapsed}>
-                {past
-                  .slice(0)
-                  .reverse()
-                  .map((item, ind) => (
-                    <OrderCards
-                      navigation={this.props.navigation}
-                      key={ind}
-                      order={item}
-                      type="past"
-                    />
-                  ))}
-              </Collapsible>
-            </View>
-          ) : null}
-        </ScrollView>
+            ) : null}
+          </ScrollView>
+        ) : (
+          <View>
+            <ActivityIndicator
+              style={{ marginTop: 100 }}
+              size="large"
+              color="black"
+            />
+          </View>
+        )}
       </View>
     );
   }

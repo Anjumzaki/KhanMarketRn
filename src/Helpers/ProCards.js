@@ -78,7 +78,6 @@ class ProCards extends React.Component {
       this.setState({ cart: true, qt: pCart[inCartIndex].quantity });
     }
   }
-
   handleChange(num) {
     var preNum = this.state.qt;
     preNum = num + preNum;
