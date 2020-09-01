@@ -21,7 +21,6 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import Modal from "react-native-modalbox";
 import CodeInput from "react-native-confirmation-code-input";
 import * as EmailValidator from "email-validator";
-
 import * as Font from "expo-font";
 import {
   widthPercentageToDP as wp,
@@ -419,7 +418,9 @@ export default class SignUp1 extends React.Component {
                     col="#5C5C5C"
                     text={"Last Name"}
                   />
+
                   <TextInput
+                    id={"LastName"}
                     style={[textIn.input]}
                     onChangeText={(lastName) =>
                       this.setState({

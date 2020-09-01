@@ -112,7 +112,7 @@ export default class StoreInfo extends Component {
     Linking.openURL(phoneNumber);
   };
   render() {
-    // alert(JSON.stringify(this.state.timings))
+    alert(JSON.stringify(this.state.store));
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
@@ -554,6 +554,40 @@ export default class StoreInfo extends Component {
                 fonSiz={17}
                 col="#5C5C5C"
                 text={this.state.store.termsAndConditions}
+              ></LatoText>
+            </View>
+          ) : null}
+          {this.state.store.aboutStore ? (
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                marginTop: 20,
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Bold"
+                fonSiz={20}
+                col="#2E2E2E"
+                text="About Store"
+              ></LatoText>
+            </View>
+          ) : null}
+          {this.state.store.aboutStore ? (
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingVertical: 20,
+                alignItems: "center",
+              }}
+            >
+              <LatoText
+                fontName="Lato-Regular"
+                fonSiz={17}
+                col="#5C5C5C"
+                text={this.state.store.aboutStore}
               ></LatoText>
             </View>
           ) : null}

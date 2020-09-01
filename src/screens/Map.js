@@ -293,7 +293,7 @@ class Map extends Component {
           region: region,
           loading: false,
           error: null,
-        }); 
+        });
       },
       (error) => {
         this.setState({
