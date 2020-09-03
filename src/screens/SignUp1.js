@@ -627,7 +627,9 @@ export default class SignUp1 extends React.Component {
                                             this.refs.modal3.open()
                                           )
                                           .catch((err) =>
-                                            console.log("num err", err)
+                                            alert(
+                                              "Please enter correct numner, Unable to send message"
+                                            )
                                           );
                                       } else {
                                         this.setState({

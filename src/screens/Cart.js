@@ -102,7 +102,7 @@ class Cart extends Component {
         var sp = id;
         var temp = this.props.cart;
         for (var i = 0; i < temp.length; i++) {
-          if (temp[i].product._id === sp) {
+          if (temp[i].product.productID === sp) {
             console.log("selcted", temp[i].product.productName);
             if (i > -1) {
               temp.splice(i, 1);
@@ -138,7 +138,7 @@ class Cart extends Component {
     console.log("CART PROPS NEW RENDER", this.props.cart);
     // alert(JSON.stringify(this.props.cart))
 
-    var myCart = this.props.cart.length;
+    // var myCart = this.props.cart.length;
     var subTotal = 0;
 
     for (var i = 0; i < this.props.cart.length; i++) {
@@ -186,7 +186,7 @@ class Cart extends Component {
               ></LatoText>
             </View>
           )}
- 
+
           <View style={lines.simple} />
           {!this.state.imageL && (
             <VirtualizedList
@@ -198,7 +198,7 @@ class Cart extends Component {
                   product={item}
                   index={index}
                   isFeatured={item.isFeatured}
-                  id={item.product._id}
+                  id={item.product.productID}
                   handleRe={this.handleRemove}
                 />
               )}

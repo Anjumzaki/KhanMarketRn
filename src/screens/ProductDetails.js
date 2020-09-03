@@ -81,8 +81,13 @@ class ProductDetails extends Component {
     var inCart = false;
     var inCartIndex = "";
     for (var i = 0; i < pCart.length; i++) {
-      if (pCart[i].product.itemID === this.props.route.params.product.itemID) {
+      if (
+        pCart[i].product.productID === this.props.route.params.product.productID
+      ) {
         inCart = true;
+        this.setState({
+          buttonDisable: true,
+        });
         inCartIndex = i;
         break;
       }
@@ -107,21 +112,31 @@ class ProductDetails extends Component {
   handleChange(num) {
     var preNum = this.state.qt;
     preNum = num + preNum;
-    if (preNum >= 0) {
+    if (preNum > 0) {
       this.setState({ qt: preNum });
-    }
-
-    var pCart = this.props.cart;
-    var that = this;
-    pCart.map(function (pro, ind) {
-      if (
-        pro.product.productName === that.props.route.params.product.productName
-      ) {
-        pro.quantity = that.state.qt + num;
+      var pCart = this.props.cart;
+      var that = this;
+      pCart.map(function (pro, ind) {
+        if (
+          pro.product.productID === that.props.route.params.product.productID
+        ) {
+          pro.quantity = that.state.qt + num;
+        }
+      });
+      this.props.cartAsync(pCart);
+    } else {
+      var sp = this.props.route.params.product.productID;
+      var temp = this.props.cart;
+      for (var i = 0; i < temp.length; i++) {
+        if (temp[i].product.productID === sp) {
+          if (i > -1) {
+            temp.splice(i, 1);
+          }
+        }
       }
-    });
-
-    this.props.cartAsync(pCart);
+      this.props.cartAsync(temp);
+      this.setState({ buttonDisable: false });
+    }
   }
   render() {
     var product = this.props.route.params.product;
@@ -193,53 +208,50 @@ class ProductDetails extends Component {
             onPress={async () => {
               if (this.state.heart === false) {
                 await this.state.favourites.push({
-                  userId: this.props.user.user._id,
+                  userId: this.props.prodcuts,
                 });
 
                 axios
-                  .post("https://lit-peak-13067.herokuapp.com/add/favourite", {
-                    userId: this.props.user.user._id,
-                    product: product,
-                    storeName: this.props.storeHeader.name,
-                  })
-                  .then((resp) => console.log(resp))
+                  .post(
+                    "https://secret-cove-59835.herokuapp.com/v1/ref_prod_fav",
+                    {
+                      userID: this.props.route.params.userID,
+                      itemID: this.props.route.params.itemID,
+                      // storeName: this.props.storeHeader.name,
+                    },
+                    {
+                      headers: {
+                        authorization: this.props.route.params.token,
+                      },
+                    }
+                  )
+                  .then((resp) =>
+                    this.setState({ heart: true }, console.log(resp))
+                  )
                   .catch((err) => console.log(err));
               } else {
                 var that = this;
                 this.state.favourites = this.state.favourites.filter(function (
                   el
                 ) {
-                  return el.userId !== that.props.user.user._id;
+                  return el.itemID !== that.props.route.params.product.itemID;
                   // console.log("asd",el.userId,that.props.user.user._id)
                 });
-
                 axios
                   .delete(
-                    "https://lit-peak-13067.herokuapp.com/delete/favourite/" +
-                      this.props.user.user._id +
-                      "/" +
-                      product._id
+                    "https://secret-cove-59835.herokuapp.com/v1/ref_prod_fav/" +
+                      this.props.route.params.currentFavID,
+                    {
+                      headers: {
+                        authorization: this.props.route.params.token,
+                      },
+                    }
                   )
-                  .then((resp) => console.log(resp))
+                  .then((resp) =>
+                    this.setState({ heart: false }, console.log(resp))
+                  )
                   .catch((err) => err);
               }
-
-              axios
-                .put(
-                  "https://lit-peak-13067.herokuapp.com/edit/favourites/" +
-                    product._id,
-                  {
-                    favourites: this.state.favourites,
-                  }
-                )
-                .then((resp) => {
-                  this.setState((prevState) => {
-                    return {
-                      heart: !prevState.heart,
-                    };
-                  });
-                })
-                .catch((err) => console.log(err));
             }}
             style={{
               alignSelf: "flex-end",
@@ -395,7 +407,7 @@ class ProductDetails extends Component {
                   this.props.route.params.product.storeID
                 );
                 this.props.cartAsync(pCart);
-                this.setState({ cart: true });
+                this.setState({ cart: true, buttonDisable: true });
               } else {
                 if (
                   this.props.store.id ===
@@ -448,7 +460,7 @@ class ProductDetails extends Component {
                     this.props.route.params.product.storeId
                   );
                   this.props.cartAsync(pCart);
-                  this.setState({ cart: true });
+                  this.setState({ cart: true, buttonDisable: true });
                   // }
                 } else {
                   this.setState(

@@ -81,19 +81,31 @@ class ProCards extends React.Component {
   handleChange(num) {
     var preNum = this.state.qt;
     preNum = num + preNum;
-    if (preNum >= 0) {
+    if (preNum > 0) {
       this.setState({ qt: preNum });
-    }
+      var pCart = this.props.cart;
+      var that = this;
+      pCart.map(function (pro, ind) {
+        if (pro.product.productName === that.props.product.productName) {
+          pro.quantity = that.state.qt + num;
+        }
+      });
 
-    var pCart = this.props.cart;
-    var that = this;
-    pCart.map(function (pro, ind) {
-      if (pro.product.productName === that.props.product.productName) {
-        pro.quantity = that.state.qt + num;
+      this.props.cartAsync(pCart);
+    } else {
+      this.setState({ cart: false });
+      var sp = this.props.product.productID;
+      var temp = this.props.cart;
+      for (var i = 0; i < temp.length; i++) {
+        if (temp[i].product.productID === sp) {
+          if (i > -1) {
+            temp.splice(i, 1);
+          }
+        }
       }
-    });
 
-    this.props.cartAsync(pCart);
+      this.props.cartAsync(temp);
+    }
   }
   render() {
     var cSize = 0;
@@ -115,6 +127,12 @@ class ProCards extends React.Component {
                 this.props.navigation.navigate("ProductDetails", {
                   product: this.props.product,
                   favProducts: this.props.favProducts,
+                  userID: this.props.user.user.userID
+                    ? this.props.user.user.userID
+                    : this.props.user.user.userId,
+                  itemID: this.props.product.itemID,
+                  token: this.props.user.token,
+                  currentFavID: this.state.currentFavID,
                 })
               }
             >
@@ -189,6 +207,13 @@ class ProCards extends React.Component {
                 onPress={() =>
                   this.props.navigation.navigate("ProductDetails", {
                     product: this.props.product,
+                    favProducts: this.props.favProducts,
+                    userID: this.props.user.user.userID
+                      ? this.props.user.user.userID
+                      : this.props.user.user.userId,
+                    itemID: this.props.product.itemID,
+                    token: this.props.user.token,
+                    currentFavID: this.state.currentFavID,
                   })
                 }
               >
@@ -203,6 +228,13 @@ class ProCards extends React.Component {
             onPress={() =>
               this.props.navigation.navigate("ProductDetails", {
                 product: this.props.product,
+                favProducts: this.props.favProducts,
+                userID: this.props.user.user.userID
+                  ? this.props.user.user.userID
+                  : this.props.user.user.userId,
+                itemID: this.props.product.itemID,
+                token: this.props.user.token,
+                currentFavID: this.state.currentFavID,
               })
             }
           >

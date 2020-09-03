@@ -306,7 +306,7 @@ class OrderDetails extends Component {
               </TouchableOpacity>
             </View>
           )}
-          {this.props.route.params.order.isSomeOneElse && (
+          {this.props.route.params.order.someOneElsePhone && (
             <>
               <View style={lines.simple} />
               <View

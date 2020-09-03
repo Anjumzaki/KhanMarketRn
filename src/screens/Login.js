@@ -45,7 +45,7 @@ class Login extends React.Component {
       password: "",
       msg: "",
       mainLoading: true,
-      forgotMsg: ""
+      forgotMsg: "",
     };
   }
   async componentDidMount() {
@@ -306,8 +306,9 @@ class Login extends React.Component {
       },
       icon: {
         position: "absolute",
-        right: 10,
-        paddingTop: 8,
+        padding: 10,
+        right: 0,
+        bottom: 0,
       },
       myText: { fontSize: hp("5%") },
     });

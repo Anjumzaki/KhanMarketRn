@@ -454,7 +454,7 @@ export default class StoreInfo extends Component {
             />
           </View>
           <View style={lines.simple} />
-          {this.state.store.messageFromStore ? (
+          {this.state.store.messageFromStore !== 'undefined' ? (
             <View
               style={{
                 flexDirection: "row",
@@ -471,7 +471,7 @@ export default class StoreInfo extends Component {
               ></LatoText>
             </View>
           ) : null}
-          {this.state.store.messageFromStore ? (
+          {this.state.store.messageFromStore !== 'undefined' ? (
             <View
               style={{
                 flexDirection: "row",
@@ -488,7 +488,7 @@ export default class StoreInfo extends Component {
               ></LatoText>
             </View>
           ) : null}
-          {this.state.store.orderCancellationPolicy ? (
+          {this.state.store.orderCancellationPolicy !== 'undefined' ? (
             <View
               style={{
                 flexDirection: "row",
@@ -505,7 +505,7 @@ export default class StoreInfo extends Component {
               ></LatoText>
             </View>
           ) : null}
-          {this.state.store.orderCancellationPolicy ? (
+          {this.state.store.orderCancellationPolicy !== 'undefined' ? (
             <View
               style={{
                 flexDirection: "row",
@@ -522,7 +522,7 @@ export default class StoreInfo extends Component {
               ></LatoText>
             </View>
           ) : null}
-          {this.state.store.termsAndConditions ? (
+          {this.state.store.termsAndConditions !== 'undefined' ? (
             <View
               style={{
                 flexDirection: "row",
@@ -539,7 +539,7 @@ export default class StoreInfo extends Component {
               ></LatoText>
             </View>
           ) : null}
-          {this.state.store.termsAndConditions ? (
+          {this.state.store.termsAndConditions !== 'undefined' ? (
             <View
               style={{
                 flexDirection: "row",
@@ -556,7 +556,7 @@ export default class StoreInfo extends Component {
               ></LatoText>
             </View>
           ) : null}
-          {this.state.store.aboutStore ? (
+          {this.state.store.aboutStore  !== 'undefined'  ? (
             <View
               style={{
                 flexDirection: "row",
@@ -573,7 +573,7 @@ export default class StoreInfo extends Component {
               ></LatoText>
             </View>
           ) : null}
-          {this.state.store.aboutStore ? (
+          {this.state.store.aboutStore  !== 'undefined'  ? (
             <View
               style={{
                 flexDirection: "row",

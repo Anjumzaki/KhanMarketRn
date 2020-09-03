@@ -98,8 +98,8 @@ class CartCards extends PureComponent {
             <TouchableOpacity
               style={[btnStyles.plusBtn, { paddingTop: 0 }]}
               onPress={() => {
-                //   this.handleChange(-1)
-                if (this.state.qt - 1 >= 1) {
+                // alert(JSON.stringify(this.state.cart[this.props.index]));
+                if (this.state.qt - 1 > 0) {
                   this.setState({ qt: this.state.qt - 1 });
                   var temp = this.state.cart[this.props.index];
                   temp.price = (
@@ -107,17 +107,38 @@ class CartCards extends PureComponent {
                       (this.props.product.product.productPrice *
                         this.props.product.product.productDiscount) /
                         100) *
-                    parseInt(this.state.qt - 1)
+                    parseInt(this.state.qt + 1)
                   ).toFixed(2);
                   temp.quantity = parseInt(this.state.qt - 1);
                   this.state.cart[this.props.index] = temp;
                   this.props.cartAsync(this.state.cart);
                 } else {
+                  // alert(this.props.id)
                   this.props.handleRe(this.props.id);
                   if (this.props.cart.length === 1) {
                     this.props.cartSizeAsync(0);
                   }
                 }
+                //   this.handleChange(-1)
+                // if (this.state.qt - 1 >= 1) {
+                //   this.setState({ qt: this.state.qt - 1 });
+                //   var temp = this.state.cart[this.props.index];
+                //   temp.price = (
+                //     (this.props.product.product.productPrice -
+                //       (this.props.product.product.productPrice *
+                //         this.props.product.product.productDiscount) /
+                //         100) *
+                //     parseInt(this.state.qt - 1)
+                //   ).toFixed(2);
+                //   temp.quantity = parseInt(this.state.qt - 1);
+                //   this.state.cart[this.props.index] = temp;
+                //   this.props.cartAsync(this.state.cart);
+                // } else {
+                //   this.props.handleRe(this.props.id);
+                //   if (this.props.cart.length === 1) {
+                //     this.props.cartSizeAsync(0);
+                //   }
+                // }
               }}
             >
               <AntDesign color="#B50000" size={18} name="minus" />
@@ -135,7 +156,7 @@ class CartCards extends PureComponent {
                 this.setState({ qt: this.state.qt + 1 });
                 var temp = this.state.cart[this.props.index];
                 temp.price = (
-                  (this.props.product.product.productPrice-
+                  (this.props.product.product.productPrice -
                     (this.props.product.product.productPrice *
                       this.props.product.product.productDiscount) /
                       100) *

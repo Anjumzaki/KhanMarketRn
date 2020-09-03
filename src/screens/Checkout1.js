@@ -614,7 +614,7 @@ class Cart extends Component {
               someOneElseFirstName: this.state.someOneElseFirstName,
               someOneElseLastName: this.state.someOneElseLastName,
               someOneElseEmail: this.state.someOneElseEmail,
-              someOneElseMobile: this.state.someOneElsePhone,
+              someOneElsePhone: this.state.someOneElsePhone,
             },
             {
               headers: {
@@ -646,7 +646,7 @@ class Cart extends Component {
                       orderId: orderN,
                       codeId: orderN,
                       token: this.props.user.token,
-                    orderID: resp.data.id,
+                      orderID: resp.data.id,
 
                       // order: resp.data.order1,
                     })
@@ -1209,6 +1209,7 @@ class Cart extends Component {
                   </View>
                   <View>
                     <TextInput
+                      autoCapitalize={"none"}
                       style={[textIn.input, { width: "100%" }]}
                       onChangeText={(email) =>
                         this.setState({

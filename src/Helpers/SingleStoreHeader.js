@@ -34,7 +34,7 @@ class SingleStoreHeader extends React.Component {
 
     this.state = {
       abc: "",
-      cartData: this.props.cartData.length,
+      cartData: this.props.cartLength,
       inputText: "",
       image: "",
     };
@@ -207,7 +207,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   store: state.storeHeader.storeData1,
-  cartData: state.Cart.cartData,
+  cartLength: state.CartSize.cartSizeData,
+
   loading: state.Store.storeLoading,
   error: state.Store.storeError,
   cartLength: state.CartSize.cartSizeData,
