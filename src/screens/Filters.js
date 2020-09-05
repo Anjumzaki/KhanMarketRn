@@ -7,7 +7,7 @@ import {
   Image,
   StyleSheet,
   LinearGradient,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import Carousel from "react-native-looped-carousel";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -22,7 +22,7 @@ import { filterAsync } from "../store/actions";
 import { connect } from "react-redux";
 const { width } = Dimensions.get("window");
 const { height } = 300;
- 
+
 class Filters extends Component {
   constructor(props) {
     super(props);
@@ -31,11 +31,11 @@ class Filters extends Component {
       heart: false,
       qt: 1,
       isCheckedDec: false,
-      isCheckedAsc: false
+      isCheckedAsc: false,
     };
   }
 
-  _onLayoutDidChange = e => {
+  _onLayoutDidChange = (e) => {
     const layout = e.nativeEvent.layout;
     this.setState({ size: { width: layout.width, height: layout.height } });
   };
@@ -47,20 +47,19 @@ class Filters extends Component {
     }
   }
 
-  componentDidMount(){
-    if(this.props.filtered === "Asc"){
-      this.setState({isCheckedAsc: true})
-    }else{
-      this.setState({isCheckedDec: true})
+  componentDidMount() {
+    if (this.props.filtered === "Asc") {
+      this.setState({ isCheckedAsc: true });
+    } else {
+      this.setState({ isCheckedDec: true });
     }
   }
 
   render() {
-
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <ScrollView style={{ backgroundColor: "white" }}>
-        <View
+          <View
             style={{
               flexDirection: "row",
               paddingHorizontal: 20,
@@ -68,7 +67,7 @@ class Filters extends Component {
               alignItems: "center",
             }}
           >
-           <LatoText
+            <LatoText
               fontName="Lato-Regular"
               fonSiz={20}
               col="#5C5C5C"
@@ -79,9 +78,9 @@ class Filters extends Component {
             style={{
               flexDirection: "row",
               paddingHorizontal: 20,
-              paddingBottom:20,
+              paddingBottom: 20,
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
             }}
           >
             <CheckBox
@@ -89,9 +88,10 @@ class Filters extends Component {
               onClick={() => {
                 this.setState({
                   isCheckedAsc: !this.state.isCheckedAsc,
+                  isCheckedDec: false,
                 });
-                if(!this.state.isCheckedAsc){
-                    this.props.filterAsync("Asc")
+                if (!this.state.isCheckedAsc) {
+                  this.props.filterAsync("Asc");
                 }
               }}
               isChecked={this.state.isCheckedAsc}
@@ -102,28 +102,28 @@ class Filters extends Component {
             style={{
               flexDirection: "row",
               paddingHorizontal: 20,
-              paddingBottom:20,
+              paddingBottom: 20,
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
             }}
           >
             <CheckBox
               style={{ flex: 1 }}
               onClick={() => {
                 this.setState({
-                  isCheckedDec: !this.state.isCheckedDec
+                  isCheckedDec: !this.state.isCheckedDec,
+                  isCheckedAsc: false,
                 });
 
-                if(!this.state.isCheckedDec){
-                  this.props.filterAsync("Dec")
-              }
+                if (!this.state.isCheckedDec) {
+                  this.props.filterAsync("Dec");
+                }
               }}
               isChecked={this.state.isCheckedDec}
               rightText={"Descending"}
             />
           </View>
-       
-          </ScrollView>
+        </ScrollView>
       </View>
     );
   }
@@ -133,14 +133,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   imgCon: {
     width: Dimensions.get("window").width,
-    height: 250
+    height: 250,
   },
   topRight: {
-    alignSelf: "flex-end"
+    alignSelf: "flex-end",
   },
   wrapTop: {
     alignSelf: "flex-end",
@@ -150,11 +150,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderTopLeftRadius: 15,
-    borderBottomLeftRadius: 15
+    borderBottomLeftRadius: 15,
   },
   bottomText: {
     height: 200,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   buybBtn: {
     alignSelf: "center",
@@ -165,31 +165,25 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
 
-    elevation: 5
-  }
+    elevation: 5,
+  },
 });
 
-
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   cart: state.Cart.cartData,
-  filtered: state.Filter.filterData
-
-
+  filtered: state.Filter.filterData,
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(
-      {
-        filterAsync, 
-      },
-      dispatch
+    {
+      filterAsync,
+    },
+    dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Filters);
+export default connect(mapStateToProps, mapDispatchToProps)(Filters);

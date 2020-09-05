@@ -8,6 +8,7 @@ import {
   StyleSheet,
   LinearGradient,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import Carousel from "react-native-looped-carousel";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -36,21 +37,21 @@ class SingleCateg extends Component {
   }
   componentDidMount() {
     // alert(JSON.stringify(this.props.route.params.favProducts))
+    // alert(this.props.filter);
 
     this.props.searchAsync("");
     this.props.search1Async("");
-    this.props.filterAsync("");
+
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
       this.props.searchAsync("");
-      this.props.filterAsync("");
       this.props.search1Async("");
+      this.setState({ loading: true }, () => this.setState({ loading: false }));
     });
   }
   componentWillUnmount() {
     this._unsubscribe();
     this.props.searchAsync("");
     this.props.search1Async("");
-    this.props.filterAsync("");
   }
 
   render() {
@@ -67,73 +68,77 @@ class SingleCateg extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: "white" }}>
-        <ScrollView style={{ backgroundColor: "white" }}>
-          {this.props.searchInput ? (
-            <View
-              style={{
-                marginVertical: 10,
-                flexDirection: "row",
-                width: "100%",
-                flexWrap: "wrap",
-              }}
-            >
-              {this.props.filtered === "Asc"
-                ? searchedProducts.map((item, ind) => (
-                    <ProcardsSmall
-                      navigation={this.props.navigation}
-                      key={1}
-                      product={item}
-                      filter1={this.props.searchInput}
-                      favProducts={this.props.route.params.favProducts}
-                    />
-                  ))
-                : searchedProducts
-                    .slice(0)
-                    .reverse()
-                    .map((item, ind) => (
+        {this.state.loading ? (
+          <ActivityIndicator size="large" color="black" />
+        ) : (
+          <ScrollView style={{ backgroundColor: "white" }}>
+            {this.props.searchInput ? (
+              <View
+                style={{
+                  marginVertical: 10,
+                  flexDirection: "row",
+                  width: "100%",
+                  flexWrap: "wrap",
+                }}
+              >
+                {this.props.filtered === "Asc"
+                  ? searchedProducts.map((item, ind) => (
                       <ProcardsSmall
                         navigation={this.props.navigation}
                         key={1}
                         product={item}
-                        filter1={this.props.filtered}
+                        filter1={this.props.searchInput}
                         favProducts={this.props.route.params.favProducts}
                       />
-                    ))}
-            </View>
-          ) : (
-            <View
-              style={{
-                marginVertical: 10,
-                flexDirection: "row",
-                width: "100%",
-                flexWrap: "wrap",
-              }}
-            >
-              {this.props.filtered === "Asc"
-                ? this.props.route.params.products.map((item, ind) => (
-                    <ProcardsSmall
-                      navigation={this.props.navigation}
-                      key={1}
-                      product={item}
-                      filter1={this.props.searchInput}
-                      favProducts={this.props.route.params.favProducts}
-                    />
-                  ))
-                : this.props.route.params.products
-                    .slice(0)
-                    .reverse()
-                    .map((item, ind) => (
+                    ))
+                  : searchedProducts
+                      .slice(0)
+                      .reverse()
+                      .map((item, ind) => (
+                        <ProcardsSmall
+                          navigation={this.props.navigation}
+                          key={1}
+                          product={item}
+                          filter1={this.props.filtered}
+                          favProducts={this.props.route.params.favProducts}
+                        />
+                      ))}
+              </View>
+            ) : (
+              <View
+                style={{
+                  marginVertical: 10,
+                  flexDirection: "row",
+                  width: "100%",
+                  flexWrap: "wrap",
+                }}
+              >
+                {this.props.filtered === "Dec"
+                  ? this.props.route.params.products.map((item, ind) => (
                       <ProcardsSmall
                         navigation={this.props.navigation}
                         key={1}
                         product={item}
-                        filter1={this.props.filtered}
+                        filter1={this.props.searchInput}
                         favProducts={this.props.route.params.favProducts}
                       />
-                    ))}
-            </View>
-          )}
-        </ScrollView>
+                    ))
+                  : this.props.route.params.products
+                      .slice(0)
+                      .reverse()
+                      .map((item, ind) => (
+                        <ProcardsSmall
+                          navigation={this.props.navigation}
+                          key={1}
+                          product={item}
+                          filter1={this.props.filtered}
+                          favProducts={this.props.route.params.favProducts}
+                        />
+                      ))}
+              </View>
+            )}
+          </ScrollView>
+        )}
       </View>
     );
   }
