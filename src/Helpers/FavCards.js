@@ -224,10 +224,10 @@ class FavCards extends React.Component {
                   <AntDesign color="#B50000" size={18} name="heart" />
                 </TouchableOpacity>
               ) : (
-                <TouchableOpacity>
-                  <AntDesign color="#B50000" size={18} name="hearto" />
-                </TouchableOpacity>
-              )}
+                  <TouchableOpacity>
+                    <AntDesign color="#B50000" size={18} name="hearto" />
+                  </TouchableOpacity>
+                )}
             </View>
 
             <View style={{ flex: 1, flexDirection: "row", paddingTop: 5 }}>
@@ -244,7 +244,7 @@ class FavCards extends React.Component {
                         parseFloat(
                           this.props.product.product.productDiscount
                         )) /
-                        100
+                      100
                     ).toFixed(2) +
                     " / lb"
                   }
@@ -418,6 +418,8 @@ const mapStateToProps = (state) => ({
   user: state.user.user,
   store: state.Store.storeData,
   favStore: state.favStore.favStoreData,
+  storeHeader: state.storeHeader.storeData1,
+
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(

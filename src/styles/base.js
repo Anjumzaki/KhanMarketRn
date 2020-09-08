@@ -1,4 +1,4 @@
-import { StyleSheet,Dimensions,Platform } from "react-native";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 const conStyles = StyleSheet.create({
@@ -8,7 +8,7 @@ const conStyles = StyleSheet.create({
   scroll: {
     justifyContent: "space-evenly",
     flexGrow: 1,
-    minHeight:Dimensions.get("window").height /2
+    minHeight: Dimensions.get("window").height / 2
   }
 });
 const cardStyles = StyleSheet.create({
@@ -39,7 +39,7 @@ const cardStyles = StyleSheet.create({
 });
 const headerStyles = StyleSheet.create({
   storeStyles: {
-    minHeight: 100 ,
+    minHeight: 100,
     // paddingTop:getStatusBarHeight(true),
     backgroundColor: "#2E2E2E",
   },
@@ -53,7 +53,7 @@ const headerStyles = StyleSheet.create({
     backgroundColor: "#7AB87F",
     justifyContent: "center",
     alignItems: "center",
-    zIndex:5
+    zIndex: 5
   }
 });
 const textStyles = StyleSheet.create({
@@ -74,8 +74,8 @@ const textIn = StyleSheet.create({
     borderBottomWidth: 1,
     paddingTop: 5,
     fontSize: 17,
-    paddingBottom:5,
-    color:'#000000'
+    paddingBottom: 5,
+    color: '#000000'
   }
 });
 const btnStyles = StyleSheet.create({
@@ -134,7 +134,6 @@ const bottomTab = StyleSheet.create({
   cartSheet: {
     paddingHorizontal: 20,
     paddingVertical: 15,
-    flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: "white",
     shadowColor: "#000",
@@ -146,7 +145,7 @@ const bottomTab = StyleSheet.create({
     },
     shadowOpacity: 0.58,
     shadowRadius: 16.0,
-    paddingBottom:Platform.OS === 'ios' ? 30 : 15,
+    paddingBottom: Platform.OS === 'ios' ? 30 : 15,
     elevation: 24
   }
 });
