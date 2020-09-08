@@ -52,7 +52,7 @@ class OrderDetails extends Component {
     axios
       .post(
         "https://secret-cove-59835.herokuapp.com/v1/store/" +
-          this.props.route.params.order.storeID,
+        this.props.route.params.order.storeID,
         { a: "sd" },
         {
           headers: {
@@ -142,11 +142,11 @@ class OrderDetails extends Component {
     if (Platform.OS === "android") {
       phoneNumber = `tel:${
         this.state.store ? this.state.store.storeContact : ""
-      }`;
+        }`;
     } else {
       phoneNumber = `telprompt:${
         this.state.store ? this.state.store.storeContact : ""
-      }`;
+        }`;
     }
 
     Linking.openURL(phoneNumber);
@@ -220,24 +220,24 @@ class OrderDetails extends Component {
                 ></LatoText>
               </TouchableOpacity>
             ) : (
-              <TouchableOpacity
-                onPress={() => this.setState({ showNum: true })}
-                style={{ flexDirection: "row", alignItems: "flex-end" }}
-              >
-                <MaterialCommunityIcons
-                  style={{ marginRight: 5 }}
-                  name="chevron-down"
-                  color="#2E2E2E"
-                  size={20}
-                />
-                <LatoText
-                  fontName="Lato-Regular"
-                  fonSiz={20}
-                  col="#2E2E2E"
-                  text="Expand"
-                ></LatoText>
-              </TouchableOpacity>
-            )}
+                <TouchableOpacity
+                  onPress={() => this.setState({ showNum: true })}
+                  style={{ flexDirection: "row", alignItems: "flex-end" }}
+                >
+                  <MaterialCommunityIcons
+                    style={{ marginRight: 5 }}
+                    name="chevron-down"
+                    color="#2E2E2E"
+                    size={20}
+                  />
+                  <LatoText
+                    fontName="Lato-Regular"
+                    fonSiz={20}
+                    col="#2E2E2E"
+                    text="Expand"
+                  ></LatoText>
+                </TouchableOpacity>
+              )}
           </View>
           <View
             style={{
@@ -306,7 +306,7 @@ class OrderDetails extends Component {
               </TouchableOpacity>
             </View>
           )}
-          {this.props.route.params.order.someOneElsePhone && (
+          {!(!this.props.route.params.order.someOneElsePhone) && (
             <>
               <View style={lines.simple} />
               <View
@@ -494,8 +494,8 @@ class OrderDetails extends Component {
                   text={
                     this.props.route.params.order.pickupDate
                       ? this.dateConvert(
-                          this.props.route.params.order.pickupDate
-                        )
+                        this.props.route.params.order.pickupDate
+                      )
                       : ""
                   }
                 ></LatoText>
@@ -514,7 +514,7 @@ class OrderDetails extends Component {
                   text={
                     this.props.route.params.order.pickupTime
                       ? "    " +
-                        this.tConvert(this.props.route.params.order.pickupTime)
+                      this.tConvert(this.props.route.params.order.pickupTime)
                       : ""
                   }
                 ></LatoText>
@@ -635,10 +635,10 @@ class OrderDetails extends Component {
                       "$" +
                       parseFloat(
                         item.productPrice -
-                          (item.productPrice * item.productDiscount) / 100
+                        (item.productPrice * item.productDiscount) / 100
                       ).toFixed(2) +
                       " x " +
-                      item.quantity
+                      item.itemQuantity
                     }
                   />
 
@@ -648,11 +648,11 @@ class OrderDetails extends Component {
                     col="#2E2E2E"
                     text={
                       "$" +
-                      item.quantity *
-                        parseFloat(
-                          item.productPrice -
-                            (item.productPrice * item.productDiscount) / 100
-                        ).toFixed(2)
+                      item.itemQuantity *
+                      parseFloat(
+                        item.productPrice -
+                        (item.productPrice * item.productDiscount) / 100
+                      ).toFixed(2)
                     }
                   />
                 </View>
@@ -762,8 +762,8 @@ class OrderDetails extends Component {
                           axios
                             .put(
                               "https://secret-cove-59835.herokuapp.com/v1/transaction/status/" +
-                                this.props.route.params.order.orderID +
-                                "/4",
+                              this.props.route.params.order.orderID +
+                              "/4",
                               { a: "a" },
                               {
                                 headers: {
@@ -813,7 +813,6 @@ class OrderDetails extends Component {
               />
             </View>
           )}
-          {/* <Text>{this.props.route.params.order.statusCode}</Text> */}
         </ScrollView>
       </View>
     );
