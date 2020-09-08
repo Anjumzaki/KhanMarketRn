@@ -104,7 +104,7 @@ class CustomDrawerContent extends Component {
             {this.state.image ? (
               <Image
                 style={{ width: 60, height: 60, borderRadius: 100 }}
-                source={{ uri: this.state.image }}
+                source={{ UserDefault }}
               />
             ) : (
               <Image

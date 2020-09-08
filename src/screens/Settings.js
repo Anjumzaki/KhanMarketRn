@@ -53,22 +53,26 @@ class Settings extends React.Component {
     };
   }
 
+  // componentWillMount(){
+  //   alert("in setting")
+  // }
   componentDidMount() {
-    const ref = firebase
-      .storage()
-      .ref(
-        "profile_images/" + this.props.user.user.userID
-          ? this.props.user.user.userID
-          : this.props.user.user.userId + ".jpg"
-      );
-    ref
-      .getDownloadURL()
-      .then((url) => {
-        this.setState({ image: url });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    
+    // const ref = firebase
+    //   .storage()
+    //   .ref(
+    //     "profile_images/" + this.props.user.user.userID
+    //       ? this.props.user.user.userID
+    //       : this.props.user.user.userId + ".jpg"
+    //   );
+    // ref
+    //   .getDownloadURL()
+    //   .then((url) => {
+    //     this.setState({ image: url });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }
 
   async editlastName() {
@@ -547,3 +551,4 @@ const mapDispatchToProps = (dispatch, ownProps) =>
   );
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+ 

@@ -18,7 +18,7 @@ const { width } = Dimensions.get("window");
 const { height } = 300;
 import { bindActionCreators } from "redux";
 import { cartAsync } from "../store/actions";
-import { connect } from "react-redux";
+import { connect } from "react-redux"; 
 import CartCardImage from "../Components/CartCardImage.js";
 import CartCard from "../Components/cartCards.js";
 
