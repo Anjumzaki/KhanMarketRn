@@ -138,7 +138,6 @@ class OrderDetails extends Component {
 
   makeCall = () => {
     let phoneNumber = "";
-
     if (Platform.OS === "android") {
       phoneNumber = `tel:${
         this.state.store ? this.state.store.storeContact : ""
@@ -148,7 +147,6 @@ class OrderDetails extends Component {
         this.state.store ? this.state.store.storeContact : ""
         }`;
     }
-
     Linking.openURL(phoneNumber);
   };
 
@@ -177,7 +175,7 @@ class OrderDetails extends Component {
     var subTotal = 0;
 
     for (var i = 0; i < this.props.cart.length; i++) {
-      var temp = this.props.cart[i].price;
+      var temp = this.props.cart[i].productPrice;
       subTotal = subTotal + parseFloat(temp);
     }
     return (
