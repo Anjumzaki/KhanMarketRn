@@ -105,6 +105,7 @@ class Cart extends Component {
   }
 
   componentDidMount() {
+    // alert(this.props.route.params.specialInstructions)
     if (this.props.store) {
       const ref = firebase
         .storage()
@@ -136,15 +137,15 @@ class Cart extends Component {
       email: this.props.user.user.email ? this.props.user.user.email : "",
       mobile: this.props.user.user.mobile
         ? this.props.user.user.mobile.substring(
-            2,
-            this.props.user.user.mobile.length
-          )
+          2,
+          this.props.user.user.mobile.length
+        )
         : "",
       previousMobileNumber: this.props.user.user.mobile
         ? this.props.user.user.mobile.substring(
-            2,
-            this.props.user.user.mobile.length
-          )
+          2,
+          this.props.user.user.mobile.length
+        )
         : "",
     });
     axios
@@ -195,7 +196,7 @@ class Cart extends Component {
     axios
       .get(
         "https://secret-cove-59835.herokuapp.com/v1/storeTimings/" +
-          this.props.store.id,
+        this.props.store.id,
         {
           headers: {
             authorization: this.props.user.token,
@@ -471,9 +472,9 @@ class Cart extends Component {
       this.setState({ qt: preNum });
     }
   }
-  onClose() {}
+  onClose() { }
 
-  onOpen() {}
+  onOpen() { }
 
   getDayName(dateStr) {
     //
@@ -615,6 +616,7 @@ class Cart extends Component {
               someOneElseLastName: this.state.someOneElseLastName,
               someOneElseEmail: this.state.someOneElseEmail,
               someOneElsePhone: this.state.someOneElsePhone,
+              specialInstructions: this.props.route.params.specialInstructions
             },
             {
               headers: {
@@ -683,8 +685,8 @@ class Cart extends Component {
       }
       alert(
         "Sorry, " +
-          name +
-          " Item is out of stock for the selected date, change pickup date or remove this product to procceed"
+        name +
+        " Item is out of stock for the selected date, change pickup date or remove this product to procceed"
       );
     }
   }
@@ -839,7 +841,7 @@ class Cart extends Component {
                   axios
                     .put(
                       "https://lit-peak-13067.herokuapp.com/api/users/guest/edit/verified/" +
-                        this.props.user.user._id,
+                      this.props.user.user._id,
                       {
                         isGuestVerified: true,
                       }
@@ -1268,7 +1270,7 @@ class Cart extends Component {
                     axios
                       .put(
                         "https://secret-cove-59835.herokuapp.com/v1/user/" +
-                          uid,
+                        uid,
                         {
                           firstName: this.state.firstName,
                           lastName: this.state.lastName,
@@ -1440,15 +1442,15 @@ class Cart extends Component {
                     text={
                       this.state.orderDate
                         ? // days[this.state.date]
-                          //  +
-                          //   " " +
-                          months[
-                            parseInt(this.state.orderDate.substring(3, 5)) - 1
-                          ] +
-                          " " +
-                          this.state.orderDate.substring(0, 2) +
-                          " " +
-                          this.state.orderDate.substring(6, 10)
+                        //  +
+                        //   " " +
+                        months[
+                        parseInt(this.state.orderDate.substring(3, 5)) - 1
+                        ] +
+                        " " +
+                        this.state.orderDate.substring(0, 2) +
+                        " " +
+                        this.state.orderDate.substring(6, 10)
                         : new Date().toDateString().substring(3, 15)
                     }
                   />
@@ -1470,14 +1472,14 @@ class Cart extends Component {
                       text={"    TBD message"}
                     />
                   ) : (
-                    <LatoText
-                      fontName="Lato-Regular"
-                      fonSiz={15}
-                      col={"#2E2E2E"}
-                      txtAlign={"center"}
-                      text={"     " + this.state.orderTime}
-                    />
-                  )}
+                        <LatoText
+                          fontName="Lato-Regular"
+                          fonSiz={15}
+                          col={"#2E2E2E"}
+                          txtAlign={"center"}
+                          text={"     " + this.state.orderTime}
+                        />
+                      )}
                 </View>
                 <TouchableOpacity
                   style={{ paddingHorizontal: 10 }}
@@ -1604,68 +1606,68 @@ class Cart extends Component {
                     text={"Verified"}
                   />
                 ) : (
-                  <TouchableOpacity
-                    disabled={!this.state.mobile}
-                    onPress={async () => {
-                      // this.props.navigation.navigate("Checkout1")
+                    <TouchableOpacity
+                      disabled={!this.state.mobile}
+                      onPress={async () => {
+                        // this.props.navigation.navigate("Checkout1")
 
-                      var num = Math.floor(100000 + Math.random() * 900000);
-                      await this.setState({ num: num.toString() });
-                      this.forceUpdate();
-                      // var numV;
-                      // if (this.props.user.user.mobile) {
-                      //   numV = this.props.user.user.mobile;
-                      // } else {
-                      //   numV = "+1" + this.state.mobile;
-                      // }
-                      // var emailV;
-                      // if (this.props.user.user.email) {
-                      //   emailV = this.props.user.user.email;
-                      // } else {
-                      //   emailV = this.state.email;
-                      // }
+                        var num = Math.floor(100000 + Math.random() * 900000);
+                        await this.setState({ num: num.toString() });
+                        this.forceUpdate();
+                        // var numV;
+                        // if (this.props.user.user.mobile) {
+                        //   numV = this.props.user.user.mobile;
+                        // } else {
+                        //   numV = "+1" + this.state.mobile;
+                        // }
+                        // var emailV;
+                        // if (this.props.user.user.email) {
+                        //   emailV = this.props.user.user.email;
+                        // } else {
+                        //   emailV = this.state.email;
+                        // }
 
-                      // console.log("numv", numV);
-                      // axios
-                      //   .get(
-                      //     "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
-                      //       "+1" +
-                      //       this.state.mobile +
-                      //       "/" +
-                      //       num
-                      //   )
-                      //   .then((resp) => {
-                      //     // console.log(resp);
+                        // console.log("numv", numV);
+                        // axios
+                        //   .get(
+                        //     "https://lit-peak-13067.herokuapp.com/api/number/verification/" +
+                        //       "+1" +
+                        //       this.state.mobile +
+                        //       "/" +
+                        //       num
+                        //   )
+                        //   .then((resp) => {
+                        //     // console.log(resp);
 
-                      //     this.refs.modal6.open();
-                      //   })
-                      //   .catch((err) => console.log("sdf", err));
+                        //     this.refs.modal6.open();
+                        //   })
+                        //   .catch((err) => console.log("sdf", err));
 
-                      axios
-                        .get(
-                          "https://secret-cove-59835.herokuapp.com/v1/number/verification/" +
+                        axios
+                          .get(
+                            "https://secret-cove-59835.herokuapp.com/v1/number/verification/" +
                             this.state.mobile +
                             "/" +
                             num
-                        )
-                        .then((resp) => this.refs.modal6.open())
-                        .catch((err) => console.log("num err", err));
-                    }}
-                    style={[
-                      !this.state.mobile
-                        ? btnStyles.cartBtnOutline1
-                        : btnStyles.cartBtnOutline,
-                      { width: "35%" },
-                    ]}
-                  >
-                    <LatoText
-                      fontName="Lato-Regular"
-                      fonSiz={18}
-                      col={!this.state.mobile ? "silver" : "#2E2E2E"}
-                      text="VERIFY"
-                    ></LatoText>
-                  </TouchableOpacity>
-                )}
+                          )
+                          .then((resp) => this.refs.modal6.open())
+                          .catch((err) => console.log("num err", err));
+                      }}
+                      style={[
+                        !this.state.mobile
+                          ? btnStyles.cartBtnOutline1
+                          : btnStyles.cartBtnOutline,
+                        { width: "35%" },
+                      ]}
+                    >
+                      <LatoText
+                        fontName="Lato-Regular"
+                        fonSiz={18}
+                        col={!this.state.mobile ? "silver" : "#2E2E2E"}
+                        text="VERIFY"
+                      ></LatoText>
+                    </TouchableOpacity>
+                  )}
               </View>
               <View style={lines.simple} />
               <View
@@ -1861,7 +1863,7 @@ class Cart extends Component {
             </KeyboardAvoidingView>
           </ScrollView>
           {!this.state.keyState && (
-            <View style={bottomTab.cartSheet}>
+            <View style={[bottomTab.cartSheet, { flexDirection: 'row' }]}>
               <TouchableOpacity
                 disabled={
                   this.state.storeTimings.isClosed ||
@@ -1882,10 +1884,10 @@ class Cart extends Component {
                 }
                 style={[
                   this.state.storeTimings.isClosed ||
-                  !nameCheck ||
-                  !this.state.numVerified ||
-                  this.state.isStoreClosed ||
-                  this.state.storeTimeCLose
+                    !nameCheck ||
+                    !this.state.numVerified ||
+                    this.state.isStoreClosed ||
+                    this.state.storeTimeCLose
                     ? btnStyles.cartBtn1
                     : btnStyles.cartBtn,
                   { width: "100%" },

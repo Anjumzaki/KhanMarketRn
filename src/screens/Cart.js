@@ -10,6 +10,7 @@ import {
   VirtualizedList,
   TouchableOpacity,
   ActivityIndicator,
+  TextInput
 } from "react-native";
 import LatoText from "../Helpers/LatoText";
 import { ScrollView } from "react-native-gesture-handler";
@@ -170,22 +171,22 @@ class Cart extends Component {
               ></LatoText>
             </View>
           ) : (
-            <View
-              style={{
-                flexDirection: "row",
-                paddingHorizontal: 20,
-                paddingVertical: 30,
-                alignItems: "center",
-              }}
-            >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={20}
-                col="#2E2E2E"
-                text="No Store Selected"
-              ></LatoText>
-            </View>
-          )}
+              <View
+                style={{
+                  flexDirection: "row",
+                  paddingHorizontal: 20,
+                  paddingVertical: 30,
+                  alignItems: "center",
+                }}
+              >
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={20}
+                  col="#2E2E2E"
+                  text="No Store Selected"
+                ></LatoText>
+              </View>
+            )}
 
           <View style={lines.simple} />
           {!this.state.imageL && (
@@ -310,57 +311,69 @@ class Cart extends Component {
 
         {this.props.user.user.isGuest ? (
           <View style={bottomTab.cartSheet}>
-            <TouchableOpacity
-              onPress={() => {
-                if (this.props.cart.length === 0) {
-                  alert("Sorry, cart is empty.");
-                } else {
-                  this.props.navigation.navigate("Checkout1");
-                }
-              }}
-              style={[btnStyles.cartBtnOutline, { width: "55%" }]}
-            >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={15}
-                col="#2E2E2E"
-                text="CONTINUE AS GUEST"
-              ></LatoText>
-            </TouchableOpacity>
+            <View style={{ width: '100%', marginBottom: 15 }}>
 
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("SignUp1")}
-              style={[btnStyles.cartBtn, { width: "40%" }]}
-            >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={15}
-                col="white"
-                text="SIGN IN/UP"
-              ></LatoText>
-            </TouchableOpacity>
+              <TextInput onChangeText={(specialInstructions) => this.setState({ specialInstructions })} multiline={true} style={{ width: '100%', borderColor: 'black', borderWidth: 1, borderRadius: 5, paddingHorizontal: 15, paddingTop: 15, height: 100 }} placeholder="Special Instructions" />
+            </View>
+            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
+
+              <TouchableOpacity
+                onPress={() => {
+                  if (this.props.cart.length === 0) {
+                    alert("Sorry, cart is empty.");
+                  } else {
+                    this.props.navigation.navigate("Checkout1", { specialInstructions: this.state.specialInstructions });
+                  }
+                }}
+                style={[btnStyles.cartBtnOutline, { width: "55%" }]}
+              >
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={15}
+                  col="#2E2E2E"
+                  text="CONTINUE AS GUEST"
+                ></LatoText>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate("SignUp1")}
+                style={[btnStyles.cartBtn, { width: "40%" }]}
+              >
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={15}
+                  col="white"
+                  text="SIGN IN/UP"
+                ></LatoText>
+              </TouchableOpacity>
+            </View>
+
           </View>
         ) : (
-          <View style={bottomTab.cartSheet}>
-            <TouchableOpacity
-              onPress={() => {
-                if (this.props.cart.length === 0) {
-                  alert("You cart is empty.");
-                } else {
-                  this.props.navigation.navigate("Checkout1");
-                }
-              }}
-              style={[btnStyles.cartBtn, { width: "100%" }]}
-            >
-              <LatoText
-                fontName="Lato-Regular"
-                fonSiz={15}
-                col="white"
-                text="Checkout"
-              ></LatoText>
-            </TouchableOpacity>
-          </View>
-        )}
+            <View style={bottomTab.cartSheet}>
+              <View style={{ width: '100%', marginBottom: 15 }}>
+
+                <TextInput onChangeText={(specialInstructions) => this.setState({ specialInstructions })} multiline={true} style={{ width: '100%', borderColor: 'black', borderWidth: 1, borderRadius: 5, paddingHorizontal: 15, paddingTop: 15, height: 100 }} placeholder="Special Instructions" />
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  if (this.props.cart.length === 0) {
+                    alert("You cart is empty.");
+                  } else {
+                    this.props.navigation.navigate("Checkout1", { specialInstructions: this.state.specialInstructions });
+                  }
+                }}
+                style={[btnStyles.cartBtn, { width: "100%" }]}
+              >
+                <LatoText
+                  fontName="Lato-Regular"
+                  fonSiz={15}
+                  col="white"
+                  text="Checkout"
+                ></LatoText>
+              </TouchableOpacity>
+            </View>
+          )}
       </View>
     );
   }
