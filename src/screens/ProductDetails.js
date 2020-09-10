@@ -50,8 +50,8 @@ class ProductDetails extends Component {
       .storage()
       .ref(
         "/product_images/" +
-          this.props.route.params.product.productID +
-          "_1.jpg"
+        this.props.route.params.product.productID +
+        "_1.jpg"
       );
     ref
       .getDownloadURL()
@@ -240,7 +240,7 @@ class ProductDetails extends Component {
                 axios
                   .delete(
                     "https://secret-cove-59835.herokuapp.com/v1/ref_prod_fav/" +
-                      this.props.route.params.currentFavID,
+                    this.props.route.params.currentFavID,
                     {
                       headers: {
                         authorization: this.props.route.params.token,
@@ -281,13 +281,13 @@ class ProductDetails extends Component {
                 name="heart"
               />
             ) : (
-              <AntDesign
-                style={styles.favIcon}
-                color="#B50000"
-                size={18}
-                name="hearto"
-              />
-            )}
+                <AntDesign
+                  style={styles.favIcon}
+                  color="#B50000"
+                  size={18}
+                  name="hearto"
+                />
+              )}
           </TouchableOpacity>
           <View style={{ paddingHorizontal: 20 }}>
             <LatoText
@@ -316,35 +316,35 @@ class ProductDetails extends Component {
                   col="#5C5C5C"
                   text={` $  ${parseFloat(
                     product.productPrice -
-                      (product.productPrice * product.productDiscount) / 100
+                    (product.productPrice * product.productDiscount) / 100
                   ).toFixed(2)} / lb `}
                 />
                 {parseFloat(
                   product.productPrice -
-                    (product.productPrice * product.productDiscount) / 100
+                  (product.productPrice * product.productDiscount) / 100
                 ) == product.productPrice ? null : (
-                  <LatoText
-                    fontName="Lato-Regular"
-                    fonSiz={17}
-                    lineThrough="line-through"
-                    col="#89898C"
-                    text={`$${product.productPrice} / lb `}
-                  />
-                )}
+                    <LatoText
+                      fontName="Lato-Regular"
+                      fonSiz={17}
+                      lineThrough="line-through"
+                      col="#89898C"
+                      text={`$${product.productPrice} / lb `}
+                    />
+                  )}
               </View>
               {parseFloat(
                 product.productPrice -
-                  (product.productPrice * product.productDiscount) / 100
+                (product.productPrice * product.productDiscount) / 100
               ) == product.productPrice ? null : (
-                <View style={{ marginTop: 22 }}>
-                  <LatoText
-                    fontName="Lato-Regular"
-                    fonSiz={17}
-                    col="#B50000"
-                    text={` You will save ${product.productDiscount}% `}
-                  />
-                </View>
-              )}
+                  <View style={{ marginTop: 22 }}>
+                    <LatoText
+                      fontName="Lato-Regular"
+                      fonSiz={17}
+                      col="#B50000"
+                      text={` You will save ${product.productDiscount}% `}
+                    />
+                  </View>
+                )}
             </View>
             <View style={{ marginTop: 22 }}>
               <LatoText

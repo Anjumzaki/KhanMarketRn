@@ -138,6 +138,7 @@ class OrderDetails extends Component {
 
   makeCall = () => {
     let phoneNumber = "";
+
     if (Platform.OS === "android") {
       phoneNumber = `tel:${
         this.state.store ? this.state.store.storeContact : ""
@@ -174,8 +175,13 @@ class OrderDetails extends Component {
 
     var subTotal = 0;
 
-    for (var i = 0; i < this.props.cart.length; i++) {
-      var temp = this.props.cart[i].productPrice;
+    for (var i = 0; i < this.props.route.params.order.products; i++) {
+      var item = this.props.route.params.order.products[i]
+      alert(this.props.route.params.order.products[i].productDiscount)
+      var temp = parseFloat(
+        item.productPrice -
+        (item.productPrice * item.productDiscount) / 100
+      ).toFixed(2)
       subTotal = subTotal + parseFloat(temp);
     }
     return (

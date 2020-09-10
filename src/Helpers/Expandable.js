@@ -502,6 +502,7 @@ export default class App extends Component {
 
   componentDidMount() {
     var CONTENT = [];
+    // alert('asdas')
 
     CONTENT.push({
       isExpanded: false,
@@ -531,7 +532,7 @@ export default class App extends Component {
       subcategory: [
         {
           id: 1,
-          val: this.props.product.specialInstructions,
+          val: this.props.product.speciaIInstructions,
         },
       ],
     });
@@ -542,7 +543,7 @@ export default class App extends Component {
         {
           id: 7,
           val:
-          this.props.product.disclaimer,
+            this.props.product.disclaimer,
         },
       ],
     });
