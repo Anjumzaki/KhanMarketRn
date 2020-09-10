@@ -20,7 +20,7 @@ import {
   cartAsync,
   cartSizeAsync,
   favStoreAsync,
-  storeAsync,
+  storeAsync, 
 } from "../store/actions";
 import { connect } from "react-redux";
 import axios from "axios";
@@ -69,6 +69,33 @@ class FavCards extends React.Component {
     // } else {
     //   this.setState({ favourites: this.props.product.product.favourites });
     // }
+
+    
+    var pCart = this.props.cart;
+    var inCart = false;
+    var inCartIndex = "";
+    for (var i = 0; i < pCart.length; i++) {
+      if (pCart[i].product.itemID === this.props.product.product.itemID) {
+        inCart = true;
+        inCartIndex = i;
+        break;
+      }
+    }
+
+    if (inCart) {
+      console.log(
+        "inCarttttttttttt",
+        inCart,
+        inCartIndex,
+        pCart[inCartIndex].quantity
+      );
+      this.setState({ cart: true, qt: pCart[inCartIndex].quantity });
+    }
+
+    if(this.state.quantity === 0){
+      this.setState({ cart: false});
+    }
+
   }
   handleChange(num) {
     var preNum = this.state.qt;
@@ -197,10 +224,10 @@ class FavCards extends React.Component {
                   <AntDesign color="#B50000" size={18} name="heart" />
                 </TouchableOpacity>
               ) : (
-                <TouchableOpacity>
-                  <AntDesign color="#B50000" size={18} name="hearto" />
-                </TouchableOpacity>
-              )}
+                  <TouchableOpacity>
+                    <AntDesign color="#B50000" size={18} name="hearto" />
+                  </TouchableOpacity>
+                )}
             </View>
 
             <View style={{ flex: 1, flexDirection: "row", paddingTop: 5 }}>
@@ -217,7 +244,7 @@ class FavCards extends React.Component {
                         parseFloat(
                           this.props.product.product.productDiscount
                         )) /
-                        100
+                      100
                     ).toFixed(2) +
                     " / lb"
                   }
@@ -254,7 +281,7 @@ class FavCards extends React.Component {
               />
             </View>
             <View style={{ marginTop: 10 }}>
-              {this.props.product.product.carted ? (
+              {this.state.cart ? (
                 <View
                   style={{
                     flexDirection: "row",
@@ -284,7 +311,7 @@ class FavCards extends React.Component {
               ) : (
                 <TouchableOpacity
                   onPress={() => {
-                    this.props.handleCart(
+                    this.props.handleCart( 
                       this.props.product.product,
                       this.state.qt,
                       this.props.ind
@@ -391,6 +418,8 @@ const mapStateToProps = (state) => ({
   user: state.user.user,
   store: state.Store.storeData,
   favStore: state.favStore.favStoreData,
+  storeHeader: state.storeHeader.storeData1,
+
 });
 const mapDispatchToProps = (dispatch, ownProps) =>
   bindActionCreators(

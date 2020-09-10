@@ -51,6 +51,7 @@ class StoreDetails extends React.Component {
             }
           )
           .then((resp) => {
+            console.log("pppprorrr", resp.data.result)
             this.setState({ products: resp.data.result });
           })
           .catch((err) => console.log("https://secret-cove-59835.herokuapp.com/v2/item/all/store/"));

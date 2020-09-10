@@ -357,7 +357,7 @@ class ProductDetails extends Component {
           </View>
           <Expandable product={product} />
         </ScrollView>
-        <View style={bottomTab.cartSheet}>
+        <View style={[bottomTab.cartSheet, { flexDirection: 'row' }]}>
           <View
             style={{
               flexDirection: "row",

@@ -155,8 +155,8 @@ class QrCode extends Component {
                       axios
                         .put(
                           "https://secret-cove-59835.herokuapp.com/v1/transaction/status/" +
-                            this.props.route.params.orderID +
-                            "/4",
+                          this.props.route.params.orderID +
+                          "/4",
                           { a: "a" },
                           {
                             headers: {
@@ -202,7 +202,7 @@ class QrCode extends Component {
             />
           </View>
         </ScrollView>
-        <View style={bottomTab.cartSheet}>
+        <View style={[bottomTab.cartSheet, { flexDirection: 'row' }]}>
           <TouchableOpacity
             onPress={() => {
               this.props.storeAsync("");

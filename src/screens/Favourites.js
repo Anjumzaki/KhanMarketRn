@@ -95,6 +95,8 @@ class Favourites extends Component {
     this._unsubscribe = this.props.navigation.addListener("focus", () => {
       this.getData();
     });
+
+
   }
   componentWillUnmount() {
     this._unsubscribe();
@@ -174,9 +176,22 @@ class Favourites extends Component {
         } else {
           if (this.props.favStore === product.storeID) {
             var pCart = this.props.cart;
+            // pCart.push({
+            //   product: product,
+            //   quantity: qt,
+            // });
+
             pCart.push({
               product: product,
               quantity: qt,
+            });
+            this.props.storeAsync({
+              name: product.storeName,
+              address: product.address,
+              id: product.storeID,
+              // phone: resp.data.phoneNumber,
+              sId: product.storeID,
+              // oId: resp.data.orderNum,
             });
             this.props.favStoreAsync(product.storeID);
             this.props.cartAsync(pCart);
@@ -185,15 +200,83 @@ class Favourites extends Component {
               favourites: items,
               imageL: false,
             });
+
+
+          //   alert("in dup")
+          //   var pCart = this.props.cart;
+          //   var inCart = false
+          //   var inCartIndex = ""
+            
+          //   for(var i=0; i<pCart.length; i++){
+          //     if(pCart[i].itemID === product._id){
+          //       inCart =true
+          //       inCartIndex=i
+          //       break
+          //     }
+          //   }
+
+          //   console.log("inCarttttttttttt",inCart, inCartIndex)
+          //   if(inCart){
+          //     alert("in dup1")
+
+          //     pCart[inCartIndex ].quantity = pCart[inCartIndex ].quantity+1
+           
+          //     this.props.storeAsync({
+          //       name: product.storeName,
+          //       address: product.address,
+          //       id: product.storeID,
+          //       // phone: resp.data.phoneNumber,
+          //       sId: product.storeID,
+          //       // oId: resp.data.orderNum,
+          //     });
+          //     // this.props.favStoreAsync(this.props.product.storeId);
+          //     // this.props.cartAsync(pCart);
+          //     // this.setState({ cart: true });
+           
+
+
+          //   this.props.favStoreAsync(product.storeID);
+          //   this.props.cartAsync(pCart);
+          //   items[ind].carted = true;
+          //   this.setState({
+          //     favourites: items,
+          //     imageL: false,
+          //   });
+          // }else{
+          //   alert("in dup2")
+
+          //   var pCart = this.props.cart;
+          //   pCart.push({
+          //     product: product,
+          //     quantity: qt,
+          //   });
+
+          //   this.props.storeAsync({
+          //     name: product.storeName,
+          //     address: product.address,
+          //     id: product.storeID,
+          //     // phone: resp.data.phoneNumber,
+          //     sId: product.storeID,
+          //     // oId: resp.data.orderNum,
+          //   });
+
+          //   this.props.favStoreAsync(product.storeID);
+          //   this.props.cartAsync(pCart);
+          //   items[ind].carted = true;
+          //   this.setState({
+          //     favourites: items,
+          //     imageL: false,
+          //   });
+          // }
           } else {
-            this.setState({ temp: product.storeId }, () => {
+            // this.setState({ temp: product.storeId }, () => {
               Alert.alert(
                 "Alert!",
                 "If you add a product from a new store, you will lose your cart from the previous store",
                 [
                   {
                     text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
+                    onPress: () => {this.setState({imageL: false,favourites: items })},
                     style: "cancel",
                   },
                   {
@@ -205,6 +288,14 @@ class Favourites extends Component {
                         product: product,
                         quantity: qt,
                       });
+
+                      this.props.storeAsync({
+                        name: product.storeName,
+                        address: product.address,
+                        id: product.storeID,
+                        sId: product.storeID,
+                      });
+                      
                       this.props.favStoreAsync(product.storeID);
                       this.props.cartAsync(pCart);
                       items[ind].carted = true;
@@ -212,32 +303,14 @@ class Favourites extends Component {
                         {
                           favourites: items,
                           imageL: false,
-                        },
-                        () =>
-                          // alert(this.state.temp)
-                          axios
-                            .get(
-                              "https://lit-peak-13067.herokuapp.com/get/store/" +
-                                this.state.temp
-                            )
-                            .then((resp) => {
-                              console.log(resp.data);
-                              this.props.storeAsync({
-                                name: resp.data.storeName,
-                                address: resp.data.storeAddress,
-                                id: resp.data._id,
-                                phone: resp.data.phoneNumber,
-                                sId: resp.data.storeId,
-                                oId: resp.data.orderNum,
-                              });
-                            })
+                        }
                       );
                     },
                   },
                 ],
                 { cancelable: true }
               );
-            });
+            // });
           }
         }
       }
