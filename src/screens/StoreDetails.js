@@ -40,11 +40,11 @@ class StoreDetails extends React.Component {
         loading: true,
       },
       async () => {
-        axios
+        axios 
           .post(
             "https://secret-cove-59835.herokuapp.com/v1/item/store/" +
               this.props.route.params.storeId,
-            { asd: "sxd" },
+            { asd: "sxdsss" },
             {
               headers: {
                 authorization: token,
@@ -52,6 +52,7 @@ class StoreDetails extends React.Component {
             }
           )
           .then((resp) => {
+            console.log("pppprorrr",resp.data.result)
             this.setState({ products: resp.data.result });
           })
           .catch((err) => console.log(err));
