@@ -63,7 +63,7 @@ class MyOrders extends Component {
               this.setState({ myOrders: resp.data.result, loading: false })
             // alert(JSON.stringify(resp.data.result))
           )
-          .catch((err) => alert(JSON.stringify(err)))
+          .catch((err) => console.log(err))
     );
   };
 

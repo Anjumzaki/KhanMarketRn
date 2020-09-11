@@ -101,17 +101,17 @@ class CustomDrawerContent extends Component {
           // disabled={isUser}
         >
           <View>
-            {this.state.image ? (
+            {/* {this.state.image ? (
               <Image
                 style={{ width: 60, height: 60, borderRadius: 100 }}
                 source={{ UserDefault }}
               />
-            ) : (
+            ) : ( */}
               <Image
                 style={{ width: 60, height: 60, borderRadius: 100 }}
                 source={UserDefault}
               />
-            )}
+            {/* )} */}
           </View>
 
           <View style={{ paddingLeft: 10 }}>
