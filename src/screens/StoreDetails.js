@@ -40,11 +40,10 @@ class StoreDetails extends React.Component {
         loading: true,
       },
       async () => {
-        axios 
-          .post(
-            "https://secret-cove-59835.herokuapp.com/v1/item/store/" +
-              this.props.route.params.storeId,
-            { asd: "sxdsss" },
+        axios
+          .get(
+            "https://secret-cove-59835.herokuapp.com/v2/item/all/store/" +
+            this.props.route.params.storeId,
             {
               headers: {
                 authorization: token,
@@ -52,15 +51,15 @@ class StoreDetails extends React.Component {
             }
           )
           .then((resp) => {
-            console.log("pppprorrr",resp.data.result)
+            console.log("pppprorrr", resp.data.result)
             this.setState({ products: resp.data.result });
           })
-          .catch((err) => console.log(err));
+          .catch((err) => console.log("https://secret-cove-59835.herokuapp.com/v2/item/all/store/"));
 
         axios
           .get(
             "https://secret-cove-59835.herokuapp.com/v1/item/featured/" +
-              this.props.route.params.storeId,
+            this.props.route.params.storeId,
             {
               headers: {
                 authorization: token,
@@ -86,9 +85,9 @@ class StoreDetails extends React.Component {
         axios
           .get(
             "https://secret-cove-59835.herokuapp.com/v1/store/user/ref_prod_fav/" +
-              uid +
-              "/" +
-              this.props.route.params.storeId,
+            uid +
+            "/" +
+            this.props.route.params.storeId,
             {
               headers: {
                 authorization: token,
@@ -121,7 +120,7 @@ class StoreDetails extends React.Component {
     this.props.searchAsync("");
   }
   render() {
-    
+
     var searchedProducts = [];
     var key1 = this.props.searchInput;
     // alert(key1);
@@ -152,59 +151,59 @@ class StoreDetails extends React.Component {
             <ActivityIndicator color="gray" size="large" />
           </View>
         ) : (
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {!this.props.searchInput &&
-            this.state.featuredProducts.length > 0 ? (
-              <Slider
-                featuredProducts={this.state.featuredProducts}
-                navigation={this.props.navigation}
-              />
-            ) : null}
-            {this.props.searchInput ? (
-              <>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    marginTop: 20,
-                    // justifyContent: "space-between",s
-                    flexWrap: "wrap",
-                    // flexWrap: "row-wrap",
-                  }}
-                >
-                  {searchedProducts.map((cat, index) => (
-                    <ProcardsSmall
-                      navigation={this.props.navigation}
-                      key={index}
-                      product={cat}
-                      favProducts={this.props.favProducts}
-                    />
-
-                    // <CardsRow
-                    //   navigation={this.props.navigation}
-                    //   key={index}
-                    //   products={cat.products}
-                    //   name={this.capitalize(cat.productName)}
-                    //   favProducts={this.state.favourites}
-                    // />
-                  ))}
-                </View>
-              </>
-            ) : (
-              fp.map((cat, index) =>
-                cat.products.length > 0 ? (
-                  <CardsRow
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {!this.props.searchInput &&
+                this.state.featuredProducts.length > 0 ? (
+                  <Slider
+                    featuredProducts={this.state.featuredProducts}
                     navigation={this.props.navigation}
-                    key={index}
-                    products={cat.products}
-                    name={this.capitalize(cat.name)}
-                    favProducts={this.state.favourites}
                   />
-                ) : null
-              )
-            )}
-            <View style={{ paddingTop: 10 }}></View>
-          </ScrollView>
-        )}
+                ) : null}
+              {this.props.searchInput ? (
+                <>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      marginTop: 20,
+                      // justifyContent: "space-between",s
+                      flexWrap: "wrap",
+                      // flexWrap: "row-wrap",
+                    }}
+                  >
+                    {searchedProducts.map((cat, index) => (
+                      <ProcardsSmall
+                        navigation={this.props.navigation}
+                        key={index}
+                        product={cat}
+                        favProducts={this.props.favProducts}
+                      />
+
+                      // <CardsRow
+                      //   navigation={this.props.navigation}
+                      //   key={index}
+                      //   products={cat.products}
+                      //   name={this.capitalize(cat.productName)}
+                      //   favProducts={this.state.favourites}
+                      // />
+                    ))}
+                  </View>
+                </>
+              ) : (
+                  fp.map((cat, index) =>
+                    cat.products.length > 0 ? (
+                      <CardsRow
+                        navigation={this.props.navigation}
+                        key={index}
+                        products={cat.products}
+                        name={this.capitalize(cat.name)}
+                        favProducts={this.state.favourites}
+                      />
+                    ) : null
+                  )
+                )}
+              <View style={{ paddingTop: 10 }}></View>
+            </ScrollView>
+          )}
       </View>
     );
   }
